@@ -22,7 +22,7 @@ public class Usuario {
     private String contraseña;
 
     @Column(nullable = true)
-    private Integer imagenUsuario;
+    private byte[] imagenUsuario;
 
     // Relación uno-a-muchos con HistorialStock
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -74,11 +74,11 @@ public class Usuario {
         this.historialStock = historialStock;
     }
 
-    public Integer getImagenUsuario() {
+    public byte[] getImagenUsuario() {
         return imagenUsuario;
     }
 
-    public void setImagenUsuario(Integer imagenUsuario) {
+    public void setImagenUsuario(byte[] imagenUsuario) {
         this.imagenUsuario = imagenUsuario;
     }
 }

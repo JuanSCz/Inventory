@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface StockService {
     List<Stock> findAll();
 
-    Optional<Stock> findById(Long id);
+    Stock findById(Long id);
 
     Stock save(Stock stock);
 

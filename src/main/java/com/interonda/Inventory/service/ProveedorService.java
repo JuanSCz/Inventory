@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface ProveedorService {
     List<Proveedor> findAll();
 
-    Optional<Proveedor> findById(Long id);
+    Proveedor findById(Long id);
 
     Proveedor save(Proveedor proveedor);
 

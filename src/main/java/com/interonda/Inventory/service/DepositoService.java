@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface DepositoService {
     List<Deposito> findAll();
 
-    Optional<Deposito> findById(Long id);
+    Deposito findById(Long id);
 
     Deposito save(Deposito deposito);
 

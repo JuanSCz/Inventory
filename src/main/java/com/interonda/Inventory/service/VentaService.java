@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface VentaService {
     List<Venta> findAll();
 
-    Optional<Venta> findById(Long id);
+    Venta findById(Long id);
 
     Venta save(Venta venta);
 

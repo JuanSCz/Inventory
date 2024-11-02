@@ -38,8 +38,7 @@ public class Producto {
     private Integer stockMinimo;
 
     @Column(nullable = true)
-    private Integer imagenProducto;
-
+    private byte[] imagenProducto;
 
 // Relaciones
 
@@ -193,11 +192,12 @@ public class Producto {
         this.historialStocks = historialStocks;
     }
 
-    public Integer getImagenProducto() {
+    public byte[] getimagenProducto() {
         return imagenProducto;
     }
 
-    public void setImagenProducto(Integer imagenProducto) {
+    public void setimagenProducto(byte[] imagenProducto) {
         this.imagenProducto = imagenProducto;
     }
+
 }

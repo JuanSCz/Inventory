@@ -85,5 +85,13 @@ public class Cliente {
     public void setVentas(List<Venta> ventas) {
         this.ventas = ventas;
     }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
 }
 

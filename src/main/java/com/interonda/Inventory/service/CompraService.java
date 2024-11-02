@@ -2,13 +2,12 @@ package com.interonda.Inventory.service;
 
 import com.interonda.Inventory.entity.Compra;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.List;;
 
 public interface CompraService {
     List<Compra> findAll();
 
-    Optional<Compra> findById(Long id);
+    Compra findById(Long id);
 
     Compra save(Compra compra);
 

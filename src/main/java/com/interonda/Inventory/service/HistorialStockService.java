@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface HistorialStockService {
     List<HistorialStock> findAll();
 
-    Optional<HistorialStock> findById(Long id);
+    HistorialStock findById(Long id);
 
     HistorialStock save(HistorialStock historialStock);
 
