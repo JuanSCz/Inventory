@@ -53,6 +53,29 @@ public class HistorialStock {
 
     // Constructor vacío requerido por JPA
     public HistorialStock() {
+        // Constructor vacío
+    }
+
+    // Constructor con parámetros
+    public HistorialStock(int cantidadAnterior, int cantidadNueva, LocalDateTime fecha,
+                          String motivo, String tipoMovimiento, String observacion,
+                          Producto producto, Deposito deposito, Usuario usuario, Stock stock) {
+        if (cantidadAnterior < 0 || cantidadNueva < 0) {
+            throw new IllegalArgumentException("Las cantidades no pueden ser negativas.");
+        }
+        if (fecha == null) {
+            throw new IllegalArgumentException("La fecha no puede ser nula.");
+        }
+        this.cantidadAnterior = cantidadAnterior;
+        this.cantidadNueva = cantidadNueva;
+        this.fecha = fecha;
+        this.motivo = motivo;
+        this.tipoMovimiento = tipoMovimiento;
+        this.observacion = observacion;
+        this.producto = producto;
+        this.deposito = deposito;
+        this.usuario = usuario;
+        this.stock = stock;
     }
 
     // Getters y Setters

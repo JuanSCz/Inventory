@@ -15,8 +15,9 @@ public class Deposito {
     @Column(nullable = false, length = 100)
     private String nombre;
 
-    @Column(length = 255)
+    @Column(nullable = false, length = 255)
     private String direccion;
+
 
     // Relación uno-a-muchos con Stock
     @OneToMany(mappedBy = "deposito", cascade = CascadeType.ALL, orphanRemoval = true)

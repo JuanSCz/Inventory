@@ -23,7 +23,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     List<Producto> buscarPorProveedor(@Param("idProveedor") Long idProveedor);
 
     //consulta JPQL que obtiene todos los productos cuyo stockActual esté por debajo de stockMinimo
-    @Query("SELECT p FROM Producto p WHERE p.stockActual < p.stockMinimo")
+    @Query("SELECT p FROM Producto p WHERE p.stockActual <= p.stockMinimo")
     List<Producto> productosBajoStockMinimo();
 
     // Obtener productos por ID de categoría

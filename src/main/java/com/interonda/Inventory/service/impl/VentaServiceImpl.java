@@ -1,13 +1,17 @@
 package com.interonda.Inventory.service.impl;
 
 import com.interonda.Inventory.entity.Venta;
-import com.interonda.Inventory.exception.ResourceNotFoundException;
+import com.interonda.Inventory.exceptions.ResourceNotFoundException;
 import com.interonda.Inventory.repository.VentaRepository;
 import com.interonda.Inventory.service.VentaService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class VentaServiceImpl implements VentaService {
+
+    private static final Logger logger = LoggerFactory.getLogger(VentaServiceImpl.class);
 
     private final VentaRepository ventaRepository;
 

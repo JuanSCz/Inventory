@@ -1,13 +1,17 @@
 package com.interonda.Inventory.service.impl;
 
 import com.interonda.Inventory.entity.Usuario;
-import com.interonda.Inventory.exception.ResourceNotFoundException;
+import com.interonda.Inventory.exceptions.ResourceNotFoundException;
 import com.interonda.Inventory.repository.UsuarioRepository;
 import com.interonda.Inventory.service.UsuarioService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class UsuarioServiceImpl implements UsuarioService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UsuarioServiceImpl.class);
 
     private final UsuarioRepository usuarioRepository;
 

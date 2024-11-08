@@ -19,7 +19,7 @@ public class Usuario {
     private String rol;
 
     @Column(nullable = false)
-    private String contraseña;
+    private String contrasenia;
 
     @Column(nullable = true)
     private byte[] imagenUsuario;
@@ -58,12 +58,12 @@ public class Usuario {
         this.rol = rol;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasenia() {
+        return contrasenia;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 
     public List<HistorialStock> getHistorialStock() {

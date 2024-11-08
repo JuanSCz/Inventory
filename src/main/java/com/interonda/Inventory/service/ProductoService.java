@@ -1,9 +1,11 @@
 package com.interonda.Inventory.service;
 
 import com.interonda.Inventory.entity.Producto;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+
 
 public interface ProductoService {
     List<Producto> findAll();
@@ -38,5 +40,5 @@ public interface ProductoService {
     // Actualizar Costo
     Producto actualizarCosto(Long idProducto, BigDecimal nuevoCosto);
 
-
+    public Producto crearProducto(Producto producto, List<Long> idsProveedores);
 }

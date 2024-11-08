@@ -1,6 +1,8 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -12,15 +14,21 @@ public class Proveedor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre del proveedor no puede estar vacío") // El campo no puede ser nulo ni vacío
+    @Size(max = 100, message = "El nombre del proveedor no puede exceder los 100 caracteres") // Longitud máxima
     @Column(nullable = false, length = 100)
     private String nombre;
 
+    @NotBlank(message = "El contacto del proveedor no puede estar vacío") // Este campo también debe ser obligatorio
+    @Size(max = 50, message = "El contacto del proveedor no puede exceder los 50 caracteres")
     @Column(length = 50)
     private String contacto;
 
+    @Size(max = 255, message = "La dirección no puede exceder los 255 caracteres") // Opcional, pero con longitud máxima
     @Column(length = 255)
     private String direccion;
 
+    @Size(max = 50, message = "El país no puede exceder los 50 caracteres") // Opcional, pero con longitud máxima
     @Column(length = 50)
     private String pais;
 

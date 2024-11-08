@@ -14,4 +14,6 @@ public interface CategoriaService {
     void deleteById(Long id);
 
     void editarNombreCategoria(Long idCategoria, String nuevoNombre);
+
+    Categoria crearCategoria(Categoria categoria);
 }

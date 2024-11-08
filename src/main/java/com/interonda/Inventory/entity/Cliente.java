@@ -12,20 +12,21 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String nombre;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 15)
     private String pais;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 15)
     private String ciudad;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String direccion;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String contacto;
+
     // Relaciones
 
     // Relación uno-a-muchos con Venta

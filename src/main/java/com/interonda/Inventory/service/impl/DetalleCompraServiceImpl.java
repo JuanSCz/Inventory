@@ -1,14 +1,16 @@
 package com.interonda.Inventory.service.impl;
 
 import com.interonda.Inventory.entity.DetalleCompra;
-import com.interonda.Inventory.exception.ResourceNotFoundException;
+import com.interonda.Inventory.exceptions.ResourceNotFoundException;
 import com.interonda.Inventory.repository.DetalleCompraRepository;
 import com.interonda.Inventory.service.DetalleCompraService;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Optional;
 
 public class DetalleCompraServiceImpl implements DetalleCompraService {
+
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DetalleCompraServiceImpl.class);
 
     private final DetalleCompraRepository detalleCompraRepository;
 
