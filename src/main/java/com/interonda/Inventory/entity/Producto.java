@@ -40,6 +40,9 @@ public class Producto {
     @Column(nullable = true)
     private byte[] imagenProducto;
 
+    @Column(nullable = true)
+    private String macAddress;
+
 // Relaciones
 
     @ManyToOne
@@ -71,7 +74,7 @@ public class Producto {
     }
 
     // Getters y Setters
-
+    
     public Long getId() {
         return id;
     }
@@ -88,20 +91,20 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
     public BigDecimal getPrecio() {
         return precio;
     }
 
     public void setPrecio(BigDecimal precio) {
         this.precio = precio;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public BigDecimal getCosto() {
@@ -142,6 +145,22 @@ public class Producto {
 
     public void setStockMinimo(Integer stockMinimo) {
         this.stockMinimo = stockMinimo;
+    }
+
+    public byte[] getImagenProducto() {
+        return imagenProducto;
+    }
+
+    public void setImagenProducto(byte[] imagenProducto) {
+        this.imagenProducto = imagenProducto;
+    }
+
+    public String getMacAddress() {
+        return macAddress;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
     }
 
     public Categoria getCategoria() {
@@ -191,13 +210,4 @@ public class Producto {
     public void setHistorialStocks(List<HistorialStock> historialStocks) {
         this.historialStocks = historialStocks;
     }
-
-    public byte[] getimagenProducto() {
-        return imagenProducto;
-    }
-
-    public void setimagenProducto(byte[] imagenProducto) {
-        this.imagenProducto = imagenProducto;
-    }
-
 }

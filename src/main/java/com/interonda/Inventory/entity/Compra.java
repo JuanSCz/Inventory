@@ -55,7 +55,6 @@ public class Compra {
         this.id = id;
     }
 
-    @Temporal(TemporalType.DATE)
     public LocalDate getFecha() {
         return fecha;
     }

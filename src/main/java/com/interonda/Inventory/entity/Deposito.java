@@ -18,6 +18,8 @@ public class Deposito {
     @Column(nullable = false, length = 255)
     private String direccion;
 
+    @Column(nullable = false)
+    private String contactoDeposito;
 
     // Relación uno-a-muchos con Stock
     @OneToMany(mappedBy = "deposito", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -28,7 +30,7 @@ public class Deposito {
     }
 
     // Getters y Setters
-
+    
     public Long getId() {
         return id;
     }
@@ -51,6 +53,14 @@ public class Deposito {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public String getContactoDeposito() {
+        return contactoDeposito;
+    }
+
+    public void setContactoDeposito(String contactoDeposito) {
+        this.contactoDeposito = contactoDeposito;
     }
 
     public List<Stock> getStocks() {

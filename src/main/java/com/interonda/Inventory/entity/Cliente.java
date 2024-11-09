@@ -25,7 +25,10 @@ public class Cliente {
     private String direccion;
 
     @Column(nullable = false, length = 20)
-    private String contacto;
+    private String contactoCliente;
+
+    @Column(nullable = true, length = 20)
+    private String eMailCliente;
 
     // Relaciones
 
@@ -38,7 +41,7 @@ public class Cliente {
     }
 
     // Getters y Setters
-
+    
     public Long getId() {
         return id;
     }
@@ -55,20 +58,20 @@ public class Cliente {
         this.nombre = nombre;
     }
 
-    public String getContacto() {
-        return contacto;
-    }
-
-    public void setContacto(String contacto) {
-        this.contacto = contacto;
-    }
-
     public String getPais() {
         return pais;
     }
 
     public void setPais(String pais) {
         this.pais = pais;
+    }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
     }
 
     public String getDireccion() {
@@ -79,20 +82,28 @@ public class Cliente {
         this.direccion = direccion;
     }
 
+    public String getContactoCliente() {
+        return contactoCliente;
+    }
+
+    public void setContactoCliente(String contactoCliente) {
+        this.contactoCliente = contactoCliente;
+    }
+
+    public String geteMailCliente() {
+        return eMailCliente;
+    }
+
+    public void seteMailCliente(String eMailCliente) {
+        this.eMailCliente = eMailCliente;
+    }
+
     public List<Venta> getVentas() {
         return ventas;
     }
 
     public void setVentas(List<Venta> ventas) {
         this.ventas = ventas;
-    }
-
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
     }
 }
 

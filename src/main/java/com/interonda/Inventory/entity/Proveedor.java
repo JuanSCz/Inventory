@@ -14,33 +14,26 @@ public class Proveedor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El nombre del proveedor no puede estar vacío") // El campo no puede ser nulo ni vacío
-    @Size(max = 100, message = "El nombre del proveedor no puede exceder los 100 caracteres") // Longitud máxima
     @Column(nullable = false, length = 100)
     private String nombre;
 
-    @NotBlank(message = "El contacto del proveedor no puede estar vacío") // Este campo también debe ser obligatorio
-    @Size(max = 50, message = "El contacto del proveedor no puede exceder los 50 caracteres")
     @Column(length = 50)
-    private String contacto;
+    private String contactoProveedor;
 
-    @Size(max = 255, message = "La dirección no puede exceder los 255 caracteres") // Opcional, pero con longitud máxima
     @Column(length = 255)
     private String direccion;
 
-    @Size(max = 50, message = "El país no puede exceder los 50 caracteres") // Opcional, pero con longitud máxima
     @Column(length = 50)
     private String pais;
+
+    @Column(length = 50)
+    private String eEmailProveedor;
 
     // Relaciones
 
     // Relación muchos-a-muchos con Producto
     @ManyToMany
-    @JoinTable(
-            name = "proveedor_producto",
-            joinColumns = @JoinColumn(name = "proveedor_id"),
-            inverseJoinColumns = @JoinColumn(name = "producto_id")
-    )
+    @JoinTable(name = "proveedor_producto", joinColumns = @JoinColumn(name = "proveedor_id"), inverseJoinColumns = @JoinColumn(name = "producto_id"))
     private List<Producto> productos;
 
     // Relación uno-a-muchos con Compra
@@ -52,7 +45,7 @@ public class Proveedor {
     }
 
     // Getters y Setters
-
+    
     public Long getId() {
         return id;
     }
@@ -69,12 +62,12 @@ public class Proveedor {
         this.nombre = nombre;
     }
 
-    public String getContacto() {
-        return contacto;
+    public String getContactoProveedor() {
+        return contactoProveedor;
     }
 
-    public void setContacto(String contacto) {
-        this.contacto = contacto;
+    public void setContactoProveedor(String contactoProveedor) {
+        this.contactoProveedor = contactoProveedor;
     }
 
     public String getDireccion() {
@@ -91,6 +84,14 @@ public class Proveedor {
 
     public void setPais(String pais) {
         this.pais = pais;
+    }
+
+    public String geteEmailProveedor() {
+        return eEmailProveedor;
+    }
+
+    public void seteEmailProveedor(String eEmailProveedor) {
+        this.eEmailProveedor = eEmailProveedor;
     }
 
     public List<Producto> getProductos() {

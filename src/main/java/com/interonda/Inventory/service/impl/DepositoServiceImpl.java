@@ -35,7 +35,7 @@ public class DepositoServiceImpl implements DepositoService {
 
     @Override
     public Deposito findById(Long id) {
-        return depositoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El deposito ", id, " no fue encontrado!"));
+        return depositoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El deposito no fue encontrado!"));
     }
 
     @Override

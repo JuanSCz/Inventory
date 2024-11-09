@@ -86,7 +86,7 @@ public class ProveedorServiceImpl implements ProveedorService {
 
         // Actualizar los datos del proveedor
         proveedorExistente.setNombre(proveedorActualizado.getNombre());
-        proveedorExistente.setContacto(proveedorActualizado.getContacto());
+        proveedorExistente.setContactoProveedor(proveedorActualizado.getContactoProveedor());
         proveedorExistente.setDireccion(proveedorActualizado.getDireccion());
         proveedorExistente.setPais(proveedorActualizado.getPais());
 
@@ -126,11 +126,7 @@ public class ProveedorServiceImpl implements ProveedorService {
     @Transactional(readOnly = true)
     @Override
     public Page<Proveedor> listarProveedores(Pageable pageable) {
-
-        // Obtener la página de proveedores
-        Page<Proveedor> proveedores = proveedorRepository.findAll(pageable);
-
-        return proveedores;
+        return proveedorRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)

@@ -46,7 +46,7 @@ public class Venta {
     }
 
     // Getters y Setters
-
+    
     public Long getId() {
         return id;
     }

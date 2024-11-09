@@ -37,7 +37,7 @@ public class CompraServiceImpl implements CompraService {
     @Transactional(readOnly = true)
     @Override
     public Compra findById(Long id) {
-        return compraRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("La compra numero ", id, " no existe!"));
+        return compraRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException());
     }
 
     @Transactional
@@ -86,7 +86,7 @@ public class CompraServiceImpl implements CompraService {
     @Transactional
     @Override
     public Compra actualizarCompra(Long idCompra, Compra compraActualizada, List<DetalleCompra> nuevosDetalles) {
-        Compra compraExistente = compraRepository.findById(idCompra).orElseThrow(() -> new ResourceNotFoundException("La compra numero ", idCompra, ", no existe!"));
+        Compra compraExistente = compraRepository.findById(idCompra).orElseThrow(() -> new ResourceNotFoundException());
 
         // Eliminar detalles anteriores
         detalleCompraRepository.deleteAll(compraExistente.getDetallesCompra());
@@ -118,7 +118,7 @@ public class CompraServiceImpl implements CompraService {
     @Override
     public void eliminarCompra(Long idCompra) {
         // Verificar si la compra existe en la base de datos
-        Compra compraExistente = compraRepository.findById(idCompra).orElseThrow(() -> new ResourceNotFoundException("La compra numero ", idCompra, ", no existe!"));
+        Compra compraExistente = compraRepository.findById(idCompra).orElseThrow(() -> new ResourceNotFoundException());
 
         // Validar el estado de la compra antes de eliminarla
         if ("COMPLETADA".equals(compraExistente.getEstado())) {
@@ -133,7 +133,7 @@ public class CompraServiceImpl implements CompraService {
     @Override
     public Compra buscarPorId(Long idCompra) {
         // Buscar y devolver la compra
-        return compraRepository.findById(idCompra).orElseThrow(() -> new ResourceNotFoundException("La compra numero ", idCompra, ", no existe!"));
+        return compraRepository.findById(idCompra).orElseThrow(() -> new ResourceNotFoundException());
     }
 
     @Transactional(readOnly = true) // Indica que este metodo solo realiza una lectura

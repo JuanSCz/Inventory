@@ -26,8 +26,6 @@ public class Categoria {
     public Categoria() {
     }
 
-    // Getters y Setters
-
     public Long getId() {
         return id;
     }
