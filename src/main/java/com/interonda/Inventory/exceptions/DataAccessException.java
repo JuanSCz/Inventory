@@ -3,12 +3,11 @@ package com.interonda.Inventory.exceptions;
 import java.time.LocalDateTime;
 
 public class DataAccessException extends RuntimeException {
-    private String userMessage;
-    private LocalDateTime timestamp;
+    private final String userMessage;
+    private final LocalDateTime timestamp;
 
     public DataAccessException() {
-        super("Error al acceder a los datos.");
-        this.timestamp = LocalDateTime.now();
+        this("Error al acceder a los datos.");
     }
 
     public DataAccessException(String userMessage) {
@@ -25,4 +24,3 @@ public class DataAccessException extends RuntimeException {
         return timestamp;
     }
 }
-

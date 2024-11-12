@@ -3,12 +3,11 @@ package com.interonda.Inventory.exceptions;
 import java.time.LocalDateTime;
 
 public class BadRequestException extends RuntimeException {
-    private String userMessage;
-    private LocalDateTime timestamp;
+    private final String userMessage;
+    private final LocalDateTime timestamp;
 
     public BadRequestException() {
-        super("Solicitud incorrecta.");
-        this.timestamp = LocalDateTime.now();
+        this("Solicitud incorrecta.");
     }
 
     public BadRequestException(String userMessage) {

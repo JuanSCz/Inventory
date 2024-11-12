@@ -1,6 +1,7 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,13 +14,18 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "La cantidad es obligatoria")
+    @PositiveOrZero(message = "La cantidad no puede ser negativa")
     @Column(nullable = false)
     private Integer cantidad;
 
-    @Column(nullable = false)
+    @FutureOrPresent(message = "La fecha de actualización debe ser actual o futura")
+    @Column(name = "actualizacion", nullable = false)
     private LocalDateTime fechaActualizacion;
 
-    @Column(length = 50)
+    @NotBlank(message = "La operación es obligatoria")
+    @Size(max = 50, message = "La operación no puede tener más de 50 caracteres")
+    @Column(length = 50, nullable = false)
     private String operacion;
 
     // Relaciones
@@ -40,7 +46,7 @@ public class Stock {
     }
 
     // Getters y Setters
-    
+
     public Long getId() {
         return id;
     }

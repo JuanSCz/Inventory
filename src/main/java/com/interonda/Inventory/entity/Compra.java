@@ -1,6 +1,7 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,19 +15,28 @@ public class Compra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Temporal(TemporalType.DATE)
+    @NotNull(message = "La fecha no puede ser nula")
+    @FutureOrPresent(message = "La fecha debe ser presente o futura")
     @Column(nullable = false)
     private LocalDate fecha;
 
+    @NotNull(message = "El total no puede ser nulo")
+    @DecimalMin(value = "0.0 ", message = "El total debe ser mayor o igual a 0")
+    @Digits(integer = 10, fraction = 2, message = "El total debe tener como máximo 10 dígitos enteros y 2 decimales")
     @Column(nullable = false)
     private BigDecimal total;
 
-    @Column(nullable = false, length = 50)
+    @NotBlank(message = "El método de pago no puede estar vacío")
+    @Column(name = "metodo_de_pago", nullable = false, length = 30)
     private String metodoPago;
 
-    @Column(nullable = false, length = 20)
+    @NotBlank(message = "El estado no puede estar vacío")
+    @Column(nullable = false, length = 30)
     private String estado;
 
+    @NotNull(message = "Los impuestos no pueden ser nulos")
+    @DecimalMin(value = "0.0", message = "Los impuestos deben ser mayores o iguales a 0")
+    @Digits(integer = 10, fraction = 2, message = "Los impuestos deben tener como máximo 10 dígitos enteros y 2 decimales")
     @Column(nullable = false)
     private BigDecimal impuestos;
 
@@ -46,7 +56,6 @@ public class Compra {
     }
 
     // Getters y Setters
-
     public Long getId() {
         return id;
     }

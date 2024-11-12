@@ -1,9 +1,11 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,39 +16,46 @@ public class Venta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Temporal(TemporalType.DATE)
+    @NotNull(message = "{venta.fecha.notNull}")
+    @FutureOrPresent(message = "{venta.fecha.futureOrPresent}")
     @Column(nullable = false)
     private LocalDate fecha;
 
+    @NotNull(message = "{venta.total.notNull}")
+    @DecimalMin(value = "0.0", message = "{venta.total.decimalMin}")
+    @Digits(integer = 10, fraction = 2, message = "{venta.total.digits}")
     @Column(nullable = false)
     private BigDecimal total;
 
-    @Column(nullable = false)
+    @NotBlank(message = "{venta.metodoPago.notBlank}")
+    @Column(name = "metodo_pago", nullable = false)
     private String metodoPago;
 
+    @NotBlank(message = "{venta.estado.notBlank}")
     @Column(nullable = false)
     private String estado;
 
+    @NotNull(message = "{venta.impuestos.notNull}")
+    @DecimalMin(value = "0.0", message = "{venta.impuestos.decimalMin}")
+    @Digits(integer = 10, fraction = 2, message = "{venta.impuestos.digits}")
     @Column(nullable = false)
     private BigDecimal impuestos;
 
-    // Relaciones
-
-    // Relación muchos-a-uno con Cliente
+    // Relación muchos-a-uno con Cliente (muchas ventas pueden tener un cliente)
+    @NotNull(message = "{venta.cliente.notNull}")
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    // Relación uno-a-muchos con DetalleVenta
+    // Relación uno-a-muchos con DetalleVenta (una venta puede tener muchos detalles de venta)
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
-    private List<DetalleVenta> detallesVenta;
+    private List<DetalleVenta> detallesVenta = new ArrayList<>();
 
     // Constructor vacío requerido por JPA
     public Venta() {
     }
 
     // Getters y Setters
-    
     public Long getId() {
         return id;
     }

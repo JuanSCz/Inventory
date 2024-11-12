@@ -1,6 +1,9 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -12,22 +15,34 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
+    @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Column(nullable = false, length = 15)
+    @NotBlank(message = "El país no puede estar vacío")
+    @Size(max = 30, message = "El país no puede tener más de 30 caracteres")
+    @Column(nullable = false, length = 30)
     private String pais;
 
-    @Column(nullable = false, length = 15)
+    @NotBlank(message = "La ciudad no puede estar vacía")
+    @Size(max = 30, message = "La ciudad no puede tener más de 30 caracteres")
+    @Column(nullable = false, length = 30)
     private String ciudad;
 
-    @Column(nullable = false, length = 20)
+    @NotBlank(message = "La dirección no puede estar vacía")
+    @Size(max = 50, message = "La dirección no puede tener más de 50 caracteres")
+    @Column(nullable = false, length = 50)
     private String direccion;
 
-    @Column(nullable = false, length = 20)
+    @NotBlank(message = "El contacto no puede estar vacío")
+    @Size(max = 15, message = "El contacto no puede tener más de 15 caracteres")
+    @Column(name = "contacto", nullable = false, length = 15)
     private String contactoCliente;
 
-    @Column(nullable = true, length = 20)
+    @Email(message = "El e-mail debe ser válido")
+    @Size(max = 254, message = "El e-mail no puede tener más de 254 caracteres")
+    @Column(name = "email", length = 254)
     private String eMailCliente;
 
     // Relaciones
@@ -41,7 +56,6 @@ public class Cliente {
     }
 
     // Getters y Setters
-    
     public Long getId() {
         return id;
     }

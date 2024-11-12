@@ -1,8 +1,10 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
@@ -14,19 +16,26 @@ public class Proveedor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 100)
+    @NotBlank(message = "El nombre es obligatorio")
+    @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
+    @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Column(length = 50)
+    @Size(max = 15, message = "El contacto no puede tener más de 15 caracteres")
+    @Column(name = "contacto", length = 15)
     private String contactoProveedor;
 
-    @Column(length = 255)
+    @Size(max = 50, message = "La dirección no puede tener más de 50 caracteres")
+    @Column(length = 50)
     private String direccion;
 
-    @Column(length = 50)
+    @Length(max = 254, message = "El país no puede tener más de 254 caracteres")
+    @Column(length = 254)
     private String pais;
 
-    @Column(length = 50)
+    @Size(max = 254, message = "El e-mail no puede tener más de 254 caracteres")
+    @Email(message = "El e-mail debe ser válido")
+    @Column(name = "email", length = 254)
     private String eEmailProveedor;
 
     // Relaciones
@@ -45,7 +54,7 @@ public class Proveedor {
     }
 
     // Getters y Setters
-    
+
     public Long getId() {
         return id;
     }

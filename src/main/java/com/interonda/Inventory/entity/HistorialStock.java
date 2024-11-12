@@ -1,6 +1,7 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
@@ -12,22 +13,33 @@ public class HistorialStock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private int cantidadAnterior;
+    @NotNull(message = "La cantidad anterior es requerida")
+    @PositiveOrZero(message = "La cantidad anterior debe ser mayor o igual a cero")
+    @Column(name = "cantidad_anterior", nullable = false)
+    private Integer cantidadAnterior;
 
-    @Column(nullable = false)
-    private int cantidadNueva;
+    @NotNull(message = "La cantidad nueva es requerida")
+    @PositiveOrZero(message = "La cantidad nueva debe ser mayor o igual a cero")
+    @Column(name = "cantidad_actual", nullable = false)
+    private Integer cantidadNueva;
 
-    @Column(nullable = false)
-    private LocalDateTime fecha;
+    @NotNull(message = "La fecha es requerida")
+    @FutureOrPresent(message = "La fecha debe ser actual o futura")
+    @Column(name = "actualizacion", nullable = false)
+    private LocalDateTime fechaActualizacion;
 
+    @NotBlank(message = "El motivo es requerido")
+    @Size(min = 3, max = 50, message = "El motivo debe tener entre 3 y 50 caracteres")
     @Column(nullable = false)
     private String motivo;
 
-    @Column(nullable = false)
+    @NotBlank(message = "El tipo de movimiento es requerido")
+    @Size(min = 3, max = 50, message = "El tipo de movimiento debe tener entre 3 y 50 caracteres")
+    @Column(name = "tipo_movimiento", length = 50, nullable = false)
     private String tipoMovimiento;
 
-    @Column(nullable = true)
+    @Size(max = 200, message = "La observación debe tener como máximo 200 caracteres")
+    @Column(length = 200)
     private String observacion;
 
     // Relaciones
@@ -37,7 +49,7 @@ public class HistorialStock {
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
 
-    // Relación muchos-a-uno con Deposito
+    // Relación muchos-a-uno con Depósito
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deposito_id", nullable = false)
     private Deposito deposito;
@@ -57,7 +69,7 @@ public class HistorialStock {
     }
 
     // Getters y Setters
-    
+
     public Long getId() {
         return id;
     }
@@ -83,11 +95,11 @@ public class HistorialStock {
     }
 
     public LocalDateTime getFecha() {
-        return fecha;
+        return fechaActualizacion;
     }
 
-    public void setFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
+    public void setFecha(LocalDateTime fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
     }
 
     public String getMotivo() {

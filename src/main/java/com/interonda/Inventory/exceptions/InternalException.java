@@ -3,12 +3,11 @@ package com.interonda.Inventory.exceptions;
 import java.time.LocalDateTime;
 
 public class InternalException extends RuntimeException {
-    private String userMessage;
-    private LocalDateTime timestamp;
+    private final String userMessage;
+    private final LocalDateTime timestamp;
 
     public InternalException() {
-        super("Ocurrió un error interno en el servidor.");
-        this.timestamp = LocalDateTime.now();
+        this("Ocurrió un error interno en el servidor.");
     }
 
     public InternalException(String userMessage) {

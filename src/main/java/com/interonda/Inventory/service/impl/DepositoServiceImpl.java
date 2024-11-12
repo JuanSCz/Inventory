@@ -2,14 +2,11 @@ package com.interonda.Inventory.service.impl;
 
 import com.interonda.Inventory.entity.Deposito;
 import com.interonda.Inventory.entity.Stock;
-import com.interonda.Inventory.exceptions.BadRequestException;
 import com.interonda.Inventory.exceptions.ConflictException;
-import com.interonda.Inventory.exceptions.DataAccessException;
 import com.interonda.Inventory.exceptions.ResourceNotFoundException;
 import com.interonda.Inventory.repository.DepositoRepository;
 import com.interonda.Inventory.service.DepositoService;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,26 +20,29 @@ public class DepositoServiceImpl implements DepositoService {
 
     private final DepositoRepository depositoRepository;
 
-    @Autowired
     public DepositoServiceImpl(DepositoRepository depositoRepository) {
         this.depositoRepository = depositoRepository;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Deposito> findAll() {
         return depositoRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Deposito findById(Long id) {
         return depositoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El deposito no fue encontrado!"));
     }
 
+    @Transactional
     @Override
     public Deposito save(Deposito deposito) {
         return depositoRepository.save(deposito);
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
         depositoRepository.deleteById(id);
@@ -59,12 +59,12 @@ public class DepositoServiceImpl implements DepositoService {
     public Deposito crearDeposito(Deposito deposito) {
 
         // Validar existencia de depósito con el mismo nombre
-        if (depositoRepository.existsByNombre(deposito.getNombre())) {
-            throw new ConflictException("Ya existe un depósito con el nombre: " + deposito.getNombre());
+        if (depositoRepository.existsByNombre(deposito.getCiudad())) {
+            throw new ConflictException("Ya existe un depósito con el nombre: " + deposito.getCiudad());
         }
 
         // Registrar la creación del depósito
-        logger.info("Creando nuevo depósito: Nombre = {}, Dirección = {}", deposito.getNombre(), deposito.getDireccion());
+        logger.info("Creando nuevo depósito: Nombre = {}, Dirección = {}", deposito.getCiudad(), deposito.getDireccion());
 
         // Guardar el depósito en el repositorio
         return depositoRepository.save(deposito);
@@ -76,18 +76,17 @@ public class DepositoServiceImpl implements DepositoService {
         return depositos;
     }
 
-
     @Transactional
     public Deposito actualizarDeposito(Long id, Deposito depositoActualizado) {
         Deposito depositoExistente = depositoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ya existe un depósito con el nombre: " + depositoActualizado));
 
-        if (depositoRepository.existsByNameAndIdNot(depositoActualizado.getNombre(), id)) {
+        if (depositoRepository.existsByNameAndIdNot(depositoActualizado.getCiudad(), id)) {
             throw new ResourceNotFoundException("Ya existe un depósito con el nombre " + depositoActualizado);
         }
 
         logger.info("Actualizando depósito con ID: {}", id);
 
-        depositoExistente.setNombre(depositoActualizado.getNombre());
+        depositoExistente.setCiudad(depositoActualizado.getCiudad());
         depositoExistente.setDireccion(depositoActualizado.getDireccion());
 
         Deposito depositoActualizadoFinal = depositoRepository.save(depositoExistente);
@@ -119,7 +118,6 @@ public class DepositoServiceImpl implements DepositoService {
         if (stocks.isEmpty()) {
             logger.warn("El depósito con ID {} no tiene stocks asociados.", depositoId);
         }
-
         return stocks;
     }
 }

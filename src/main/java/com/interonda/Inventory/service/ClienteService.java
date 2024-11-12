@@ -16,17 +16,19 @@ public interface ClienteService {
 
     void deleteById(Long id);
 
-    Cliente crearCliente(Cliente cliente);
+    public Cliente crearCliente(Cliente cliente);
 
-    Cliente actualizarCliente(Long id, Cliente clienteActualizado);
+    public Cliente actualizarCliente(Long id, Cliente clienteActualizado);
 
-    void eliminarCliente(Long id);
+    public void eliminarCliente(Long id);
 
-    Page<Cliente> listarClientes(Pageable pageable);
+    public Page<Cliente> listarClientes(Pageable pageable);
 
-    Page<Cliente> buscarClientesPorNombre(String nombre, Pageable pageable);
+    public Page<Cliente> buscarClientesPorNombre(String nombre, Pageable pageable);
 
-    Page<Venta> obtenerVentasDeCliente(Long clienteId, Pageable pageable);
+    public Page<Venta> obtenerVentasDeCliente(Long clienteId, Pageable pageable);
 
-    boolean existeClientePorContacto(String contacto);
+    public boolean existeClientePorContacto(String contacto);
+
+
 }

@@ -8,10 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-    
-    @Query("SELECT COUNT(c) > 0 FROM Cliente c WHERE c.contacto = :contacto")
+
+    @Query("SELECT COUNT(c) > 0 FROM Cliente c WHERE c.contactoCliente = :contacto")
     boolean existsByContacto(@Param("contacto") String contacto);
 
     @Query("SELECT c FROM Cliente c WHERE LOWER(c.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
-    Page<Cliente> buscarClientesPorNombre(@Param("nombre") String nombre, Pageable pageable);
+    Page<Cliente> findByNombre(@Param("nombre") String nombre, Pageable pageable);
+
+
 }

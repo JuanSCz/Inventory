@@ -125,5 +125,4 @@ public class HistorialStockServiceImpl implements HistorialStockService {
 
         return historial;
     }
-
 }

@@ -12,4 +12,8 @@ public interface VentaRepository extends JpaRepository<Venta, Long> {
     @Query("SELECT v FROM Venta v WHERE v.cliente.id = :clienteId")
     Page<Venta> obtenerVentasDeCliente(@Param("clienteId") Long clienteId, Pageable pageable);
 
+    @Query("SELECT v FROM Venta v WHERE v.cliente.id = :clienteId")
+    Page<Venta> findByClienteId(@Param("clienteId") Long clienteId, Pageable pageable);
+
+
 }

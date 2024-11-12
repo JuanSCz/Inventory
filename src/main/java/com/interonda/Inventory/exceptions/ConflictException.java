@@ -3,12 +3,11 @@ package com.interonda.Inventory.exceptions;
 import java.time.LocalDateTime;
 
 public class ConflictException extends RuntimeException {
-    private String userMessage;
-    private LocalDateTime timestamp;
+    private final String userMessage;
+    private final LocalDateTime timestamp;
 
     public ConflictException() {
-        super("Conflicto al procesar la solicitud.");
-        this.timestamp = LocalDateTime.now();
+        this("Conflicto al procesar la solicitud.");
     }
 
     public ConflictException(String userMessage) {

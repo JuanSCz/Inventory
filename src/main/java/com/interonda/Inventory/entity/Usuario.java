@@ -1,7 +1,10 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,28 +15,38 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @NotBlank(message = "{usuario.nombre.notBlank}")
+    @Size(max = 50, message = "{usuario.nombre.size}")
+    @Column(nullable = false, length = 50)
     private String nombre;
 
+    @NotBlank(message = "{usuario.rol.notBlank}")
     @Column(nullable = false)
     private String rol;
 
-    @Column(nullable = false)
+    @NotBlank(message = "{usuario.contrasenia.notBlank}")
+    @Size(min = 8, message = "{usuario.contrasenia.size}")
+    @Column(name = "contraseña", nullable = false)
     private String contrasenia;
 
-    @Column(nullable = true)
+    @Column(name = "foto_usuario")
     private byte[] imagenUsuario;
 
-    // Relación uno-a-muchos con HistorialStock
+    @NotBlank(message = "{usuario.contacto.notBlank}")
+    @Size(max = 15, message = "{usuario.contacto.size}")
+    @Column(length = 15, nullable = false)
+    private String contacto;
+
+    // Relación uno-a-muchos con HistorialStock (un usuario puede tener varios historiales de stock)
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HistorialStock> historialStock;
+    private List<HistorialStock> historialStock = new ArrayList<>();
 
     // Constructor vacío requerido por JPA
     public Usuario() {
     }
 
     // Getters y Setters
-    
+
     public Long getId() {
         return id;
     }

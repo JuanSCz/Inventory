@@ -1,6 +1,10 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 
@@ -12,10 +16,15 @@ public class DetalleVenta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "La cantidad es obligatoria")
+    @Positive(message = "La cantidad debe ser mayor a cero")
     @Column(nullable = false)
     private Integer cantidad;
 
-    @Column(nullable = false)
+    @NotNull(message = "El precio unitario es obligatorio")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El precio unitario debe ser mayor a cero")
+    @Digits(integer = 10, fraction = 2, message = "El precio unitario debe tener máximo 10 dígitos enteros y 2 decimales")
+    @Column(name = "precio_unitario", nullable = false)
     private BigDecimal precioUnitario;
 
     // Relaciones
@@ -35,7 +44,7 @@ public class DetalleVenta {
     }
 
     // Getters y Setters
-    
+
     public Long getId() {
         return id;
     }

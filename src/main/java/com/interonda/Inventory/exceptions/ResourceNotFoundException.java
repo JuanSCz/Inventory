@@ -3,12 +3,11 @@ package com.interonda.Inventory.exceptions;
 import java.time.LocalDateTime;
 
 public class ResourceNotFoundException extends RuntimeException {
-    private String userMessage;
-    private LocalDateTime timestamp;
+    private final String userMessage;
+    private final LocalDateTime timestamp;
 
     public ResourceNotFoundException() {
-        super("Recurso no encontrado.");
-        this.timestamp = LocalDateTime.now();
+        this("Recurso no encontrado.");
     }
 
     public ResourceNotFoundException(String userMessage) {

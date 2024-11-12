@@ -8,6 +8,7 @@ import com.interonda.Inventory.repository.ClienteRepository;
 import com.interonda.Inventory.repository.VentaRepository;
 import com.interonda.Inventory.service.ClienteService;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,83 +29,104 @@ public class ClienteServiceImpl implements ClienteService {
         this.ventaRepository = ventaRepository;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Cliente> findAll() {
         return clienteRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Cliente findById(Long id) {
         return clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("El cliente no fue encontrado!"));
     }
 
+    @Transactional
     @Override
     public Cliente save(Cliente cliente) {
         return clienteRepository.save(cliente);
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
         clienteRepository.deleteById(id);
     }
 
-    @Override
     @Transactional
+    @Override
     public Cliente crearCliente(Cliente cliente) {
-
+        // Verificar si ya existe un cliente con el mismo contacto para evitar duplicados
         if (clienteRepository.existsByContacto(cliente.getContactoCliente())) {
-            logger.warn("Intento de crear cliente con contacto duplicado: {}", cliente.getContactoCliente());
-            throw new ConflictException("Ya existe un cliente con el mismo contacto.");
+            throw new ConflictException("Ya existe un cliente con el mismo contacto: " + cliente.getContactoCliente());
         }
 
-        Cliente nuevoCliente = clienteRepository.save(cliente);
-
-        return nuevoCliente;
+        return clienteRepository.save(cliente);
     }
 
-    @Override
     @Transactional
+    @Override
     public Cliente actualizarCliente(Long id, Cliente clienteActualizado) {
-        Cliente clienteExistente = clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException());
+        // Verificar si el cliente existe en la base de datos
+        Cliente clienteExistente = clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con ID: " + id));
 
-        // Actualizar los atributos necesarios
+        // Validación de duplicado para el campo "contactoCliente" si se intenta actualizar
+        if (!clienteExistente.getContactoCliente().equals(clienteActualizado.getContactoCliente()) && clienteRepository.existsByContacto(clienteActualizado.getContactoCliente())) {
+            throw new ConflictException("Ya existe otro cliente con el contacto: " + clienteActualizado.getContactoCliente());
+        }
+
+        // Actualizar los campos necesarios (nombre, país, ciudad, dirección, contacto y email)
         clienteExistente.setNombre(clienteActualizado.getNombre());
-        clienteExistente.setContactoCliente(clienteActualizado.getContactoCliente());
-        clienteExistente.setDireccion(clienteActualizado.getDireccion());
         clienteExistente.setPais(clienteActualizado.getPais());
         clienteExistente.setCiudad(clienteActualizado.getCiudad());
+        clienteExistente.setDireccion(clienteActualizado.getDireccion());
+        clienteExistente.setContactoCliente(clienteActualizado.getContactoCliente());
+        clienteExistente.seteMailCliente(clienteActualizado.geteMailCliente());
 
-        Cliente clienteGuardado = clienteRepository.save(clienteExistente);
-
-        return clienteGuardado;
+        // Guardar y devolver el cliente actualizado
+        return clienteRepository.save(clienteExistente);
     }
 
+    @Transactional
     @Override
     public void eliminarCliente(Long id) {
-        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente con ID " + id + " no encontrado"));
+        // Verificar si el cliente existe en la base de datos
+        Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con ID: " + id));
 
+        // Eliminar el cliente
         clienteRepository.delete(cliente);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<Cliente> listarClientes(Pageable pageable) {
-        return clienteRepository.findAll(pageable);
+        return null;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<Cliente> buscarClientesPorNombre(String nombre, Pageable pageable) {
-        return clienteRepository.buscarClientesPorNombre(nombre, pageable);
+        return clienteRepository.findByNombre(nombre, pageable);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<Venta> obtenerVentasDeCliente(Long clienteId, Pageable pageable) {
-        return ventaRepository.obtenerVentasDeCliente(clienteId, pageable);
+        // Verificamos si el cliente existe
+        Cliente cliente = clienteRepository.findById(clienteId).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con ID: " + clienteId));
+
+        // Recuperamos y retornamos las ventas paginadas
+        return ventaRepository.findByClienteId(clienteId, pageable);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public boolean existeClientePorContacto(String contacto) {
+        // Usamos el método del repositorio para verificar la existencia
         return clienteRepository.existsByContacto(contacto);
     }
+
+
 }
 
 

@@ -1,6 +1,7 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
@@ -12,10 +13,15 @@ public class DetalleCompra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "La cantidad no puede ser nula")
+    @Positive(message = "La cantidad debe ser un número positivo")
     @Column(nullable = false)
     private Integer cantidad;
 
-    @Column(nullable = false)
+    @NotNull(message = "El precio unitario no puede ser nulo")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El precio unitario debe ser un número positivo")
+    @Digits(integer = 10, fraction = 2, message = "El precio unitario debe tener un máximo de 10 dígitos enteros y 2 decimales")
+    @Column(name = "precio_unitario", nullable = false)
     private BigDecimal precioUnitario;
 
     // Relaciones
@@ -35,7 +41,6 @@ public class DetalleCompra {
     }
 
     // Getters y Setters
-
     public Long getId() {
         return id;
     }
