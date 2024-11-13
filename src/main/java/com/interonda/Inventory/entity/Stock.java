@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,39 +15,43 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "La cantidad es obligatoria")
-    @PositiveOrZero(message = "La cantidad no puede ser negativa")
+    @NotNull(message = "{stock.cantidad.notNull}")
+    @PositiveOrZero(message = "{stock.cantidad.positiveOrZero}")
     @Column(nullable = false)
     private Integer cantidad;
 
-    @FutureOrPresent(message = "La fecha de actualización debe ser actual o futura")
+    @FutureOrPresent(message = "{stock.fechaActualizacion.futureOrPresent}")
     @Column(name = "actualizacion", nullable = false)
     private LocalDateTime fechaActualizacion;
 
-    @NotBlank(message = "La operación es obligatoria")
-    @Size(max = 50, message = "La operación no puede tener más de 50 caracteres")
+    @NotBlank(message = "{stock.operacion.notBlank}")
+    @Size(max = 50, message = "{stock.operacion.size}")
     @Column(length = 50, nullable = false)
     private String operacion;
 
     // Relaciones
 
+    // Relación muchos-a-uno con Producto (un stock pertenece a un producto)
     @ManyToOne
     @JoinColumn(name = "producto_id", nullable = false)
+    @NotNull(message = "{stock.producto.notNull}")
     private Producto producto;
 
+    // Relación muchos-a-uno con Deposito (un stock pertenece a un depósito)
     @ManyToOne
     @JoinColumn(name = "deposito_id", nullable = false)
+    @NotNull(message = "{stock.deposito.notNull}")
     private Deposito deposito;
 
+    // Relación uno-a-muchos con HistorialStock (un stock puede tener varios historiales de stock)
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HistorialStock> historialStocks;
+    private List<HistorialStock> historialStocks = new ArrayList<>();
 
     // Constructor vacío requerido por JPA
     public Stock() {
     }
 
     // Getters y Setters
-
     public Long getId() {
         return id;
     }

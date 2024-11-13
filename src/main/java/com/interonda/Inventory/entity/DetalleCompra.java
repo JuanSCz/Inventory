@@ -13,27 +13,29 @@ public class DetalleCompra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "La cantidad no puede ser nula")
-    @Positive(message = "La cantidad debe ser un número positivo")
+    @NotNull(message = "{detalleCompra.cantidad.notNull}")
+    @Positive(message = "{detalleCompra.cantidad.positive}")
     @Column(nullable = false)
     private Integer cantidad;
 
-    @NotNull(message = "El precio unitario no puede ser nulo")
-    @DecimalMin(value = "0.0", inclusive = false, message = "El precio unitario debe ser un número positivo")
-    @Digits(integer = 10, fraction = 2, message = "El precio unitario debe tener un máximo de 10 dígitos enteros y 2 decimales")
+    @NotNull(message = "{detalleCompra.precioUnitario.notNull}")
+    @DecimalMin(value = "0.0", inclusive = false, message = "{detalleCompra.precioUnitario.decimalMin}")
+    @Digits(integer = 10, fraction = 2, message = "{detalleCompra.precioUnitario.digits}")
     @Column(name = "precio_unitario", nullable = false)
     private BigDecimal precioUnitario;
 
     // Relaciones
 
-    // Relación muchos-a-uno con Compra
+    // Relación muchos-a-uno con Compra(una compra puede tener varios detalles)
     @ManyToOne
     @JoinColumn(name = "compra_id", nullable = false)
+    @NotNull(message = "{detalleCompra.compra.notNull}")
     private Compra compra;
 
-    // Relación muchos-a-uno con Producto
+    // Relación muchos-a-uno con Producto(un producto puede estar en varios detalles)
     @ManyToOne
     @JoinColumn(name = "producto_id", nullable = false)
+    @NotNull(message = "{detalleCompra.producto.notNull}")
     private Producto producto;
 
     // Constructor vacío requerido por JPA

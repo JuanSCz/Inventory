@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,38 +17,38 @@ public class Proveedor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El nombre es obligatorio")
-    @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
+    @NotBlank(message = "{proveedor.nombre.notBlank}")
+    @Size(max = 50, message = "{proveedor.nombre.size}")
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Size(max = 15, message = "El contacto no puede tener más de 15 caracteres")
+    @Size(max = 15, message = "{proveedor.contactoProveedor.size}")
     @Column(name = "contacto", length = 15)
     private String contactoProveedor;
 
-    @Size(max = 50, message = "La dirección no puede tener más de 50 caracteres")
+    @Size(max = 50, message = "{proveedor.direccion.size}")
     @Column(length = 50)
     private String direccion;
 
-    @Length(max = 254, message = "El país no puede tener más de 254 caracteres")
+    @Length(max = 254, message = "{proveedor.pais.length}")
     @Column(length = 254)
     private String pais;
 
-    @Size(max = 254, message = "El e-mail no puede tener más de 254 caracteres")
-    @Email(message = "El e-mail debe ser válido")
+    @Size(max = 254, message = "{proveedor.emailProveedor.size}")
+    @Email(message = "{proveedor.emailProveedor.email}")
     @Column(name = "email", length = 254)
-    private String eEmailProveedor;
+    private String emailProveedor;
 
     // Relaciones
 
-    // Relación muchos-a-muchos con Producto
+    // Relación muchos-a-muchos con Producto (un proveedor puede suministrar varios productos)
     @ManyToMany
     @JoinTable(name = "proveedor_producto", joinColumns = @JoinColumn(name = "proveedor_id"), inverseJoinColumns = @JoinColumn(name = "producto_id"))
-    private List<Producto> productos;
+    private List<Producto> productos = new ArrayList<>();
 
-    // Relación uno-a-muchos con Compra
+    // Relación uno-a-muchos con Compra (un proveedor puede tener varias compras)
     @OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Compra> compras;
+    private List<Compra> compras = new ArrayList<>();
 
     // Constructor vacío requerido por JPA
     public Proveedor() {
@@ -95,12 +96,12 @@ public class Proveedor {
         this.pais = pais;
     }
 
-    public String geteEmailProveedor() {
-        return eEmailProveedor;
+    public String getEmailProveedor() {
+        return emailProveedor;
     }
 
-    public void seteEmailProveedor(String eEmailProveedor) {
-        this.eEmailProveedor = eEmailProveedor;
+    public void setEmailProveedor(String emailProveedor) {
+        this.emailProveedor = emailProveedor;
     }
 
     public List<Producto> getProductos() {

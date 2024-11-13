@@ -16,14 +16,14 @@ public class DetalleVenta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "La cantidad es obligatoria")
-    @Positive(message = "La cantidad debe ser mayor a cero")
+    @NotNull(message = "{detalleVenta.cantidad.notNull}")
+    @Positive(message = "{detalleVenta.cantidad.positive}")
     @Column(nullable = false)
     private Integer cantidad;
 
-    @NotNull(message = "El precio unitario es obligatorio")
-    @DecimalMin(value = "0.0", inclusive = false, message = "El precio unitario debe ser mayor a cero")
-    @Digits(integer = 10, fraction = 2, message = "El precio unitario debe tener máximo 10 dígitos enteros y 2 decimales")
+    @NotNull(message = "{detalleVenta.precioUnitario.notNull}")
+    @DecimalMin(value = "0.0", inclusive = false, message = "{detalleVenta.precioUnitario.decimalMin}")
+    @Digits(integer = 10, fraction = 2, message = "{detalleVenta.precioUnitario.digits}")
     @Column(name = "precio_unitario", nullable = false)
     private BigDecimal precioUnitario;
 
@@ -32,11 +32,13 @@ public class DetalleVenta {
     // Relación muchos-a-uno con Venta
     @ManyToOne
     @JoinColumn(name = "venta_id", nullable = false)
+    @NotNull(message = "{detalleVenta.venta.notNull}")
     private Venta venta;
 
     // Relación muchos-a-uno con Producto
     @ManyToOne
     @JoinColumn(name = "producto_id", nullable = false)
+    @NotNull(message = "{detalleVenta.producto.notNull}")
     private Producto producto;
 
     // Constructor vacío requerido por JPA

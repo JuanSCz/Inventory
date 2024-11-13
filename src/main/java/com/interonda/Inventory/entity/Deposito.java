@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,29 +16,31 @@ public class Deposito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El nombre no puede estar vacío")
-    @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
+    @NotBlank(message = "{deposito.nombre.notBlank}")
+    @Size(max = 50, message = "{deposito.nombre.size}")
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @NotBlank(message = "La provincia no puede estar vacía")
-    @Size(max = 20, message = "La provincia no puede tener más de 20 caracteres")
+    @NotBlank(message = "{deposito.provincia.notBlank}")
+    @Size(max = 20, message = "{deposito.provincia.size}")
     @Column(nullable = false, length = 20)
     private String provincia;
 
-    @NotBlank(message = "La dirección no puede estar vacía")
-    @Size(max = 20, message = "La dirección no puede tener más de 25 caracteres")
+    @NotBlank(message = "{deposito.direccion.notBlank}")
+    @Size(max = 20, message = "{deposito.direccion.size}")
     @Column(nullable = false, length = 20)
     private String direccion;
 
-    @NotBlank(message = "El contacto no puede estar vacío")
-    @Size(max = 15, message = "El contacto no puede tener más de 15 digitos")
+    @NotBlank(message = "{deposito.contactoDeposito.notBlank}")
+    @Size(max = 15, message = "{deposito.contactoDeposito.size}")
     @Column(name = "contacto", length = 15, nullable = false)
     private String contactoDeposito;
 
     // Relaciones
+
+    // Relación uno-a-muchos con Stock (un depósito puede tener muchos stocks)
     @OneToMany(mappedBy = "deposito", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Stock> stocks;
+    private List<Stock> stocks = new ArrayList<>();
 
     // Constructor vacío requerido por JPA
     public Deposito() {

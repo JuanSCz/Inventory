@@ -3,7 +3,6 @@ package com.interonda.Inventory.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +19,6 @@ public class Usuario {
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @NotBlank(message = "{usuario.rol.notBlank}")
-    @Column(nullable = false)
-    private String rol;
-
     @NotBlank(message = "{usuario.contrasenia.notBlank}")
     @Size(min = 8, message = "{usuario.contrasenia.size}")
     @Column(name = "contraseña", nullable = false)
@@ -37,15 +32,16 @@ public class Usuario {
     @Column(length = 15, nullable = false)
     private String contacto;
 
-    // Relación uno-a-muchos con HistorialStock (un usuario puede tener varios historiales de stock)
+    // Relación uno-a-muchos con HistorialStock (un usuario puede tener muchos historiales de stock)
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HistorialStock> historialStock = new ArrayList<>();
 
-    // Constructor vacío requerido por JPA
-    public Usuario() {
-    }
+    //Relación muchos-a-uno con Rol (muchos usuarios pueden tener un rol)
+    @ManyToOne
+    @JoinColumn(name = "rol_id")
+    private Rol rol;
 
-    // Getters y Setters
+    public Usuario() {}
 
     public Long getId() {
         return id;
@@ -63,11 +59,11 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public String getRol() {
+    public Rol getRol() {
         return rol;
     }
 
-    public void setRol(String rol) {
+    public void setRol(Rol rol) {
         this.rol = rol;
     }
 
@@ -94,5 +90,14 @@ public class Usuario {
     public void setImagenUsuario(byte[] imagenUsuario) {
         this.imagenUsuario = imagenUsuario;
     }
+
+    public String getContacto() {
+        return contacto;
+    }
+
+    public void setContacto(String contacto) {
+        this.contacto = contacto;
+    }
 }
+
 

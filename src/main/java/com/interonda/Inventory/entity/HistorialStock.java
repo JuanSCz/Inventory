@@ -13,63 +13,66 @@ public class HistorialStock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "La cantidad anterior es requerida")
-    @PositiveOrZero(message = "La cantidad anterior debe ser mayor o igual a cero")
+    @NotNull(message = "{historialStock.cantidadAnterior.notNull}")
+    @PositiveOrZero(message = "{historialStock.cantidadAnterior.positiveOrZero}")
     @Column(name = "cantidad_anterior", nullable = false)
     private Integer cantidadAnterior;
 
-    @NotNull(message = "La cantidad nueva es requerida")
-    @PositiveOrZero(message = "La cantidad nueva debe ser mayor o igual a cero")
+    @NotNull(message = "{historialStock.cantidadNueva.notNull}")
+    @PositiveOrZero(message = "{historialStock.cantidadNueva.positiveOrZero}")
     @Column(name = "cantidad_actual", nullable = false)
     private Integer cantidadNueva;
 
-    @NotNull(message = "La fecha es requerida")
-    @FutureOrPresent(message = "La fecha debe ser actual o futura")
+    @NotNull(message = "{historialStock.fechaActualizacion.notNull}")
+    @FutureOrPresent(message = "{historialStock.fechaActualizacion.futureOrPresent}")
     @Column(name = "actualizacion", nullable = false)
     private LocalDateTime fechaActualizacion;
 
-    @NotBlank(message = "El motivo es requerido")
-    @Size(min = 3, max = 50, message = "El motivo debe tener entre 3 y 50 caracteres")
+    @NotBlank(message = "{historialStock.motivo.notBlank}")
+    @Size(min = 3, max = 50, message = "{historialStock.motivo.size}")
     @Column(nullable = false)
     private String motivo;
 
-    @NotBlank(message = "El tipo de movimiento es requerido")
-    @Size(min = 3, max = 50, message = "El tipo de movimiento debe tener entre 3 y 50 caracteres")
+    @NotBlank(message = "{historialStock.tipoMovimiento.notBlank}")
+    @Size(min = 3, max = 50, message = "{historialStock.tipoMovimiento.size}")
     @Column(name = "tipo_movimiento", length = 50, nullable = false)
     private String tipoMovimiento;
 
-    @Size(max = 200, message = "La observación debe tener como máximo 200 caracteres")
+    @Size(max = 200, message = "{historialStock.observacion.size}")
     @Column(length = 200)
     private String observacion;
 
     // Relaciones
 
-    // Relación muchos-a-uno con Producto
+    // Relación muchos-a-uno con Producto (un producto puede tener varios historiales de stock)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "producto_id", nullable = false)
+    @NotNull(message = "{historialStock.producto.notNull}")
     private Producto producto;
 
-    // Relación muchos-a-uno con Depósito
+    // Relación muchos-a-uno con Depósito (un depósito puede tener varios historiales de stock)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deposito_id", nullable = false)
+    @NotNull(message = "{historialStock.deposito.notNull}")
     private Deposito deposito;
 
-    // Relación muchos-a-uno con Usuario
+    // Relación muchos-a-uno con Usuario (un usuario puede tener varios historiales de stock)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
+    @NotNull(message = "{historialStock.usuario.notNull}")
     private Usuario usuario;
 
+    // Relación muchos-a-uno con Stock (un stock puede tener varios historiales de stock)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stock_id", nullable = false)
+    @NotNull(message = "{historialStock.stock.notNull}")
     private Stock stock; // Esta es la propiedad que faltaba
 
     // Constructor vacío requerido por JPA
     public HistorialStock() {
-        // Constructor vacío
     }
 
     // Getters y Setters
-
     public Long getId() {
         return id;
     }

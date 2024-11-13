@@ -20,11 +20,7 @@ public class GlobalExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     private ResponseEntity<Map<String, Object>> buildResponse(String title, String message, HttpStatus status) {
-        Map<String, Object> response = Map.of(
-                "title", title,
-                "message", message,
-                "timestamp", LocalDateTime.now()
-        );
+        Map<String, Object> response = Map.of("title", title, "message", message, "timestamp", LocalDateTime.now());
         return ResponseEntity.status(status).body(response);
     }
 
@@ -52,6 +48,12 @@ public class GlobalExceptionHandler {
         return buildResponse("Error: Acceso a datos fallido", ex.getUserMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Map<String, Object>> handleUnauthorizedException(UnauthorizedException ex) {
+        logger.warn("Unauthorized Error: {} | Timestamp: {}", ex.getUserMessage(), ex.getTimestamp());
+        return buildResponse("Error: Unauthorized", ex.getUserMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(InternalException.class)
     public ResponseEntity<Map<String, Object>> handleInternalException(InternalException ex) {
         logger.error("Internal Server Error: {} | Timestamp: {}", ex.getUserMessage(), ex.getTimestamp());
@@ -67,19 +69,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         logger.warn("Validation Error: {}", ex.getMessage());
-        Map<String, String> errors = ex.getBindingResult().getFieldErrors().stream()
-                .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+        Map<String, String> errors = ex.getBindingResult().getFieldErrors().stream().collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Map<String, String>> handleConstraintViolationException(ConstraintViolationException ex) {
         logger.warn("Constraint Violation: {}", ex.getMessage());
-        Map<String, String> errors = ex.getConstraintViolations().stream()
-                .collect(Collectors.toMap(
-                        violation -> violation.getPropertyPath().toString(),
-                        violation -> violation.getMessage()
-                ));
+        Map<String, String> errors = ex.getConstraintViolations().stream().collect(Collectors.toMap(violation -> violation.getPropertyPath().toString(), violation -> violation.getMessage()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 }

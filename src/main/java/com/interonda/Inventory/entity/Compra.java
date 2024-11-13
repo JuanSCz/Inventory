@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,41 +16,42 @@ public class Compra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "La fecha no puede ser nula")
-    @FutureOrPresent(message = "La fecha debe ser presente o futura")
+    @NotNull(message = "{compra.fecha.notNull}")
+    @FutureOrPresent(message = "{compra.fecha.futureOrPresent}")
     @Column(nullable = false)
     private LocalDate fecha;
 
-    @NotNull(message = "El total no puede ser nulo")
-    @DecimalMin(value = "0.0 ", message = "El total debe ser mayor o igual a 0")
-    @Digits(integer = 10, fraction = 2, message = "El total debe tener como máximo 10 dígitos enteros y 2 decimales")
+    @NotNull(message = "{compra.total.notNull}")
+    @DecimalMin(value = "0.0 ", message = "{compra.total.decimalMin}")
+    @Digits(integer = 10, fraction = 2, message = "{compra.total.digits}")
     @Column(nullable = false)
     private BigDecimal total;
 
-    @NotBlank(message = "El método de pago no puede estar vacío")
+    @NotBlank(message = "{compra.metodoPago.notBlank}")
     @Column(name = "metodo_de_pago", nullable = false, length = 30)
     private String metodoPago;
 
-    @NotBlank(message = "El estado no puede estar vacío")
+    @NotBlank(message = "{compra.estado.notBlank}")
     @Column(nullable = false, length = 30)
     private String estado;
 
-    @NotNull(message = "Los impuestos no pueden ser nulos")
-    @DecimalMin(value = "0.0", message = "Los impuestos deben ser mayores o iguales a 0")
-    @Digits(integer = 10, fraction = 2, message = "Los impuestos deben tener como máximo 10 dígitos enteros y 2 decimales")
+    @NotNull(message = "{compra.impuestos.notNull}")
+    @DecimalMin(value = "0.0", message = "{compra.impuestos.decimalMin}")
+    @Digits(integer = 10, fraction = 2, message = "{compra.impuestos.digits}")
     @Column(nullable = false)
     private BigDecimal impuestos;
 
     // Relaciones
 
-    // Relación muchos-a-uno con Proveedor
+    // Relación muchos-a-uno con Proveedor(una compra pertenece a un proveedor)
     @ManyToOne
     @JoinColumn(name = "proveedor_id", nullable = false)
+    @NotNull(message = "{compra.proveedor.notNull}")
     private Proveedor proveedor;
 
-    // Relación uno-a-muchos con DetalleCompra
+    // Relación uno-a-muchos con DetalleCompra(una compra puede tener muchos detalles de compra)
     @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetalleCompra> detallesCompra;
+    private List<DetalleCompra> detallesCompra = new ArrayList<>();
 
     // Constructor vacío requerido por JPA
     public Compra() {

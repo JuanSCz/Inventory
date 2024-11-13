@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,80 +15,83 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El nombre no puede estar vacío")
-    @Size(min = 3, max = 50, message = "El nombre debe tener entre 3 y 50 caracteres")
+    @NotBlank(message = "{producto.nombre.notBlank}")
+    @Size(min = 3, max = 50, message = "{producto.nombre.size}")
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Size(max = 100, message = "La descripción no puede tener más de 75 caracteres")
+    @Size(max = 100, message = "{producto.descripcion.size}")
     @Column(length = 100)
     private String descripcion;
 
-    @NotNull(message = "El precio no puede estar vacío")
-    @Digits(integer = 10, fraction = 2, message = "El precio debe tener máximo 10 dígitos y 2 decimales")
-    @DecimalMin(value = "0.00", message = "El precio no puede ser negativo")
+    @NotNull(message = "{producto.precio.notNull}")
+    @Digits(integer = 10, fraction = 2, message = "{producto.precio.digits}")
+    @DecimalMin(value = "0.00", message = "{producto.precio.decimalMin}")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal precio;
 
-    @NotNull(message = "El costo no puede estar vacío")
-    @Digits(integer = 10, fraction = 2, message = "El costo debe tener máximo 10 dígitos y 2 decimales")
-    @DecimalMin(value = "0.00", message = "El costo no puede ser negativo")
+    @NotNull(message = "{producto.costo.notNull}")
+    @Digits(integer = 10, fraction = 2, message = "{producto.costo.digits}")
+    @DecimalMin(value = "0.00", message = "{producto.costo.decimalMin}")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal costo;
 
-    @Size(min = 12, max = 13, message = "El codigo de barra debe tener entre 12 y 13 caracteres")
-    @Positive(message = "El codigo de barra no puede ser 0")
+    @Size(min = 12, max = 13, message = "{producto.codigoBarras.size}")
+    @Positive(message = "{producto.codigoBarras.positive}")
     @Column(name = "codigo_barra", length = 13, unique = true)
     private String codigoBarras;
 
-    @Size(max = 50, message = "El numero de serie debe tener entre 1 y 50 caracteres")
-    @Positive(message = "El numero de serie no puede ser 0")
+    @Size(max = 50, message = "{producto.numeroDeSerie.size}")
+    @Positive(message = "{producto.numeroDeSerie.positive}")
     @Column(name = "numero_serie", length = 50, unique = true)
     private String numeroDeSerie;
 
-    @NotNull(message = "El stock actual no puede estar vacío")
-    @PositiveOrZero(message = "El stock actual no puede ser negativo")
+    @NotNull(message = "{producto.stockActual.notNull}")
+    @PositiveOrZero(message = "{producto.stockActual.positiveOrZero}")
     @Column(name = "stock_actual", nullable = false)
     private Integer stockActual;
 
-    @NotNull(message = "El stock mínimo no puede estar vacío")
-    @PositiveOrZero(message = "El stock mínimo no puede ser 0")
+    @NotNull(message = "{producto.stockMinimo.notNull}")
+    @PositiveOrZero(message = "{producto.stockMinimo.positiveOrZero}")
     @Column(nullable = false)
     private Integer stockMinimo;
 
     @Column(name = "imagen_producto")
     private byte[] imagenProducto;
 
-    @Size(min = 17, max = 17, message = "La dirección MAC debe tener 17 caracteres")
-    @Positive(message = "La dirección MAC no puede ser 0")
+    @Size(min = 17, max = 17, message = "{producto.macAddress.size}")
+    @Positive(message = "{producto.macAddress.positive}")
     @Column(name = "mac_address", length = 17, unique = true)
     private String macAddress;
 
-// Relaciones
+    // Relaciones
 
+    // Relación muchos a uno con la entidad Categoria (un producto pertenece a una categoría)
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
+    @NotNull(message = "{producto.categoria.notNull}")
     private Categoria categoria;
 
+    // Relación uno a muchos con la entidad Stock (un producto tiene muchos stocks)
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Stock> stocks;
+    private List<Stock> stocks = new ArrayList<>();
 
+    // Relación muchos a muchos con la entidad Proveedor (un producto tiene muchos proveedores)
     @ManyToMany
-    @JoinTable(
-            name = "producto_proveedor",
-            joinColumns = @JoinColumn(name = "producto_id"),
-            inverseJoinColumns = @JoinColumn(name = "proveedor_id")
-    )
-    private List<Proveedor> proveedores;
+    @JoinTable(name = "producto_proveedor", joinColumns = @JoinColumn(name = "producto_id"), inverseJoinColumns = @JoinColumn(name = "proveedor_id"))
+    private List<Proveedor> proveedores = new ArrayList<>();
 
+    // Relación uno a muchos con la entidad DetalleCompra (un producto tiene muchos detalles de compra)
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetalleCompra> detallesCompra;
+    private List<DetalleCompra> detallesCompra = new ArrayList<>();
 
+    // Relación uno a muchos con la entidad DetalleVenta (un producto tiene muchos detalles
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DetalleVenta> detallesVenta;
+    private List<DetalleVenta> detallesVenta = new ArrayList<>();
 
+    // Relación uno a muchos con la entidad HistorialStock (un producto tiene muchos historiales de stock)
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HistorialStock> historialStocks;
+    private List<HistorialStock> historialStocks = new ArrayList<>();
 
     // Constructor vacío requerido por JPA
     public Producto() {

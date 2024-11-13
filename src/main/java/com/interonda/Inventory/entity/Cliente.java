@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,41 +16,41 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El nombre no puede estar vacío")
-    @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
+    @NotBlank(message = "{cliente.nombre.notBlank}")
+    @Size(max = 50, message = "{cliente.nombre.size}")
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @NotBlank(message = "El país no puede estar vacío")
-    @Size(max = 30, message = "El país no puede tener más de 30 caracteres")
+    @NotBlank(message = "{cliente.pais.notBlank}")
+    @Size(max = 30, message = "{cliente.pais.size}")
     @Column(nullable = false, length = 30)
     private String pais;
 
-    @NotBlank(message = "La ciudad no puede estar vacía")
-    @Size(max = 30, message = "La ciudad no puede tener más de 30 caracteres")
+    @NotBlank(message = "{cliente.ciudad.notBlank}")
+    @Size(max = 30, message = "{cliente.ciudad.size}")
     @Column(nullable = false, length = 30)
     private String ciudad;
 
-    @NotBlank(message = "La dirección no puede estar vacía")
-    @Size(max = 50, message = "La dirección no puede tener más de 50 caracteres")
+    @NotBlank(message = "{cliente.direccion.notBlank}")
+    @Size(max = 50, message = "{cliente.direccion.size}")
     @Column(nullable = false, length = 50)
     private String direccion;
 
-    @NotBlank(message = "El contacto no puede estar vacío")
-    @Size(max = 15, message = "El contacto no puede tener más de 15 caracteres")
+    @NotBlank(message = "{cliente.contactoCliente.notBlank}")
+    @Size(max = 15, message = "{cliente.contactoCliente.size}")
     @Column(name = "contacto", nullable = false, length = 15)
     private String contactoCliente;
 
-    @Email(message = "El e-mail debe ser válido")
-    @Size(max = 254, message = "El e-mail no puede tener más de 254 caracteres")
+    @Email(message = "{cliente.eMailCliente.email}")
+    @Size(max = 254, message = "{cliente.eMailCliente.size}")
     @Column(name = "email", length = 254)
     private String eMailCliente;
 
     // Relaciones
 
-    // Relación uno-a-muchos con Venta
+    // Relación uno-a-muchos con Venta (un cliente puede tener muchas ventas)
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Venta> ventas;
+    private List<Venta> ventas = new ArrayList<>();
 
     // Constructor vacío requerido por JPA
     public Cliente() {
