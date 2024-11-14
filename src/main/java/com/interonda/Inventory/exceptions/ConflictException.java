@@ -16,6 +16,12 @@ public class ConflictException extends RuntimeException {
         this.timestamp = LocalDateTime.now();
     }
 
+    public ConflictException(String userMessage, Throwable cause) {
+        super(userMessage, cause);
+        this.userMessage = userMessage;
+        this.timestamp = LocalDateTime.now();
+    }
+
     public String getUserMessage() {
         return userMessage;
     }

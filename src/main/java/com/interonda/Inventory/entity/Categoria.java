@@ -28,7 +28,7 @@ public class Categoria {
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Producto> productos = new ArrayList<>();
 
-    // Constructor vacío requerido por JPA
+
     public Categoria() {
     }
 

@@ -3,6 +3,7 @@ package com.interonda.Inventory.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,8 @@ public class Usuario {
     @JoinColumn(name = "rol_id")
     private Rol rol;
 
-    public Usuario() {}
+    public Usuario() {
+    }
 
     public Long getId() {
         return id;

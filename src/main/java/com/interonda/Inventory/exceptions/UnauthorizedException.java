@@ -16,6 +16,12 @@ public class UnauthorizedException extends RuntimeException {
         this.timestamp = LocalDateTime.now();
     }
 
+    public UnauthorizedException(String userMessage, Throwable cause) {
+        super(userMessage, cause);
+        this.userMessage = userMessage;
+        this.timestamp = LocalDateTime.now();
+    }
+
     public String getUserMessage() {
         return userMessage;
     }

@@ -55,11 +55,11 @@ public class Deposito {
         this.id = id;
     }
 
-    public String getCiudad() {
+    public String getNombre() {
         return nombre;
     }
 
-    public void setCiudad(String nombre) {
+    public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
