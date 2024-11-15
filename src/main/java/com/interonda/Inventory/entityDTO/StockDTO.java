@@ -1,14 +1,28 @@
 package com.interonda.Inventory.entityDTO;
 
+import jakarta.validation.constraints.*;
+
 import java.time.LocalDateTime;
 
 public class StockDTO {
 
     private Long id;
+
+    @NotNull(message = "{stockDTO.cantidad.notNull}")
+    @PositiveOrZero(message = "{stockDTO.cantidad.positiveOrZero}")
     private Integer cantidad;
+
+    @FutureOrPresent(message = "{stockDTO.fechaActualizacion.futureOrPresent}")
     private LocalDateTime fechaActualizacion;
+
+    @NotBlank(message = "{stockDTO.operacion.notBlank}")
+    @Size(max = 50, message = "{stockDTO.operacion.size}")
     private String operacion;
+
+    @NotNull(message = "{stockDTO.producto.notNull}")
     private Long productoId;
+
+    @NotNull(message = "{stockDTO.deposito.notNull}")
     private Long depositoId;
 
     public StockDTO() {

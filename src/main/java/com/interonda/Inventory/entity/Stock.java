@@ -1,7 +1,6 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,17 +14,12 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "{stock.cantidad.notNull}")
-    @PositiveOrZero(message = "{stock.cantidad.positiveOrZero}")
     @Column(nullable = false)
     private Integer cantidad;
 
-    @FutureOrPresent(message = "{stock.fechaActualizacion.futureOrPresent}")
     @Column(name = "actualizacion", nullable = false)
     private LocalDateTime fechaActualizacion;
 
-    @NotBlank(message = "{stock.operacion.notBlank}")
-    @Size(max = 50, message = "{stock.operacion.size}")
     @Column(length = 50, nullable = false)
     private String operacion;
 
@@ -34,13 +28,11 @@ public class Stock {
     // Relación muchos-a-uno con Producto (un stock pertenece a un producto)
     @ManyToOne
     @JoinColumn(name = "producto_id", nullable = false)
-    @NotNull(message = "{stock.producto.notNull}")
     private Producto producto;
 
     // Relación muchos-a-uno con Deposito (un stock pertenece a un depósito)
     @ManyToOne
     @JoinColumn(name = "deposito_id", nullable = false)
-    @NotNull(message = "{stock.deposito.notNull}")
     private Deposito deposito;
 
     // Relación uno-a-muchos con HistorialStock (un stock puede tener varios historiales de stock)

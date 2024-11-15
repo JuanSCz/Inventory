@@ -1,16 +1,35 @@
 package com.interonda.Inventory.entityDTO;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.Length;
+
 import java.util.List;
 
 public class ProveedorDTO {
 
     private Long id;
+
+    @NotBlank(message = "{proveedorDTO.nombre.notBlank}")
+    @Size(max = 50, message = "{proveedorDTO.nombre.size}")
     private String nombre;
+
+    @Size(max = 15, message = "{proveedorDTO.contactoProveedor.size}")
     private String contactoProveedor;
+
+    @Size(max = 50, message = "{proveedorDTO.direccion.size}")
     private String direccion;
+
+    @Length(max = 254, message = "{proveedorDTO.pais.length}")
     private String pais;
+
+    @Size(max = 254, message = "{proveedorDTO.emailProveedor.size}")
+    @Email(message = "{proveedorDTO.emailProveedor.email}")
     private String emailProveedor;
+
     private List<Long> productosIds;
+
     private List<Long> comprasIds;
 
     public ProveedorDTO() {

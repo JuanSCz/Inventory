@@ -1,7 +1,6 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
@@ -12,33 +11,22 @@ public class HistorialStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotNull(message = "{historialStock.cantidadAnterior.notNull}")
-    @PositiveOrZero(message = "{historialStock.cantidadAnterior.positiveOrZero}")
+    
     @Column(name = "cantidad_anterior", nullable = false)
     private Integer cantidadAnterior;
 
-    @NotNull(message = "{historialStock.cantidadNueva.notNull}")
-    @PositiveOrZero(message = "{historialStock.cantidadNueva.positiveOrZero}")
     @Column(name = "cantidad_actual", nullable = false)
     private Integer cantidadNueva;
 
-    @NotNull(message = "{historialStock.fechaActualizacion.notNull}")
-    @FutureOrPresent(message = "{historialStock.fechaActualizacion.futureOrPresent}")
     @Column(name = "actualizacion", nullable = false)
     private LocalDateTime fechaActualizacion;
 
-    @NotBlank(message = "{historialStock.motivo.notBlank}")
-    @Size(min = 3, max = 50, message = "{historialStock.motivo.size}")
     @Column(nullable = false)
     private String motivo;
 
-    @NotBlank(message = "{historialStock.tipoMovimiento.notBlank}")
-    @Size(min = 3, max = 50, message = "{historialStock.tipoMovimiento.size}")
     @Column(name = "tipo_movimiento", length = 50, nullable = false)
     private String tipoMovimiento;
 
-    @Size(max = 200, message = "{historialStock.observacion.size}")
     @Column(length = 200)
     private String observacion;
 
@@ -47,25 +35,21 @@ public class HistorialStock {
     // Relación muchos-a-uno con Producto (un producto puede tener varios historiales de stock)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "producto_id", nullable = false)
-    @NotNull(message = "{historialStock.producto.notNull}")
     private Producto producto;
 
     // Relación muchos-a-uno con Depósito (un depósito puede tener varios historiales de stock)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "deposito_id", nullable = false)
-    @NotNull(message = "{historialStock.deposito.notNull}")
     private Deposito deposito;
 
     // Relación muchos-a-uno con Usuario (un usuario puede tener varios historiales de stock)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
-    @NotNull(message = "{historialStock.usuario.notNull}")
     private Usuario usuario;
 
     // Relación muchos-a-uno con Stock (un stock puede tener varios historiales de stock)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stock_id", nullable = false)
-    @NotNull(message = "{historialStock.stock.notNull}")
     private Stock stock; // Esta es la propiedad que faltaba
 
     // Constructor vacío requerido por JPA

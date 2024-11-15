@@ -6,14 +6,18 @@ import java.util.List;
 
 @Entity
 public class Rol {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 50)
     private String nombre;
 
     public Rol() {
     }
+
+    //Relaciones
 
     // Relación uno-a-muchos con Usuario (un rol puede tener muchos usuarios)
     @OneToMany(mappedBy = "rol")

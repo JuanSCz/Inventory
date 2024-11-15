@@ -13,14 +13,9 @@ public class DetalleCompra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "{detalleCompra.cantidad.notNull}")
-    @Positive(message = "{detalleCompra.cantidad.positive}")
     @Column(nullable = false)
     private Integer cantidad;
 
-    @NotNull(message = "{detalleCompra.precioUnitario.notNull}")
-    @DecimalMin(value = "0.0", inclusive = false, message = "{detalleCompra.precioUnitario.decimalMin}")
-    @Digits(integer = 10, fraction = 2, message = "{detalleCompra.precioUnitario.digits}")
     @Column(name = "precio_unitario", nullable = false)
     private BigDecimal precioUnitario;
 
@@ -29,13 +24,11 @@ public class DetalleCompra {
     // Relación muchos-a-uno con Compra(una compra puede tener varios detalles)
     @ManyToOne
     @JoinColumn(name = "compra_id", nullable = false)
-    @NotNull(message = "{detalleCompra.compra.notNull}")
     private Compra compra;
 
     // Relación muchos-a-uno con Producto(un producto puede estar en varios detalles)
     @ManyToOne
     @JoinColumn(name = "producto_id", nullable = false)
-    @NotNull(message = "{detalleCompra.producto.notNull}")
     private Producto producto;
 
     // Constructor vacío requerido por JPA

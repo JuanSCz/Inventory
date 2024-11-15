@@ -1,10 +1,6 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 
@@ -16,14 +12,9 @@ public class DetalleVenta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "{detalleVenta.cantidad.notNull}")
-    @Positive(message = "{detalleVenta.cantidad.positive}")
     @Column(nullable = false)
     private Integer cantidad;
 
-    @NotNull(message = "{detalleVenta.precioUnitario.notNull}")
-    @DecimalMin(value = "0.0", inclusive = false, message = "{detalleVenta.precioUnitario.decimalMin}")
-    @Digits(integer = 10, fraction = 2, message = "{detalleVenta.precioUnitario.digits}")
     @Column(name = "precio_unitario", nullable = false)
     private BigDecimal precioUnitario;
 
@@ -32,13 +23,11 @@ public class DetalleVenta {
     // Relación muchos-a-uno con Venta
     @ManyToOne
     @JoinColumn(name = "venta_id", nullable = false)
-    @NotNull(message = "{detalleVenta.venta.notNull}")
     private Venta venta;
 
     // Relación muchos-a-uno con Producto
     @ManyToOne
     @JoinColumn(name = "producto_id", nullable = false)
-    @NotNull(message = "{detalleVenta.producto.notNull}")
     private Producto producto;
 
     // Constructor vacío requerido por JPA

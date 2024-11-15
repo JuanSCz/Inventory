@@ -1,7 +1,6 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,52 +14,33 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "{producto.nombre.notBlank}")
-    @Size(min = 3, max = 50, message = "{producto.nombre.size}")
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Size(max = 100, message = "{producto.descripcion.size}")
     @Column(length = 100)
     private String descripcion;
 
-    @NotNull(message = "{producto.precio.notNull}")
-    @Digits(integer = 10, fraction = 2, message = "{producto.precio.digits}")
-    @DecimalMin(value = "0.00", message = "{producto.precio.decimalMin}")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal precio;
 
-    @NotNull(message = "{producto.costo.notNull}")
-    @Digits(integer = 10, fraction = 2, message = "{producto.costo.digits}")
-    @DecimalMin(value = "0.00", message = "{producto.costo.decimalMin}")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal costo;
 
-    @Size(min = 12, max = 13, message = "{producto.codigoBarras.size}")
-    @Positive(message = "{producto.codigoBarras.positive}")
     @Column(name = "codigo_barra", length = 13, unique = true)
     private String codigoBarras;
 
-    @Size(max = 50, message = "{producto.numeroDeSerie.size}")
-    @Positive(message = "{producto.numeroDeSerie.positive}")
     @Column(name = "numero_serie", length = 50, unique = true)
     private String numeroDeSerie;
 
-    @NotNull(message = "{producto.stockActual.notNull}")
-    @PositiveOrZero(message = "{producto.stockActual.positiveOrZero}")
     @Column(name = "stock_actual", nullable = false)
     private Integer stockActual;
 
-    @NotNull(message = "{producto.stockMinimo.notNull}")
-    @PositiveOrZero(message = "{producto.stockMinimo.positiveOrZero}")
     @Column(nullable = false)
     private Integer stockMinimo;
 
     @Column(name = "imagen_producto")
     private byte[] imagenProducto;
 
-    @Size(min = 17, max = 17, message = "{producto.macAddress.size}")
-    @Positive(message = "{producto.macAddress.positive}")
     @Column(name = "mac_address", length = 17, unique = true)
     private String macAddress;
 
@@ -69,7 +49,6 @@ public class Producto {
     // Relación muchos a uno con la entidad Categoria (un producto pertenece a una categoría)
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
-    @NotNull(message = "{producto.categoria.notNull}")
     private Categoria categoria;
 
     // Relación uno a muchos con la entidad Stock (un producto tiene muchos stocks)

@@ -1,7 +1,6 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,28 +15,18 @@ public class Compra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "{compra.fecha.notNull}")
-    @FutureOrPresent(message = "{compra.fecha.futureOrPresent}")
     @Column(nullable = false)
     private LocalDate fecha;
 
-    @NotNull(message = "{compra.total.notNull}")
-    @DecimalMin(value = "0.0 ", message = "{compra.total.decimalMin}")
-    @Digits(integer = 10, fraction = 2, message = "{compra.total.digits}")
     @Column(nullable = false)
     private BigDecimal total;
 
-    @NotBlank(message = "{compra.metodoPago.notBlank}")
     @Column(name = "metodo_de_pago", nullable = false, length = 30)
     private String metodoPago;
 
-    @NotBlank(message = "{compra.estado.notBlank}")
     @Column(nullable = false, length = 30)
     private String estado;
 
-    @NotNull(message = "{compra.impuestos.notNull}")
-    @DecimalMin(value = "0.0", message = "{compra.impuestos.decimalMin}")
-    @Digits(integer = 10, fraction = 2, message = "{compra.impuestos.digits}")
     @Column(nullable = false)
     private BigDecimal impuestos;
 
@@ -46,7 +35,6 @@ public class Compra {
     // Relación muchos-a-uno con Proveedor(una compra pertenece a un proveedor)
     @ManyToOne
     @JoinColumn(name = "proveedor_id", nullable = false)
-    @NotNull(message = "{compra.proveedor.notNull}")
     private Proveedor proveedor;
 
     // Relación uno-a-muchos con DetalleCompra(una compra puede tener muchos detalles de compra)

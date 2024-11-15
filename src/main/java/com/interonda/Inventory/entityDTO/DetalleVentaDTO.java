@@ -1,13 +1,30 @@
 package com.interonda.Inventory.entityDTO;
 
+import jakarta.persistence.Column;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 import java.math.BigDecimal;
 
 public class DetalleVentaDTO {
 
     private Long id;
+
+    @NotNull(message = "{detalleVentaDTO.cantidad.notNull}")
+    @Positive(message = "{detalleVentaDTO.cantidad.positive}")
     private Integer cantidad;
+
+    @NotNull(message = "{detalleVentaDTO.precioUnitario.notNull}")
+    @DecimalMin(value = "0.0", inclusive = false, message = "{detalleVentaDTO.precioUnitario.decimalMin}")
+    @Digits(integer = 10, fraction = 2, message = "{detalleVentaDTO.precioUnitario.digits}")
     private BigDecimal precioUnitario;
+
+    @NotNull(message = "{detalleVentaDTO.venta.notNull}")
     private Long ventaId;
+
+    @NotNull(message = "{detalleVentaDTO.producto.notNull}")
     private Long productoId;
 
     public DetalleVentaDTO() {

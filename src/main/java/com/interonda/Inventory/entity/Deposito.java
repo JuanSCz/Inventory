@@ -1,8 +1,6 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,23 +14,15 @@ public class Deposito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "{deposito.nombre.notBlank}")
-    @Size(max = 50, message = "{deposito.nombre.size}")
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @NotBlank(message = "{deposito.provincia.notBlank}")
-    @Size(max = 20, message = "{deposito.provincia.size}")
     @Column(nullable = false, length = 20)
     private String provincia;
 
-    @NotBlank(message = "{deposito.direccion.notBlank}")
-    @Size(max = 20, message = "{deposito.direccion.size}")
     @Column(nullable = false, length = 20)
     private String direccion;
 
-    @NotBlank(message = "{deposito.contactoDeposito.notBlank}")
-    @Size(max = 15, message = "{deposito.contactoDeposito.size}")
     @Column(name = "contacto", length = 15, nullable = false)
     private String contactoDeposito;
 

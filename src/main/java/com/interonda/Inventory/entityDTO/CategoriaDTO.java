@@ -1,8 +1,16 @@
 package com.interonda.Inventory.entityDTO;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class CategoriaDTO {
     private Long id;
+
+    @NotBlank(message = "{categoriaDTO.nombre.notBlank}")
+    @Size(max = 50, message = "{categoriaDTO.nombre.size}")
     private String nombre;
+
+    @Size(max = 75, message = "{categoriaDTO.descripcion.size}")
     private String descripcion;
 
     public CategoriaDTO() {
@@ -32,5 +40,6 @@ public class CategoriaDTO {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
 }
 

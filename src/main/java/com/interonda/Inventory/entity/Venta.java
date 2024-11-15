@@ -1,7 +1,6 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,33 +15,22 @@ public class Venta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "{venta.fecha.notNull}")
-    @FutureOrPresent(message = "{venta.fecha.futureOrPresent}")
     @Column(nullable = false)
     private LocalDate fecha;
 
-    @NotNull(message = "{venta.total.notNull}")
-    @DecimalMin(value = "0.0", message = "{venta.total.decimalMin}")
-    @Digits(integer = 10, fraction = 2, message = "{venta.total.digits}")
     @Column(nullable = false)
     private BigDecimal total;
 
-    @NotBlank(message = "{venta.metodoPago.notBlank}")
     @Column(name = "metodo_pago", nullable = false)
     private String metodoPago;
 
-    @NotBlank(message = "{venta.estado.notBlank}")
     @Column(nullable = false)
     private String estado;
 
-    @NotNull(message = "{venta.impuestos.notNull}")
-    @DecimalMin(value = "0.0", message = "{venta.impuestos.decimalMin}")
-    @Digits(integer = 10, fraction = 2, message = "{venta.impuestos.digits}")
     @Column(nullable = false)
     private BigDecimal impuestos;
 
     // Relación muchos-a-uno con Cliente (muchas ventas pueden tener un cliente)
-    @NotNull(message = "{venta.cliente.notNull}")
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;

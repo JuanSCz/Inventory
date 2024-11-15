@@ -1,10 +1,6 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.Length;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,25 +13,18 @@ public class Proveedor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "{proveedor.nombre.notBlank}")
-    @Size(max = 50, message = "{proveedor.nombre.size}")
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Size(max = 15, message = "{proveedor.contactoProveedor.size}")
     @Column(name = "contacto", length = 15)
     private String contactoProveedor;
 
-    @Size(max = 50, message = "{proveedor.direccion.size}")
     @Column(length = 50)
     private String direccion;
 
-    @Length(max = 254, message = "{proveedor.pais.length}")
     @Column(length = 254)
     private String pais;
 
-    @Size(max = 254, message = "{proveedor.emailProveedor.size}")
-    @Email(message = "{proveedor.emailProveedor.email}")
     @Column(name = "email", length = 254)
     private String emailProveedor;
 

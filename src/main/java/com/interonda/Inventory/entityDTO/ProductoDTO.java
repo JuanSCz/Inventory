@@ -1,18 +1,48 @@
 package com.interonda.Inventory.entityDTO;
 
+import jakarta.validation.constraints.*;
+
 import java.math.BigDecimal;
 
 public class ProductoDTO {
 
     private Long id;
+
+    @NotBlank(message = "{productoDTO.nombre.notBlank}")
+    @Size(min = 3, max = 50, message = "{productoDTO.nombre.size}")
     private String nombre;
+
+    @Size(max = 100, message = "{productoDTO.descripcion.size}")
     private String descripcion;
+
+    @NotNull(message = "{productoDTO.precio.notNull}")
+    @Digits(integer = 10, fraction = 2, message = "{productoDTO.precio.digits}")
+    @DecimalMin(value = "0.00", message = "{productoDTO.precio.decimalMin}")
     private BigDecimal precio;
+
+    @NotNull(message = "{productoDTO.costo.notNull}")
+    @Digits(integer = 10, fraction = 2, message = "{productoDTO.costo.digits}")
+    @DecimalMin(value = "0.00", message = "{productoDTO.costo.decimalMin}")
     private BigDecimal costo;
+
+    @Size(min = 12, max = 13, message = "{productoDTO.codigoBarras.size}")
     private String codigoBarras;
+
+    @Size(max = 50, message = "{productoDTO.numeroDeSerie.size}")
+    private String numeroDeSerie;
+
+    @NotNull(message = "{productoDTO.stockActual.notNull}")
+    @PositiveOrZero(message = "{productoDTO.stockActual.positiveOrZero}")
     private Integer stockActual;
+
+    @NotNull(message = "{productoDTO.stockMinimo.notNull}")
+    @PositiveOrZero(message = "{productoDTO.stockMinimo.positiveOrZero}")
     private Integer stockMinimo;
+
+    @Size(min = 17, max = 17, message = "{productoDTO.macAddress.size}")
     private String macAddress;
+
+    @NotNull(message = "{productoDTO.categoriaId.notNull}")
     private Long categoriaId;
 
     public ProductoDTO() {
@@ -66,6 +96,14 @@ public class ProductoDTO {
 
     public void setCodigoBarras(String codigoBarras) {
         this.codigoBarras = codigoBarras;
+    }
+
+    public String getNumeroDeSerie() {
+        return numeroDeSerie;
+    }
+
+    public void setNumeroDeSerie(String numeroDeSerie) {
+        this.numeroDeSerie = numeroDeSerie;
     }
 
     public Integer getStockActual() {

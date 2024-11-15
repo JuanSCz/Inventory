@@ -1,8 +1,6 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,20 +13,16 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "{categoria.nombre.notBlank}")
-    @Size(max = 50, message = "{categoria.nombre.size}")
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Size(max = 75, message = "{categoria.descripcion.size}")
     @Column(length = 75)
     private String descripcion;
 
     // Relación uno-a-muchos con Producto (una categoría puede tener muchos productos)
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Producto> productos = new ArrayList<>();
-
-
+    
     public Categoria() {
     }
 

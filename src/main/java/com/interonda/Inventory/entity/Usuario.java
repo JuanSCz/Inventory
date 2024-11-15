@@ -1,8 +1,6 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,21 +13,15 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "{usuario.nombre.notBlank}")
-    @Size(max = 50, message = "{usuario.nombre.size}")
     @Column(nullable = false, length = 50)
     private String nombre;
 
-    @NotBlank(message = "{usuario.contrasenia.notBlank}")
-    @Size(min = 8, message = "{usuario.contrasenia.size}")
     @Column(name = "contraseña", nullable = false)
     private String contrasenia;
 
     @Column(name = "foto_usuario")
     private byte[] imagenUsuario;
 
-    @NotBlank(message = "{usuario.contacto.notBlank}")
-    @Size(max = 15, message = "{usuario.contacto.size}")
     @Column(length = 15, nullable = false)
     private String contacto;
 

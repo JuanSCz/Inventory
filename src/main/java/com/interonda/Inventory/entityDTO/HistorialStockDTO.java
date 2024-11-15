@@ -1,19 +1,46 @@
 package com.interonda.Inventory.entityDTO;
 
+import jakarta.validation.constraints.*;
+
 import java.time.LocalDateTime;
 
 public class HistorialStockDTO {
 
     private Long id;
+
+    @NotNull(message = "{historialStockDTO.cantidadAnterior.notNull}")
+    @PositiveOrZero(message = "{historialStockDTO.cantidadAnterior.positiveOrZero}")
     private Integer cantidadAnterior;
+
+    @NotNull(message = "{historialStockDTO.cantidadNueva.notNull}")
+    @PositiveOrZero(message = "{historialStockDTO.cantidadNueva.positiveOrZero}")
     private Integer cantidadNueva;
+
+    @NotNull(message = "{historialStockDTO.fechaActualizacion.notNull}")
+    @FutureOrPresent(message = "{historialStockDTO.fechaActualizacion.futureOrPresent}")
     private LocalDateTime fechaActualizacion;
+
+    @NotBlank(message = "{historialStockDTO.motivo.notBlank}")
+    @Size(min = 3, max = 50, message = "{historialStockDTO.motivo.size}")
     private String motivo;
+
+    @NotBlank(message = "{historialStockDTO.tipoMovimiento.notBlank}")
+    @Size(min = 3, max = 50, message = "{historialStockDTO.tipoMovimiento.size}")
     private String tipoMovimiento;
+
+    @Size(max = 200, message = "{historialStockDTO.observacion.size}")
     private String observacion;
+
+    @NotNull(message = "{historialStockDTO.producto.notNull}")
     private Long productoId;
+
+    @NotNull(message = "{historialStockDTO.deposito.notNull}")
     private Long depositoId;
+
+    @NotNull(message = "{historialStockDTO.usuario.notNull}")
     private Long usuarioId;
+
+    @NotNull(message = "{historialStockDTO.stock.notNull}")
     private Long stockId;
 
     public HistorialStockDTO() {
