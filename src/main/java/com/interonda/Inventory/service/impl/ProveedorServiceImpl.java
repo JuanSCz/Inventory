@@ -9,6 +9,8 @@ import com.interonda.Inventory.repository.ProveedorRepository;
 import com.interonda.Inventory.service.ProveedorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,14 +116,14 @@ public class ProveedorServiceImpl implements ProveedorService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProveedorDTO> getAllProveedores() {
+    public Page<ProveedorDTO> getAllProveedores(Pageable pageable) {
         try {
-            logger.info("Obteniendo todos los Proveedores");
-            List<Proveedor> proveedores = proveedorRepository.findAll();
-            return proveedores.stream().map(proveedorMapper::toDto).collect(Collectors.toList());
+            logger.info("Obteniendo todos los Proveedores con paginación");
+            Page<Proveedor> proveedores = proveedorRepository.findAll(pageable);
+            return proveedores.map(proveedorMapper::toDto);
         } catch (Exception e) {
-            logger.error("Error obteniendo todos los Proveedores", e);
-            throw new DataAccessException("Error obteniendo todos los Proveedores", e);
+            logger.error("Error obteniendo todos los Proveedores con paginación", e);
+            throw new DataAccessException("Error obteniendo todos los Proveedores con paginación", e);
         }
     }
 }

@@ -8,7 +8,11 @@ import com.interonda.Inventory.mapper.DepositoMapper;
 import com.interonda.Inventory.repository.DepositoRepository;
 import com.interonda.Inventory.service.DepositoService;
 
+import com.interonda.Inventory.utils.ValidatorUtils;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
@@ -24,11 +28,13 @@ public class DepositoServiceImpl implements DepositoService {
 
     private final DepositoRepository depositoRepository;
     private final DepositoMapper depositoMapper;
+    private final Validator validator;
 
     @Autowired
-    public DepositoServiceImpl(DepositoRepository depositoRepository, DepositoMapper depositoMapper) {
+    public DepositoServiceImpl(DepositoRepository depositoRepository, DepositoMapper depositoMapper, Validator validator) {
         this.depositoRepository = depositoRepository;
         this.depositoMapper = depositoMapper;
+        this.validator = validator;
     }
 
     @Override
@@ -44,6 +50,7 @@ public class DepositoServiceImpl implements DepositoService {
     @Override
     @Transactional
     public DepositoDTO createDeposito(DepositoDTO depositoDTO) {
+        ValidatorUtils.validateEntity(depositoDTO, validator);
         try {
             logger.info("Creando nuevo Deposito");
             Deposito deposito = convertToEntity(depositoDTO);
@@ -59,6 +66,7 @@ public class DepositoServiceImpl implements DepositoService {
     @Override
     @Transactional
     public DepositoDTO updateDeposito(Long id, DepositoDTO depositoDTO) {
+        ValidatorUtils.validateEntity(depositoDTO, validator);
         try {
             logger.info("Actualizando Deposito con id: {}", id);
             Deposito deposito = depositoRepository.findById(id)
@@ -99,16 +107,17 @@ public class DepositoServiceImpl implements DepositoService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<DepositoDTO> getAllDepositos() {
-        try {
-            logger.info("Obteniendo todos los Depositos");
-            return depositoRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
-        } catch (Exception e) {
-            logger.error("Error obteniendo todos los Depositos", e);
-            throw new DataAccessException("Error obteniendo todos los Depositos", e);
-        }
+@Transactional(readOnly = true)
+public Page<DepositoDTO> getAllDepositos(Pageable pageable) {
+    try {
+        logger.info("Obteniendo todos los Depositos con paginación");
+        Page<Deposito> depositos = depositoRepository.findAll(pageable);
+        return depositos.map(this::convertToDto);
+    } catch (Exception e) {
+        logger.error("Error obteniendo todos los Depositos con paginación", e);
+        throw new DataAccessException("Error obteniendo todos los Depositos con paginación", e);
     }
+}
 
     @Override
     @Transactional(readOnly = true)

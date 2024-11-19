@@ -11,6 +11,8 @@ import com.interonda.Inventory.exceptions.DataAccessException;
 import com.interonda.Inventory.utils.ValidatorUtils;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
@@ -112,13 +114,14 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CategoriaDTO> getAllCategorias() {
+    public Page<CategoriaDTO> getAllCategorias(Pageable pageable) {
         try {
-            logger.info("Obteniendo todas las Categorias");
-            return categoriaRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
+            logger.info("Obteniendo todas las Categorias con paginación");
+            Page<Categoria> categorias = categoriaRepository.findAll(pageable);
+            return categorias.map(this::convertToDto);
         } catch (Exception e) {
-            logger.error("Error obteniendo todas las Categorias", e);
-            throw new DataAccessException("Error obteniendo todas las Categorias", e);
+            logger.error("Error obteniendo todas las Categorias con paginación", e);
+            throw new DataAccessException("Error obteniendo todas las Categorias con paginación", e);
         }
     }
 

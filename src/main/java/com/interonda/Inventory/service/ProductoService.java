@@ -2,9 +2,8 @@ package com.interonda.Inventory.service;
 
 import com.interonda.Inventory.entity.Producto;
 import com.interonda.Inventory.entityDTO.ProductoDTO;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ProductoService {
 
@@ -20,7 +19,7 @@ public interface ProductoService {
 
     ProductoDTO getProducto(Long id);
 
-    List<ProductoDTO> getAllProductos();
+    Page<ProductoDTO> getAllProductos(Pageable pageable);
 
 
 }

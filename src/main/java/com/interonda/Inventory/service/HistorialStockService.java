@@ -2,8 +2,8 @@ package com.interonda.Inventory.service;
 
 import com.interonda.Inventory.entity.HistorialStock;
 import com.interonda.Inventory.entityDTO.HistorialStockDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface HistorialStockService {
 
@@ -15,11 +15,11 @@ public interface HistorialStockService {
 
     HistorialStockDTO updateHistorialStock(Long id, HistorialStockDTO historialStockDTO);
 
-    public void deleteHistorialStock(Long id);
+    void deleteHistorialStock(Long id);
 
-    public HistorialStockDTO getHistorialStock(Long id);
+    HistorialStockDTO getHistorialStock(Long id);
 
-    public List<HistorialStockDTO> getAllHistorialStock();
+    Page<HistorialStockDTO> getAllHistorialStock(Pageable pageable);
 
 }
 

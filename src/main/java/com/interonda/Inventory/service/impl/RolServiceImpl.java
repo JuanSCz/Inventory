@@ -9,6 +9,8 @@ import com.interonda.Inventory.repository.RolRepository;
 import com.interonda.Inventory.service.RolService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,14 +116,14 @@ public class RolServiceImpl implements RolService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<RolDTO> getAllRoles() {
+    public Page<RolDTO> getAllRoles(Pageable pageable) {
         try {
-            logger.info("Obteniendo todos los Roles");
-            List<Rol> roles = rolRepository.findAll();
-            return roles.stream().map(rolMapper::toDto).collect(Collectors.toList());
+            logger.info("Obteniendo todos los Roles con paginación");
+            Page<Rol> roles = rolRepository.findAll(pageable);
+            return roles.map(rolMapper::toDto);
         } catch (Exception e) {
-            logger.error("Error obteniendo todos los Roles", e);
-            throw new DataAccessException("Error obteniendo todos los Roles", e);
+            logger.error("Error obteniendo todos los Roles con paginación", e);
+            throw new DataAccessException("Error obteniendo todos los Roles con paginación", e);
         }
     }
 }

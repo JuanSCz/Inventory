@@ -2,8 +2,8 @@ package com.interonda.Inventory.service;
 
 import com.interonda.Inventory.entity.Stock;
 import com.interonda.Inventory.entityDTO.StockDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface StockService {
 
@@ -19,5 +19,5 @@ public interface StockService {
 
     StockDTO getStock(Long id);
 
-    List<StockDTO> getAllStocks();
+    Page<StockDTO> getAllStocks(Pageable pageable);
 }

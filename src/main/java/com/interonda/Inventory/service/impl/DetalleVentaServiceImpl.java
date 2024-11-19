@@ -15,6 +15,8 @@ import com.interonda.Inventory.service.DetalleVentaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -115,14 +117,14 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DetalleVentaDTO> getAllDetalleVentas() {
+    public Page<DetalleVentaDTO> getAllDetalleVentas(Pageable pageable) {
         try {
-            logger.info("Obteniendo todos los DetalleVenta");
-            List<DetalleVenta> detalleVentas = detalleVentaRepository.findAll();
-            return detalleVentas.stream().map(this::convertToDto).collect(Collectors.toList());
+            logger.info("Obteniendo todos los DetalleVenta con paginación");
+            Page<DetalleVenta> detalleVentaPage = detalleVentaRepository.findAll(pageable);
+            return detalleVentaPage.map(this::convertToDto);
         } catch (Exception e) {
-            logger.error("Error obteniendo todos los DetalleVenta", e);
-            throw new DataAccessException("Error obteniendo todos los DetalleVenta", e);
+            logger.error("Error obteniendo todos los DetalleVenta con paginación", e);
+            throw new DataAccessException("Error obteniendo todos los DetalleVenta con paginación", e);
         }
     }
 

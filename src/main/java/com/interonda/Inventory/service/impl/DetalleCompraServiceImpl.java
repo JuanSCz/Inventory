@@ -13,6 +13,8 @@ import com.interonda.Inventory.repository.ProductoRepository;
 import com.interonda.Inventory.service.DetalleCompraService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
@@ -69,17 +71,14 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
     public DetalleCompraDTO updateDetalleCompra(Long id, DetalleCompraDTO detalleCompraDTO) {
         try {
             logger.info("Actualizando DetalleCompra con id: {}", id);
-            DetalleCompra detalleCompra = detalleCompraRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("DetalleCompra no encontrada con el id: " + id));
+            DetalleCompra detalleCompra = detalleCompraRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("DetalleCompra no encontrada con el id: " + id));
             detalleCompra.setCantidad(detalleCompraDTO.getCantidad());
             detalleCompra.setPrecioUnitario(detalleCompraDTO.getPrecioUnitario());
 
-            Compra compra = compraRepository.findById(detalleCompraDTO.getCompraId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Compra no encontrada con el id: " + detalleCompraDTO.getCompraId()));
+            Compra compra = compraRepository.findById(detalleCompraDTO.getCompraId()).orElseThrow(() -> new ResourceNotFoundException("Compra no encontrada con el id: " + detalleCompraDTO.getCompraId()));
             detalleCompra.setCompra(compra);
 
-            Producto producto = productoRepository.findById(detalleCompraDTO.getProductoId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleCompraDTO.getProductoId()));
+            Producto producto = productoRepository.findById(detalleCompraDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleCompraDTO.getProductoId()));
             detalleCompra.setProducto(producto);
 
             DetalleCompra updatedDetalleCompra = detalleCompraRepository.save(detalleCompra);
@@ -115,14 +114,14 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<DetalleCompraDTO> getAllDetalleCompra() {
+    public Page<DetalleCompraDTO> getAllDetalleCompra(Pageable pageable) {
         try {
-            logger.info("Obteniendo todos los DetalleCompra");
-            List<DetalleCompra> detalleCompraList = detalleCompraRepository.findAll();
-            return detalleCompraList.stream().map(detalleCompraMapper::toDto).collect(Collectors.toList());
+            logger.info("Obteniendo todos los DetalleCompra con paginación");
+            Page<DetalleCompra> detalleCompraPage = detalleCompraRepository.findAll(pageable);
+            return detalleCompraPage.map(detalleCompraMapper::toDto);
         } catch (Exception e) {
-            logger.error("Error obteniendo todos los DetalleCompra", e);
-            throw new DataAccessException("Error obteniendo todos los DetalleCompra", e);
+            logger.error("Error obteniendo todos los DetalleCompra con paginación", e);
+            throw new DataAccessException("Error obteniendo todos los DetalleCompra con paginación", e);
         }
     }
 
@@ -131,8 +130,7 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
     public DetalleCompraDTO getDetalleCompraById(Long id) {
         try {
             logger.info("Obteniendo DetalleCompra con id: {}", id);
-            DetalleCompra detalleCompra = detalleCompraRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Detalle de compra no encontrado con el id: " + id));
+            DetalleCompra detalleCompra = detalleCompraRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Detalle de compra no encontrado con el id: " + id));
             return convertToDto(detalleCompra);
         } catch (ResourceNotFoundException e) {
             logger.warn("DetalleCompra no encontrado: {}", e.getMessage());

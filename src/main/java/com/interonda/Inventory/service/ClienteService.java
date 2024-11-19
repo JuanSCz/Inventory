@@ -2,8 +2,8 @@ package com.interonda.Inventory.service;
 
 import com.interonda.Inventory.entity.Cliente;
 import com.interonda.Inventory.entityDTO.ClienteDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ClienteService {
 
@@ -17,7 +17,7 @@ public interface ClienteService {
 
     void deleteCliente(Long id);
 
-    List<ClienteDTO> getAllClientes();
+    Page<ClienteDTO> getAllClientes(Pageable pageable);
 
     ClienteDTO getClienteById(Long id);
 

@@ -9,6 +9,8 @@ import com.interonda.Inventory.repository.HistorialStockRepository;
 import com.interonda.Inventory.service.HistorialStockService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,22 +95,27 @@ public class HistorialStockServiceImpl implements HistorialStockService {
             HistorialStock historialStock = historialStockRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("HistorialStock no encontrado"));
             return convertToDto(historialStock);
+        } catch (ResourceNotFoundException e) {
+            logger.warn("HistorialStock no encontrado: {}", e.getMessage());
+            throw e;
         } catch (Exception e) {
             logger.error("Error obteniendo HistorialStock", e);
             throw new DataAccessException("Error obteniendo HistorialStock", e);
         }
     }
 
+
     @Override
     @Transactional(readOnly = true)
-    public List<HistorialStockDTO> getAllHistorialStock() {
+    public Page<HistorialStockDTO> getAllHistorialStock(Pageable pageable) {
         try {
-            logger.info("Obteniendo todos los HistorialStock");
-            List<HistorialStock> historialStocks = historialStockRepository.findAll();
-            return historialStocks.stream().map(historialStockMapper::toDto).collect(Collectors.toList());
+            logger.info("Obteniendo todos los HistorialStock con paginación");
+            Page<HistorialStock> historialStockPage = historialStockRepository.findAll(pageable);
+            return historialStockPage.map(historialStockMapper::toDto);
         } catch (Exception e) {
-            logger.error("Error obteniendo todos los HistorialStock", e);
-            throw new DataAccessException("Error obteniendo todos los HistorialStock", e);
+            logger.error("Error obteniendo todos los HistorialStock con paginación", e);
+            throw new DataAccessException("Error obteniendo todos los HistorialStock con paginación", e);
         }
     }
+
 }

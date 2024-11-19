@@ -2,8 +2,8 @@ package com.interonda.Inventory.service;
 
 import com.interonda.Inventory.entity.Deposito;
 import com.interonda.Inventory.entityDTO.DepositoDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface DepositoService {
 
@@ -17,7 +17,7 @@ public interface DepositoService {
 
     void deleteDeposito(Long id);
 
-    List<DepositoDTO> getAllDepositos();
+    Page<DepositoDTO> getAllDepositos(Pageable pageable);
 
     DepositoDTO getDepositoById(Long id);
 }

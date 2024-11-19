@@ -1,7 +1,6 @@
 package com.interonda.Inventory.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 

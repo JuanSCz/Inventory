@@ -4,6 +4,7 @@ import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CompraDTO {
@@ -33,7 +34,7 @@ public class CompraDTO {
     @NotNull(message = "{compraDTO.proveedor.notNull}")
     private Long proveedorId;
 
-    private List<DetalleCompraDTO> detallesCompra;
+    private List<DetalleCompraDTO> detallesCompra = new ArrayList<>();
 
     public CompraDTO() {
     }

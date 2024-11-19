@@ -9,6 +9,8 @@ import com.interonda.Inventory.repository.StockRepository;
 import com.interonda.Inventory.service.StockService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,15 +116,14 @@ public class StockServiceImpl implements StockService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<StockDTO> getAllStocks() {
+    public Page<StockDTO> getAllStocks(Pageable pageable) {
         try {
-            logger.info("Obteniendo todos los Stocks");
-            List<Stock> stocks = stockRepository.findAll();
-            return stocks.stream().map(stockMapper::toDto).collect(Collectors.toList());
+            logger.info("Obteniendo todos los Stocks con paginación");
+            Page<Stock> stockPage = stockRepository.findAll(pageable);
+            return stockPage.map(stockMapper::toDto);
         } catch (Exception e) {
-            logger.error("Error obteniendo todos los Stocks", e);
-            throw new DataAccessException("Error obteniendo todos los Stocks", e);
+            logger.error("Error obteniendo todos los Stocks con paginación", e);
+            throw new DataAccessException("Error obteniendo todos los Stocks con paginación", e);
         }
     }
 }
-

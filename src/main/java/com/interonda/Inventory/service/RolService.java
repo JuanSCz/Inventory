@@ -2,8 +2,8 @@ package com.interonda.Inventory.service;
 
 import com.interonda.Inventory.entity.Rol;
 import com.interonda.Inventory.entityDTO.RolDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface RolService {
     RolDTO convertToDto(Rol rol);
@@ -18,5 +18,5 @@ public interface RolService {
 
     RolDTO getRol(Long id);
 
-    List<RolDTO> getAllRoles();
+    Page<RolDTO> getAllRoles(Pageable pageable);
 }

@@ -2,8 +2,8 @@ package com.interonda.Inventory.service;
 
 import com.interonda.Inventory.entity.Proveedor;
 import com.interonda.Inventory.entityDTO.ProveedorDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ProveedorService {
 
@@ -19,6 +19,6 @@ public interface ProveedorService {
 
     ProveedorDTO getProveedor(Long id);
 
-    List<ProveedorDTO> getAllProveedores();
+    Page<ProveedorDTO> getAllProveedores(Pageable pageable);
 
 }

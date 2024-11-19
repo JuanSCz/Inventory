@@ -2,8 +2,8 @@ package com.interonda.Inventory.service;
 
 import com.interonda.Inventory.entity.Venta;
 import com.interonda.Inventory.entityDTO.VentaDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface VentaService {
 
@@ -19,7 +19,7 @@ public interface VentaService {
 
     VentaDTO getVenta(Long id);
 
-    List<VentaDTO> getAllVentas();
+    Page<VentaDTO> getAllVentas(Pageable pageable);
 
 
 }

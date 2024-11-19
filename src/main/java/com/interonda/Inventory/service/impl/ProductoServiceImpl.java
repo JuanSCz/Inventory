@@ -9,13 +9,12 @@ import com.interonda.Inventory.repository.ProductoRepository;
 import com.interonda.Inventory.service.ProductoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductoServiceImpl implements ProductoService {
@@ -44,6 +43,9 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     @Transactional
     public ProductoDTO createProducto(ProductoDTO productoDTO) {
+        if (productoDTO == null) {
+            throw new IllegalArgumentException("ProductoDTO no puede ser null");
+        }
         try {
             logger.info("Creando nuevo Producto");
             Producto producto = productoMapper.toEntity(productoDTO);
@@ -114,14 +116,14 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProductoDTO> getAllProductos() {
+    public Page<ProductoDTO> getAllProductos(Pageable pageable) {
         try {
-            logger.info("Obteniendo todos los Productos");
-            List<Producto> productos = productoRepository.findAll();
-            return productos.stream().map(productoMapper::toDto).collect(Collectors.toList());
+            logger.info("Obteniendo todos los Productos con paginación");
+            Page<Producto> productos = productoRepository.findAll(pageable);
+            return productos.map(productoMapper::toDto);
         } catch (Exception e) {
-            logger.error("Error obteniendo todos los Productos", e);
-            throw new DataAccessException("Error obteniendo todos los Productos", e);
+            logger.error("Error obteniendo todos los Productos con paginación", e);
+            throw new DataAccessException("Error obteniendo todos los Productos con paginación", e);
         }
     }
 }

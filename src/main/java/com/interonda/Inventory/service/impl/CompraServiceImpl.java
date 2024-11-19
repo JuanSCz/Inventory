@@ -11,12 +11,17 @@ import com.interonda.Inventory.repository.CompraRepository;
 import com.interonda.Inventory.repository.ProveedorRepository;
 import com.interonda.Inventory.service.CompraService;
 
+import com.interonda.Inventory.utils.ValidatorUtils;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,12 +33,14 @@ public class CompraServiceImpl implements CompraService {
     private final CompraRepository compraRepository;
     private final ProveedorRepository proveedorRepository;
     private final CompraMapper compraMapper;
+    private final Validator validator;
 
     @Autowired
-    public CompraServiceImpl(CompraRepository compraRepository, ProveedorRepository proveedorRepository, CompraMapper compraMapper) {
+    public CompraServiceImpl(CompraRepository compraRepository, ProveedorRepository proveedorRepository, CompraMapper compraMapper, Validator validator) {
         this.compraRepository = compraRepository;
         this.proveedorRepository = proveedorRepository;
         this.compraMapper = compraMapper;
+        this.validator = validator;
     }
 
     @Override
@@ -43,6 +50,9 @@ public class CompraServiceImpl implements CompraService {
 
     @Override
     public Compra convertToEntity(CompraDTO compraDTO) {
+        if (compraDTO == null) {
+            return null;
+        }
         Compra compra = compraMapper.toEntity(compraDTO);
         Proveedor proveedor = proveedorRepository.findById(compraDTO.getProveedorId())
                 .orElseThrow(() -> new ResourceNotFoundException("Proveedor no encontrado con el id: " + compraDTO.getProveedorId()));
@@ -53,6 +63,7 @@ public class CompraServiceImpl implements CompraService {
     @Override
     @Transactional
     public CompraDTO createCompra(CompraDTO compraDTO) {
+        ValidatorUtils.validateEntity(compraDTO, validator);
         try {
             logger.info("Creando nueva Compra");
             Compra compra = convertToEntity(compraDTO);
@@ -68,18 +79,18 @@ public class CompraServiceImpl implements CompraService {
     @Override
     @Transactional
     public CompraDTO updateCompra(Long id, CompraDTO compraDTO) {
+        ValidatorUtils.validateEntity(compraDTO, validator);
         try {
             logger.info("Actualizando Compra con id: {}", id);
             Compra compra = compraRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Compra no encontrada con el id: " + id));
-            compra.setFecha(compraDTO.getFecha());
-            compra.setTotal(compraDTO.getTotal());
-            compra.setMetodoPago(compraDTO.getMetodoPago());
-            compra.setEstado(compraDTO.getEstado());
-            compra.setImpuestos(compraDTO.getImpuestos());
+            compraMapper.updateEntityFromDto(compraDTO, compra); // Ensure this method updates the existing entity
             Proveedor proveedor = proveedorRepository.findById(compraDTO.getProveedorId())
                     .orElseThrow(() -> new ResourceNotFoundException("Proveedor no encontrado con el id: " + compraDTO.getProveedorId()));
             compra.setProveedor(proveedor);
+            if (compraDTO.getDetallesCompra() == null) {
+                compraDTO.setDetallesCompra(new ArrayList<>());
+            }
             List<DetalleCompra> detallesCompra = compraDTO.getDetallesCompra().stream()
                     .map(compraMapper::toDetalleCompraEntity)
                     .collect(Collectors.toList());
@@ -117,14 +128,14 @@ public class CompraServiceImpl implements CompraService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CompraDTO> getAllCompras() {
+    public Page<CompraDTO> getAllCompras(Pageable pageable) {
         try {
-            logger.info("Obteniendo todas las Compras");
-            List<Compra> compras = compraRepository.findAll();
-            return compras.stream().map(this::convertToDto).collect(Collectors.toList());
+            logger.info("Obteniendo todas las Compras con paginación");
+            Page<Compra> compras = compraRepository.findAll(pageable);
+            return compras.map(this::convertToDto);
         } catch (Exception e) {
-            logger.error("Error obteniendo todas las Compras", e);
-            throw new DataAccessException("Error obteniendo todas las Compras", e);
+            logger.error("Error obteniendo todas las Compras con paginación", e);
+            throw new DataAccessException("Error obteniendo todas las Compras con paginación", e);
         }
     }
 

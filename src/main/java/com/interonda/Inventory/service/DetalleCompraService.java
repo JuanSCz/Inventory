@@ -2,8 +2,8 @@ package com.interonda.Inventory.service;
 
 import com.interonda.Inventory.entity.DetalleCompra;
 import com.interonda.Inventory.entityDTO.DetalleCompraDTO;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface DetalleCompraService {
 
@@ -17,7 +17,7 @@ public interface DetalleCompraService {
 
     void deleteDetalleCompra(Long id);
 
-    List<DetalleCompraDTO> getAllDetalleCompra();
+    Page<DetalleCompraDTO> getAllDetalleCompra(Pageable pageable);
 
     DetalleCompraDTO getDetalleCompraById(Long id);
 }

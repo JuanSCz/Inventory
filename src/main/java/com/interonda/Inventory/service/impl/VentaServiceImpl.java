@@ -9,6 +9,8 @@ import com.interonda.Inventory.repository.VentaRepository;
 import com.interonda.Inventory.service.VentaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,8 +62,7 @@ public class VentaServiceImpl implements VentaService {
     public VentaDTO updateVenta(VentaDTO ventaDTO) {
         try {
             logger.info("Actualizando Venta con id: {}", ventaDTO.getId());
-            Venta venta = ventaRepository.findById(ventaDTO.getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + ventaDTO.getId()));
+            Venta venta = ventaRepository.findById(ventaDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + ventaDTO.getId()));
             venta = ventaMapper.toEntity(ventaDTO);
             Venta updatedVenta = ventaRepository.save(venta);
             logger.info("Venta actualizada exitosamente con id: {}", updatedVenta.getId());
@@ -99,8 +100,7 @@ public class VentaServiceImpl implements VentaService {
     public VentaDTO getVenta(Long id) {
         try {
             logger.info("Obteniendo Venta con id: {}", id);
-            Venta venta = ventaRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + id));
+            Venta venta = ventaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + id));
             return ventaMapper.toDto(venta);
         } catch (ResourceNotFoundException e) {
             logger.warn("Venta no encontrada: {}", e.getMessage());
@@ -113,14 +113,14 @@ public class VentaServiceImpl implements VentaService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<VentaDTO> getAllVentas() {
+    public Page<VentaDTO> getAllVentas(Pageable pageable) {
         try {
-            logger.info("Obteniendo todas las Ventas");
-            List<Venta> ventas = ventaRepository.findAll();
-            return ventas.stream().map(ventaMapper::toDto).collect(Collectors.toList());
+            logger.info("Obteniendo todas las Ventas con paginación");
+            Page<Venta> ventas = ventaRepository.findAll(pageable);
+            return ventas.map(ventaMapper::toDto);
         } catch (Exception e) {
-            logger.error("Error obteniendo todas las Ventas", e);
-            throw new DataAccessException("Error obteniendo todas las Ventas", e);
+            logger.error("Error obteniendo todas las Ventas con paginación", e);
+            throw new DataAccessException("Error obteniendo todas las Ventas con paginación", e);
         }
     }
 }

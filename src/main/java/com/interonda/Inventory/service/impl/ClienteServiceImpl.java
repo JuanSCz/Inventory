@@ -7,7 +7,11 @@ import com.interonda.Inventory.mapper.ClienteMapper;
 import com.interonda.Inventory.repository.ClienteRepository;
 import com.interonda.Inventory.service.ClienteService;
 import com.interonda.Inventory.exceptions.DataAccessException;
+import com.interonda.Inventory.utils.ValidatorUtils;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +27,13 @@ public class ClienteServiceImpl implements ClienteService {
 
     private final ClienteRepository clienteRepository;
     private final ClienteMapper clienteMapper;
+    private final Validator validator;
 
     @Autowired
-    public ClienteServiceImpl(ClienteRepository clienteRepository, ClienteMapper clienteMapper) {
+    public ClienteServiceImpl(ClienteRepository clienteRepository, ClienteMapper clienteMapper, Validator validator) {
         this.clienteRepository = clienteRepository;
         this.clienteMapper = clienteMapper;
+        this.validator = validator;
     }
 
     @Override
@@ -43,6 +49,7 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional
     public ClienteDTO createCliente(ClienteDTO clienteDTO) {
+        ValidatorUtils.validateEntity(clienteDTO, validator);
         try {
             logger.info("Creando nuevo Cliente");
             Cliente cliente = convertToEntity(clienteDTO);
@@ -58,6 +65,7 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional
     public ClienteDTO updateCliente(Long id, ClienteDTO clienteDTO) {
+        ValidatorUtils.validateEntity(clienteDTO, validator);
         try {
             logger.info("Actualizando Cliente con id: {}", id);
             Cliente cliente = clienteRepository.findById(id)
@@ -101,15 +109,14 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ClienteDTO> getAllClientes() {
+    public Page<ClienteDTO> getAllClientes(Pageable pageable) {
         try {
-            logger.info("Obteniendo todos los Clientes");
-            return clienteRepository.findAll().stream()
-                    .map(this::convertToDto)
-                    .collect(Collectors.toList());
+            logger.info("Obteniendo todos los Clientes con paginación");
+            Page<Cliente> clientes = clienteRepository.findAll(pageable);
+            return clientes.map(this::convertToDto);
         } catch (Exception e) {
-            logger.error("Error obteniendo todos los Clientes", e);
-            throw new DataAccessException("Error obteniendo todos los Clientes", e);
+            logger.error("Error obteniendo todos los Clientes con paginación", e);
+            throw new DataAccessException("Error obteniendo todos los Clientes con paginación", e);
         }
     }
 
