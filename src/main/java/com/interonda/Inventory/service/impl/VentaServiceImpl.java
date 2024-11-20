@@ -8,6 +8,8 @@ import com.interonda.Inventory.mapper.VentaMapper;
 import com.interonda.Inventory.repository.VentaRepository;
 import com.interonda.Inventory.service.VentaService;
 
+import com.interonda.Inventory.utils.ValidatorUtils;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,20 +18,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class VentaServiceImpl implements VentaService {
     private static final Logger logger = LoggerFactory.getLogger(VentaServiceImpl.class);
 
     private final VentaRepository ventaRepository;
     private final VentaMapper ventaMapper;
+    private final Validator validator;
 
     @Autowired
-    public VentaServiceImpl(VentaRepository ventaRepository, VentaMapper ventaMapper) {
+    public VentaServiceImpl(VentaRepository ventaRepository, VentaMapper ventaMapper, Validator validator) {
         this.ventaRepository = ventaRepository;
         this.ventaMapper = ventaMapper;
+        this.validator = validator;
     }
 
     @Override
@@ -45,6 +46,7 @@ public class VentaServiceImpl implements VentaService {
     @Override
     @Transactional
     public VentaDTO createVenta(VentaDTO ventaDTO) {
+        ValidatorUtils.validateEntity(ventaDTO, validator);
         try {
             logger.info("Creando nueva Venta");
             Venta venta = ventaMapper.toEntity(ventaDTO);
@@ -60,6 +62,7 @@ public class VentaServiceImpl implements VentaService {
     @Override
     @Transactional
     public VentaDTO updateVenta(VentaDTO ventaDTO) {
+        ValidatorUtils.validateEntity(ventaDTO, validator);
         try {
             logger.info("Actualizando Venta con id: {}", ventaDTO.getId());
             Venta venta = ventaRepository.findById(ventaDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + ventaDTO.getId()));

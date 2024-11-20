@@ -58,13 +58,16 @@ class CategoriaServiceImplTest {
 
     @Test
     void createCategoria_ShouldCreateCategoriaSuccessfully() {
+        // Arrange
         when(categoriaRepository.existsByNombre(categoriaDTO.getNombre())).thenReturn(false);
         when(categoriaMapper.toEntity(categoriaDTO)).thenReturn(categoria);
         when(categoriaRepository.save(categoria)).thenReturn(categoria);
         when(categoriaMapper.toDto(categoria)).thenReturn(categoriaDTO);
 
+        // Act
         CategoriaDTO result = categoriaService.createCategoria(categoriaDTO);
 
+        // Assert
         assertNotNull(result);
         assertEquals("Categoria Test", result.getNombre());
         verify(validator).validate(categoriaDTO);
@@ -75,13 +78,13 @@ class CategoriaServiceImplTest {
 
     @Test
     void createCategoria_ShouldThrowConflictException_WhenCategoriaExists() {
+        // Arrange
         when(categoriaRepository.existsByNombre(categoriaDTO.getNombre())).thenReturn(true);
 
-        ConflictException exception = assertThrows(
-                ConflictException.class,
-                () -> categoriaService.createCategoria(categoriaDTO)
-        );
+        // Act & Assert
+        ConflictException exception = assertThrows(ConflictException.class, () -> categoriaService.createCategoria(categoriaDTO));
 
+        // Verify
         assertEquals("El nombre de la categoria ya existe", exception.getMessage());
         verify(validator).validate(categoriaDTO);
         verify(categoriaRepository).existsByNombre(categoriaDTO.getNombre());
@@ -90,15 +93,15 @@ class CategoriaServiceImplTest {
 
     @Test
     void createCategoria_ShouldThrowDataAccessException_OnUnexpectedError() {
+        // Arrange
         when(categoriaRepository.existsByNombre(categoriaDTO.getNombre())).thenReturn(false);
         when(categoriaMapper.toEntity(categoriaDTO)).thenReturn(categoria);
         when(categoriaRepository.save(categoria)).thenThrow(new RuntimeException("Database error"));
 
-        DataAccessException exception = assertThrows(
-                DataAccessException.class,
-                () -> categoriaService.createCategoria(categoriaDTO)
-        );
+        // Act & Assert
+        DataAccessException exception = assertThrows(DataAccessException.class, () -> categoriaService.createCategoria(categoriaDTO));
 
+        // Verify
         assertTrue(exception.getMessage().contains("Error creando Categoria"));
         verify(validator).validate(categoriaDTO);
         verify(categoriaRepository).existsByNombre(categoriaDTO.getNombre());
@@ -107,14 +110,13 @@ class CategoriaServiceImplTest {
 
     @Test
     void createCategoria_ShouldThrowValidationException_OnValidationFailure() {
-        doThrow(new ValidationException("Invalid data"))
-                .when(validator).validate(categoriaDTO);
+        // Arrange
+        doThrow(new ValidationException("Invalid data")).when(validator).validate(categoriaDTO);
 
-        ValidationException exception = assertThrows(
-                ValidationException.class,
-                () -> categoriaService.createCategoria(categoriaDTO)
-        );
+        // Act & Assert
+        ValidationException exception = assertThrows(ValidationException.class, () -> categoriaService.createCategoria(categoriaDTO));
 
+        // Verify
         assertEquals("Invalid data", exception.getMessage());
         verify(validator).validate(categoriaDTO);
         verifyNoInteractions(categoriaRepository);
@@ -122,13 +124,16 @@ class CategoriaServiceImplTest {
 
     @Test
     void updateCategoria_ShouldUpdateCategoriaSuccessfully() {
+        // Arrange
         when(categoriaRepository.existsByNombreAndIdNot(categoriaDTO.getNombre(), categoriaDTO.getId())).thenReturn(false);
         when(categoriaRepository.findById(categoriaDTO.getId())).thenReturn(Optional.of(categoria));
         when(categoriaRepository.save(categoria)).thenReturn(categoria);
         when(categoriaMapper.toDto(categoria)).thenReturn(categoriaDTO);
 
+        // Act
         CategoriaDTO result = categoriaService.updateCategoria(categoriaDTO.getId(), categoriaDTO);
 
+        // Assert
         assertNotNull(result);
         assertEquals("Categoria Test", result.getNombre());
         verify(validator).validate(categoriaDTO);
@@ -140,13 +145,13 @@ class CategoriaServiceImplTest {
 
     @Test
     void updateCategoria_ShouldThrowConflictException_WhenCategoriaExists() {
+        // Arrange
         when(categoriaRepository.existsByNombreAndIdNot(categoriaDTO.getNombre(), categoriaDTO.getId())).thenReturn(true);
 
-        ConflictException exception = assertThrows(
-                ConflictException.class,
-                () -> categoriaService.updateCategoria(categoriaDTO.getId(), categoriaDTO)
-        );
+        // Act & Assert
+        ConflictException exception = assertThrows(ConflictException.class, () -> categoriaService.updateCategoria(categoriaDTO.getId(), categoriaDTO));
 
+        // Verify
         assertEquals("El nombre de la categoria ya existe", exception.getMessage());
         verify(validator).validate(categoriaDTO);
         verify(categoriaRepository).existsByNombreAndIdNot(categoriaDTO.getNombre(), categoriaDTO.getId());
@@ -155,14 +160,14 @@ class CategoriaServiceImplTest {
 
     @Test
     void updateCategoria_ShouldThrowResourceNotFoundException_WhenCategoriaNotFound() {
+        // Arrange
         when(categoriaRepository.existsByNombreAndIdNot(categoriaDTO.getNombre(), categoriaDTO.getId())).thenReturn(false);
         when(categoriaRepository.findById(categoriaDTO.getId())).thenReturn(Optional.empty());
 
-        ResourceNotFoundException exception = assertThrows(
-                ResourceNotFoundException.class,
-                () -> categoriaService.updateCategoria(categoriaDTO.getId(), categoriaDTO)
-        );
+        // Act & Assert
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> categoriaService.updateCategoria(categoriaDTO.getId(), categoriaDTO));
 
+        // Verify
         assertEquals("Categoria no encontrada con el id: " + categoriaDTO.getId(), exception.getMessage());
         verify(validator).validate(categoriaDTO);
         verify(categoriaRepository).existsByNombreAndIdNot(categoriaDTO.getNombre(), categoriaDTO.getId());
@@ -172,15 +177,15 @@ class CategoriaServiceImplTest {
 
     @Test
     void updateCategoria_ShouldThrowDataAccessException_OnUnexpectedError() {
+        // Arrange
         when(categoriaRepository.existsByNombreAndIdNot(categoriaDTO.getNombre(), categoriaDTO.getId())).thenReturn(false);
         when(categoriaRepository.findById(categoriaDTO.getId())).thenReturn(Optional.of(categoria));
         when(categoriaRepository.save(categoria)).thenThrow(new RuntimeException("Database error"));
 
-        DataAccessException exception = assertThrows(
-                DataAccessException.class,
-                () -> categoriaService.updateCategoria(categoriaDTO.getId(), categoriaDTO)
-        );
+        // Act & Assert
+        DataAccessException exception = assertThrows(DataAccessException.class, () -> categoriaService.updateCategoria(categoriaDTO.getId(), categoriaDTO));
 
+        // Verify
         assertTrue(exception.getMessage().contains("Error actualizando Categoria"));
         verify(validator).validate(categoriaDTO);
         verify(categoriaRepository).existsByNombreAndIdNot(categoriaDTO.getNombre(), categoriaDTO.getId());
@@ -190,23 +195,26 @@ class CategoriaServiceImplTest {
 
     @Test
     void deleteCategoria_ShouldDeleteCategoriaSuccessfully() {
+        // Arrange
         when(categoriaRepository.existsById(categoriaDTO.getId())).thenReturn(true);
 
+        // Act
         categoriaService.deleteCategoria(categoriaDTO.getId());
 
+        // Verify
         verify(categoriaRepository).existsById(categoriaDTO.getId());
         verify(categoriaRepository).deleteById(categoriaDTO.getId());
     }
 
     @Test
     void deleteCategoria_ShouldThrowResourceNotFoundException_WhenCategoriaNotFound() {
+        // Arrange
         when(categoriaRepository.existsById(categoriaDTO.getId())).thenReturn(false);
 
-        ResourceNotFoundException exception = assertThrows(
-                ResourceNotFoundException.class,
-                () -> categoriaService.deleteCategoria(categoriaDTO.getId())
-        );
+        // Act & Assert
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> categoriaService.deleteCategoria(categoriaDTO.getId()));
 
+        // Verify
         assertEquals("Categoria no encontrada con el id: " + categoriaDTO.getId(), exception.getMessage());
         verify(categoriaRepository).existsById(categoriaDTO.getId());
         verifyNoMoreInteractions(categoriaRepository);
@@ -214,15 +222,14 @@ class CategoriaServiceImplTest {
 
     @Test
     void deleteCategoria_ShouldThrowDataAccessException_OnUnexpectedError() {
+        // Arrange
         when(categoriaRepository.existsById(categoriaDTO.getId())).thenReturn(true);
-        doThrow(new RuntimeException("Database error"))
-                .when(categoriaRepository).deleteById(categoriaDTO.getId());
+        doThrow(new RuntimeException("Database error")).when(categoriaRepository).deleteById(categoriaDTO.getId());
 
-        DataAccessException exception = assertThrows(
-                DataAccessException.class,
-                () -> categoriaService.deleteCategoria(categoriaDTO.getId())
-        );
+        // Act & Assert
+        DataAccessException exception = assertThrows(DataAccessException.class, () -> categoriaService.deleteCategoria(categoriaDTO.getId()));
 
+        // Verify
         assertTrue(exception.getMessage().contains("Error eliminando Categoria"));
         verify(categoriaRepository).existsById(categoriaDTO.getId());
         verify(categoriaRepository).deleteById(categoriaDTO.getId());
@@ -230,13 +237,16 @@ class CategoriaServiceImplTest {
 
     @Test
     void getAllCategorias_ShouldReturnAllCategorias() {
+        // Arrange
         Pageable pageable = PageRequest.of(0, 10);
         Page<Categoria> categoriaPage = new PageImpl<>(Collections.singletonList(categoria), pageable, 1);
         when(categoriaRepository.findAll(pageable)).thenReturn(categoriaPage);
         when(categoriaMapper.toDto(categoria)).thenReturn(categoriaDTO);
 
+        // Act
         Page<CategoriaDTO> result = categoriaService.getAllCategorias(pageable);
 
+        // Assert
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
         verify(categoriaRepository).findAll(pageable);
@@ -245,11 +255,14 @@ class CategoriaServiceImplTest {
 
     @Test
     void getCategoriaById_ShouldReturnCategoriaById() {
+        // Arrange
         when(categoriaRepository.findById(categoriaDTO.getId())).thenReturn(Optional.of(categoria));
         when(categoriaMapper.toDto(categoria)).thenReturn(categoriaDTO);
 
+        // Act
         CategoriaDTO result = categoriaService.getCategoriaById(categoriaDTO.getId());
 
+        // Assert
         assertNotNull(result);
         assertEquals("Categoria Test", result.getNombre());
         verify(categoriaRepository).findById(categoriaDTO.getId());
@@ -258,13 +271,13 @@ class CategoriaServiceImplTest {
 
     @Test
     void getCategoriaById_ShouldThrowResourceNotFoundException_WhenCategoriaNotFound() {
+        // Arrange
         when(categoriaRepository.findById(categoriaDTO.getId())).thenReturn(Optional.empty());
 
-        ResourceNotFoundException exception = assertThrows(
-                ResourceNotFoundException.class,
-                () -> categoriaService.getCategoriaById(categoriaDTO.getId())
-        );
+        // Act & Assert
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> categoriaService.getCategoriaById(categoriaDTO.getId()));
 
+        // Verify
         assertEquals("Categoria no encontrada con el id: " + categoriaDTO.getId(), exception.getMessage());
         verify(categoriaRepository).findById(categoriaDTO.getId());
     }

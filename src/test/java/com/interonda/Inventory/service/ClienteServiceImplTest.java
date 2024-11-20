@@ -66,12 +66,15 @@ class ClienteServiceImplTest {
 
     @Test
     void createCliente_ShouldReturnClienteDTO_WhenClienteDTOIsValid() {
+        // Arrange
         when(clienteMapper.toEntity(clienteDTO)).thenReturn(cliente);
         when(clienteRepository.save(cliente)).thenReturn(cliente);
         when(clienteMapper.toDto(cliente)).thenReturn(clienteDTO);
 
+        // Act
         ClienteDTO result = ClienteServiceImpl.createCliente(clienteDTO);
 
+        // Assert
         assertNotNull(result);
         assertEquals(clienteDTO.getId(), result.getId());
         assertEquals(clienteDTO.getNombre(), result.getNombre());
@@ -82,11 +85,14 @@ class ClienteServiceImplTest {
 
     @Test
     void createCliente_ShouldThrowDataAccessException_WhenErrorSavingCliente() {
+        // Arrange
         when(clienteMapper.toEntity(clienteDTO)).thenReturn(cliente);
         when(clienteRepository.save(cliente)).thenThrow(new RuntimeException());
 
+        // Act & Assert
         DataAccessException exception = assertThrows(DataAccessException.class, () -> ClienteServiceImpl.createCliente(clienteDTO));
 
+        // Verify
         assertEquals("Error guardando Cliente", exception.getMessage());
         verify(clienteMapper).toEntity(clienteDTO);
         verify(clienteRepository).save(cliente);
@@ -94,12 +100,15 @@ class ClienteServiceImplTest {
 
     @Test
     void updateCliente_ShouldReturnClienteDTO_WhenClienteDTOIsValid() {
+        // Arrange
         when(clienteRepository.findById(clienteDTO.getId())).thenReturn(Optional.of(cliente));
         when(clienteRepository.save(cliente)).thenReturn(cliente);
         when(clienteMapper.toDto(cliente)).thenReturn(clienteDTO);
 
+        // Act
         ClienteDTO result = ClienteServiceImpl.updateCliente(clienteDTO.getId(), clienteDTO);
 
+        // Assert
         assertNotNull(result);
         assertEquals(clienteDTO.getId(), result.getId());
         assertEquals(clienteDTO.getNombre(), result.getNombre());
@@ -110,21 +119,27 @@ class ClienteServiceImplTest {
 
     @Test
     void updateCliente_ShouldThrowResourceNotFoundException_WhenClienteNotFound() {
+        // Arrange
         when(clienteRepository.findById(clienteDTO.getId())).thenReturn(Optional.empty());
 
+        // Act & Assert
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> ClienteServiceImpl.updateCliente(clienteDTO.getId(), clienteDTO));
 
+        // Verify
         assertEquals("Cliente no encontrado con el id: " + clienteDTO.getId(), exception.getMessage());
         verify(clienteRepository).findById(clienteDTO.getId());
     }
 
     @Test
     void updateCliente_ShouldThrowDataAccessException_WhenErrorSavingCliente() {
+        // Arrange
         when(clienteRepository.findById(clienteDTO.getId())).thenReturn(Optional.of(cliente));
         when(clienteRepository.save(cliente)).thenThrow(new RuntimeException());
 
+        // Act & Assert
         DataAccessException exception = assertThrows(DataAccessException.class, () -> ClienteServiceImpl.updateCliente(clienteDTO.getId(), clienteDTO));
 
+        // Verify
         assertEquals("Error actualizando Cliente", exception.getMessage());
         verify(clienteRepository).findById(clienteDTO.getId());
         verify(clienteRepository).save(cliente);
@@ -132,31 +147,40 @@ class ClienteServiceImplTest {
 
     @Test
     void deleteCliente_ShouldDeleteCliente_WhenClienteExists() {
+        // Arrange
         when(clienteRepository.existsById(clienteDTO.getId())).thenReturn(true);
 
+        // Act
         ClienteServiceImpl.deleteCliente(clienteDTO.getId());
 
+        // Assert
         verify(clienteRepository).existsById(clienteDTO.getId());
         verify(clienteRepository).deleteById(clienteDTO.getId());
     }
 
     @Test
     void deleteCliente_ShouldThrowResourceNotFoundException_WhenClienteNotFound() {
+        // Arrange
         when(clienteRepository.existsById(clienteDTO.getId())).thenReturn(false);
 
+        // Act & Assert
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> ClienteServiceImpl.deleteCliente(clienteDTO.getId()));
 
+        // Verify
         assertEquals("Cliente no encontrado con el id: " + clienteDTO.getId(), exception.getMessage());
         verify(clienteRepository).existsById(clienteDTO.getId());
     }
 
     @Test
     void deleteCliente_ShouldThrowDataAccessException_WhenErrorDeletingCliente() {
+        // Arrange
         when(clienteRepository.existsById(clienteDTO.getId())).thenReturn(true);
         doThrow(new RuntimeException()).when(clienteRepository).deleteById(clienteDTO.getId());
 
+        // Act & Assert
         DataAccessException exception = assertThrows(DataAccessException.class, () -> ClienteServiceImpl.deleteCliente(clienteDTO.getId()));
 
+        // Verify
         assertEquals("Error eliminando Cliente", exception.getMessage());
         verify(clienteRepository).existsById(clienteDTO.getId());
         verify(clienteRepository).deleteById(clienteDTO.getId());
@@ -164,13 +188,16 @@ class ClienteServiceImplTest {
 
     @Test
     void getAllClientes_ShouldReturnPageOfClienteDTO_WhenClientesExist() {
+        // Arrange
         Pageable pageable = PageRequest.of(0, 10);
         Page<Cliente> clientePage = new PageImpl<>(List.of(cliente), pageable, 1);
         when(clienteRepository.findAll(pageable)).thenReturn(clientePage);
         when(clienteMapper.toDto(cliente)).thenReturn(clienteDTO);
 
+        // Act
         Page<ClienteDTO> result = ClienteServiceImpl.getAllClientes(pageable);
 
+        // Assert
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
         assertEquals(clienteDTO.getId(), result.getContent().get(0).getId());
@@ -180,24 +207,30 @@ class ClienteServiceImplTest {
 
     @Test
     void getAllClientes_ShouldThrowDataAccessException_WhenErrorGettingClientes() {
+        // Arrange
         Pageable pageable = PageRequest.of(0, 10);
         when(clienteRepository.findAll(pageable)).thenThrow(new RuntimeException());
 
+        // Act & Assert
         DataAccessException exception = assertThrows(DataAccessException.class, () -> {
             ClienteServiceImpl.getAllClientes(pageable);
         });
 
+        // Verify
         assertEquals("Error obteniendo todos los Clientes con paginación", exception.getMessage());
         verify(clienteRepository).findAll(pageable);
     }
 
     @Test
     void getClienteById_ShouldReturnClienteDTO_WhenClienteExists() {
+        // Arrange
         when(clienteRepository.findById(clienteDTO.getId())).thenReturn(Optional.of(cliente));
         when(clienteMapper.toDto(cliente)).thenReturn(clienteDTO);
 
+        // Act
         ClienteDTO result = ClienteServiceImpl.getClienteById(clienteDTO.getId());
 
+        // Assert
         assertNotNull(result);
         assertEquals(clienteDTO.getId(), result.getId());
         assertEquals(clienteDTO.getNombre(), result.getNombre());
@@ -207,10 +240,13 @@ class ClienteServiceImplTest {
 
     @Test
     void getClienteById_ShouldThrowResourceNotFoundException_WhenClienteNotFound() {
+        // Arrange
         when(clienteRepository.findById(clienteDTO.getId())).thenReturn(Optional.empty());
 
+        // Act & Assert
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> ClienteServiceImpl.getClienteById(clienteDTO.getId()));
 
+        // Verify
         assertEquals("Cliente no encontrado con el id: " + clienteDTO.getId(), exception.getMessage());
         verify(clienteRepository).findById(clienteDTO.getId());
     }

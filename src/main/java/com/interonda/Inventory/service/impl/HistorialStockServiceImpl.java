@@ -8,6 +8,8 @@ import com.interonda.Inventory.mapper.HistorialStockMapper;
 import com.interonda.Inventory.repository.HistorialStockRepository;
 import com.interonda.Inventory.service.HistorialStockService;
 
+import com.interonda.Inventory.utils.ValidatorUtils;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class HistorialStockServiceImpl implements HistorialStockService {
 
@@ -26,11 +25,13 @@ public class HistorialStockServiceImpl implements HistorialStockService {
 
     private final HistorialStockRepository historialStockRepository;
     private final HistorialStockMapper historialStockMapper;
+    private final Validator validator;
 
     @Autowired
-    public HistorialStockServiceImpl(HistorialStockRepository historialStockRepository, HistorialStockMapper historialStockMapper) {
+    public HistorialStockServiceImpl(HistorialStockRepository historialStockRepository, HistorialStockMapper historialStockMapper, Validator validator) {
         this.historialStockRepository = historialStockRepository;
         this.historialStockMapper = historialStockMapper;
+        this.validator = validator;
     }
 
     @Override
@@ -46,6 +47,7 @@ public class HistorialStockServiceImpl implements HistorialStockService {
     @Override
     @Transactional
     public HistorialStockDTO createHistorialStock(HistorialStockDTO historialStockDTO) {
+        ValidatorUtils.validateEntity(historialStockDTO, validator);
         try {
             logger.info("Creando nuevo HistorialStock");
             HistorialStock historialStock = convertToEntity(historialStockDTO);
@@ -61,6 +63,7 @@ public class HistorialStockServiceImpl implements HistorialStockService {
     @Override
     @Transactional
     public HistorialStockDTO updateHistorialStock(Long id, HistorialStockDTO historialStockDTO) {
+        ValidatorUtils.validateEntity(historialStockDTO, validator);
         try {
             logger.info("Actualizando HistorialStock con id: {}", id);
             HistorialStock historialStock = convertToEntity(historialStockDTO);

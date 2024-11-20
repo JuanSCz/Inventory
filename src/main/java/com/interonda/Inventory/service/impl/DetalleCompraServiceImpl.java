@@ -12,6 +12,9 @@ import com.interonda.Inventory.repository.DetalleCompraRepository;
 import com.interonda.Inventory.repository.ProductoRepository;
 import com.interonda.Inventory.service.DetalleCompraService;
 
+import com.interonda.Inventory.utils.ValidatorUtils;
+import jakarta.persistence.PersistenceException;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class DetalleCompraServiceImpl implements DetalleCompraService {
@@ -32,13 +32,15 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
     private final CompraRepository compraRepository;
     private final ProductoRepository productoRepository;
     private final DetalleCompraMapper detalleCompraMapper;
+    private final Validator validator;
 
     @Autowired
-    public DetalleCompraServiceImpl(DetalleCompraRepository detalleCompraRepository, CompraRepository compraRepository, ProductoRepository productoRepository, DetalleCompraMapper detalleCompraMapper) {
+    public DetalleCompraServiceImpl(DetalleCompraRepository detalleCompraRepository, CompraRepository compraRepository, ProductoRepository productoRepository, DetalleCompraMapper detalleCompraMapper, Validator validator) {
         this.detalleCompraRepository = detalleCompraRepository;
         this.compraRepository = compraRepository;
         this.productoRepository = productoRepository;
         this.detalleCompraMapper = detalleCompraMapper;
+        this.validator = validator;
     }
 
     @Override
@@ -54,14 +56,20 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
     @Override
     @Transactional
     public DetalleCompraDTO createDetalleCompra(DetalleCompraDTO detalleCompraDTO) {
+        ValidatorUtils.validateEntity(detalleCompraDTO, validator);
+
+        Compra compra = compraRepository.findById(detalleCompraDTO.getCompraId()).orElseThrow(() -> new ResourceNotFoundException("Compra no encontrada con el id: " + detalleCompraDTO.getCompraId()));
+
+        Producto producto = productoRepository.findById(detalleCompraDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleCompraDTO.getProductoId()));
+
+        DetalleCompra detalleCompra = detalleCompraMapper.toEntity(detalleCompraDTO);
+        detalleCompra.setCompra(compra);
+        detalleCompra.setProducto(producto);
+
         try {
-            logger.info("Creando nuevo DetalleCompra");
-            DetalleCompra detalleCompra = convertToEntity(detalleCompraDTO);
             DetalleCompra savedDetalleCompra = detalleCompraRepository.save(detalleCompra);
-            logger.info("DetalleCompra creado exitosamente con id: {}", savedDetalleCompra.getId());
-            return convertToDto(savedDetalleCompra);
-        } catch (Exception e) {
-            logger.error("Error creando DetalleCompra", e);
+            return detalleCompraMapper.toDto(savedDetalleCompra);
+        } catch (PersistenceException e) {
             throw new DataAccessException("Error creando DetalleCompra", e);
         }
     }
@@ -69,6 +77,7 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
     @Override
     @Transactional
     public DetalleCompraDTO updateDetalleCompra(Long id, DetalleCompraDTO detalleCompraDTO) {
+        ValidatorUtils.validateEntity(detalleCompraDTO, validator);
         try {
             logger.info("Actualizando DetalleCompra con id: {}", id);
             DetalleCompra detalleCompra = detalleCompraRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("DetalleCompra no encontrada con el id: " + id));

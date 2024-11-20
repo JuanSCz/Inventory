@@ -8,6 +8,8 @@ import com.interonda.Inventory.mapper.RolMapper;
 import com.interonda.Inventory.repository.RolRepository;
 import com.interonda.Inventory.service.RolService;
 
+import com.interonda.Inventory.utils.ValidatorUtils;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class RolServiceImpl implements RolService {
 
@@ -26,11 +25,13 @@ public class RolServiceImpl implements RolService {
 
     private final RolRepository rolRepository;
     private final RolMapper rolMapper;
+    private final Validator validator;
 
     @Autowired
-    public RolServiceImpl(RolRepository rolRepository, RolMapper rolMapper) {
+    public RolServiceImpl(RolRepository rolRepository, RolMapper rolMapper, Validator validator) {
         this.rolRepository = rolRepository;
         this.rolMapper = rolMapper;
+        this.validator = validator;
     }
 
     @Override
@@ -46,6 +47,7 @@ public class RolServiceImpl implements RolService {
     @Override
     @Transactional
     public RolDTO createRol(RolDTO rolDTO) {
+        ValidatorUtils.validateEntity(rolDTO, validator);
         try {
             logger.info("Creando nuevo Rol");
             Rol rol = rolMapper.toEntity(rolDTO);
@@ -61,6 +63,7 @@ public class RolServiceImpl implements RolService {
     @Override
     @Transactional
     public RolDTO updateRol(Long id, RolDTO rolDTO) {
+        ValidatorUtils.validateEntity(rolDTO, validator);
         try {
             logger.info("Actualizando Rol con id: {}", id);
             Rol rol = rolRepository.findById(id)

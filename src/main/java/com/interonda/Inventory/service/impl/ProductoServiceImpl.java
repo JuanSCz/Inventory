@@ -8,6 +8,8 @@ import com.interonda.Inventory.mapper.ProductoMapper;
 import com.interonda.Inventory.repository.ProductoRepository;
 import com.interonda.Inventory.service.ProductoService;
 
+import com.interonda.Inventory.utils.ValidatorUtils;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,11 +25,13 @@ public class ProductoServiceImpl implements ProductoService {
 
     private final ProductoRepository productoRepository;
     private final ProductoMapper productoMapper;
+    private final Validator validator;
 
     @Autowired
-    public ProductoServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper) {
+    public ProductoServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper, Validator validator) {
         this.productoRepository = productoRepository;
         this.productoMapper = productoMapper;
+        this.validator = validator;
     }
 
     @Override
@@ -43,6 +47,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     @Transactional
     public ProductoDTO createProducto(ProductoDTO productoDTO) {
+        ValidatorUtils.validateEntity(productoDTO, validator);
         if (productoDTO == null) {
             throw new IllegalArgumentException("ProductoDTO no puede ser null");
         }
@@ -61,10 +66,10 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     @Transactional
     public ProductoDTO updateProducto(ProductoDTO productoDTO) {
+        ValidatorUtils.validateEntity(productoDTO, validator);
         try {
             logger.info("Actualizando Producto con id: {}", productoDTO.getId());
-            Producto producto = productoRepository.findById(productoDTO.getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + productoDTO.getId()));
+            Producto producto = productoRepository.findById(productoDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + productoDTO.getId()));
             producto = productoMapper.toEntity(productoDTO);
             Producto updatedProducto = productoRepository.save(producto);
             logger.info("Producto actualizado exitosamente con id: {}", updatedProducto.getId());
@@ -102,8 +107,7 @@ public class ProductoServiceImpl implements ProductoService {
     public ProductoDTO getProducto(Long id) {
         try {
             logger.info("Obteniendo Producto con id: {}", id);
-            Producto producto = productoRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + id));
+            Producto producto = productoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + id));
             return productoMapper.toDto(producto);
         } catch (ResourceNotFoundException e) {
             logger.warn("Producto no encontrado: {}", e.getMessage());

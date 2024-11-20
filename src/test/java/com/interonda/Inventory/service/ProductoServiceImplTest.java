@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductoServiceImplTest {
+class ProductoServiceImplTest {
 
     private static final Long PRODUCTO_ID = 1L;
 
@@ -53,13 +53,7 @@ public class ProductoServiceImplTest {
 
         ProductoDTO result = productoServiceImpl.createProducto(productoDTO);
 
-        assertAll(
-                () -> assertNotNull(result),
-                () -> verify(productoMapper, times(1)).toEntity(productoDTO),
-                () -> verify(productoRepository, times(1)).save(producto),
-                () -> verify(productoMapper, times(1)).toDto(producto),
-                () -> verifyNoMoreInteractions(productoRepository, productoMapper)
-        );
+        assertAll(() -> assertNotNull(result), () -> verify(productoMapper, times(1)).toEntity(productoDTO), () -> verify(productoRepository, times(1)).save(producto), () -> verify(productoMapper, times(1)).toDto(producto), () -> verifyNoMoreInteractions(productoRepository, productoMapper));
     }
 
     @Test
@@ -93,14 +87,7 @@ public class ProductoServiceImplTest {
 
         ProductoDTO result = productoServiceImpl.updateProducto(productoDTO);
 
-        assertAll(
-                () -> assertNotNull(result),
-                () -> verify(productoRepository, times(1)).findById(PRODUCTO_ID),
-                () -> verify(productoMapper, times(1)).toEntity(productoDTO),
-                () -> verify(productoRepository, times(1)).save(producto),
-                () -> verify(productoMapper, times(1)).toDto(producto),
-                () -> verifyNoMoreInteractions(productoRepository, productoMapper)
-        );
+        assertAll(() -> assertNotNull(result), () -> verify(productoRepository, times(1)).findById(PRODUCTO_ID), () -> verify(productoMapper, times(1)).toEntity(productoDTO), () -> verify(productoRepository, times(1)).save(producto), () -> verify(productoMapper, times(1)).toDto(producto), () -> verifyNoMoreInteractions(productoRepository, productoMapper));
     }
 
     @Test
@@ -174,12 +161,7 @@ public class ProductoServiceImplTest {
 
         ProductoDTO result = productoServiceImpl.getProducto(PRODUCTO_ID);
 
-        assertAll(
-                () -> assertNotNull(result),
-                () -> verify(productoRepository, times(1)).findById(PRODUCTO_ID),
-                () -> verify(productoMapper, times(1)).toDto(producto),
-                () -> verifyNoMoreInteractions(productoRepository, productoMapper)
-        );
+        assertAll(() -> assertNotNull(result), () -> verify(productoRepository, times(1)).findById(PRODUCTO_ID), () -> verify(productoMapper, times(1)).toDto(producto), () -> verifyNoMoreInteractions(productoRepository, productoMapper));
     }
 
     @Test
@@ -231,12 +213,7 @@ public class ProductoServiceImplTest {
 
         Page<ProductoDTO> result = productoServiceImpl.getAllProductos(pageable);
 
-        assertAll(
-                () -> assertNotNull(result),
-                () -> assertTrue(result.isEmpty()),
-                () -> verify(productoRepository, times(1)).findAll(pageable),
-                () -> verifyNoMoreInteractions(productoRepository, productoMapper)
-        );
+        assertAll(() -> assertNotNull(result), () -> assertTrue(result.isEmpty()), () -> verify(productoRepository, times(1)).findAll(pageable), () -> verifyNoMoreInteractions(productoRepository, productoMapper));
     }
 
     @Test

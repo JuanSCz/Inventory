@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class CompraServiceImplTest {
+class CompraServiceImplTest {
 
     @Mock
     private ProveedorRepository proveedorRepository;
@@ -73,10 +73,13 @@ public class CompraServiceImplTest {
 
     @Test
     void convertToDto_ShouldReturnCompraDTO_WhenCompraIsValid() {
+        // Arrange
         when(compraMapper.toDto(compra)).thenReturn(compraDTO);
 
+        // Act
         CompraDTO result = compraServiceImpl.convertToDto(compra);
 
+        // Assert
         assertNotNull(result);
         assertEquals(compra.getId(), result.getId());
         verify(compraMapper).toDto(compra);
@@ -84,18 +87,23 @@ public class CompraServiceImplTest {
 
     @Test
     void convertToDto_ShouldReturnNull_WhenCompraIsNull() {
+        // Act
         CompraDTO result = compraServiceImpl.convertToDto(null);
 
+        // Assert
         assertNull(result);
     }
 
     @Test
     void convertToEntity_ShouldReturnCompra_WhenCompraDTOIsValid() {
+        // Arrange
         when(compraMapper.toEntity(compraDTO)).thenReturn(compra);
         when(proveedorRepository.findById(compraDTO.getProveedorId())).thenReturn(Optional.of(proveedor));
 
+        // Act
         Compra result = compraServiceImpl.convertToEntity(compraDTO);
 
+        // Assert
         assertNotNull(result);
         assertEquals(compraDTO.getId(), result.getId());
         assertEquals(proveedor.getId(), result.getProveedor().getId());
@@ -105,20 +113,25 @@ public class CompraServiceImplTest {
 
     @Test
     void convertToEntity_ShouldReturnNull_WhenCompraDTOIsNull() {
+        // Act
         Compra result = compraServiceImpl.convertToEntity(null);
 
+        // Assert
         assertNull(result);
     }
 
     @Test
     void createCompra_ShouldReturnCompraDTO_WhenCompraDTOIsValid() {
+        // Arrange
         when(compraMapper.toEntity(compraDTO)).thenReturn(compra);
         when(proveedorRepository.findById(compraDTO.getProveedorId())).thenReturn(Optional.of(proveedor));
         when(compraRepository.save(compra)).thenReturn(compra);
         when(compraMapper.toDto(compra)).thenReturn(compraDTO);
 
+        // Act
         CompraDTO result = compraServiceImpl.createCompra(compraDTO);
 
+        // Assert
         assertNotNull(result);
         assertEquals(compraDTO.getId(), result.getId());
         verify(compraMapper).toEntity(compraDTO);
@@ -129,14 +142,17 @@ public class CompraServiceImplTest {
 
     @Test
     void createCompra_ShouldThrowDataAccessException_WhenErrorCreatingCompra() {
+        // Arrange
         when(compraMapper.toEntity(compraDTO)).thenReturn(compra);
         when(proveedorRepository.findById(compraDTO.getProveedorId())).thenReturn(Optional.of(proveedor));
         when(compraRepository.save(compra)).thenThrow(new RuntimeException("Error creating compra"));
 
+        // Act & Assert
         Exception exception = assertThrows(DataAccessException.class, () -> {
             compraServiceImpl.createCompra(compraDTO);
         });
 
+        // Assert
         assertEquals("Error creando Compra", exception.getMessage());
         verify(compraMapper).toEntity(compraDTO);
         verify(proveedorRepository).findById(compraDTO.getProveedorId());
@@ -145,13 +161,16 @@ public class CompraServiceImplTest {
 
     @Test
     void updateCompra_ShouldReturnCompraDTO_WhenCompraDTOIsValid() {
+        // Arrange
         when(compraRepository.findById(compraDTO.getId())).thenReturn(Optional.of(compra));
         when(proveedorRepository.findById(compraDTO.getProveedorId())).thenReturn(Optional.of(proveedor));
         when(compraRepository.save(compra)).thenReturn(compra);
         when(compraMapper.toDto(compra)).thenReturn(compraDTO);
 
+        // Act
         CompraDTO result = compraServiceImpl.updateCompra(compraDTO.getId(), compraDTO);
 
+        // Assert
         assertNotNull(result);
         assertEquals(compraDTO.getId(), result.getId());
         verify(compraRepository).findById(compraDTO.getId());
@@ -162,26 +181,32 @@ public class CompraServiceImplTest {
 
     @Test
     void updateCompra_ShouldThrowResourceNotFoundException_WhenCompraIsNotFound() {
+        // Arrange
         when(compraRepository.findById(compraDTO.getId())).thenReturn(Optional.empty());
 
+        // Act & Assert
         Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
             compraServiceImpl.updateCompra(compraDTO.getId(), compraDTO);
         });
 
+        // Assert
         assertEquals("Compra no encontrada con el id: " + compraDTO.getId(), exception.getMessage());
         verify(compraRepository).findById(compraDTO.getId());
     }
 
     @Test
     void updateCompra_ShouldThrowDataAccessException_WhenErrorUpdatingCompra() {
+        // Arrange
         when(compraRepository.findById(compraDTO.getId())).thenReturn(Optional.of(compra));
         when(proveedorRepository.findById(compraDTO.getProveedorId())).thenReturn(Optional.of(proveedor));
         doThrow(new RuntimeException("Error updating compra")).when(compraRepository).save(compra);
 
+        // Act & Assert
         Exception exception = assertThrows(DataAccessException.class, () -> {
             compraServiceImpl.updateCompra(compraDTO.getId(), compraDTO);
         });
 
+        // Assert
         assertEquals("Error actualizando Compra por id: " + compraDTO.getId(), exception.getMessage());
         verify(compraRepository).findById(compraDTO.getId());
         verify(compraMapper).updateEntityFromDto(compraDTO, compra);
@@ -191,35 +216,44 @@ public class CompraServiceImplTest {
 
     @Test
     void deleteCompra_ShouldDeleteCompra_WhenCompraExists() {
+        // Arrange
         when(compraRepository.existsById(compraDTO.getId())).thenReturn(true);
 
+        // Act
         compraServiceImpl.deleteCompra(compraDTO.getId());
 
+        // Assert
         verify(compraRepository).existsById(compraDTO.getId());
         verify(compraRepository).deleteById(compraDTO.getId());
     }
 
     @Test
     void deleteCompra_ShouldThrowResourceNotFoundException_WhenCompraIsNotFound() {
+        // Arrange
         when(compraRepository.existsById(compraDTO.getId())).thenReturn(false);
 
+        // Act & Assert
         Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
             compraServiceImpl.deleteCompra(compraDTO.getId());
         });
 
+        // Assert
         assertEquals("Compra no encontrada con el id: " + compraDTO.getId(), exception.getMessage());
         verify(compraRepository).existsById(compraDTO.getId());
     }
 
     @Test
     void getAllCompras_ShouldReturnPageOfCompraDTO() {
+        // Arrange
         Pageable pageable = PageRequest.of(0, 10);
         Page<Compra> compraPage = new PageImpl<>(List.of(compra), pageable, 1);
         when(compraRepository.findAll(pageable)).thenReturn(compraPage);
         when(compraMapper.toDto(compra)).thenReturn(compraDTO);
 
+        // Act
         Page<CompraDTO> result = compraServiceImpl.getAllCompras(pageable);
 
+        // Assert
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
         verify(compraRepository).findAll(pageable);
@@ -228,24 +262,30 @@ public class CompraServiceImplTest {
 
     @Test
     void getAllCompras_ShouldThrowDataAccessException_WhenErrorGettingAllCompras() {
+        // Arrange
         Pageable pageable = PageRequest.of(0, 10);
         when(compraRepository.findAll(pageable)).thenThrow(new RuntimeException("Error getting all compras"));
 
+        // Act & Assert
         Exception exception = assertThrows(DataAccessException.class, () -> {
             compraServiceImpl.getAllCompras(pageable);
         });
 
+        // Assert
         assertEquals("Error obteniendo todas las Compras con paginación", exception.getMessage());
         verify(compraRepository).findAll(pageable);
     }
 
     @Test
     void getCompraById_ShouldReturnCompraDTO_WhenCompraExists() {
+        // Arrange
         when(compraRepository.findById(compraDTO.getId())).thenReturn(Optional.of(compra));
         when(compraMapper.toDto(compra)).thenReturn(compraDTO);
 
+        // Act
         CompraDTO result = compraServiceImpl.getCompraById(compraDTO.getId());
 
+        // Assert
         assertNotNull(result);
         assertEquals(compraDTO.getId(), result.getId());
         verify(compraRepository).findById(compraDTO.getId());
@@ -254,12 +294,15 @@ public class CompraServiceImplTest {
 
     @Test
     void getCompraById_ShouldThrowResourceNotFoundException_WhenCompraIsNotFound() {
+        // Arrange
         when(compraRepository.findById(compraDTO.getId())).thenReturn(Optional.empty());
 
+        // Act & Assert
         Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
             compraServiceImpl.getCompraById(compraDTO.getId());
         });
 
+        // Assert
         assertEquals("Compra no encontrada con el id: " + compraDTO.getId(), exception.getMessage());
         verify(compraRepository).findById(compraDTO.getId());
     }

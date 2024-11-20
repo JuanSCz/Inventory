@@ -11,7 +11,6 @@ import com.interonda.Inventory.repository.DetalleVentaRepository;
 import com.interonda.Inventory.repository.ProductoRepository;
 import com.interonda.Inventory.repository.VentaRepository;
 import com.interonda.Inventory.service.impl.DetalleVentaServiceImpl;
-import jakarta.validation.Validator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,13 +30,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class DetalleVentaServiceImplTest {
+class DetalleVentaServiceImplTest {
 
     @Mock
     private DetalleVentaRepository detalleVentaRepository;
-
-    @Mock
-    private Validator validator;
 
     @Mock
     private DetalleVentaMapper detalleVentaMapper;
@@ -53,16 +49,29 @@ public class DetalleVentaServiceImplTest {
 
     private DetalleVentaDTO detalleVentaDTO;
     private DetalleVenta detalleVenta;
+    private Venta venta;
+    private Producto producto;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         detalleVentaDTO = new DetalleVentaDTO();
         detalleVenta = new DetalleVenta();
+        venta = new Venta();
+        venta.setId(1L);
+        producto = new Producto();
+        producto.setId(1L);
     }
 
     @Test
     void createDetalleVenta_Success() {
+        detalleVentaDTO.setVentaId(1L);
+        detalleVentaDTO.setProductoId(1L);
+        detalleVenta.setVenta(venta);
+        detalleVenta.setProducto(producto);
+
+        when(ventaRepository.findById(1L)).thenReturn(Optional.of(venta));
+        when(productoRepository.findById(1L)).thenReturn(Optional.of(producto));
         when(detalleVentaMapper.toEntity(detalleVentaDTO)).thenReturn(detalleVenta);
         when(detalleVentaRepository.save(detalleVenta)).thenReturn(detalleVenta);
         when(detalleVentaMapper.toDto(detalleVenta)).thenReturn(detalleVentaDTO);
@@ -71,196 +80,199 @@ public class DetalleVentaServiceImplTest {
 
         assertNotNull(result);
         assertEquals(detalleVentaDTO, result);
+        verify(ventaRepository, times(1)).findById(1L);
+        verify(productoRepository, times(1)).findById(1L);
         verify(detalleVentaRepository, times(1)).save(detalleVenta);
         verify(detalleVentaMapper, times(1)).toEntity(detalleVentaDTO);
         verify(detalleVentaMapper, times(1)).toDto(detalleVenta);
     }
 
-    @Test
-    void createDetalleVenta_DataAccessException() {
-        when(detalleVentaMapper.toEntity(detalleVentaDTO)).thenReturn(detalleVenta);
-        when(detalleVentaRepository.save(detalleVenta)).thenThrow(new RuntimeException("Database error"));
 
-        DataAccessException exception = assertThrows(DataAccessException.class, () -> {
-            detalleVentaServiceImpl.createDetalleVenta(detalleVentaDTO);
-        });
+@Test
+void createDetalleVenta_DataAccessException() {
+    when(detalleVentaMapper.toEntity(detalleVentaDTO)).thenReturn(detalleVenta);
+    when(detalleVentaRepository.save(detalleVenta)).thenThrow(new RuntimeException("Database error"));
 
-        assertEquals("Error creando DetalleVenta", exception.getMessage());
-        verify(detalleVentaRepository, times(1)).save(detalleVenta);
-        verify(detalleVentaMapper, times(1)).toEntity(detalleVentaDTO);
-        verify(detalleVentaMapper, never()).toDto(any(DetalleVenta.class));
-    }
+    DataAccessException exception = assertThrows(DataAccessException.class, () -> {
+        detalleVentaServiceImpl.createDetalleVenta(detalleVentaDTO);
+    });
 
-    @Test
-    void updateDetalleVenta_Success() {
-        when(detalleVentaRepository.findById(1L)).thenReturn(Optional.of(detalleVenta));
-        when(ventaRepository.findById(detalleVentaDTO.getVentaId())).thenReturn(Optional.of(new Venta()));
-        when(productoRepository.findById(detalleVentaDTO.getProductoId())).thenReturn(Optional.of(new Producto()));
-        when(detalleVentaRepository.save(detalleVenta)).thenReturn(detalleVenta);
-        when(detalleVentaMapper.toDto(detalleVenta)).thenReturn(detalleVentaDTO);
+    assertEquals("Error creando DetalleVenta", exception.getMessage());
+    verify(detalleVentaRepository, times(1)).save(detalleVenta);
+    verify(detalleVentaMapper, times(1)).toEntity(detalleVentaDTO);
+    verify(detalleVentaMapper, never()).toDto(any(DetalleVenta.class));
+}
 
-        DetalleVentaDTO result = detalleVentaServiceImpl.updateDetalleVenta(1L, detalleVentaDTO);
+@Test
+void updateDetalleVenta_Success() {
+    when(detalleVentaRepository.findById(1L)).thenReturn(Optional.of(detalleVenta));
+    when(ventaRepository.findById(detalleVentaDTO.getVentaId())).thenReturn(Optional.of(new Venta()));
+    when(productoRepository.findById(detalleVentaDTO.getProductoId())).thenReturn(Optional.of(new Producto()));
+    when(detalleVentaRepository.save(detalleVenta)).thenReturn(detalleVenta);
+    when(detalleVentaMapper.toDto(detalleVenta)).thenReturn(detalleVentaDTO);
 
-        assertNotNull(result);
-        assertEquals(detalleVentaDTO, result);
-        verify(detalleVentaRepository, times(1)).save(detalleVenta);
-        verify(detalleVentaMapper, times(1)).toDto(detalleVenta);
-    }
+    DetalleVentaDTO result = detalleVentaServiceImpl.updateDetalleVenta(1L, detalleVentaDTO);
 
-    @Test
-    void updateDetalleVenta_DetalleVentaNotFound() {
-        when(detalleVentaRepository.findById(1L)).thenReturn(Optional.empty());
+    assertNotNull(result);
+    assertEquals(detalleVentaDTO, result);
+    verify(detalleVentaRepository, times(1)).save(detalleVenta);
+    verify(detalleVentaMapper, times(1)).toDto(detalleVenta);
+}
 
-        assertThrows(ResourceNotFoundException.class, () -> {
-            detalleVentaServiceImpl.updateDetalleVenta(1L, detalleVentaDTO);
-        });
+@Test
+void updateDetalleVenta_DetalleVentaNotFound() {
+    when(detalleVentaRepository.findById(1L)).thenReturn(Optional.empty());
 
-        verify(detalleVentaRepository, never()).save(any(DetalleVenta.class));
-    }
+    assertThrows(ResourceNotFoundException.class, () -> {
+        detalleVentaServiceImpl.updateDetalleVenta(1L, detalleVentaDTO);
+    });
 
-    @Test
-    void updateDetalleVenta_VentaNotFound() {
-        when(detalleVentaRepository.findById(1L)).thenReturn(Optional.of(detalleVenta));
-        when(ventaRepository.findById(detalleVentaDTO.getVentaId())).thenReturn(Optional.empty());
+    verify(detalleVentaRepository, never()).save(any(DetalleVenta.class));
+}
 
-        assertThrows(ResourceNotFoundException.class, () -> {
-            detalleVentaServiceImpl.updateDetalleVenta(1L, detalleVentaDTO);
-        });
+@Test
+void updateDetalleVenta_VentaNotFound() {
+    when(detalleVentaRepository.findById(1L)).thenReturn(Optional.of(detalleVenta));
+    when(ventaRepository.findById(detalleVentaDTO.getVentaId())).thenReturn(Optional.empty());
 
-        verify(detalleVentaRepository, never()).save(any(DetalleVenta.class));
-    }
+    assertThrows(ResourceNotFoundException.class, () -> {
+        detalleVentaServiceImpl.updateDetalleVenta(1L, detalleVentaDTO);
+    });
 
-    @Test
-    void updateDetalleVenta_ProductoNotFound() {
-        when(detalleVentaRepository.findById(1L)).thenReturn(Optional.of(detalleVenta));
-        when(ventaRepository.findById(detalleVentaDTO.getVentaId())).thenReturn(Optional.of(new Venta()));
-        when(productoRepository.findById(detalleVentaDTO.getProductoId())).thenReturn(Optional.empty());
+    verify(detalleVentaRepository, never()).save(any(DetalleVenta.class));
+}
 
-        assertThrows(ResourceNotFoundException.class, () -> {
-            detalleVentaServiceImpl.updateDetalleVenta(1L, detalleVentaDTO);
-        });
+@Test
+void updateDetalleVenta_ProductoNotFound() {
+    when(detalleVentaRepository.findById(1L)).thenReturn(Optional.of(detalleVenta));
+    when(ventaRepository.findById(detalleVentaDTO.getVentaId())).thenReturn(Optional.of(new Venta()));
+    when(productoRepository.findById(detalleVentaDTO.getProductoId())).thenReturn(Optional.empty());
 
-        verify(detalleVentaRepository, never()).save(any(DetalleVenta.class));
-    }
+    assertThrows(ResourceNotFoundException.class, () -> {
+        detalleVentaServiceImpl.updateDetalleVenta(1L, detalleVentaDTO);
+    });
 
-    @Test
-    void updateDetalleVenta_DataAccessException() {
-        when(detalleVentaRepository.findById(1L)).thenReturn(Optional.of(detalleVenta));
-        when(ventaRepository.findById(detalleVentaDTO.getVentaId())).thenReturn(Optional.of(new Venta()));
-        when(productoRepository.findById(detalleVentaDTO.getProductoId())).thenReturn(Optional.of(new Producto()));
-        when(detalleVentaRepository.save(detalleVenta)).thenThrow(new RuntimeException("Database error"));
+    verify(detalleVentaRepository, never()).save(any(DetalleVenta.class));
+}
 
-        DataAccessException exception = assertThrows(DataAccessException.class, () -> {
-            detalleVentaServiceImpl.updateDetalleVenta(1L, detalleVentaDTO);
-        });
+@Test
+void updateDetalleVenta_DataAccessException() {
+    when(detalleVentaRepository.findById(1L)).thenReturn(Optional.of(detalleVenta));
+    when(ventaRepository.findById(detalleVentaDTO.getVentaId())).thenReturn(Optional.of(new Venta()));
+    when(productoRepository.findById(detalleVentaDTO.getProductoId())).thenReturn(Optional.of(new Producto()));
+    when(detalleVentaRepository.save(detalleVenta)).thenThrow(new RuntimeException("Database error"));
 
-        assertEquals("Error actualizando DetalleVenta por id: 1", exception.getMessage());
-        verify(detalleVentaRepository, times(1)).save(detalleVenta);
-    }
+    DataAccessException exception = assertThrows(DataAccessException.class, () -> {
+        detalleVentaServiceImpl.updateDetalleVenta(1L, detalleVentaDTO);
+    });
 
-    @Test
-    void deleteDetalleVenta_Success() {
-        when(detalleVentaRepository.existsById(1L)).thenReturn(true);
+    assertEquals("Error actualizando DetalleVenta por id: 1", exception.getMessage());
+    verify(detalleVentaRepository, times(1)).save(detalleVenta);
+}
 
+@Test
+void deleteDetalleVenta_Success() {
+    when(detalleVentaRepository.existsById(1L)).thenReturn(true);
+
+    detalleVentaServiceImpl.deleteDetalleVenta(1L);
+
+    verify(detalleVentaRepository, times(1)).deleteById(1L);
+}
+
+@Test
+void deleteDetalleVenta_DetalleVentaNotFound() {
+    when(detalleVentaRepository.existsById(1L)).thenReturn(false);
+
+    ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
         detalleVentaServiceImpl.deleteDetalleVenta(1L);
+    });
 
-        verify(detalleVentaRepository, times(1)).deleteById(1L);
-    }
+    assertEquals("DetalleVenta no encontrado con el id: 1", exception.getMessage());
+    verify(detalleVentaRepository, never()).deleteById(1L);
+}
 
-    @Test
-    void deleteDetalleVenta_DetalleVentaNotFound() {
-        when(detalleVentaRepository.existsById(1L)).thenReturn(false);
+@Test
+void deleteDetalleVenta_DataAccessException() {
+    when(detalleVentaRepository.existsById(1L)).thenReturn(true);
+    doThrow(new RuntimeException("Database error")).when(detalleVentaRepository).deleteById(1L);
 
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            detalleVentaServiceImpl.deleteDetalleVenta(1L);
-        });
+    DataAccessException exception = assertThrows(DataAccessException.class, () -> {
+        detalleVentaServiceImpl.deleteDetalleVenta(1L);
+    });
 
-        assertEquals("DetalleVenta no encontrado con el id: 1", exception.getMessage());
-        verify(detalleVentaRepository, never()).deleteById(1L);
-    }
+    assertEquals("Error eliminando DetalleVenta por id: 1", exception.getMessage());
+    verify(detalleVentaRepository, times(1)).deleteById(1L);
+}
 
-    @Test
-    void deleteDetalleVenta_DataAccessException() {
-        when(detalleVentaRepository.existsById(1L)).thenReturn(true);
-        doThrow(new RuntimeException("Database error")).when(detalleVentaRepository).deleteById(1L);
+@Test
+void getAllDetalleVentas_Success() {
+    Pageable pageable = PageRequest.of(0, 10);
+    DetalleVenta detalleVenta = new DetalleVenta();
+    detalleVenta.setId(1L);
+    List<DetalleVenta> detalleVentaList = List.of(detalleVenta);
+    Page<DetalleVenta> detalleVentaPage = new PageImpl<>(detalleVentaList, pageable, detalleVentaList.size());
 
-        DataAccessException exception = assertThrows(DataAccessException.class, () -> {
-            detalleVentaServiceImpl.deleteDetalleVenta(1L);
-        });
+    DetalleVentaDTO detalleVentaDTO = new DetalleVentaDTO();
+    detalleVentaDTO.setId(1L);
 
-        assertEquals("Error eliminando DetalleVenta por id: 1", exception.getMessage());
-        verify(detalleVentaRepository, times(1)).deleteById(1L);
-    }
+    when(detalleVentaRepository.findAll(pageable)).thenReturn(detalleVentaPage);
+    when(detalleVentaMapper.toDto(detalleVenta)).thenReturn(detalleVentaDTO);
 
-    @Test
-    void getAllDetalleVentas_Success() {
-        Pageable pageable = PageRequest.of(0, 10);
-        DetalleVenta detalleVenta = new DetalleVenta();
-        detalleVenta.setId(1L);
-        List<DetalleVenta> detalleVentaList = List.of(detalleVenta);
-        Page<DetalleVenta> detalleVentaPage = new PageImpl<>(detalleVentaList, pageable, detalleVentaList.size());
+    Page<DetalleVentaDTO> result = detalleVentaServiceImpl.getAllDetalleVentas(pageable);
 
-        DetalleVentaDTO detalleVentaDTO = new DetalleVentaDTO();
-        detalleVentaDTO.setId(1L);
+    assertNotNull(result);
+    assertEquals(1, result.getContent().size());
+    assertEquals(1L, result.getContent().get(0).getId());
+    verify(detalleVentaRepository, times(1)).findAll(pageable);
+}
 
-        when(detalleVentaRepository.findAll(pageable)).thenReturn(detalleVentaPage);
-        when(detalleVentaMapper.toDto(detalleVenta)).thenReturn(detalleVentaDTO);
+@Test
+void getAllDetalleVentas_DataAccessException() {
+    Pageable pageable = mock(Pageable.class);
+    when(detalleVentaRepository.findAll(pageable)).thenThrow(new RuntimeException("Database error"));
 
-        Page<DetalleVentaDTO> result = detalleVentaServiceImpl.getAllDetalleVentas(pageable);
+    DataAccessException exception = assertThrows(DataAccessException.class, () -> {
+        detalleVentaServiceImpl.getAllDetalleVentas(pageable);
+    });
 
-        assertNotNull(result);
-        assertEquals(1, result.getContent().size());
-        assertEquals(1L, result.getContent().get(0).getId());
-        verify(detalleVentaRepository, times(1)).findAll(pageable);
-    }
+    assertEquals("Error obteniendo todos los DetalleVenta con paginación", exception.getMessage());
+    verify(detalleVentaRepository, times(1)).findAll(pageable);
+}
 
-    @Test
-    void getAllDetalleVentas_DataAccessException() {
-        Pageable pageable = mock(Pageable.class);
-        when(detalleVentaRepository.findAll(pageable)).thenThrow(new RuntimeException("Database error"));
+@Test
+void getDetalleVentaById_Success() {
+    when(detalleVentaRepository.findById(1L)).thenReturn(Optional.of(detalleVenta));
+    when(detalleVentaMapper.toDto(detalleVenta)).thenReturn(detalleVentaDTO);
 
-        DataAccessException exception = assertThrows(DataAccessException.class, () -> {
-            detalleVentaServiceImpl.getAllDetalleVentas(pageable);
-        });
+    DetalleVentaDTO result = detalleVentaServiceImpl.getDetalleVentaById(1L);
 
-        assertEquals("Error obteniendo todos los DetalleVenta con paginación", exception.getMessage());
-        verify(detalleVentaRepository, times(1)).findAll(pageable);
-    }
+    assertNotNull(result);
+    assertEquals(detalleVentaDTO, result);
+    verify(detalleVentaRepository, times(1)).findById(1L);
+    verify(detalleVentaMapper, times(1)).toDto(detalleVenta);
+}
 
-    @Test
-    void getDetalleVentaById_Success() {
-        when(detalleVentaRepository.findById(1L)).thenReturn(Optional.of(detalleVenta));
-        when(detalleVentaMapper.toDto(detalleVenta)).thenReturn(detalleVentaDTO);
+@Test
+void getDetalleVentaById_NotFound() {
+    when(detalleVentaRepository.findById(1L)).thenReturn(Optional.empty());
 
-        DetalleVentaDTO result = detalleVentaServiceImpl.getDetalleVentaById(1L);
+    ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+        detalleVentaServiceImpl.getDetalleVentaById(1L);
+    });
 
-        assertNotNull(result);
-        assertEquals(detalleVentaDTO, result);
-        verify(detalleVentaRepository, times(1)).findById(1L);
-        verify(detalleVentaMapper, times(1)).toDto(detalleVenta);
-    }
+    assertEquals("DetalleVenta no encontrado con el id: 1", exception.getMessage());
+    verify(detalleVentaRepository, times(1)).findById(1L);
+}
 
-    @Test
-    void getDetalleVentaById_NotFound() {
-        when(detalleVentaRepository.findById(1L)).thenReturn(Optional.empty());
+@Test
+void getDetalleVentaById_DataAccessException() {
+    when(detalleVentaRepository.findById(1L)).thenThrow(new RuntimeException("Database error"));
 
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            detalleVentaServiceImpl.getDetalleVentaById(1L);
-        });
+    DataAccessException exception = assertThrows(DataAccessException.class, () -> {
+        detalleVentaServiceImpl.getDetalleVentaById(1L);
+    });
 
-        assertEquals("DetalleVenta no encontrado con el id: 1", exception.getMessage());
-        verify(detalleVentaRepository, times(1)).findById(1L);
-    }
-
-    @Test
-    void getDetalleVentaById_DataAccessException() {
-        when(detalleVentaRepository.findById(1L)).thenThrow(new RuntimeException("Database error"));
-
-        DataAccessException exception = assertThrows(DataAccessException.class, () -> {
-            detalleVentaServiceImpl.getDetalleVentaById(1L);
-        });
-
-        assertEquals("Error obteniendo DetalleVenta por id: 1", exception.getMessage());
-        verify(detalleVentaRepository, times(1)).findById(1L);
-    }
+    assertEquals("Error obteniendo DetalleVenta por id: 1", exception.getMessage());
+    verify(detalleVentaRepository, times(1)).findById(1L);
+}
 }

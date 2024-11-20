@@ -8,6 +8,8 @@ import com.interonda.Inventory.mapper.StockMapper;
 import com.interonda.Inventory.repository.StockRepository;
 import com.interonda.Inventory.service.StockService;
 
+import com.interonda.Inventory.utils.ValidatorUtils;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,21 +18,29 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class StockServiceImpl implements StockService {
 
-    private static final Logger logger = LoggerFactory.getLogger(StockServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(StockServiceImpl.class);
 
     private final StockRepository stockRepository;
     private final StockMapper stockMapper;
+    private final Validator validator;
+
 
     @Autowired
-    public StockServiceImpl(StockRepository stockRepository, StockMapper stockMapper) {
+    public StockServiceImpl(StockRepository stockRepository, StockMapper stockMapper, Validator validator) {
         this.stockRepository = stockRepository;
         this.stockMapper = stockMapper;
+        this.validator = validator;
+    }
+
+    // Constructor for testing purposes
+    public StockServiceImpl(StockRepository stockRepository, StockMapper stockMapper, Validator validator, Logger logger) {
+        this.stockRepository = stockRepository;
+        this.stockMapper = stockMapper;
+        this.validator = validator;
+        this.logger = logger;
     }
 
     @Override
@@ -47,24 +57,25 @@ public class StockServiceImpl implements StockService {
     @Transactional
     public StockDTO createStock(StockDTO stockDTO) {
         try {
-            logger.info("Creando nuevo Stock");
+            ValidatorUtils.validateEntity(stockDTO, validator);
+            logger.info("Creando nuevo Stock con cantidad: {}", stockDTO.getCantidad());
             Stock stock = stockMapper.toEntity(stockDTO);
             Stock savedStock = stockRepository.save(stock);
             logger.info("Stock creado exitosamente con id: {}", savedStock.getId());
             return stockMapper.toDto(savedStock);
         } catch (Exception e) {
-            logger.error("Error guardando Stock", e);
-            throw new DataAccessException("Error guardando Stock", e);
+            logger.error("Error creando Stock", e);
+            throw new DataAccessException("Error creando Stock", e);
         }
     }
 
     @Override
     @Transactional
     public StockDTO updateStock(StockDTO stockDTO) {
+        ValidatorUtils.validateEntity(stockDTO, validator);
         try {
             logger.info("Actualizando Stock con id: {}", stockDTO.getId());
-            Stock stock = stockRepository.findById(stockDTO.getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Stock no encontrado con el id: " + stockDTO.getId()));
+            Stock stock = stockRepository.findById(stockDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Stock no encontrado con el id: " + stockDTO.getId()));
             stock = stockMapper.toEntity(stockDTO);
             Stock updatedStock = stockRepository.save(stock);
             logger.info("Stock actualizado exitosamente con id: {}", updatedStock.getId());
@@ -102,8 +113,7 @@ public class StockServiceImpl implements StockService {
     public StockDTO getStock(Long id) {
         try {
             logger.info("Obteniendo Stock con id: {}", id);
-            Stock stock = stockRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Stock no encontrado con el id: " + id));
+            Stock stock = stockRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Stock no encontrado con el id: " + id));
             return stockMapper.toDto(stock);
         } catch (ResourceNotFoundException e) {
             logger.warn("Stock no encontrado: {}", e.getMessage());

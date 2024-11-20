@@ -8,6 +8,8 @@ import com.interonda.Inventory.mapper.ProveedorMapper;
 import com.interonda.Inventory.repository.ProveedorRepository;
 import com.interonda.Inventory.service.ProveedorService;
 
+import com.interonda.Inventory.utils.ValidatorUtils;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class ProveedorServiceImpl implements ProveedorService {
 
@@ -26,11 +25,13 @@ public class ProveedorServiceImpl implements ProveedorService {
 
     private final ProveedorRepository proveedorRepository;
     private final ProveedorMapper proveedorMapper;
+    private final Validator validator;
 
     @Autowired
-    public ProveedorServiceImpl(ProveedorRepository proveedorRepository, ProveedorMapper proveedorMapper) {
+    public ProveedorServiceImpl(ProveedorRepository proveedorRepository, ProveedorMapper proveedorMapper, Validator validator) {
         this.proveedorRepository = proveedorRepository;
         this.proveedorMapper = proveedorMapper;
+        this.validator = validator;
     }
 
     @Override
@@ -46,6 +47,7 @@ public class ProveedorServiceImpl implements ProveedorService {
     @Override
     @Transactional
     public ProveedorDTO createProveedor(ProveedorDTO proveedorDTO) {
+        ValidatorUtils.validateEntity(proveedorDTO, validator);
         try {
             logger.info("Creando nuevo Proveedor");
             Proveedor proveedor = proveedorMapper.toEntity(proveedorDTO);
@@ -61,10 +63,10 @@ public class ProveedorServiceImpl implements ProveedorService {
     @Override
     @Transactional
     public ProveedorDTO updateProveedor(ProveedorDTO proveedorDTO) {
+        ValidatorUtils.validateEntity(proveedorDTO, validator);
         try {
             logger.info("Actualizando Proveedor con id: {}", proveedorDTO.getId());
-            Proveedor proveedor = proveedorRepository.findById(proveedorDTO.getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Proveedor no encontrado con el id: " + proveedorDTO.getId()));
+            Proveedor proveedor = proveedorRepository.findById(proveedorDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Proveedor no encontrado con el id: " + proveedorDTO.getId()));
             proveedor = proveedorMapper.toEntity(proveedorDTO);
             Proveedor updatedProveedor = proveedorRepository.save(proveedor);
             logger.info("Proveedor actualizado exitosamente con id: {}", updatedProveedor.getId());
@@ -102,8 +104,7 @@ public class ProveedorServiceImpl implements ProveedorService {
     public ProveedorDTO getProveedor(Long id) {
         try {
             logger.info("Obteniendo Proveedor con id: {}", id);
-            Proveedor proveedor = proveedorRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Proveedor no encontrado con el id: " + id));
+            Proveedor proveedor = proveedorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Proveedor no encontrado con el id: " + id));
             return proveedorMapper.toDto(proveedor);
         } catch (ResourceNotFoundException e) {
             logger.warn("Proveedor no encontrado: {}", e.getMessage());

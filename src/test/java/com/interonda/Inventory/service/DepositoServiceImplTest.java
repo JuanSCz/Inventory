@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class DepositoServiceImplTest {
+class DepositoServiceImplTest {
 
     @Mock
     private DepositoRepository depositoRepository;
@@ -62,12 +62,15 @@ public class DepositoServiceImplTest {
 
     @Test
     void createDepositoSuccessfully() {
+        // Arrange
         when(depositoMapper.toEntity(depositoDTO)).thenReturn(deposito);
         when(depositoRepository.save(deposito)).thenReturn(deposito);
         when(depositoMapper.toDto(deposito)).thenReturn(depositoDTO);
 
+        // Act
         DepositoDTO result = depositoServiceImpl.createDeposito(depositoDTO);
 
+        // Assert
         assertNotNull(result);
         assertEquals(depositoDTO.getId(), result.getId());
         verify(depositoMapper).toEntity(depositoDTO);
@@ -77,11 +80,14 @@ public class DepositoServiceImplTest {
 
     @Test
     void createDepositoThrowsDataAccessExceptionWhenErrorSaving() {
+        // Arrange
         when(depositoMapper.toEntity(depositoDTO)).thenReturn(deposito);
         when(depositoRepository.save(deposito)).thenThrow(new RuntimeException());
 
+        // Act & Assert
         DataAccessException exception = assertThrows(DataAccessException.class, () -> depositoServiceImpl.createDeposito(depositoDTO));
 
+        // Assert
         assertEquals("Error creando Deposito", exception.getMessage());
         verify(depositoMapper).toEntity(depositoDTO);
         verify(depositoRepository).save(deposito);
@@ -89,12 +95,15 @@ public class DepositoServiceImplTest {
 
     @Test
     void updateDepositoSuccessfully() {
+        // Arrange
         when(depositoRepository.findById(depositoDTO.getId())).thenReturn(Optional.of(deposito));
         when(depositoRepository.save(deposito)).thenReturn(deposito);
         when(depositoMapper.toDto(deposito)).thenReturn(depositoDTO);
 
+        // Act
         DepositoDTO result = depositoServiceImpl.updateDeposito(depositoDTO.getId(), depositoDTO);
 
+        // Assert
         assertNotNull(result);
         assertEquals(depositoDTO.getId(), result.getId());
         assertEquals(depositoDTO.getNombre(), result.getNombre());
@@ -105,21 +114,27 @@ public class DepositoServiceImplTest {
 
     @Test
     void updateDepositoThrowsResourceNotFoundExceptionWhenDepositoNotFound() {
+        // Arrange
         when(depositoRepository.findById(depositoDTO.getId())).thenReturn(Optional.empty());
 
+        // Act & Assert
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> depositoServiceImpl.updateDeposito(depositoDTO.getId(), depositoDTO));
 
+        // Assert
         assertEquals("Deposito no encontrado con el id: " + depositoDTO.getId(), exception.getMessage());
         verify(depositoRepository).findById(depositoDTO.getId());
     }
 
     @Test
     void updateDepositoThrowsDataAccessExceptionWhenErrorSaving() {
+        // Arrange
         when(depositoRepository.findById(depositoDTO.getId())).thenReturn(Optional.of(deposito));
         when(depositoRepository.save(deposito)).thenThrow(new RuntimeException());
 
+        // Act & Assert
         DataAccessException exception = assertThrows(DataAccessException.class, () -> depositoServiceImpl.updateDeposito(depositoDTO.getId(), depositoDTO));
 
+        // Assert
         assertEquals("Error actualizando Deposito por id: " + depositoDTO.getId(), exception.getMessage());
         verify(depositoRepository).findById(depositoDTO.getId());
         verify(depositoRepository).save(deposito);
@@ -127,31 +142,40 @@ public class DepositoServiceImplTest {
 
     @Test
     void deleteDepositoSuccessfully() {
+        // Arrange
         when(depositoRepository.existsById(depositoDTO.getId())).thenReturn(true);
 
+        // Act
         depositoServiceImpl.deleteDeposito(depositoDTO.getId());
 
+        // Assert
         verify(depositoRepository).existsById(depositoDTO.getId());
         verify(depositoRepository).deleteById(depositoDTO.getId());
     }
 
     @Test
     void deleteDepositoThrowsResourceNotFoundExceptionWhenDepositoNotFound() {
+        // Arrange
         when(depositoRepository.existsById(depositoDTO.getId())).thenReturn(false);
 
+        // Act & Assert
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> depositoServiceImpl.deleteDeposito(depositoDTO.getId()));
 
+        // Assert
         assertEquals("Deposito no encontrado con el id: " + depositoDTO.getId(), exception.getMessage());
         verify(depositoRepository).existsById(depositoDTO.getId());
     }
 
     @Test
     void deleteDepositoThrowsDataAccessExceptionWhenErrorDeleting() {
+        // Arrange
         when(depositoRepository.existsById(depositoDTO.getId())).thenReturn(true);
         doThrow(new RuntimeException()).when(depositoRepository).deleteById(depositoDTO.getId());
 
+        // Act & Assert
         DataAccessException exception = assertThrows(DataAccessException.class, () -> depositoServiceImpl.deleteDeposito(depositoDTO.getId()));
 
+        // Assert
         assertEquals("Error eliminando Deposito por id: " + depositoDTO.getId(), exception.getMessage());
         verify(depositoRepository).existsById(depositoDTO.getId());
         verify(depositoRepository).deleteById(depositoDTO.getId());
@@ -159,13 +183,16 @@ public class DepositoServiceImplTest {
 
     @Test
     void getAllDepositosSuccessfully() {
+        // Arrange
         Pageable pageable = PageRequest.of(0, 10);
         Page<Deposito> depositoPage = new PageImpl<>(List.of(deposito), pageable, 1);
         when(depositoRepository.findAll(pageable)).thenReturn(depositoPage);
         when(depositoMapper.toDto(deposito)).thenReturn(depositoDTO);
 
+        // Act
         Page<DepositoDTO> result = depositoServiceImpl.getAllDepositos(pageable);
 
+        // Assert
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
         assertEquals(depositoDTO.getId(), result.getContent().get(0).getId());
@@ -175,19 +202,27 @@ public class DepositoServiceImplTest {
 
     @Test
     void getAllDepositosThrowsDataAccessExceptionWhenErrorGetting() {
+        // Arrange
         Pageable pageable = PageRequest.of(0, 10);
         when(depositoRepository.findAll(pageable)).thenThrow(new RuntimeException());
 
+        // Act & Assert
         DataAccessException exception = assertThrows(DataAccessException.class, () -> depositoServiceImpl.getAllDepositos(pageable));
+
+        // Assert
+        assertEquals("Error obteniendo todos los Depositos con paginación", exception.getMessage());
     }
 
     @Test
     void getDepositoByIdSuccessfully() {
+        // Arrange
         when(depositoRepository.findById(depositoDTO.getId())).thenReturn(Optional.of(deposito));
         when(depositoMapper.toDto(deposito)).thenReturn(depositoDTO);
 
+        // Act
         DepositoDTO result = depositoServiceImpl.getDepositoById(depositoDTO.getId());
 
+        // Assert
         assertNotNull(result);
         assertEquals(depositoDTO.getId(), result.getId());
         verify(depositoRepository).findById(depositoDTO.getId());
@@ -196,20 +231,26 @@ public class DepositoServiceImplTest {
 
     @Test
     void getDepositoByIdThrowsResourceNotFoundExceptionWhenDepositoNotFound() {
+        // Arrange
         when(depositoRepository.findById(depositoDTO.getId())).thenReturn(Optional.empty());
 
+        // Act & Assert
         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> depositoServiceImpl.getDepositoById(depositoDTO.getId()));
 
+        // Assert
         assertEquals("Deposito no encontrado con el id: " + depositoDTO.getId(), exception.getMessage());
         verify(depositoRepository).findById(depositoDTO.getId());
     }
 
     @Test
     void getDepositoByIdThrowsDataAccessExceptionWhenErrorGetting() {
+        // Arrange
         when(depositoRepository.findById(depositoDTO.getId())).thenThrow(new RuntimeException());
 
+        // Act & Assert
         DataAccessException exception = assertThrows(DataAccessException.class, () -> depositoServiceImpl.getDepositoById(depositoDTO.getId()));
 
+        // Assert
         assertEquals("Error obteniendo Deposito por id: " + depositoDTO.getId(), exception.getMessage());
         verify(depositoRepository).findById(depositoDTO.getId());
     }
