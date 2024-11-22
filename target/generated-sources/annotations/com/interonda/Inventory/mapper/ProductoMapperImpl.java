@@ -1,14 +1,16 @@
 package com.interonda.Inventory.mapper;
 
+import com.interonda.Inventory.dto.ProductoDTO;
 import com.interonda.Inventory.entity.Producto;
-import com.interonda.Inventory.entityDTO.ProductoDTO;
 import javax.annotation.processing.Generated;
+import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-20T10:59:59-0300",
+    date = "2024-11-22T16:33:53-0300",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
 )
+@Component
 public class ProductoMapperImpl implements ProductoMapper {
 
     @Override

@@ -22,7 +22,7 @@ public class Categoria {
     // Relación uno-a-muchos con Producto (una categoría puede tener muchos productos)
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Producto> productos = new ArrayList<>();
-    
+
     public Categoria() {
     }
 

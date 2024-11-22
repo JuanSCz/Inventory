@@ -1,13 +1,11 @@
 package com.interonda.Inventory.mapper;
 
 import com.interonda.Inventory.entity.DetalleCompra;
-import com.interonda.Inventory.entityDTO.DetalleCompraDTO;
+import com.interonda.Inventory.dto.DetalleCompraDTO;
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface DetalleCompraMapper {
-    DetalleCompraMapper INSTANCE = Mappers.getMapper(DetalleCompraMapper.class);
 
     DetalleCompraDTO toDto(DetalleCompra detalleCompra);
 

@@ -11,7 +11,7 @@ public class HistorialStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Column(name = "cantidad_anterior", nullable = false)
     private Integer cantidadAnterior;
 
