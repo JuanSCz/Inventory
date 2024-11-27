@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head"></head>
+
+<body>
+<nav th:replace="fragments/navbar :: navbar"></nav>
+<div class="d-flex">
+    <aside th:replace="fragments/sidebar :: sidebar"></aside>
+    <main class="content p-3 text-center" aria-label="Main Content">
+        <h1 class="my-3 mb-4 titleDashboard highlight">Sistema de Gestion de Inventarios</h1>
+        <div class="row justify-content-center flex-wrap">
+            <div class="col-md-2">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body">
+                        <h2 class="card-number elegant-text">148</h2>
+                        <h5 class="card-title elegant-text">Productos</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body">
+                        <h2 class="card-number elegant-text">12</h2>
+                        <h5 class="card-title elegant-text">Proveedores</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body">
+                        <h2 class="card-number elegant-text">78</h2>
+                        <h5 class="card-title elegant-text">Clientes</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body">
+                        <h2 class="card-number elegant-text">368</h2>
+                        <h5 class="card-title elegant-text">Ventas</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body">
+                        <h2 class="card-number elegant-text">368</h2>
+                        <h5 class="card-title elegant-text">Compras</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center flex-wrap">
+            <div class="col-md-2">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body">
+                        <h2 class="card-number elegant-text">148</h2>
+                        <h5 class="card-title elegant-text">Depositos</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body">
+                        <h2 class="card-number elegant-text">12</h5>
+                        <h5 class="card-title elegant-text">Historiales <br> de Stock</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body">
+                        <h2 class="card-number elegant-text">78</h2>
+                        <h5 class="card-title elegant-text">Alertas de Stocks</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/index.js}"></script>
+</body>
+
+</html>

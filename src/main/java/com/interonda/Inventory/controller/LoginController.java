@@ -19,7 +19,7 @@ public class LoginController {
                         @RequestParam("password") String password,
                         Model model) {
         if ("admin".equals(name) && "password".equals(password)) {
-            return "redirect:/dashboard";
+            return "redirect:/index";
         } else {
             model.addAttribute("error", "Nombre de usuario o contraseña inválidos");
             return "login";

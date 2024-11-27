@@ -1,4 +1,3 @@
-/* Reset CSS */
 * {
     padding: 0;
     margin: 0;
@@ -7,9 +6,9 @@
     text-decoration: none;
     list-style: none;
     scroll-behavior: smooth;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
 }
 
-/* Variables */
 :root {
     --bg-color: #333333;
     --second-bg-color: #282828;
@@ -22,6 +21,10 @@
     --h3-font: 1.6rem;
     --p-font: 1.1rem;
     --span-font: 1.5rem;
+    --highlight-color: #f0f0f0; /* Añadido para sincronizar colores */
+    --gradient-bg: linear-gradient(135deg, #333333, #282828); /* Añadido para sincronizar colores */
+    --shadow-color: rgba(0, 0, 0, 0.5); /* Añadido para sincronizar colores */
+    --button-hover-color: #0073cc; /* Añadido para sincronizar colores */
 }
 
 /* Global Styles */
@@ -36,7 +39,7 @@ body {
     margin: 0 !important;
     padding: 0 !important;
     overflow-x: hidden;
-    font-size: 1rem;
+    font-size: var(--p-font);
 }
 
 h1,
@@ -45,8 +48,25 @@ h3 {
     font-weight: 700;
 }
 
+h1 {
+    font-size: var(--h1-font);
+    color: var(--text-color);
+}
+
+h2 {
+    font-size: var(--h2-font);
+    color: var(--text-color);
+}
+
+h3 {
+    font-size: var(--h3-font);
+    color: var(--text-color);
+}
+
 p {
     font-weight: 300;
+    font-size: var(--p-font);
+    color: var(--text-color);
 }
 
 button {
@@ -59,7 +79,7 @@ button {
     transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     cursor: pointer;
     width: 100%;
-    font-size: 1rem;
+    font-size: var(--p-font);
     text-shadow: 1px 1px 2px var(--bg-color) !important;
 }
 
@@ -67,6 +87,7 @@ button:hover {
     background: linear-gradient(45deg, var(--hover-color), var(--main-color));
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-shadow: 1px 1px 2px var(--bg-color) !important;
+    color: var(--text-color);
 }
 
 button:focus {
@@ -94,14 +115,14 @@ main {
 }
 
 #formulario {
-    background: var(--second-bg-color);
+    background: var(--bg-color);
     border-radius: 15px;
     border: 2px solid var(--main-color);
-    opacity: 0.9;
     width: 100%;
     max-width: 400px;
     padding: 2rem 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
 }
 
 .btn-primary {
@@ -124,7 +145,7 @@ main {
 
 #page-name .navbar-brand {
     color: var(--text-color);
-    font-size: 2rem;
+    font-size: var(--h1-font);
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -154,11 +175,17 @@ main {
     z-index: -1;
 }
 
-::placeholder {
-    color: #000000;
+input::placeholder {
+    color: white !important;
 }
 
 /* Darker placeholder color */
+
+/* Custom Input Styles */
+.custom-input {
+    color: white !important;
+    background: var(--second-bg-color) !important;
+}
 
 /* Responsive Styles for Medium Screens */
 @media (max-width: 992px) and (min-width: 768px) {
