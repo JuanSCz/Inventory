@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<body xmlns:th="http://www.thymeleaf.org" lang="en">
+<div th:fragment="sidebar">
+  <aside class="sidebar bg-secondary text-white p-3 fixed-sidebar">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link text-white" href="#" th:href="@{/dashboard}">Dashboard</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="#" th:href="@{/proveedores}">Proveedores</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="#" th:href="@{/clientes}">Clientes</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="#" th:href="@{/ventas}">Ventas</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="#" th:href="@{/compras}">Compras</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="#" th:href="@{/depositos}">Depósitos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" href="#" th:href="@{/historiales-stock}">Historiales de Stock</a>
+      </li>
+    </ul>
+  </aside>
+</div>
+</body>
