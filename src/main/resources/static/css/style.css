@@ -371,9 +371,9 @@ input::placeholder {
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 1rem;
-    height: 350px !important;
-    width: 100% !important;
-    max-width: 500px !important;
+    height: 150px !important;
+    width: 100% !important
+    max-width: 300px !important;
     display: flex;
     flex-direction: column;
     justify-content: center;

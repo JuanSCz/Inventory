@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class IndexController {
 
     @GetMapping("/login")
-    public String showLoginForm() {
+    public String showLoginForm(Model model) {
+        model.addAttribute("usuarioDTO", new UsuarioDTO());
         return "index";
     }
 
@@ -24,10 +25,15 @@ public class IndexController {
             return "index";
         }
 
-        if ("admin".equals(usuarioDTO.getNombre()) && "password".equals(usuarioDTO.getContrasenia())) {
-            return "redirect:/dashboard";
-        } else {
-            throw new AuthenticationException("Nombre de usuario o contraseña inválidos");
+        try {
+            if ("admin".equals(usuarioDTO.getNombre()) && "password".equals(usuarioDTO.getContrasenia())) {
+                return "redirect:/dashboard";
+            } else {
+                throw new AuthenticationException("Nombre de usuario o contraseña inválidos");
+            }
+        } catch (AuthenticationException e) {
+            model.addAttribute("error", e.getMessage());
+            return "index";
         }
     }
 }
