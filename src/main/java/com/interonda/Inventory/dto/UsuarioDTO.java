@@ -1,12 +1,23 @@
 package com.interonda.Inventory.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
+
 public class UsuarioDTO {
 
     private Long id;
+    @NotBlank(message = "{usuarioDTO.nombre.notBlank}")
+    @Size(max = 50, message = "{usuarioDTO.nombre.size}")
     private String nombre;
+    @NotBlank(message = "{usuarioDTO.contrasenia.notBlank}")
+    @Size(max = 50, message = "{usuarioDTO.contrasenia.size}")
     private String contrasenia;
     private byte[] imagenUsuario;
+
     private String contacto;
+
     private Long rolId;
 
     public UsuarioDTO() {

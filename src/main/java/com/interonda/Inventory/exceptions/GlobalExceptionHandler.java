@@ -7,10 +7,12 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -68,6 +70,12 @@ public class GlobalExceptionHandler {
         return buildResponse("Error: Problema interno del sistema", ex.getUserMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    public ModelAndView handleAuthenticationException(AuthenticationException ex, Model model) {
+        model.addAttribute("error", ex.getMessage());
+        return new ModelAndView("index", model.asMap());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         logger.warn("Validation Error: {}", ex.getMessage());
@@ -85,4 +93,5 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.toMap(violation -> violation.getPropertyPath().toString(), violation -> messageSource.getMessage(violation.getMessage(), null, locale)));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
+
 }
