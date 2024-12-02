@@ -77,21 +77,23 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public String handleValidationExceptions(MethodArgumentNotValidException ex, Model model) {
         logger.warn("Validation Error: {}", ex.getMessage());
         Locale locale = LocaleContextHolder.getLocale();
         Map<String, String> errors = ex.getBindingResult().getFieldErrors().stream()
                 .collect(Collectors.toMap(FieldError::getField, fieldError -> messageSource.getMessage(fieldError, locale)));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+        model.addAttribute("errorMessage", errors.values().stream().findFirst().orElse("Error de validación"));
+        return "index"; // Cambia "index" por la vista correspondiente
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<Map<String, String>> handleConstraintViolationException(ConstraintViolationException ex) {
+    public String handleConstraintViolationException(ConstraintViolationException ex, Model model) {
         logger.warn("Constraint Violation: {}", ex.getMessage());
         Locale locale = LocaleContextHolder.getLocale();
         Map<String, String> errors = ex.getConstraintViolations().stream()
                 .collect(Collectors.toMap(violation -> violation.getPropertyPath().toString(), violation -> messageSource.getMessage(violation.getMessage(), null, locale)));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+        model.addAttribute("errorMessage", errors.values().stream().findFirst().orElse("Error de validación"));
+        return "index"; // Cambia "index" por la vista correspondiente
     }
 
 }

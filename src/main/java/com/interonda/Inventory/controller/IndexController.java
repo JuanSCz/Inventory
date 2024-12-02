@@ -1,4 +1,3 @@
-// src/main/java/com/interonda/Inventory/controller/IndexController.java
 package com.interonda.Inventory.controller;
 
 import com.interonda.Inventory.dto.UsuarioDTO;
@@ -10,18 +9,24 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.stream.Collectors;
+
 @Controller
 public class IndexController {
 
     @GetMapping("/login")
     public String showLoginForm(Model model) {
         model.addAttribute("usuarioDTO", new UsuarioDTO());
-        return "index";
+        return "index"; // Nombre de la vista de login
     }
 
     @PostMapping("/login")
     public String login(@Valid UsuarioDTO usuarioDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .collect(Collectors.joining("<br>")); // Combina los mensajes de error
+            model.addAttribute("errorMessage", errorMessage);
             return "index";
         }
 
@@ -32,7 +37,7 @@ public class IndexController {
                 throw new AuthenticationException("Nombre de usuario o contraseña inválidos");
             }
         } catch (AuthenticationException e) {
-            model.addAttribute("error", e.getMessage());
+            model.addAttribute("errorMessage", e.getMessage());
             return "index";
         }
     }
