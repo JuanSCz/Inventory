@@ -9,12 +9,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
-@RestController
-@RequestMapping("/api/proveedores")
+@Controller
+@RequestMapping("/tableProveedores")
 public class ProveedorController {
 
     private static final Logger logger = LoggerFactory.getLogger(ProveedorController.class);
@@ -58,9 +60,18 @@ public class ProveedorController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProveedorDTO>> getAllProveedores(Pageable pageable) {
+    public String getAllProveedores(Model model, Pageable pageable) {
         logger.info("Solicitud recibida para obtener todos los proveedores");
-        Page<ProveedorDTO> proveedores = proveedorService.getAllProveedores(pageable);
-        return ResponseEntity.ok(proveedores);
+        Page<ProveedorDTO> proveedoresDTO = proveedorService.getAllProveedores(pageable);
+        model.addAttribute("proveedores", proveedoresDTO.getContent());
+        return "tableProveedores";
+    }
+
+    @GetMapping("/search")
+    public String searchProveedoresByName(@RequestParam String name, Model model, Pageable pageable) {
+        logger.info("Solicitud recibida para buscar proveedores por nombre: {}", name);
+        Page<ProveedorDTO> proveedores = proveedorService.searchProveedoresByName(name, pageable);
+        model.addAttribute("proveedores", proveedores.getContent());
+        return "tableProveedores";
     }
 }

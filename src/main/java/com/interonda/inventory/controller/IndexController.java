@@ -3,6 +3,9 @@ package com.interonda.inventory.controller;
 import com.interonda.inventory.dto.UsuarioDTO;
 import com.interonda.inventory.exceptions.AuthenticationException;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +17,13 @@ import java.util.stream.Collectors;
 @Controller
 public class IndexController {
 
+    private final MessageSource messageSource;
+
+    @Autowired
+    public IndexController(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     @GetMapping("/login")
     public String showLoginForm(Model model) {
         model.addAttribute("usuarioDTO", new UsuarioDTO());
@@ -23,9 +33,7 @@ public class IndexController {
     @PostMapping("/login")
     public String login(@Valid UsuarioDTO usuarioDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
-                    .map(fieldError -> fieldError.getDefaultMessage())
-                    .collect(Collectors.joining("<br>")); // Combina los mensajes de error
+            String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             return "index";
         }
@@ -37,7 +45,8 @@ public class IndexController {
                 throw new AuthenticationException("Nombre de usuario o contraseña inválidos");
             }
         } catch (AuthenticationException e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            String errorMessage = e.getMessage();
+            model.addAttribute("errorMessage", errorMessage);
             return "index";
         }
     }

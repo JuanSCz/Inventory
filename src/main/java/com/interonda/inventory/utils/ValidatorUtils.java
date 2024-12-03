@@ -1,6 +1,7 @@
 package com.interonda.inventory.utils;
 
 import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
 
 import java.util.Set;
@@ -17,7 +18,7 @@ public class ValidatorUtils {
             String errorMessage = violations.stream()
                     .map(ConstraintViolation::getMessage)
                     .collect(Collectors.joining(", "));
-            throw new IllegalArgumentException(errorMessage);
+            throw new ValidationException(errorMessage);
         }
     }
 }

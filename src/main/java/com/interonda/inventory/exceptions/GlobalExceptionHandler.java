@@ -1,6 +1,7 @@
 package com.interonda.inventory.exceptions;
 
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -8,7 +9,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -72,18 +72,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ModelAndView handleAuthenticationException(AuthenticationException ex, Model model) {
-        model.addAttribute("error", ex.getMessage());
+        model.addAttribute("errorMessage", ex.getMessage());
         return new ModelAndView("index", model.asMap());
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public String handleValidationExceptions(MethodArgumentNotValidException ex, Model model) {
-        logger.warn("Validation Error: {}", ex.getMessage());
-        Locale locale = LocaleContextHolder.getLocale();
-        Map<String, String> errors = ex.getBindingResult().getFieldErrors().stream()
-                .collect(Collectors.toMap(FieldError::getField, fieldError -> messageSource.getMessage(fieldError, locale)));
-        model.addAttribute("errorMessage", errors.values().stream().findFirst().orElse("Error de validación"));
-        return "index"; // Retorna la vista principal de login
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -94,5 +84,15 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.toMap(violation -> violation.getPropertyPath().toString(), violation -> messageSource.getMessage(violation.getMessage(), null, locale)));
         model.addAttribute("errorMessage", errors.values().stream().findFirst().orElse("Error de validación"));
         return "index"; // Retorna la vista principal de login
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public String handleValidationExceptions(MethodArgumentNotValidException ex, Model model) {
+        Locale locale = LocaleContextHolder.getLocale();
+        String errorMessage = ex.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> messageSource.getMessage(fieldError, locale))
+                .collect(Collectors.joining("<br>"));
+        model.addAttribute("errorMessage", errorMessage);
+        return "index";
     }
 }

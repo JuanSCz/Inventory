@@ -21,4 +21,5 @@ public interface ProveedorService {
 
     Page<ProveedorDTO> getAllProveedores(Pageable pageable);
 
+    Page<ProveedorDTO> searchProveedoresByName(String nombre, Pageable pageable);
 }

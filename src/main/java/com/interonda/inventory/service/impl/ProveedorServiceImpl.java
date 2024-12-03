@@ -127,5 +127,20 @@ public class ProveedorServiceImpl implements ProveedorService {
             throw new DataAccessException("Error obteniendo todos los Proveedores con paginación", e);
         }
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ProveedorDTO> searchProveedoresByName(String nombre, Pageable pageable) {
+        try {
+            logger.info("Buscando Proveedores por nombre: {}", nombre);
+            Page<Proveedor> proveedores = proveedorRepository.findByNombreContainingIgnoreCase(nombre, pageable);
+            return proveedores.map(proveedorMapper::toDto);
+        } catch (Exception e) {
+            logger.error("Error buscando Proveedores por nombre", e);
+            throw new DataAccessException("Error buscando Proveedores por nombre", e);
+        }
+    }
+
+
 }
 

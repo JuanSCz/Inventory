@@ -1,26 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const errorMessage = /*[[${errorMessage}]]*/ '';
+    // Obtener el mensaje de error desde el atributo data-error-message del body
+    const errorMessage = document.body.getAttribute('data-error-message');
+
     if (errorMessage) {
+        // Obtener el cuerpo del modal y establecer el mensaje de error
         const modalBody = document.getElementById('errorModalBody');
-        modalBody.textContent = errorMessage; // Establece el mensaje de error en el cuerpo del modal
-        const modal = new bootstrap.Modal(document.getElementById('errorModal'));
-        modal.show();
+        modalBody.innerHTML = errorMessage;
+
+        // Mostrar el modal de error
+        const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+        errorModal.show();
     }
-
-    const submitBtn = document.getElementById('submitBtn');
-    const form = document.getElementById('formLogin');
-
-    submitBtn.addEventListener('click', function (event) {
-        event.preventDefault(); // Prevenir el envío del formulario
-
-        // Validar el formulario manualmente
-        if (form.checkValidity() === false) {
-            event.stopPropagation();
-            form.classList.add('was-validated');
-        } else {
-            // Mostrar el modal de error si hay errores
-            const modal = new bootstrap.Modal(document.getElementById('errorModal'));
-            modal.show();
-        }
-    });
 });
