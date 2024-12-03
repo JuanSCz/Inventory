@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     const errorMessage = /*[[${errorMessage}]]*/ '';
     if (errorMessage) {
+        const modalBody = document.getElementById('errorModalBody');
+        modalBody.textContent = errorMessage; // Establece el mensaje de error en el cuerpo del modal
         const modal = new bootstrap.Modal(document.getElementById('errorModal'));
         modal.show();
     }

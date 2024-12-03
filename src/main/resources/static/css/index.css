@@ -106,12 +106,11 @@ main > .main-login {
         border-color: var(--main-color);
         background-origin: border-box;
         width: 100%;
-        max-width: 400px;
         padding: 2rem 1.5rem;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         color: var(--text-color);
-        max-width: 325px !important;
-        overflow: hidden;
+        max-width: 328px !important;
+        overflow: hidden !important;
 }
 
 .buttonLogin {

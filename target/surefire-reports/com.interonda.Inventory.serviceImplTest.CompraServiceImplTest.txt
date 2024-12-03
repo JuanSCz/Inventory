@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.interonda.Inventory.serviceImplTest.CompraServiceImplTest
--------------------------------------------------------------------------------
-Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.231 s -- in com.interonda.Inventory.serviceImplTest.CompraServiceImplTest

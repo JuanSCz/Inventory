@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'com.interonda.Inventory ' is invalid and this project uses 'com.interonda.Inventory' instead.
+* The original package name 'com.interonda.inventory ' is invalid and this project uses 'com.interonda.inventory' instead.
 
 # Getting Started
 
