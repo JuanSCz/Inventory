@@ -29,7 +29,7 @@
     --secondary-color: #ffcc00;
 }
 
-body {
+body{
     font-weight: 400 !important;
     font-family: 'Poppins', sans-serif;
     display: flex;
@@ -599,6 +599,82 @@ span {
     color: var(--text-color) !important;
     border-color: var(--main-color);
     box-shadow: none;
+}
+
+.main-formCreate {
+    width: 100vw !important;
+    height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    overflow: hidden !important;
+    position: relative !important;
+    padding: 0 !important !important;
+    margin: 0 !important !important;
+}
+
+#formCreate {
+    background: var(--gradient-bg) !important;
+    border-radius: 15px !important;
+    border: 2px solid !important;
+    border-color: var(--main-color) !important;
+    background-origin: border-box !important;
+    width: 100% !important;
+    max-width: 600px !important;
+    padding: 2rem 1.5rem !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+    color: var(--text-color) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+.buttonFormCreate {
+    font-weight: 500 !important;
+    background: linear-gradient(45deg, var(--main-color), var(--hover-color)) !important;
+    color: var(--text-color) !important;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 0.5rem 1rem !important;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    font-size: 0.9rem !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+}
+
+.buttonFormCreate:hover {
+    background: linear-gradient(45deg, var(--hover-color), var(--main-color)) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+    color: var(--text-color) !important;
+}
+
+.buttonFormCreate:focus {
+    outline: none !important;
+    box-shadow: 0 0 0 3px var(--highlight-color) !important;
+}
+
+.titleFormCreate{
+    color: var(--text-color) !important;
+    font-size: var(--h2-font) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    transition: color 0.3s ease !important;
+    margin: 0 !important;
+    text-shadow: 2px 2px 4px var(--bg-color) !important;
+    font-style: italic !important;
+}
+
+.custom-input-formCreate::placeholder {
+    color: white !important !important;
+}
+
+.custom-input-formCreate {
+    color: white !important !important;
+    background: var(--second-bg-color) !important;
 }
 
 @media (max-width: 768px) {

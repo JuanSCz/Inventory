@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Size;
 
 public class CategoriaDTO {
     private Long id;
-
     @NotBlank(message = "{categoriaDTO.nombre.notBlank}")
     @Size(max = 50, message = "{categoriaDTO.nombre.size}")
     private String nombre;

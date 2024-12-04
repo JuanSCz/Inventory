@@ -28,35 +28,16 @@ public class ProveedorController {
         this.proveedorService = proveedorService;
     }
 
+    @GetMapping("/create")
+    public String showCreateForm(Model model) {
+        model.addAttribute("proveedorDTO", new ProveedorDTO());
+        return "fragments/formCreate :: formCreate";
+    }
+
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ProveedorDTO> createProveedor(@Valid @RequestBody ProveedorDTO proveedorDTO) {
-        logger.info("Solicitud recibida para crear proveedor con detalles: {}", proveedorDTO);
-        ProveedorDTO createdProveedor = proveedorService.createProveedor(proveedorDTO);
-        return new ResponseEntity<>(createdProveedor, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ProveedorDTO> updateProveedor(@PathVariable Long id, @Valid @RequestBody ProveedorDTO proveedorDTO) {
-        logger.info("Solicitud recibida para actualizar proveedor con id: {}", id);
-        proveedorDTO.setId(id);
-        ProveedorDTO updatedProveedor = proveedorService.updateProveedor(proveedorDTO);
-        return ResponseEntity.ok(updatedProveedor);
-    }
-
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> deleteProveedor(@PathVariable Long id) {
-        logger.info("Solicitud recibida para eliminar proveedor con id: {}", id);
-        proveedorService.deleteProveedor(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ProveedorDTO> getProveedorById(@PathVariable Long id) {
-        logger.info("Solicitud recibida para obtener proveedor con id: {}", id);
-        ProveedorDTO proveedor = proveedorService.getProveedor(id);
-        return ResponseEntity.ok(proveedor);
+    public String createProveedor(ProveedorDTO proveedorDTO, Model model) {
+        proveedorService.createProveedor(proveedorDTO);
+        return "redirect:/tableProveedores";
     }
 
     @GetMapping
