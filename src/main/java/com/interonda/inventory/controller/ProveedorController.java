@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -28,24 +29,29 @@ public class ProveedorController {
         this.proveedorService = proveedorService;
     }
 
-    @GetMapping("/create")
-    public String showCreateForm(Model model) {
+    @GetMapping
+    public String showProveedores(@RequestParam(required = false) String name, Model model, Pageable pageable) {
+        Page<ProveedorDTO> proveedores;
+        if (name != null && !name.isEmpty()) {
+            logger.info("Solicitud recibida para buscar proveedores por nombre: {}", name);
+            proveedores = proveedorService.searchProveedoresByName(name, pageable);
+        } else {
+            proveedores = proveedorService.getAllProveedores(pageable);
+        }
+        model.addAttribute("proveedores", proveedores.getContent());
         model.addAttribute("proveedorDTO", new ProveedorDTO());
-        return "fragments/formCreate :: formCreate";
+        return "tableProveedores";
     }
 
     @PostMapping
-    public String createProveedor(ProveedorDTO proveedorDTO, Model model) {
+    public String createProveedor(@Valid ProveedorDTO proveedorDTO, BindingResult result, Model model, Pageable pageable) {
+        if (result.hasErrors()) {
+            model.addAttribute("proveedores", proveedorService.getAllProveedores(pageable).getContent());
+            model.addAttribute("proveedorDTO", proveedorDTO);
+            return "tableProveedores";
+        }
         proveedorService.createProveedor(proveedorDTO);
         return "redirect:/tableProveedores";
-    }
-
-    @GetMapping
-    public String getAllProveedores(Model model, Pageable pageable) {
-        logger.info("Solicitud recibida para obtener todos los proveedores");
-        Page<ProveedorDTO> proveedoresDTO = proveedorService.getAllProveedores(pageable);
-        model.addAttribute("proveedores", proveedoresDTO.getContent());
-        return "tableProveedores";
     }
 
     @GetMapping("/search")
@@ -53,6 +59,7 @@ public class ProveedorController {
         logger.info("Solicitud recibida para buscar proveedores por nombre: {}", name);
         Page<ProveedorDTO> proveedores = proveedorService.searchProveedoresByName(name, pageable);
         model.addAttribute("proveedores", proveedores.getContent());
+        model.addAttribute("proveedorDTO", new ProveedorDTO());
         return "tableProveedores";
     }
 }
