@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="body-table">
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm responsive-navbar">
     <div class="container-fluid">
         <img th:src="@{/images/logo.png}" alt="Interonda Logo"
@@ -68,11 +68,13 @@
     </aside>
     <main class="contentPersist p-3 text-center">
         <h2 class="mb-4 titlePersist">Proveedores</h2>
+
         <div>
-            <button class="btn buttonPersist navbar-menu" data-bs-toggle="modal" data-bs-target="#createProveedorModal">
+            <button class="btn buttonPersist navbar-menu" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Crear Proveedor
             </button>
         </div>
+
         <form th:action="@{/tableProveedores/search}" method="get" class="search-form-container">
             <div class="input-group-buscar">
                 <input type="text" name="name" placeholder="Nombre" class="form-control search-input">
@@ -114,13 +116,10 @@
         </div>
     </main>
 </div>
-<!--  <div>
-     <form th:action="@{/proveedores}" method="post" th:object="${proveedorDTO}" id="formCreate">
-           <div th:replace="fragments/formCreate :: form"></div>
-       </form>
-   </div> -->
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-   <script src="js/index.js"></script>
-   </body>
 
-   </html>
+<div th:replace="~{fragments/formCreate :: form}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/index.js"></script>
+</body>
+
+</html>

@@ -38,3 +38,13 @@ function filterTable() {
         })
         .catch(error => console.error('Error al realizar la búsqueda:', error));
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    var createProveedorModal = new bootstrap.Modal(document.getElementById('createProveedorModal'), {
+        keyboard: false
+    });
+
+    document.querySelector('.buttonPersist').addEventListener('click', function () {
+        createProveedorModal.show();
+    });
+});

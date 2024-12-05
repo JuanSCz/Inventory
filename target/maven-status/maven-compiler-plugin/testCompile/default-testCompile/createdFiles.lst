@@ -1,0 +1,12 @@
+com\interonda\inventory\service\impl\DepositoServiceImplTest.class
+com\interonda\inventory\service\impl\ProveedorServiceImplTest.class
+com\interonda\inventory\service\impl\HistorialStockServiceImplTest.class
+com\interonda\inventory\service\impl\RolServiceImplTest.class
+com\interonda\inventory\service\impl\VentaServiceImplTest.class
+com\interonda\inventory\service\impl\CompraServiceImplTest.class
+com\interonda\inventory\service\impl\DetalleVentaServiceImplTest.class
+com\interonda\inventory\service\impl\StockServiceImplTest.class
+com\interonda\inventory\service\impl\DetalleCompraServiceImplTest.class
+com\interonda\inventory\service\impl\ProductoServiceImplTest.class
+com\interonda\inventory\service\impl\CategoriaServiceImplTest.class
+com\interonda\inventory\service\impl\ClienteServiceImplTest.class

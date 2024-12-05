@@ -2,43 +2,48 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <body>
-<div class="modal fade" id="createProveedorModal" tabindex="-1" aria-labelledby="createProveedorModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="createProveedorModalLabel">Crear Proveedor</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content modal-content-createProveedor">
+            <div class="modal-header modal-header-createProveedor">
+                <h5 class="modal-title modal-title-createProveedor" id="exampleModalLabel">Nuevo Proveedor</h5>
+                <button type="button" class="btn-close btn-close-createProveedor" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/proveedores}" method="post" th:object="${proveedorDTO}" id="formCreate" novalidate autocomplete="off">
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre</label>
-                        <input type="text" class="form-control custom-input-formCreate" id="nombre" th:field="*{nombre}" placeholder="Ingrese el nombre">
+                <form th:action="@{/proveedores}" method="post" th:object="${proveedorDTO}" autocomplete="off">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">Nombre</label>
+                            <input type="text" class="form-control form-control-createProveedor" id="name" th:field="*{nombre}" placeholder="Ingrese el nombre">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Correo Electrónico</label>
+                            <input type="email" class="form-control form-control-createProveedor" id="email" th:field="*{emailProveedor}" placeholder="Ingrese el correo">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="contacto" class="form-label">Contacto</label>
-                        <input type="text" class="form-control custom-input-formCreate" id="contacto" th:field="*{contactoProveedor}" placeholder="Ingrese el teléfono">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="contacto" class="form-label">Contacto</label>
+                            <input type="text" class="form-control form-control-createProveedor" id="contacto" th:field="*{contactoProveedor}" placeholder="Ingrese el contacto">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="pais" class="form-label">País</label>
+                            <input type="text" class="form-control form-control-createProveedor" id="pais" th:field="*{pais}" placeholder="Ingrese el país">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="direccion" class="form-label">Dirección</label>
-                        <input type="text" class="form-control custom-input-formCreate" id="direccion" th:field="*{direccion}" placeholder="Ingrese la dirección">
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mx-auto text-center">
+                            <label for="dirección" class="form-label">Dirección</label>
+                            <input type="text" class="form-control form-control-createProveedor" id="dirección" th:field="*{direccion}" placeholder="Ingrese la direccion">
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control custom-input-formCreate" id="email" th:field="*{emailProveedor}" placeholder="Ingrese el email">
-                    </div>
-                    <div class="mb-3">
-                        <label for="pais" class="form-label">País</label>
-                        <input type="text" class="form-control custom-input-formCreate" id="pais" th:field="*{pais}" placeholder="Ingrese el país">
-                    </div>
-                    <button type="submit" class="btn btn-primary buttonFormCreate my-3 w-100">Registrar</button>
+                    <button type="submit" class="btn btn-primary btn-primary-createProveedor w-100">Crear Proveedor</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/index.js"></script>
 </body>
-
 </html>
