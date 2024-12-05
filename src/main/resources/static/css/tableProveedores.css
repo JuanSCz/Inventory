@@ -504,12 +504,6 @@
     text-align: right !important;
 }
 
-.btn-group {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
 .contentPersist .search-form-container {
     width: 100%;
     display: flex;
@@ -645,6 +639,80 @@
     color: transparent !important;
 }
 
+.input-group {
+    display: flex;
+    width: 100%;
+    max-width: 250px;
+}
+
+.modal-content-updateProveedor {
+    background: var(--gradient-bg) !important;
+    color: var(--text-color) !important;
+    border: 2px solid var(--main-color) !important;
+    border-radius: 15px !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+    background-origin: border-box !important;
+}
+
+.modal-header-updateProveedor {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid var(--main-color) !important;
+    position: relative;
+    padding-right: 1rem;
+}
+
+.modal-header .btn-close-updateProveedor {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--main-color) !important;
+}
+
+.modal-header .btn-close-updateProveedor:hover {
+    background-color: var(--hover-color) !important;
+}
+
+.modal-title-updateProveedor {
+    font-size: var(--h3-font) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    transition: color 0.3s ease !important;
+    margin: 0 !important;
+    text-shadow: 2px 2px 4px var(--bg-color) !important;
+}
+
+.btn-primary-updateProveedor {
+    font-weight: 500;
+    background: linear-gradient(45deg, var(--main-color), var(--hover-color));
+    color: var(--text-color) !important;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+    margin-top: 10px;
+}
+
+.btn-primary-updateProveedor:hover {
+    background: linear-gradient(45deg, var(--hover-color), var(--main-color));
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: var(--text-color);
+}
+
+.form-control-updateProveedor {
+    color: white !important;
+    background: var(--second-bg-color) !important;
+    padding: 0.5rem 0.75rem !important;
+    font-size: 1rem !important;
+}
+
 @media (max-width: 768px) {
     .contentPersist {
         width: 100%;
@@ -740,11 +808,6 @@
         width: 100%;
     }
 
-    .input-group {
-        flex-direction: row !important;
-        width: 100%;
-    }
-
     .search-input {
         border-radius: 5px;
         margin-bottom: 0.5rem;
@@ -760,6 +823,11 @@
     .table-responsive {
         margin-top: 1rem;
     }
+
+    .input-group {
+            flex-direction: row !important;
+            width: 100%;
+        }
 
     .custom-table th,
     .custom-table td {
@@ -887,11 +955,6 @@
         width: 100%;
     }
 
-    .input-group {
-        flex-direction: row !important;
-        width: 100%;
-    }
-
     .search-input {
         border-radius: 5px;
         margin-bottom: 0.5rem;
@@ -991,6 +1054,11 @@
 
     .contentPersist {
         order: 2;
+    }
+
+    .input-group {
+            flex-direction: row !important;
+            width: 100%;
     }
 }
 }

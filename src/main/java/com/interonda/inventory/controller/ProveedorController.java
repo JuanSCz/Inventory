@@ -29,6 +29,42 @@ public class ProveedorController {
         this.proveedorService = proveedorService;
     }
 
+    @PostMapping
+    public String createProveedor(@Valid ProveedorDTO proveedorDTO, BindingResult result, Model model, Pageable pageable) {
+        if (result.hasErrors()) {
+            model.addAttribute("proveedores", proveedorService.getAllProveedores(pageable).getContent());
+            model.addAttribute("proveedorDTO", proveedorDTO);
+            return "tableProveedores";
+        }
+        proveedorService.createProveedor(proveedorDTO);
+        return "redirect:/tableProveedores";
+    }
+
+    @PostMapping("/update")
+    public String updateProveedor(@Valid ProveedorDTO proveedorDTO, BindingResult result, Model model, Pageable pageable) {
+        if (result.hasErrors()) {
+            model.addAttribute("proveedores", proveedorService.getAllProveedores(pageable).getContent());
+            model.addAttribute("proveedorDTO", proveedorDTO);
+            return "tableProveedores";
+        }
+        proveedorService.updateProveedor(proveedorDTO);
+        return "redirect:/tableProveedores";
+    }
+
+    @PostMapping("/{id}")
+    public String deleteProveedor(@PathVariable Long id) {
+        logger.debug("Llamando al método deleteProveedor con id: {}", id);
+        proveedorService.deleteProveedor(id);
+        logger.debug("Proveedor con id: {} eliminado correctamente", id);
+        return "redirect:/tableProveedores";  // Redirige después de la eliminación
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProveedorDTO> getProveedorById(@PathVariable Long id) {
+        ProveedorDTO proveedorDTO = proveedorService.getProveedor(id);
+        return new ResponseEntity<>(proveedorDTO, HttpStatus.OK);
+    }
+
     @GetMapping
     public String showProveedores(@RequestParam(required = false) String name, Model model, Pageable pageable) {
         Page<ProveedorDTO> proveedores;
@@ -41,17 +77,6 @@ public class ProveedorController {
         model.addAttribute("proveedores", proveedores.getContent());
         model.addAttribute("proveedorDTO", new ProveedorDTO());
         return "tableProveedores";
-    }
-
-    @PostMapping
-    public String createProveedor(@Valid ProveedorDTO proveedorDTO, BindingResult result, Model model, Pageable pageable) {
-        if (result.hasErrors()) {
-            model.addAttribute("proveedores", proveedorService.getAllProveedores(pageable).getContent());
-            model.addAttribute("proveedorDTO", proveedorDTO);
-            return "tableProveedores";
-        }
-        proveedorService.createProveedor(proveedorDTO);
-        return "redirect:/tableProveedores";
     }
 
     @GetMapping("/search")
