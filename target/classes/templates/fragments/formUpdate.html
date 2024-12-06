@@ -8,50 +8,43 @@
 </head>
 <body>
 <div th:fragment="updateModal">
-    <div class="modal fade" id="updateProveedorModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
+    <div class="modal fade" id="updateProveedorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content modal-content-updateProveedor">
                 <div class="modal-header modal-header-updateProveedor">
                     <h5 class="modal-title modal-title-updateProveedor" id="exampleModalLabel">Actualizar Proveedor</h5>
-                    <button type="button" class="btn-close btn-close-updateProveedor" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-updateProveedor" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form th:action="@{/tableProveedores/update}" method="post" th:object="${proveedorDTO}">
+                        <input type="hidden" id="id" th:field="*{id}">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="name" class="form-label">Nombre</label>
-                                <input type="text" class="form-control form-control-updateProveedor" id="name"
-                                       th:field="*{nombre}">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control form-control-updateProveedor" id="nombre" th:field="*{nombre}">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="email" class="form-label">Correo Electrónico</label>
-                                <input type="email" class="form-control form-control-updateProveedor" id="email"
-                                       th:field="*{emailProveedor}">
+                                <input type="email" class="form-control form-control-updateProveedor" id="email" th:field="*{emailProveedor}">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="contacto" class="form-label">Contacto</label>
-                                <input type="text" class="form-control form-control-updateProveedor" id="contacto"
-                                       th:field="*{contactoProveedor}">
+                                <input type="text" class="form-control form-control-updateProveedor" id="contacto" th:field="*{contactoProveedor}">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="pais" class="form-label">País</label>
-                                <input type="text" class="form-control form-control-updateProveedor" id="pais"
-                                       th:field="*{pais}">
+                                <input type="text" class="form-control form-control-updateProveedor" id="pais" th:field="*{pais}">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3 mx-auto text-center">
-                                <label for="dirección" class="form-label">Dirección</label>
-                                <input type="text" class="form-control form-control-updateProveedor" id="dirección"
-                                       th:field="*{direccion}">
+                                <label for="direccion" class="form-label">Dirección</label>
+                                <input type="text" class="form-control form-control-updateProveedor" id="direccion" th:field="*{direccion}">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-primary-updateProveedor w-100">Actualizar
-                        </button>
+                        <button type="submit" class="btn btn-primary btn-primary-updateProveedor w-100">Actualizar</button>
                     </form>
                 </div>
             </div>

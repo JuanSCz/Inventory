@@ -1,5 +1,6 @@
 package com.interonda.inventory.exceptions;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
 import org.slf4j.Logger;
@@ -77,22 +78,23 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public String handleConstraintViolationException(ConstraintViolationException ex, Model model) {
+    public String handleConstraintViolationException(ConstraintViolationException ex, Model model, HttpServletRequest request) {
         logger.warn("Constraint Violation: {}", ex.getMessage());
         Locale locale = LocaleContextHolder.getLocale();
-        Map<String, String> errors = ex.getConstraintViolations().stream()
-                .collect(Collectors.toMap(violation -> violation.getPropertyPath().toString(), violation -> messageSource.getMessage(violation.getMessage(), null, locale)));
-        model.addAttribute("errorMessage", errors.values().stream().findFirst().orElse("Error de validación"));
-        return "index"; // Retorna la vista principal de login
+        String errorMessage = ex.getConstraintViolations().stream()
+                .map(violation -> messageSource.getMessage(violation.getMessage(), null, locale))
+                .collect(Collectors.joining("<br>"));
+        model.addAttribute("errorMessage", errorMessage);
+        return "redirect:" + request.getHeader("Referer");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public String handleValidationExceptions(MethodArgumentNotValidException ex, Model model) {
+    public String handleValidationExceptions(MethodArgumentNotValidException ex, Model model, HttpServletRequest request) {
         Locale locale = LocaleContextHolder.getLocale();
         String errorMessage = ex.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> messageSource.getMessage(fieldError, locale))
                 .collect(Collectors.joining("<br>"));
         model.addAttribute("errorMessage", errorMessage);
-        return "index";
+        return "redirect:" + request.getHeader("Referer");
     }
 }

@@ -5,6 +5,8 @@ import com.interonda.inventory.service.ProveedorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/tableProveedores")
 public class ProveedorController {
@@ -23,15 +27,21 @@ public class ProveedorController {
     private static final Logger logger = LoggerFactory.getLogger(ProveedorController.class);
 
     private final ProveedorService proveedorService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public ProveedorController(ProveedorService proveedorService) {
+    public ProveedorController(ProveedorService proveedorService, MessageSource messageSource) {
         this.proveedorService = proveedorService;
+        this.messageSource = messageSource;
     }
 
     @PostMapping
     public String createProveedor(@Valid ProveedorDTO proveedorDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
+            String errorMessage = result.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
+            model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("proveedores", proveedorService.getAllProveedores(pageable).getContent());
             model.addAttribute("proveedorDTO", proveedorDTO);
             return "tableProveedores";
@@ -64,6 +74,7 @@ public class ProveedorController {
         ProveedorDTO proveedorDTO = proveedorService.getProveedor(id);
         return new ResponseEntity<>(proveedorDTO, HttpStatus.OK);
     }
+
 
     @GetMapping
     public String showProveedores(@RequestParam(required = false) String name, Model model, Pageable pageable) {

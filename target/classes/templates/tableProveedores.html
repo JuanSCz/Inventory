@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
-<body class="body-table">
+<body class="body-table" th:data-error-message="${errorMessage}">
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm responsive-navbar">
     <div class="container-fluid">
         <img th:src="@{/images/logo.png}" alt="Interonda Logo"
@@ -106,7 +106,7 @@
                     <td th:data-label="Acciones">
                         <div class="btn-group">
                             <button class="btn btn-primary btn-sm navbar-menu me-2" data-bs-toggle="modal"
-                                    data-bs-target="#updateProveedorModal" data-id="${proveedor.id}">
+                                    data-bs-target="#updateProveedorModal" th:data-id="${proveedor.id}">
                                 Editar
                             </button>
                             <form th:action="@{/tableProveedores/{id}(id=${proveedor.id})}" method="post"
@@ -125,6 +125,7 @@
 
 <div th:replace="~{fragments/formUpdate :: updateModal}"></div>
 <div th:replace="~{fragments/formCreate :: createModal}"></div>
+<div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/index.js"></script>
 </body>

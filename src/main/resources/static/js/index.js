@@ -14,7 +14,6 @@ function handleErrorModal() {
         modalBody.innerHTML = errorMessage;
 
         const errorModal = new bootstrap.Modal(document.getElementById('errorModalGlobal'));
-
         errorModal.show();
     }
 }
@@ -78,28 +77,34 @@ function initializeUpdateModals() {
     });
 }
 
-// Función para poblar el modal de actualización
 function populateUpdateModal(id) {
     fetch(`/tableProveedores/${id}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`No se pudo obtener los datos del proveedor con ID ${id}`);
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            // Poblar los campos del modal con los datos recibidos
-            document.querySelector('#updateProveedorModal [name="nombre"]').value = data.nombre;
-            document.querySelector('#updateProveedorModal [name="contactoProveedor"]').value = data.contactoProveedor;
-            document.querySelector('#updateProveedorModal [name="direccion"]').value = data.direccion;
-            document.querySelector('#updateProveedorModal [name="pais"]').value = data.pais;
-            document.querySelector('#updateProveedorModal [name="emailProveedor"]').value = data.emailProveedor;
-
-            // Mostrar el modal
-            const updateModal = new bootstrap.Modal(document.getElementById('updateProveedorModal'));
-            updateModal.show();
+            console.log(data); // Verificar los datos recibidos
+            document.getElementById('updateProveedorModal').querySelector('#nombre').value = data.nombre;
+            document.getElementById('updateProveedorModal').querySelector('#email').value = data.emailProveedor;
+            document.getElementById('updateProveedorModal').querySelector('#contacto').value = data.contactoProveedor;
+            document.getElementById('updateProveedorModal').querySelector('#pais').value = data.pais;
+            document.getElementById('updateProveedorModal').querySelector('#direccion').value = data.direccion;
         })
-        .catch(error => console.error('Error al obtener los datos del proveedor:', error));
+        .catch(error => console.error('Error al cargar los datos del proveedor:', error));
+}
+
+function populateUpdateModal(id) {
+    fetch(`/tableProveedores/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // Verificar los datos recibidos
+            const updateModal = document.getElementById('updateProveedorModal');
+            updateModal.querySelector('#id').value = data.id;
+            updateModal.querySelector('#nombre').value = data.nombre;
+            updateModal.querySelector('#email').value = data.emailProveedor;
+            updateModal.querySelector('#contacto').value = data.contactoProveedor;
+            updateModal.querySelector('#pais').value = data.pais;
+            updateModal.querySelector('#direccion').value = data.direccion;
+        })
+        .catch(error => console.error('Error al cargar los datos del proveedor:', error));
 }
 
 // Utilidad: Función de debounce para limitar solicitudes frecuentes
