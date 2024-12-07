@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     handleErrorModal();
     initializeSearch();
     initializeCreateModal();
-    initializeUpdateModals();
+    initializeUpdateModal();
 });
 
 // Manejo del modal de error
@@ -58,7 +58,7 @@ function initializeCreateModal() {
         keyboard: false
     });
 
-    const createButton = document.querySelector('.buttonPersist');
+    const createButton = document.querySelector('.buttonPersistProveedor');
     if (createButton) {
         createButton.addEventListener('click', function () {
             createProveedorModal.show();
@@ -66,14 +66,36 @@ function initializeCreateModal() {
     }
 }
 
-// Manejo del modal "Actualizar Proveedor"
-function initializeUpdateModals() {
-    const updateButtons = document.querySelectorAll('.btn-primary[data-id]');
+// Inicializar modal de actualización para proveedores
+function initializeUpdateModal() {
+    // Crear una única instancia del modal
+    const updateModal = new bootstrap.Modal(document.getElementById('updateProveedorModal'));
+
+    // Seleccionar todos los botones relacionados con la actualización
+    const updateButtons = document.querySelectorAll('.buttonUpdateProveedor[data-id]');
+
     updateButtons.forEach(button => {
         button.addEventListener('click', function () {
-            const id = this.getAttribute('data-id');
-            populateUpdateModal(id); // Llama a la función para cargar datos en el modal
+            const id = this.getAttribute('data-id'); // Obtener el ID del proveedor
+            populateUpdateModal(id); // Llenar los datos del modal con el ID del proveedor
+            updateModal.show(); // Mostrar el modal usando la misma instancia
         });
+    });
+
+    // Limpiar el modal cuando se cierra
+    const updateModalElement = document.getElementById('updateProveedorModal');
+    updateModalElement.addEventListener('hidden.bs.modal', function () {
+        // Limpiar los campos del formulario
+        document.getElementById('id').value = '';
+        document.getElementById('nombre').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('contacto').value = '';
+        document.getElementById('pais').value = '';
+        document.getElementById('direccion').value = '';
+
+        // Opcional: limpiar clases de validación, si usas alguna
+        const form = updateModalElement.querySelector('form');
+        if (form) form.reset();
     });
 }
 
@@ -82,27 +104,12 @@ function populateUpdateModal(id) {
         .then(response => response.json())
         .then(data => {
             console.log(data); // Verificar los datos recibidos
-            document.getElementById('updateProveedorModal').querySelector('#nombre').value = data.nombre;
-            document.getElementById('updateProveedorModal').querySelector('#email').value = data.emailProveedor;
-            document.getElementById('updateProveedorModal').querySelector('#contacto').value = data.contactoProveedor;
-            document.getElementById('updateProveedorModal').querySelector('#pais').value = data.pais;
-            document.getElementById('updateProveedorModal').querySelector('#direccion').value = data.direccion;
-        })
-        .catch(error => console.error('Error al cargar los datos del proveedor:', error));
-}
-
-function populateUpdateModal(id) {
-    fetch(`/tableProveedores/${id}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data); // Verificar los datos recibidos
-            const updateModal = document.getElementById('updateProveedorModal');
-            updateModal.querySelector('#id').value = data.id;
-            updateModal.querySelector('#nombre').value = data.nombre;
-            updateModal.querySelector('#email').value = data.emailProveedor;
-            updateModal.querySelector('#contacto').value = data.contactoProveedor;
-            updateModal.querySelector('#pais').value = data.pais;
-            updateModal.querySelector('#direccion').value = data.direccion;
+            document.getElementById('id').value = data.id;
+            document.getElementById('nombre').value = data.nombre;
+            document.getElementById('email').value = data.emailProveedor;
+            document.getElementById('contacto').value = data.contactoProveedor;
+            document.getElementById('pais').value = data.pais;
+            document.getElementById('direccion').value = data.direccion;
         })
         .catch(error => console.error('Error al cargar los datos del proveedor:', error));
 }

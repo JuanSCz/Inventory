@@ -15,15 +15,19 @@ public class ProveedorDTO {
     @Size(max = 50, message = "{proveedorDTO.nombre.size}")
     private String nombre;
 
+    @NotBlank(message = "{proveedorDTO.contactoProveedor.notBlank}")
     @Size(max = 15, message = "{proveedorDTO.contactoProveedor.size}")
     private String contactoProveedor;
 
+    @NotBlank(message = "{proveedorDTO.direccion.notBlank}")
     @Size(max = 50, message = "{proveedorDTO.direccion.size}")
     private String direccion;
 
+    @NotBlank(message = "{proveedorDTO.pais.notBlank}")
     @Length(max = 254, message = "{proveedorDTO.pais.length}")
     private String pais;
 
+    @NotBlank(message = "{proveedorDTO.emailProveedor.notBlank}")
     @Size(max = 254, message = "{proveedorDTO.emailProveedor.size}")
     @Email(message = "{proveedorDTO.emailProveedor.email}")
     private String emailProveedor;

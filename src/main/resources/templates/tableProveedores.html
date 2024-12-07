@@ -70,7 +70,8 @@
         <h2 class="mb-4 titlePersist">Proveedores</h2>
 
         <div>
-            <button class="btn buttonPersist navbar-menu" data-bs-toggle="modal" data-bs-target="#createProveedorModal">
+            <button class="btn buttonPersist navbar-menu buttonPersistProveedor" data-bs-toggle="modal"
+                    data-bs-target="#createProveedorModal">
                 Crear Proveedor
             </button>
         </div>
@@ -105,7 +106,8 @@
                     <td th:data-label="Email" th:text="${proveedor.emailProveedor}"></td>
                     <td th:data-label="Acciones">
                         <div class="btn-group">
-                            <button class="btn btn-primary btn-sm navbar-menu me-2" data-bs-toggle="modal"
+                            <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateProveedor"
+                                    data-bs-toggle="modal"
                                     data-bs-target="#updateProveedorModal" th:data-id="${proveedor.id}">
                                 Editar
                             </button>

@@ -105,7 +105,7 @@ class ClienteServiceImplTest {
         when(clienteMapper.toDto(cliente)).thenReturn(clienteDTO);
 
         // Act
-        ClienteDTO result = ClienteServiceImpl.updateCliente(clienteDTO.getId(), clienteDTO);
+        ClienteDTO result = ClienteServiceImpl.updateCliente(clienteDTO);
 
         // Assert
         assertNotNull(result);
@@ -122,7 +122,7 @@ class ClienteServiceImplTest {
         when(clienteRepository.findById(clienteDTO.getId())).thenReturn(Optional.empty());
 
         // Act & Assert
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> ClienteServiceImpl.updateCliente(clienteDTO.getId(), clienteDTO));
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> ClienteServiceImpl.updateCliente(clienteDTO));
 
         // Verify
         assertEquals("Cliente no encontrado con el id: " + clienteDTO.getId(), exception.getMessage());
@@ -136,7 +136,7 @@ class ClienteServiceImplTest {
         when(clienteRepository.save(cliente)).thenThrow(new RuntimeException());
 
         // Act & Assert
-        DataAccessException exception = assertThrows(DataAccessException.class, () -> ClienteServiceImpl.updateCliente(clienteDTO.getId(), clienteDTO));
+        DataAccessException exception = assertThrows(DataAccessException.class, () -> ClienteServiceImpl.updateCliente(clienteDTO));
 
         // Verify
         assertEquals("Error actualizando Cliente", exception.getMessage());
@@ -227,7 +227,7 @@ class ClienteServiceImplTest {
         when(clienteMapper.toDto(cliente)).thenReturn(clienteDTO);
 
         // Act
-        ClienteDTO result = ClienteServiceImpl.getClienteById(clienteDTO.getId());
+        ClienteDTO result = ClienteServiceImpl.getCliente(clienteDTO.getId());
 
         // Assert
         assertNotNull(result);
@@ -243,7 +243,7 @@ class ClienteServiceImplTest {
         when(clienteRepository.findById(clienteDTO.getId())).thenReturn(Optional.empty());
 
         // Act & Assert
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> ClienteServiceImpl.getClienteById(clienteDTO.getId()));
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> ClienteServiceImpl.getCliente(clienteDTO.getId()));
 
         // Verify
         assertEquals("Cliente no encontrado con el id: " + clienteDTO.getId(), exception.getMessage());

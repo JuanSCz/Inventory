@@ -43,16 +43,17 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteMapper.toEntity(clienteDTO);
     }
 
+
     @Override
     @Transactional
     public ClienteDTO createCliente(ClienteDTO clienteDTO) {
         ValidatorUtils.validateEntity(clienteDTO, validator);
         try {
             logger.info("Creando nuevo Cliente");
-            Cliente cliente = convertToEntity(clienteDTO);
+            Cliente cliente = clienteMapper.toEntity(clienteDTO);
             Cliente savedCliente = clienteRepository.save(cliente);
             logger.info("Cliente creado exitosamente con id: {}", savedCliente.getId());
-            return convertToDto(savedCliente);
+            return clienteMapper.toDto(savedCliente);
         } catch (Exception e) {
             logger.error("Error guardando Cliente", e);
             throw new DataAccessException("Error guardando Cliente", e);
@@ -61,20 +62,15 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public ClienteDTO updateCliente(Long id, ClienteDTO clienteDTO) {
+    public ClienteDTO updateCliente(ClienteDTO clienteDTO) {
         ValidatorUtils.validateEntity(clienteDTO, validator);
         try {
-            logger.info("Actualizando Cliente con id: {}", id);
-            Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con el id: " + id));
-            cliente.setNombre(clienteDTO.getNombre());
-            cliente.setPais(clienteDTO.getPais());
-            cliente.setCiudad(clienteDTO.getCiudad());
-            cliente.setDireccion(clienteDTO.getDireccion());
-            cliente.setContactoCliente(clienteDTO.getContactoCliente());
-            cliente.seteMailCliente(clienteDTO.geteMailCliente());
+            logger.info("Actualizando Cliente con id: {}", clienteDTO.getId());
+            Cliente cliente = clienteRepository.findById(clienteDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con el id: " + clienteDTO.getId()));
+            cliente = clienteMapper.toEntity(clienteDTO);
             Cliente updatedCliente = clienteRepository.save(cliente);
-            logger.info("Cliente actualizado exitosamente con id: {}", id);
-            return convertToDto(updatedCliente);
+            logger.info("Cliente actualizado exitosamente con id: {}", updatedCliente.getId());
+            return clienteMapper.toDto(updatedCliente);
         } catch (ResourceNotFoundException e) {
             logger.warn("Cliente no encontrado: {}", e.getMessage());
             throw e;
@@ -105,11 +101,27 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional(readOnly = true)
+    public ClienteDTO getCliente(Long id) {
+        try {
+            logger.info("Obteniendo Cliente con id: {}", id);
+            Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con el id: " + id));
+            return clienteMapper.toDto(cliente);
+        } catch (ResourceNotFoundException e) {
+            logger.warn("Cliente no encontrado: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            logger.error("Error obteniendo Cliente", e);
+            throw new DataAccessException("Error obteniendo Cliente", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<ClienteDTO> getAllClientes(Pageable pageable) {
         try {
             logger.info("Obteniendo todos los Clientes con paginación");
             Page<Cliente> clientes = clienteRepository.findAll(pageable);
-            return clientes.map(this::convertToDto);
+            return clientes.map(clienteMapper::toDto);
         } catch (Exception e) {
             logger.error("Error obteniendo todos los Clientes con paginación", e);
             throw new DataAccessException("Error obteniendo todos los Clientes con paginación", e);
@@ -118,17 +130,14 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional(readOnly = true)
-    public ClienteDTO getClienteById(Long id) {
+    public Page<ClienteDTO> searchClientesByName(String nombre, Pageable pageable) {
         try {
-            logger.info("Obteniendo Cliente con id: {}", id);
-            Cliente cliente = clienteRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con el id: " + id));
-            return convertToDto(cliente);
-        } catch (ResourceNotFoundException e) {
-            logger.warn("Cliente no encontrado: {}", e.getMessage());
-            throw e;
+            logger.info("Buscando Clientes por nombre: {}", nombre);
+            Page<Cliente> clientes = clienteRepository.findByNombreContainingIgnoreCase(nombre, pageable);
+            return clientes.map(clienteMapper::toDto);
         } catch (Exception e) {
-            logger.error("Error obteniendo Cliente", e);
-            throw new DataAccessException("Error obteniendo Cliente", e);
+            logger.error("Error buscando Clientes por nombre", e);
+            throw new DataAccessException("Error buscando Clientes por nombre", e);
         }
     }
 }

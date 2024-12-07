@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="body-table" th:data-error-message="${errorMessage}">
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm responsive-navbar">
     <div class="container-fluid">
         <img th:src="@{/images/logo.png}" alt="Interonda Logo"
@@ -68,16 +68,21 @@
     </aside>
     <main class="contentPersist p-3 text-center">
         <h2 class="mb-4 titlePersist">Clientes</h2>
+
         <div>
-            <button class="btn buttonPersist navbar-menu">Crear Cliente</button>
+            <button class="btn buttonPersist navbar-menu buttonPersistCliente" data-bs-toggle="modal"
+                    data-bs-target="#createClienteModal">
+                Crear Cliente
+            </button>
         </div>
+
         <form th:action="@{/tableClientes/search}" method="get" class="search-form-container">
-            <div class="input-group">
-                <input type="text" name="name" value="" placeholder="Nombre" class="form-control search-input"
-                       oninput="filterTable()">
+            <div class="input-group-buscar">
+                <input type="text" name="name" placeholder="Nombre" class="form-control search-input">
                 <button type="submit" class="btn search-button">Buscar</button>
             </div>
         </form>
+
         <div class="table-responsive mt-3">
             <table class="table table-dark table-striped table-bordered custom-table table-sm">
                 <thead class="table-light">
@@ -92,21 +97,25 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="proveedor : ${proveedores}">
-                    <td th:data-label="ID" th:text="${proveedor.id}"></td>
-                    <td th:data-label="Nombre" th:text="${proveedor.nombre}"></td>
-                    <td th:data-label="Contacto" th:text="${proveedor.contactoProveedor}"></td>
-                    <td th:data-label="Dirección" th:text="${proveedor.direccion}"></td>
-                    <td th:data-label="País" th:text="${proveedor.pais}"></td>
-                    <td th:data-label="Email" th:text="${proveedor.emailProveedor}"></td>
+                <tr th:each="cliente : ${clientes}">
+                    <td th:data-label="ID" th:text="${cliente.id}"></td>
+                    <td th:data-label="Nombre" th:text="${cliente.nombre}"></td>
+                    <td th:data-label="Contacto" th:text="${cliente.contactoCliente}"></td>
+                    <td th:data-label="Dirección" th:text="${cliente.direccion}"></td>
+                    <td th:data-label="País" th:text="${cliente.pais}"></td>
+                    <td th:data-label="Email" th:text="${cliente.eMailCliente}"></td>
                     <td th:data-label="Acciones">
                         <div class="btn-group">
-                            <button class="btn btn-primary btn-sm navbar-menu"
-                                    th:onclick="'editProvider(' + ${proveedor.id} + ')'">Editar
+                            <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateCliente"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#updateProveedorModal" th:data-id="${cliente.id}">
+                                Editar
                             </button>
-                            <button class="btn btn-danger btn-sm"
-                                    th:onclick="'deleteProvider(' + ${proveedor.id} + ')'">Borrar
-                            </button>
+                            <form th:action="@{/tableClientes/{id}(id=${cliente.id})}" method="post"
+                                  onsubmit="return confirm('¿Estás seguro de que deseas eliminar este cliente?');">
+                                <input type="hidden" name="_method" value="delete"/>
+                                <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
+                            </form>
                         </div>
                     </td>
                 </tr>
@@ -115,8 +124,6 @@
         </div>
     </main>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/index.js"></script>
 </body>
 
 </html>

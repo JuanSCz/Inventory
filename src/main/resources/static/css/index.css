@@ -190,55 +190,64 @@ input::placeholder {
     background: var(--second-bg-color) !important;
 }
 
-.modal-content {
-    background: var(--gradient-bg);
-    color: var(--highlight-color);
-    border: 2px solid var(--main-color);
-    border-radius: 15px;
-    padding: 1rem;
-    box-shadow: 0 4px 8px var(--shadow-color);
+.modalContentErrors {
+    background: var(--gradient-bg) !important;
+        color: var(--highlight-color) !important;
+        border: 2px solid var(--main-color) !important;
+        border-radius: 15px !important;
+        padding: 1rem !important;
+        box-shadow: 0 4px 8px var(--shadow-color) !important;
 }
 
-.modal-header {
+.modalHeaderErrors{
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid var(--main-color);
+        justify-content: space-between !important;
+        align-items: center !important;
+        border-bottom: 2px solid var(--main-color) !important;
 }
 
-.modal-body {
-    border-top: 2px solid var(--main-color);
-    border-bottom: 2px solid var(--main-color);
+.modalBodyErrors {
+    border-top: 2px solid var(--main-color) !important;
+        border-bottom: 2px solid var(--main-color) !important;
 }
 
-.modal-footer {
+.modalFooterErrors {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    border-top: 2px solid var(--main-color);
+        justify-content: center !important;
+        align-items: center !important;
+        border-top: 2px solid var(--main-color) !important
 }
 
-.modal-footer .btn-secondary {
-    background-color: var(--main-color);
-    color: var(--text-color);
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-    box-shadow: 0 2px 4px var(--shadow-color);
+.modalFooterErrors .btn-secondary {
+    background-color: var(--main-color) !important;
+        color: var(--text-color) !important;
+        padding: 0.5rem 1rem !important;
+        border-radius: 4px !important;
+        font-size: 1rem !important;
+        transition: background-color 0.3s ease !important;
+        box-shadow: 0 2px 4px var(--shadow-color) !important;
 }
 
-.modal-footer .btn-secondary:hover {
-    background-color: var(--hover-color);
+.modalFooterErrors .btn-secondary:hover {
+    background-color: var(--hover-color) !important;
 }
 
-.modal.fade .modal-dialog {
-    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-    transform: translateY(-10px);
-    opacity: 0;
+.modal.fade .modalDialogErrors {
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out !important;
+        transform: translateY(-10px) !important;
+        opacity: 0 !important !important;
 }
 
-.modal.show .modal-dialog {
-    transform: translateY(0);
-    opacity: 1;
+.modal.show .modalDialogErrors {
+    transform: translateY(0) !important;
+        opacity: 1 !important;
+}
+
+.btnCloseErrors {
+    transform: translateY(-50%) !important;
+    background-color: var(--main-color) !important;
+}
+
+.btnCloseErrors:hover {
+    background-color: var(--hover-color) !important;
 }

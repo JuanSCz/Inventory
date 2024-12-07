@@ -13,13 +13,15 @@ public interface ClienteService {
 
     ClienteDTO createCliente(ClienteDTO clienteDTO);
 
-    ClienteDTO updateCliente(Long id, ClienteDTO clienteDTO);
+    ClienteDTO updateCliente(ClienteDTO clienteDTO);
 
     void deleteCliente(Long id);
 
+    ClienteDTO getCliente(Long id);
+
     Page<ClienteDTO> getAllClientes(Pageable pageable);
 
-    ClienteDTO getClienteById(Long id);
+    Page<ClienteDTO> searchClientesByName(String nombre, Pageable pageable);
 
 
 }

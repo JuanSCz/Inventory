@@ -53,13 +53,18 @@ public class ProveedorController {
     @PostMapping("/update")
     public String updateProveedor(@Valid ProveedorDTO proveedorDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            model.addAttribute("proveedores", proveedorService.getAllProveedores(pageable).getContent());
+            String errorMessage = result.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
+            model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("proveedorDTO", proveedorDTO);
-            return "tableProveedores";
+            model.addAttribute("proveedores", proveedorService.getAllProveedores(pageable).getContent());
+            return "tableProveedores"; // Asegúrate de renderizar con datos correctos
         }
         proveedorService.updateProveedor(proveedorDTO);
         return "redirect:/tableProveedores";
     }
+
 
     @PostMapping("/{id}")
     public String deleteProveedor(@PathVariable Long id) {
@@ -74,7 +79,6 @@ public class ProveedorController {
         ProveedorDTO proveedorDTO = proveedorService.getProveedor(id);
         return new ResponseEntity<>(proveedorDTO, HttpStatus.OK);
     }
-
 
     @GetMapping
     public String showProveedores(@RequestParam(required = false) String name, Model model, Pageable pageable) {
@@ -98,4 +102,5 @@ public class ProveedorController {
         model.addAttribute("proveedorDTO", new ProveedorDTO());
         return "tableProveedores";
     }
+
 }
