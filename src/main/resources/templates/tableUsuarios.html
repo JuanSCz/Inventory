@@ -67,16 +67,16 @@
         </ul>
     </aside>
     <main class="contentPersist p-3 text-center">
-        <h2 class="mb-4 titlePersist">Clientes</h2>
+        <h2 class="mb-4 titlePersist">Usuarios</h2>
 
         <div>
             <button class="btn buttonPersist navbar-menu buttonPersistCliente" data-bs-toggle="modal"
-                    data-bs-target="#createClienteModal">
+                    data-bs-target="#createUsuarioModal">
                 Crear Cliente
             </button>
         </div>
 
-        <form th:action="@{/tableClientes/search}" method="get" class="search-form-container">
+        <form th:action="@{/tableUsuarios/search}" method="get" class="search-form-container">
             <div class="input-group-buscar">
                 <input type="text" name="name" placeholder="Nombre" class="form-control search-input">
                 <input type="hidden" name="page" value="0">
@@ -90,31 +90,27 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Nombre</th>
+                    <th scope="col">Contraseña</th>
                     <th scope="col">Contacto</th>
-                    <th scope="col">Dirección</th>
-                    <th scope="col">País</th>
-                    <th scope="col">Ciudad</th>
-                    <th scope="col">Email</th>
+                    <th scope="col">Rol</th>
                     <th scope="col">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="cliente : ${clientes}">
-                    <td th:data-label="ID" th:text="${cliente.id}"></td>
-                    <td th:data-label="Nombre" th:text="${cliente.nombre}"></td>
-                    <td th:data-label="País" th:text="${cliente.pais}"></td>
-                    <td th:data-label="Ciudad" th:text="${cliente.ciudad}"></td>
-                    <td th:data-label="Direccion" th:text="${cliente.direccion}"></td>
-                    <td th:data-label="Contacto" th:text="${cliente.contactoCliente}"></td>
-                    <td th:data-label="Email" th:text="${cliente.eMailCliente}"></td>
+                <tr th:each="usuario : ${usuarios}">
+                    <td th:data-label="ID" th:text="${usuario.id}"></td>
+                    <td th:data-label="Nombre" th:text="${usuario.nombre}"></td>
+                    <td th:data-label="Contraseña" th:text="${usuario.contrasenia}"></td>
+                    <td th:data-label="Contacto" th:text="${usuario.contacto}"></td>
+                    <td th:data-label="Rol" th:text="${usuario.rolNombre}"></td>
                     <td th:data-label="Acciones">
                         <div class="btn-group">
                             <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateCliente"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#updateClienteModal" th:data-id="${cliente.id}">
+                                    data-bs-target="#updateClienteModal" th:data-id="${usuario.id}">
                                 Editar
                             </button>
-                            <form th:action="@{/tableClientes/{id}(id=${cliente.id})}" method="post"
+                            <form th:action="@{/tableClientes/{id}(id=${usuario.id})}" method="post"
                                   onsubmit="return confirm('¿Estás seguro de que deseas eliminar este cliente?');">
                                 <input type="hidden" name="_method" value="delete"/>
                                 <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
@@ -144,8 +140,8 @@
         </nav>
     </main>
 </div>
-<div th:replace="~{fragments/formUpdateClientes.html :: updateModalClientes}"></div>
-<div th:replace="~{fragments/formCreateClientes :: createModalClientes}"></div>
+
+<div th:replace="~{fragments/formCreateUsuarios :: createModalUsuarios}"></div>
 <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/indexClientes.js"></script>

@@ -15,9 +15,11 @@ public class UsuarioDTO {
     @Size(min = 8, max = 50, message = "{usuarioDTO.contrasenia.size}")
     private String contrasenia;
 
-    private byte[] imagenUsuario;
     private String contacto;
+
     private Long rolId;
+
+    private String rolNombre;
 
     public UsuarioDTO() {
     }
@@ -48,14 +50,6 @@ public class UsuarioDTO {
         this.contrasenia = contrasenia;
     }
 
-    public byte[] getImagenUsuario() {
-        return imagenUsuario;
-    }
-
-    public void setImagenUsuario(byte[] imagenUsuario) {
-        this.imagenUsuario = imagenUsuario;
-    }
-
     public String getContacto() {
         return contacto;
     }
@@ -70,5 +64,13 @@ public class UsuarioDTO {
 
     public void setRolId(Long rolId) {
         this.rolId = rolId;
+    }
+
+    public String getRolNombre() {
+        return rolNombre;
+    }
+
+    public void setRolNombre(String rolNombre) {
+        this.rolNombre = rolNombre;
     }
 }

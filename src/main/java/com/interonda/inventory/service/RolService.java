@@ -5,6 +5,8 @@ import com.interonda.inventory.dto.RolDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface RolService {
     RolDTO convertToDto(Rol rol);
 

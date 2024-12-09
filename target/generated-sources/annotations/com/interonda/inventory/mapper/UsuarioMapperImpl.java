@@ -2,14 +2,13 @@ package com.interonda.inventory.mapper;
 
 import com.interonda.inventory.dto.UsuarioDTO;
 import com.interonda.inventory.entity.Usuario;
-import java.util.Arrays;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-12-08T23:57:03-0300",
-    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.9 (Oracle Corporation)"
+    date = "2024-12-09T15:45:36-0300",
+    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
 )
 @Component
 public class UsuarioMapperImpl implements UsuarioMapper {
@@ -25,10 +24,6 @@ public class UsuarioMapperImpl implements UsuarioMapper {
         usuarioDTO.setId( usuario.getId() );
         usuarioDTO.setNombre( usuario.getNombre() );
         usuarioDTO.setContrasenia( usuario.getContrasenia() );
-        byte[] imagenUsuario = usuario.getImagenUsuario();
-        if ( imagenUsuario != null ) {
-            usuarioDTO.setImagenUsuario( Arrays.copyOf( imagenUsuario, imagenUsuario.length ) );
-        }
         usuarioDTO.setContacto( usuario.getContacto() );
 
         return usuarioDTO;
@@ -45,10 +40,6 @@ public class UsuarioMapperImpl implements UsuarioMapper {
         usuario.setId( usuarioDTO.getId() );
         usuario.setNombre( usuarioDTO.getNombre() );
         usuario.setContrasenia( usuarioDTO.getContrasenia() );
-        byte[] imagenUsuario = usuarioDTO.getImagenUsuario();
-        if ( imagenUsuario != null ) {
-            usuario.setImagenUsuario( Arrays.copyOf( imagenUsuario, imagenUsuario.length ) );
-        }
         usuario.setContacto( usuarioDTO.getContacto() );
 
         return usuario;

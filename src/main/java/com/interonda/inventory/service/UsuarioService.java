@@ -1,7 +1,7 @@
 package com.interonda.inventory.service;
 
-import com.interonda.inventory.entity.Usuario;
 import com.interonda.inventory.dto.UsuarioDTO;
+import com.interonda.inventory.entity.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,11 +13,13 @@ public interface UsuarioService {
 
     UsuarioDTO createUsuario(UsuarioDTO usuarioDTO);
 
-    UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO);
+    UsuarioDTO updateUsuario(UsuarioDTO usuarioDTO);
 
     void deleteUsuario(Long id);
 
     UsuarioDTO getUsuario(Long id);
 
     Page<UsuarioDTO> getAllUsuarios(Pageable pageable);
+
+    Page<UsuarioDTO> searchUsuariosByName(String nombre, Pageable pageable);
 }

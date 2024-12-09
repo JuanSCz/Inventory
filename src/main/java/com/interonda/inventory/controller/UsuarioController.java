@@ -1,69 +1,115 @@
 package com.interonda.inventory.controller;
 
 import com.interonda.inventory.dto.UsuarioDTO;
+import com.interonda.inventory.service.RolService;
 import com.interonda.inventory.service.UsuarioService;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import jakarta.validation.Valid;
+import java.util.stream.Collectors;
 
-@RestController
-@RequestMapping("/api/usuarios")
+@Controller
+@RequestMapping("/tableUsuarios")
 public class UsuarioController {
 
     private static final Logger logger = LoggerFactory.getLogger(UsuarioController.class);
 
     private final UsuarioService usuarioService;
+    private final RolService rolService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public UsuarioController(UsuarioService usuarioService) {
+    public UsuarioController(UsuarioService usuarioService, RolService rolService, MessageSource messageSource) {
         this.usuarioService = usuarioService;
+        this.rolService = rolService;
+        this.messageSource = messageSource;
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UsuarioDTO> createUsuario(@Valid @RequestBody UsuarioDTO usuarioDTO) {
-        logger.info("Solicitud recibida para crear usuario con nombre: {}", usuarioDTO.getNombre());
-        UsuarioDTO createdUsuario = usuarioService.createUsuario(usuarioDTO);
-        return new ResponseEntity<>(createdUsuario, HttpStatus.CREATED);
+    public String createUsuario(@Valid UsuarioDTO usuarioDTO, BindingResult result, Model model, Pageable pageable) {
+        if (result.hasErrors()) {
+            String errorMessage = result.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
+            model.addAttribute("errorMessage", errorMessage);
+            model.addAttribute("usuarios", usuarioService.getAllUsuarios(pageable).getContent());
+            model.addAttribute("usuarioDTO", usuarioDTO);
+            return "tableUsuarios";
+        }
+        usuarioService.createUsuario(usuarioDTO);
+        return "redirect:/tableUsuarios";
     }
 
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<UsuarioDTO> updateUsuario(@PathVariable Long id, @Validated @RequestBody UsuarioDTO usuarioDTO) {
-        logger.info("Solicitud recibida para actualizar usuario con id: {}", id);
-        UsuarioDTO updatedUsuario = usuarioService.updateUsuario(id, usuarioDTO);
-        return ResponseEntity.ok(updatedUsuario);
+    @PostMapping("/update")
+    public String updateUsuario(@Valid UsuarioDTO usuarioDTO, BindingResult result, Model model, Pageable pageable) {
+        if (result.hasErrors()) {
+            String errorMessage = result.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
+            model.addAttribute("errorMessage", errorMessage);
+            model.addAttribute("usuarioDTO", usuarioDTO);
+            model.addAttribute("usuarios", usuarioService.getAllUsuarios(pageable).getContent());
+            return "tableUsuarios"; // Asegúrate de renderizar con datos correctos
+        }
+        usuarioService.updateUsuario(usuarioDTO);
+        return "redirect:/tableUsuarios";
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> deleteUsuario(@PathVariable Long id) {
-        logger.info("Solicitud recibida para eliminar usuario con id: {}", id);
+    @PostMapping("/{id}")
+    public String deleteUsuario(@PathVariable Long id) {
+        logger.debug("Llamando al método deleteUsuario con id: {}", id);
         usuarioService.deleteUsuario(id);
-        return ResponseEntity.noContent().build();
+        logger.debug("Usuario con id: {} eliminado correctamente", id);
+        return "redirect:/tableUsuarios";  // Redirige después de la eliminación
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<UsuarioDTO> getUsuario(@PathVariable Long id) {
-        logger.info("Solicitud recibida para obtener usuario con id: {}", id);
+    public ResponseEntity<UsuarioDTO> getUsuarioById(@PathVariable Long id) {
         UsuarioDTO usuarioDTO = usuarioService.getUsuario(id);
-        return ResponseEntity.ok(usuarioDTO);
+        return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
     }
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Page<UsuarioDTO>> getAllUsuarios(Pageable pageable) {
-        logger.info("Solicitud recibida para obtener todos los usuarios");
-        Page<UsuarioDTO> usuarios = usuarioService.getAllUsuarios(pageable);
-        return ResponseEntity.ok(usuarios);
+    public String showUsuarios(@RequestParam(required = false) String name, Model model, Pageable pageable) {
+        int pageSize = 15;
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
+        Page<UsuarioDTO> usuarios;
+        if (name != null && !name.isEmpty()) {
+            logger.info("Solicitud recibida para buscar usuarios por nombre: {}", name);
+            usuarios = usuarioService.searchUsuariosByName(name, newPageable);
+        } else {
+            usuarios = usuarioService.getAllUsuarios(newPageable);
+        }
+        model.addAttribute("usuarios", usuarios.getContent());
+        model.addAttribute("usuarioDTO", new UsuarioDTO());
+        model.addAttribute("page", usuarios);
+        model.addAttribute("roles", rolService.getAllRoles(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+
+        return "tableUsuarios";
+    }
+
+    @GetMapping("/search")
+    public String searchUsuariosByName(@RequestParam String name, Model model, Pageable pageable) {
+        int pageSize = 15;
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
+        logger.info("Solicitud recibida para buscar usuarios por nombre: {}", name);
+        Page<UsuarioDTO> usuarios = usuarioService.searchUsuariosByName(name, newPageable);
+        model.addAttribute("usuarios", usuarios.getContent());
+        model.addAttribute("usuarioDTO", new UsuarioDTO());
+        model.addAttribute("page", usuarios);
+        return "tableUsuarios";
     }
 }

@@ -1,7 +1,9 @@
 package com.interonda.inventory.controller;
 
 import com.interonda.inventory.dto.ClienteDTO;
+import com.interonda.inventory.dto.ProveedorDTO;
 import com.interonda.inventory.service.ClienteService;
+import com.interonda.inventory.service.ProveedorService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +40,9 @@ public class ClienteController {
     @PostMapping
     public String createCliente(@Valid ClienteDTO clienteDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("clientes", clienteService.getAllClientes(pageable).getContent());
             model.addAttribute("clienteDTO", clienteDTO);
@@ -50,9 +55,13 @@ public class ClienteController {
     @PostMapping("/update")
     public String updateCliente(@Valid ClienteDTO clienteDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            model.addAttribute("clientes", clienteService.getAllClientes(pageable).getContent());
+            String errorMessage = result.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
+            model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("clienteDTO", clienteDTO);
-            return "tableClientes";
+            model.addAttribute("clientes", clienteService.getAllClientes(pageable).getContent());
+            return "tableClientes"; // Asegúrate de renderizar con datos correctos
         }
         clienteService.updateCliente(clienteDTO);
         return "redirect:/tableClientes";
@@ -74,25 +83,32 @@ public class ClienteController {
 
     @GetMapping
     public String showClientes(@RequestParam(required = false) String name, Model model, Pageable pageable) {
+        int pageSize = 15;
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
         Page<ClienteDTO> clientes;
         if (name != null && !name.isEmpty()) {
             logger.info("Solicitud recibida para buscar clientes por nombre: {}", name);
-            clientes = clienteService.searchClientesByName(name, pageable);
+            clientes = clienteService.searchClientesByName(name, newPageable);
         } else {
-            clientes = clienteService.getAllClientes(pageable);
+            clientes = clienteService.getAllClientes(newPageable);
         }
         model.addAttribute("clientes", clientes.getContent());
         model.addAttribute("clienteDTO", new ClienteDTO());
+        model.addAttribute("page", clientes);
         return "tableClientes";
     }
 
     @GetMapping("/search")
     public String searchClientesByName(@RequestParam String name, Model model, Pageable pageable) {
+        int pageSize = 15;
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
         logger.info("Solicitud recibida para buscar clientes por nombre: {}", name);
-        Page<ClienteDTO> clientes = clienteService.searchClientesByName(name, pageable);
+        Page<ClienteDTO> clientes = clienteService.searchClientesByName(name, newPageable);
         model.addAttribute("clientes", clientes.getContent());
         model.addAttribute("clienteDTO", new ClienteDTO());
+        model.addAttribute("page", clientes);
         return "tableClientes";
     }
+
 
 }

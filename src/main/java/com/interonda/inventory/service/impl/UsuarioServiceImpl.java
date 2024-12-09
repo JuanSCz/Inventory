@@ -5,6 +5,7 @@ import com.interonda.inventory.entity.Rol;
 import com.interonda.inventory.entity.Usuario;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
+import com.interonda.inventory.mapper.UsuarioMapper;
 import com.interonda.inventory.repository.RolRepository;
 import com.interonda.inventory.repository.UsuarioRepository;
 import com.interonda.inventory.service.UsuarioService;
@@ -18,53 +19,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
     private static final Logger logger = LoggerFactory.getLogger(UsuarioServiceImpl.class);
 
     private final UsuarioRepository usuarioRepository;
+    private final UsuarioMapper usuarioMapper;
     private final RolRepository rolRepository;
     private final Validator validator;
 
     @Autowired
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, RolRepository rolRepository, Validator validator) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper, RolRepository rolRepository, Validator validator) {
         this.usuarioRepository = usuarioRepository;
+        this.usuarioMapper = usuarioMapper;
         this.rolRepository = rolRepository;
         this.validator = validator;
     }
 
     @Override
     public UsuarioDTO convertToDto(Usuario usuario) {
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
-        usuarioDTO.setId(usuario.getId());
-        usuarioDTO.setNombre(usuario.getNombre());
-        usuarioDTO.setContrasenia(usuario.getContrasenia());
-        usuarioDTO.setImagenUsuario(usuario.getImagenUsuario());
-        usuarioDTO.setContacto(usuario.getContacto());
-        usuarioDTO.setRolId(usuario.getRol().getId());
-        return usuarioDTO;
+        return usuarioMapper.toDto(usuario);
     }
 
     @Override
     public Usuario convertToEntity(UsuarioDTO usuarioDTO) {
-        Usuario usuario = new Usuario();
-        usuario.setId(usuarioDTO.getId());
-        usuario.setNombre(usuarioDTO.getNombre());
-        usuario.setContrasenia(usuarioDTO.getContrasenia());
-        usuario.setImagenUsuario(usuarioDTO.getImagenUsuario());
-        usuario.setContacto(usuarioDTO.getContacto());
-
-        Optional<Rol> rol = rolRepository.findById(usuarioDTO.getRolId());
-        if (rol.isPresent()) {
-            usuario.setRol(rol.get());
-        } else {
-            throw new ResourceNotFoundException("Rol no encontrado con el id: " + usuarioDTO.getRolId());
-        }
-
-        return usuario;
+        return usuarioMapper.toEntity(usuarioDTO);
     }
 
     @Override
@@ -73,10 +53,18 @@ public class UsuarioServiceImpl implements UsuarioService {
         ValidatorUtils.validateEntity(usuarioDTO, validator);
         try {
             logger.info("Creando nuevo Usuario");
-            Usuario usuario = convertToEntity(usuarioDTO);
+            Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
+
+            // Asignar el rol al usuario
+            if (usuarioDTO.getRolId() != null) {
+                Rol rol = rolRepository.findById(usuarioDTO.getRolId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con el id: " + usuarioDTO.getRolId()));
+                usuario.setRol(rol);
+            }
+
             Usuario savedUsuario = usuarioRepository.save(usuario);
             logger.info("Usuario creado exitosamente con id: {}", savedUsuario.getId());
-            return convertToDto(savedUsuario);
+            return usuarioMapper.toDto(savedUsuario);
         } catch (Exception e) {
             logger.error("Error guardando Usuario", e);
             throw new DataAccessException("Error guardando Usuario", e);
@@ -85,16 +73,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public UsuarioDTO updateUsuario(Long id, UsuarioDTO usuarioDTO) {
+    public UsuarioDTO updateUsuario(UsuarioDTO usuarioDTO) {
         ValidatorUtils.validateEntity(usuarioDTO, validator);
         try {
-            logger.info("Actualizando Usuario con id: {}", id);
-            Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el id: " + id));
-            usuario = convertToEntity(usuarioDTO);
-            usuario.setId(id);
+            logger.info("Actualizando Usuario con id: {}", usuarioDTO.getId());
+            Usuario usuario = usuarioRepository.findById(usuarioDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el id: " + usuarioDTO.getId()));
+            usuario = usuarioMapper.toEntity(usuarioDTO);
             Usuario updatedUsuario = usuarioRepository.save(usuario);
             logger.info("Usuario actualizado exitosamente con id: {}", updatedUsuario.getId());
-            return convertToDto(updatedUsuario);
+            return usuarioMapper.toDto(updatedUsuario);
         } catch (ResourceNotFoundException e) {
             logger.warn("Usuario no encontrado: {}", e.getMessage());
             throw e;
@@ -129,7 +116,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         try {
             logger.info("Obteniendo Usuario con id: {}", id);
             Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el id: " + id));
-            return convertToDto(usuario);
+            return usuarioMapper.toDto(usuario);
         } catch (ResourceNotFoundException e) {
             logger.warn("Usuario no encontrado: {}", e.getMessage());
             throw e;
@@ -145,10 +132,33 @@ public class UsuarioServiceImpl implements UsuarioService {
         try {
             logger.info("Obteniendo todos los Usuarios con paginación");
             Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
-            return usuarios.map(this::convertToDto);
+            return usuarios.map(usuario -> {
+                UsuarioDTO usuarioDTO = usuarioMapper.toDto(usuario);
+                if (usuario.getRol() != null) {
+                    usuarioDTO.setRolId(usuario.getRol().getId());
+                    usuarioDTO.setRolNombre(usuario.getRol().getNombre());
+                } else {
+                    usuarioDTO.setRolId(null);
+                    usuarioDTO.setRolNombre(null);
+                }
+                return usuarioDTO;
+            });
         } catch (Exception e) {
             logger.error("Error obteniendo todos los Usuarios con paginación", e);
             throw new DataAccessException("Error obteniendo todos los Usuarios con paginación", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<UsuarioDTO> searchUsuariosByName(String nombre, Pageable pageable) {
+        try {
+            logger.info("Buscando Usuarios por nombre: {}", nombre);
+            Page<Usuario> usuarios = usuarioRepository.findByNombreContainingIgnoreCase(nombre, pageable);
+            return usuarios.map(usuarioMapper::toDto);
+        } catch (Exception e) {
+            logger.error("Error buscando Usuarios por nombre", e);
+            throw new DataAccessException("Error buscando Usuarios por nombre", e);
         }
     }
 }

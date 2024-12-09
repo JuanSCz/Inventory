@@ -1,10 +1,14 @@
 package com.interonda.inventory.service.impl;
 
+import com.interonda.inventory.dto.ProveedorDTO;
 import com.interonda.inventory.entity.Cliente;
 import com.interonda.inventory.dto.ClienteDTO;
+import com.interonda.inventory.entity.Proveedor;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.ClienteMapper;
+import com.interonda.inventory.mapper.ProveedorMapper;
 import com.interonda.inventory.repository.ClienteRepository;
+import com.interonda.inventory.repository.ProveedorRepository;
 import com.interonda.inventory.service.ClienteService;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.utils.ValidatorUtils;
@@ -42,7 +46,6 @@ public class ClienteServiceImpl implements ClienteService {
     public Cliente convertToEntity(ClienteDTO clienteDTO) {
         return clienteMapper.toEntity(clienteDTO);
     }
-
 
     @Override
     @Transactional

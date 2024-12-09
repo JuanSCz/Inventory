@@ -1,7 +1,9 @@
 package com.interonda.inventory.service;
 
+import com.interonda.inventory.dto.ProveedorDTO;
 import com.interonda.inventory.entity.Cliente;
 import com.interonda.inventory.dto.ClienteDTO;
+import com.interonda.inventory.entity.Proveedor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
