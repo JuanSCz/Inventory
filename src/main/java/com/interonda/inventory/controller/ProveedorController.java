@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,24 +83,30 @@ public class ProveedorController {
 
     @GetMapping
     public String showProveedores(@RequestParam(required = false) String name, Model model, Pageable pageable) {
+        int pageSize = 15;
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
         Page<ProveedorDTO> proveedores;
         if (name != null && !name.isEmpty()) {
             logger.info("Solicitud recibida para buscar proveedores por nombre: {}", name);
-            proveedores = proveedorService.searchProveedoresByName(name, pageable);
+            proveedores = proveedorService.searchProveedoresByName(name, newPageable);
         } else {
-            proveedores = proveedorService.getAllProveedores(pageable);
+            proveedores = proveedorService.getAllProveedores(newPageable);
         }
         model.addAttribute("proveedores", proveedores.getContent());
         model.addAttribute("proveedorDTO", new ProveedorDTO());
+        model.addAttribute("page", proveedores);
         return "tableProveedores";
     }
 
     @GetMapping("/search")
     public String searchProveedoresByName(@RequestParam String name, Model model, Pageable pageable) {
+        int pageSize = 15;
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
         logger.info("Solicitud recibida para buscar proveedores por nombre: {}", name);
-        Page<ProveedorDTO> proveedores = proveedorService.searchProveedoresByName(name, pageable);
+        Page<ProveedorDTO> proveedores = proveedorService.searchProveedoresByName(name, newPageable);
         model.addAttribute("proveedores", proveedores.getContent());
         model.addAttribute("proveedorDTO", new ProveedorDTO());
+        model.addAttribute("page", proveedores);
         return "tableProveedores";
     }
 

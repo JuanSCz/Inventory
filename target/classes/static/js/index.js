@@ -33,7 +33,7 @@ function filterTable() {
 
     tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Cargando...</td></tr>';
 
-    fetch(`/tableProveedores/search?name=${filter}`)
+    fetch(`/tableProveedores/search?name=${filter}&page=0&size=15`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error al buscar proveedores');
@@ -44,7 +44,10 @@ function filterTable() {
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const newTableBody = doc.querySelector('.custom-table tbody');
+            const pagination = doc.querySelector('.pagination');
             tableBody.innerHTML = newTableBody ? newTableBody.innerHTML : '<tr><td colspan="7" class="text-center">No se encontraron resultados</td></tr>';
+            document.querySelector('.pagination').innerHTML = pagination ? pagination.innerHTML : '';
+            initializeUpdateModal(); // Re-inicializar los eventos de los botones de edición
         })
         .catch(error => {
             console.error('Error al realizar la búsqueda:', error);

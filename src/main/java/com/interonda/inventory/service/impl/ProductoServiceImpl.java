@@ -27,6 +27,8 @@ public class ProductoServiceImpl implements ProductoService {
     private final ProductoMapper productoMapper;
     private final Validator validator;
 
+
+
     @Autowired
     public ProductoServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper, Validator validator) {
         this.productoRepository = productoRepository;
@@ -128,6 +130,18 @@ public class ProductoServiceImpl implements ProductoService {
         } catch (Exception e) {
             logger.error("Error obteniendo todos los Productos con paginación", e);
             throw new DataAccessException("Error obteniendo todos los Productos con paginación", e);
+        }
+    }
+    @Override
+    @Transactional(readOnly = true)
+    public long countProductos() {
+        try {
+            long total = productoRepository.count();
+            logger.info("Total de productos: {}", total); // Log para verificar el resultado
+            return total;
+        } catch (Exception e) {
+            logger.error("Error contando todos los Productos", e);
+            throw new DataAccessException("Error contando todos los Productos", e);
         }
     }
 }

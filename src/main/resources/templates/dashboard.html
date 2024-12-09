@@ -31,7 +31,7 @@
                     <a class="nav-link active" aria-current="page" th:href="@{/dashboard}">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/}">Usuario</a>
+                    <a class="nav-link" th:href="@{/}">Admin</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/login}">Salir</a>
@@ -44,7 +44,7 @@
     <aside class="sidebar bg-secondary text-white p-3 fixed-sidebar responsive-sidebar">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/}">Dashboard</a>
+                <a class="nav-link text-white" th:href="@{/dashboard}">Dashboard</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableProveedores}">Proveedores</a>
@@ -72,8 +72,9 @@
             <div class="card-container">
                 <div class="card mb-3 shadow-sm elegant-card">
                     <div class="card-body body-dashboard">
-                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${productos}">148</h2>
+                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalProductos}"></h2>
                         <h5 class="card-title card-title-dashboard elegant-text-dashboard">Productos</h5>
+
                     </div>
                 </div>
             </div>

@@ -21,5 +21,5 @@ public interface ProductoService {
 
     Page<ProductoDTO> getAllProductos(Pageable pageable);
 
-
+    long countProductos();
 }

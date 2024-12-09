@@ -79,7 +79,8 @@
         <form th:action="@{/tableProveedores/search}" method="get" class="search-form-container">
             <div class="input-group-buscar">
                 <input type="text" name="name" placeholder="Nombre" class="form-control search-input">
-                <button type="submit" class="btn search-button">Buscar</button>
+                <input type="hidden" name="page" value="0">
+                <input type="hidden" name="size" value="15">
             </div>
         </form>
 
@@ -122,6 +123,21 @@
                 </tbody>
             </table>
         </div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
+                    <a class="page-link" th:href="@{/tableProveedores(page=${page.number - 1}, size=${page.size})}">Anterior</a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                    th:classappend="${page.number == i} ? 'active'">
+                    <a class="page-link" th:href="@{/tableProveedores(page=${i}, size=${page.size})}"
+                       th:text="${i + 1}">1</a>
+                </li>
+                <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
+                    <a class="page-link" th:href="@{/tableProveedores(page=${page.number + 1}, size=${page.size})}">Siguiente</a>
+                </li>
+            </ul>
+        </nav>
     </main>
 </div>
 
