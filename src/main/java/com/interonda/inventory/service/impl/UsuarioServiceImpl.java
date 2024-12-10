@@ -77,8 +77,23 @@ public class UsuarioServiceImpl implements UsuarioService {
         ValidatorUtils.validateEntity(usuarioDTO, validator);
         try {
             logger.info("Actualizando Usuario con id: {}", usuarioDTO.getId());
-            Usuario usuario = usuarioRepository.findById(usuarioDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el id: " + usuarioDTO.getId()));
-            usuario = usuarioMapper.toEntity(usuarioDTO);
+            Usuario usuario = usuarioRepository.findById(usuarioDTO.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el id: " + usuarioDTO.getId()));
+
+            // Actualizar los campos del usuario
+            usuario.setNombre(usuarioDTO.getNombre());
+            usuario.setContrasenia(usuarioDTO.getContrasenia());
+            usuario.setContacto(usuarioDTO.getContacto());
+
+            // Asignar el rol al usuario
+            if (usuarioDTO.getRolId() != null) {
+                Rol rol = rolRepository.findById(usuarioDTO.getRolId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con el id: " + usuarioDTO.getRolId()));
+                usuario.setRol(rol);
+            } else {
+                usuario.setRol(null);
+            }
+
             Usuario updatedUsuario = usuarioRepository.save(usuario);
             logger.info("Usuario actualizado exitosamente con id: {}", updatedUsuario.getId());
             return usuarioMapper.toDto(updatedUsuario);

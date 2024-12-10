@@ -92,9 +92,8 @@ function initializeUpdateModal() {
         document.getElementById('id').value = '';
         document.getElementById('nombre').value = '';
         document.getElementById('contrasenia').value = '';
-         document.getElementById('contacto').value = '';
+        document.getElementById('contacto').value = '';
         document.getElementById('rol').value = '';
-
 
         // Opcional: limpiar clases de validación, si usas alguna
         const form = updateModalElement.querySelector('form');
@@ -106,12 +105,12 @@ function populateUpdateModal(id) {
     fetch(`/tableUsuarios/${id}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data); // Verificar los datos recibidos
-            document.getElementById('id').value = data.id;
-            document.getElementById('nombre').value = data.nombre;
-            document.getElementById('contrasenia').value = data.contrasenia;
-            document.getElementById('contacto').value = data.contacto;
-            document.getElementById('rol').value = data.rol;
+            const updateModalElement = document.getElementById('updateUsuarioModal');
+            updateModalElement.querySelector('#id').value = data.id;
+            updateModalElement.querySelector('#nombre').value = data.nombre;
+            updateModalElement.querySelector('#contrasenia').value = data.contrasenia;
+            updateModalElement.querySelector('#contacto').value = data.contacto;
+            updateModalElement.querySelector('#rol').value = data.rolId;
         })
         .catch(error => console.error('Error al cargar los datos del usuario:', error));
 }

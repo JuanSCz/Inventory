@@ -43,8 +43,7 @@
                                 <label for="rol" class="form-label">Rol</label>
                                 <select class="form-control form-control-updateProveedor" id="rol" th:field="*{rolId}">
                                     <option value="">Seleccione un rol</option>
-                                    <option th:each="rol : ${roles}" th:value="${rol.id}"
-                                            th:text="${rol.nombre}"></option>
+                                    <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}" th:selected="${rol.id} == *{rolId}"></option>
                                 </select>
                             </div>
                         </div>

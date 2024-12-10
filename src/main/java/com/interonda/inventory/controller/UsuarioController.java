@@ -62,7 +62,8 @@ public class UsuarioController {
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("usuarioDTO", usuarioDTO);
             model.addAttribute("usuarios", usuarioService.getAllUsuarios(pageable).getContent());
-            return "tableUsuarios"; // Asegúrate de renderizar con datos correctos
+            model.addAttribute("roles", rolService.getAllRoles(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+            return "tableUsuarios";
         }
         usuarioService.updateUsuario(usuarioDTO);
         return "redirect:/tableUsuarios";

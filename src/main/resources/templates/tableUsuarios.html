@@ -70,9 +70,9 @@
         <h2 class="mb-4 titlePersist">Usuarios</h2>
 
         <div>
-            <button class="btn buttonPersist navbar-menu buttonPersistCliente" data-bs-toggle="modal"
+            <button class="btn buttonPersist navbar-menu buttonPersistUsuario" data-bs-toggle="modal"
                     data-bs-target="#createUsuarioModal">
-                Crear Cliente
+                Crear Usuario
             </button>
         </div>
 
@@ -105,12 +105,12 @@
                     <td th:data-label="Rol" th:text="${usuario.rolNombre}"></td>
                     <td th:data-label="Acciones">
                         <div class="btn-group">
-                            <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateCliente"
+                            <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateUsuario"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#updateClienteModal" th:data-id="${usuario.id}">
+                                    data-bs-target="#updateUsuarioModal" th:data-id="${usuario.id}">
                                 Editar
                             </button>
-                            <form th:action="@{/tableClientes/{id}(id=${usuario.id})}" method="post"
+                            <form th:action="@{/tableUsuarios/{id}(id=${usuario.id})}" method="post"
                                   onsubmit="return confirm('¿Estás seguro de que deseas eliminar este cliente?');">
                                 <input type="hidden" name="_method" value="delete"/>
                                 <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
@@ -125,26 +125,27 @@
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
                     <a class="page-link"
-                       th:href="@{/tableClientes(page=${page.number - 1}, size=${page.size}, name=${param.name})}">Anterior</a>
+                       th:href="@{/tableUsuarios(page=${page.number - 1}, size=${page.size}, name=${param.name})}">Anterior</a>
                 </li>
                 <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
                     th:classappend="${page.number == i} ? 'active'">
-                    <a class="page-link" th:href="@{/tableClientes(page=${i}, size=${page.size}, name=${param.name})}"
+                    <a class="page-link" th:href="@{/tableUsuarios(page=${i}, size=${page.size}, name=${param.name})}"
                        th:text="${i + 1}">1</a>
                 </li>
                 <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
                     <a class="page-link"
-                       th:href="@{/tableClientes(page=${page.number + 1}, size=${page.size}, name=${param.name})}">Siguiente</a>
+                       th:href="@{/tableUsuarios(page=${page.number + 1}, size=${page.size}, name=${param.name})}">Siguiente</a>
                 </li>
             </ul>
         </nav>
     </main>
 </div>
 
+<div th:replace="~{fragments/formUpdateUsuarios :: updateModalUsuarios}"></div>
 <div th:replace="~{fragments/formCreateUsuarios :: createModalUsuarios}"></div>
 <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/indexClientes.js"></script>
+<script src="js/indexUsuarios.js"></script>
 </body>
 
 </html>
