@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Actualizar Producto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+<div th:fragment="updateModalProductos">
+    <div class="modal fade" id="updateProductoModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-content-updateProveedor">
+                <div class="modal-header modal-header-updateProveedor">
+                    <h5 class="modal-title modal-title-updateProveedor" id="exampleModalLabel">Actualizar Producto</h5>
+                    <button type="button" class="btn-close btn-close-updateProveedor" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/tableProductos/update}" method="post" th:object="${productoDTO}">
+                        <input type="hidden" id="id" th:field="*{id}">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control form-control-updateProveedor" id="nombre"
+                                       th:field="*{nombre}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="descripcion" class="form-label">Descripción</label>
+                                <input type="text" class="form-control form-control-updateProveedor" id="descripcion"
+                                       th:field="*{descripcion}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="precio" class="form-label">Precio</label>
+                                <input type="text" class="form-control form-control-updateProveedor" id="precio"
+                                       th:field="*{precio}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="costo" class="form-label">Costo</label>
+                                <input type="text" class="form-control form-control-updateProveedor" id="costo"
+                                       th:field="*{costo}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="codigoBarras" class="form-label">Código de Barras</label>
+                                <input type="text" class="form-control form-control-updateProveedor" id="codigoBarras"
+                                       th:field="*{codigoBarras}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="numeroDeSerie" class="form-label">Número de Serie</label>
+                                <input type="text" class="form-control form-control-updateProveedor" id="numeroDeSerie"
+                                       th:field="*{numeroDeSerie}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="stockActual" class="form-label">Stock Actual</label>
+                                <input type="text" class="form-control form-control-updateProveedor" id="stockActual"
+                                       th:field="*{stockActual}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="stockMinimo" class="form-label">Stock Mínimo</label>
+                                <input type="text" class="form-control form-control-updateProveedor" id="stockMinimo"
+                                       th:field="*{stockMinimo}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="macAddress" class="form-label">MAC Address</label>
+                                <input type="text" class="form-control form-control-updateProveedor" id="macAddress"
+                                       th:field="*{macAddress}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="categoriaId" class="form-label">Categoría</label>
+                                <select class="form-control form-control-updateProveedor" id="categoriaId"
+                                        th:field="*{categoriaId}">
+                                    <option value="">Seleccione una categoría</option>
+                                    <option th:each="categoria : ${categorias}" th:value="${categoria.id}"
+                                            th:text="${categoria.nombre}"
+                                            th:selected="${categoria.id} == *{categoriaId}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-primary-updateProveedor w-100">Actualizar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

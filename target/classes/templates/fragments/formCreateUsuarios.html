@@ -41,7 +41,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="rol" class="form-label">Rol</label>
                                 <select class="form-control form-control-createProveedor" id="rol" th:field="*{rolId}">
-                                    <option value="">Seleccione un rol</option>
+                                    <option value="">Seleccionar rol</option>
                                     <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}"></option>
                                 </select>
                             </div>

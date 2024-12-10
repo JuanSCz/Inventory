@@ -102,17 +102,17 @@ function initializeUpdateModal() {
 }
 
 function populateUpdateModal(id) {
-    fetch(`/tableUsuarios/${id}`)
+    fetch(`/tableDepositos/${id}`)
         .then(response => response.json())
         .then(data => {
-            const updateModalElement = document.getElementById('updateUsuarioModal');
+            const updateModalElement = document.getElementById('updateDepositoModal');
             updateModalElement.querySelector('#id').value = data.id;
             updateModalElement.querySelector('#nombre').value = data.nombre;
-            updateModalElement.querySelector('#contrasenia').value = data.contrasenia;
-            updateModalElement.querySelector('#contacto').value = data.contacto;
-            updateModalElement.querySelector('#rol').value = data.rolId;
+            updateModalElement.querySelector('#provincia').value = data.provincia;
+            updateModalElement.querySelector('#direccion').value = data.direccion;
+            updateModalElement.querySelector('#contactoDeposito').value = data.contactoDeposito;
         })
-        .catch(error => console.error('Error al cargar los datos del usuario:', error));
+        .catch(error => console.error('Error al cargar los datos del depósito:', error));
 }
 
 // Utilidad: Función de debounce para limitar solicitudes frecuentes

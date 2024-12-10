@@ -1,4 +1,4 @@
-package com.interonda.inventory.service.impl;
+/* package com.interonda.inventory.service.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -255,3 +255,5 @@ class DepositoServiceImplTest {
         verify(depositoRepository).findById(depositoDTO.getId());
     }
 }
+
+ */

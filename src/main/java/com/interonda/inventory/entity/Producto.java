@@ -38,9 +38,6 @@ public class Producto {
     @Column(nullable = false)
     private Integer stockMinimo;
 
-    @Column(name = "imagen_producto")
-    private byte[] imagenProducto;
-
     @Column(name = "mac_address", length = 17, unique = true)
     private String macAddress;
 
@@ -148,14 +145,6 @@ public class Producto {
 
     public void setStockMinimo(Integer stockMinimo) {
         this.stockMinimo = stockMinimo;
-    }
-
-    public byte[] getImagenProducto() {
-        return imagenProducto;
-    }
-
-    public void setImagenProducto(byte[] imagenProducto) {
-        this.imagenProducto = imagenProducto;
     }
 
     public String getMacAddress() {

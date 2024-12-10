@@ -21,5 +21,7 @@ public interface ProductoService {
 
     Page<ProductoDTO> getAllProductos(Pageable pageable);
 
+    Page<ProductoDTO> searchProductosByName(String nombre, Pageable pageable);
+
     long countProductos();
 }

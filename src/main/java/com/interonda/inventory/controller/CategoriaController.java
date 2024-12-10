@@ -6,58 +6,105 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/api/categorias")
+import java.util.stream.Collectors;
+
+@Controller
+@RequestMapping("/tableCategorias")
 public class CategoriaController {
+
     private static final Logger logger = LoggerFactory.getLogger(CategoriaController.class);
 
     private final CategoriaService categoriaService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public CategoriaController(CategoriaService categoriaService) {
+    public CategoriaController(CategoriaService categoriaService, MessageSource messageSource) {
         this.categoriaService = categoriaService;
+        this.messageSource = messageSource;
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<CategoriaDTO> crearCategoria(@Valid @RequestBody CategoriaDTO categoriaDTO) {
-        logger.info("Solicitud recibida para crear categoría con nombre: {}", categoriaDTO.getNombre());
-        CategoriaDTO createdCategoria = categoriaService.createCategoria(categoriaDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCategoria);
+    public String createCategoria(@Valid CategoriaDTO categoriaDTO, BindingResult result, Model model, Pageable pageable) {
+        if (result.hasErrors()) {
+            String errorMessage = result.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
+            model.addAttribute("errorMessage", errorMessage);
+            model.addAttribute("categorias", categoriaService.getAllCategorias(pageable).getContent());
+            model.addAttribute("categoriaDTO", categoriaDTO);
+            return "tableCategorias";
+        }
+        categoriaService.createCategoria(categoriaDTO);
+        return "redirect:/tableCategorias";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CategoriaDTO> updateCategoria(@PathVariable Long id, @Validated @RequestBody CategoriaDTO categoriaDTO) {
-        logger.info("Solicitud recibida para actualizar categoría con id: {}", id);
-        CategoriaDTO updatedCategoria = categoriaService.updateCategoria(id, categoriaDTO);
-        return ResponseEntity.ok(updatedCategoria);
+    @PostMapping("/update")
+    public String updateCategoria(@Valid CategoriaDTO categoriaDTO, BindingResult result, Model model, Pageable pageable) {
+        if (result.hasErrors()) {
+            String errorMessage = result.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
+            model.addAttribute("errorMessage", errorMessage);
+            model.addAttribute("categoriaDTO", categoriaDTO);
+            model.addAttribute("categorias", categoriaService.getAllCategorias(pageable).getContent());
+            return "tableCategorias";
+        }
+        categoriaService.updateCategoria(categoriaDTO);
+        return "redirect:/tableCategorias";
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCategoria(@PathVariable Long id) {
-        logger.info("Solicitud recibida para eliminar categoría con id: {}", id);
+    @PostMapping("/{id}")
+    public String deleteCategoria(@PathVariable Long id) {
+        logger.debug("Llamando al método deleteCategoria con id: {}", id);
         categoriaService.deleteCategoria(id);
-    }
-
-    @GetMapping
-    public ResponseEntity<Page<CategoriaDTO>> getAllCategorias(Pageable pageable) {
-        logger.info("Solicitud recibida para obtener todas las categorías");
-        Page<CategoriaDTO> categorias = categoriaService.getAllCategorias(pageable);
-        return ResponseEntity.ok(categorias);
+        logger.debug("Categoria con id: {} eliminada correctamente", id);
+        return "redirect:/tableCategorias";
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoriaDTO> getCategoriaById(@PathVariable Long id) {
-        logger.info("Solicitud recibida para obtener categoría con id: {}", id);
-        CategoriaDTO categoria = categoriaService.getCategoriaById(id);
-        return ResponseEntity.ok(categoria);
+        CategoriaDTO categoriaDTO = categoriaService.getCategoria(id);
+        return new ResponseEntity<>(categoriaDTO, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public String showCategorias(@RequestParam(required = false) String name, Model model, Pageable pageable) {
+        int pageSize = 15;
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
+        Page<CategoriaDTO> categorias;
+        if (name != null && !name.isEmpty()) {
+            logger.info("Solicitud recibida para buscar categorias por nombre: {}", name);
+            categorias = categoriaService.searchCategoriasByName(name, newPageable);
+        } else {
+            categorias = categoriaService.getAllCategorias(newPageable);
+        }
+        model.addAttribute("categorias", categorias.getContent());
+        model.addAttribute("categoriaDTO", new CategoriaDTO());
+        model.addAttribute("page", categorias);
+        return "tableCategorias";
+    }
+
+    @GetMapping("/search")
+    public String searchCategoriasByName(@RequestParam String name, Model model, Pageable pageable) {
+        int pageSize = 15;
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
+        logger.info("Solicitud recibida para buscar categorías por nombre: {}", name);
+        Page<CategoriaDTO> categorias = categoriaService.searchCategoriasByName(name, newPageable);
+        model.addAttribute("categorias", categorias.getContent());
+        model.addAttribute("categoriaDTO", new CategoriaDTO());
+        model.addAttribute("page", categorias);
+        return "tableCategorias";
     }
 }
