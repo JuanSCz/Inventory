@@ -30,10 +30,11 @@ public class Deposito {
 
     // Relación uno-a-muchos con Stock (un depósito puede tener muchos stocks)
     @OneToMany(mappedBy = "deposito", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Stock> stocks = new ArrayList<>();
+    private List<Stock> stocks;
 
     // Constructor vacío requerido por JPA
     public Deposito() {
+        this.stocks = new ArrayList<>();
     }
 
     // Getters y Setters

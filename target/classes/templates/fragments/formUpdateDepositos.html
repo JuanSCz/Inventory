@@ -11,10 +11,10 @@
     <div class="modal fade" id="updateDepositoModal" tabindex="-1" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content modal-content-updateProveedor">
-                <div class="modal-header modal-header-updateProveedor">
-                    <h5 class="modal-title modal-title-updateProveedor" id="exampleModalLabel">Actualizar Depósito</h5>
-                    <button type="button" class="btn-close btn-close-updateProveedor" data-bs-dismiss="modal"
+            <div class="modal-content modal-content-updateDeposito">
+                <div class="modal-header modal-header-updateDeposito">
+                    <h5 class="modal-title modal-title-updateDeposito" id="exampleModalLabel">Actualizar Depósito</h5>
+                    <button type="button" class="btn-close btn-close-updateDeposito" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -23,29 +23,28 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control form-control-updateProveedor" id="nombre"
+                                <input type="text" class="form-control form-control-updateDeposito" id="nombre"
                                        th:field="*{nombre}">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="provincia" class="form-label">Provincia</label>
-                                <input type="text" class="form-control form-control-updateProveedor" id="provincia"
+                                <input type="text" class="form-control form-control-updateDeposito" id="provincia"
                                        th:field="*{provincia}">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="direccion" class="form-label">Dirección</label>
-                                <input type="text" class="form-control form-control-updateProveedor" id="direccion"
+                                <input type="text" class="form-control form-control-updateDeposito" id="direccion"
                                        th:field="*{direccion}">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="contactoDeposito" class="form-label">Contacto</label>
-                                <input type="text" class="form-control form-control-updateProveedor"
-                                       id="contactoDeposito" th:field="*{contactoDeposito}">
+                                <label for="contacto" class="form-label">Contacto</label>
+                                <input type="text" class="form-control form-control-updateDeposito" id="contacto"
+                                       th:field="*{contactoDeposito}">
                             </div>
                         </div>
-                        <input type="hidden" th:field="*{stocks}"/>
-                        <button type="submit" class="btn btn-primary btn-primary-updateProveedor w-100">Actualizar
+                        <button type="submit" class="btn btn-primary btn-primary-updateDeposito w-100">Actualizar
                         </button>
                     </form>
                 </div>

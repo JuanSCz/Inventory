@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-12-10T08:04:44-0300",
-    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
+    date = "2024-12-10T20:53:51-0300",
+    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.9 (Oracle Corporation)"
 )
 @Component
 public class DepositoMapperImpl implements DepositoMapper {
@@ -51,6 +51,35 @@ public class DepositoMapperImpl implements DepositoMapper {
         deposito.setContactoDeposito( depositoDTO.getContactoDeposito() );
 
         return deposito;
+    }
+
+    @Override
+    public void updateEntityFromDto(DepositoDTO depositoDTO, Deposito deposito) {
+        if ( depositoDTO == null ) {
+            return;
+        }
+
+        deposito.setId( depositoDTO.getId() );
+        deposito.setNombre( depositoDTO.getNombre() );
+        deposito.setProvincia( depositoDTO.getProvincia() );
+        deposito.setDireccion( depositoDTO.getDireccion() );
+        if ( deposito.getStocks() != null ) {
+            List<Stock> list = stockDTOListToStockList( depositoDTO.getStocks() );
+            if ( list != null ) {
+                deposito.getStocks().clear();
+                deposito.getStocks().addAll( list );
+            }
+            else {
+                deposito.setStocks( null );
+            }
+        }
+        else {
+            List<Stock> list = stockDTOListToStockList( depositoDTO.getStocks() );
+            if ( list != null ) {
+                deposito.setStocks( list );
+            }
+        }
+        deposito.setContactoDeposito( depositoDTO.getContactoDeposito() );
     }
 
     protected StockDTO stockToStockDTO(Stock stock) {

@@ -71,23 +71,19 @@ function initializeCreateModal() {
 
 // Inicializar modal de actualización para depósitos
 function initializeUpdateModal() {
+    // Crear una única instancia del modal
     const updateModal = new bootstrap.Modal(document.getElementById('updateDepositoModal'));
 
+    // Seleccionar todos los botones relacionados con la actualización
     const updateButtons = document.querySelectorAll('.buttonUpdateDeposito[data-id]');
+
     updateButtons.forEach(button => {
         button.addEventListener('click', function () {
-            const id = this.getAttribute('data-id');
-            populateUpdateModal(id);
-            updateModal.show();
+            const id = this.getAttribute('data-id'); // Obtener el ID del depósito
+            populateUpdateModal(id); // Llenar los datos del modal con el ID del depósito
+            updateModal.show(); // Mostrar el modal usando la misma instancia
         });
     });
-
-    const updateModalElement = document.getElementById('updateDepositoModal');
-        updateModalElement.addEventListener('hidden.bs.modal', function () {
-            const form = updateModalElement.querySelector('form');
-            form.reset();
-        });
-    }
 
     // Limpiar el modal cuando se cierra
     const updateModalElement = document.getElementById('updateDepositoModal');
@@ -97,7 +93,7 @@ function initializeUpdateModal() {
         document.getElementById('nombre').value = '';
         document.getElementById('provincia').value = '';
         document.getElementById('direccion').value = '';
-        document.getElementById('contactoDeposito').value = '';
+        document.getElementById('contacto').value = '';
 
         // Opcional: limpiar clases de validación, si usas alguna
         const form = updateModalElement.querySelector('form');
@@ -109,12 +105,12 @@ function populateUpdateModal(id) {
     fetch(`/tableDepositos/${id}`)
         .then(response => response.json())
         .then(data => {
-            const updateModalElement = document.getElementById('updateDepositoModal');
-            updateModalElement.querySelector('#id').value = data.id;
-            updateModalElement.querySelector('#nombre').value = data.nombre;
-            updateModalElement.querySelector('#provincia').value = data.provincia;
-            updateModalElement.querySelector('#direccion').value = data.direccion;
-            updateModalElement.querySelector('#contactoDeposito').value = data.contactoDeposito;
+            console.log(data); // Verificar los datos recibidos
+            document.getElementById('id').value = data.id;
+            document.getElementById('nombre').value = data.nombre;
+            document.getElementById('provincia').value = data.provincia;
+            document.getElementById('direccion').value = data.direccion;
+            document.getElementById('contacto').value = data.contactoDeposito;
         })
         .catch(error => console.error('Error al cargar los datos del depósito:', error));
 }
