@@ -1,9 +1,11 @@
 package com.interonda.inventory.service;
 
-import com.interonda.inventory.entity.Compra;
 import com.interonda.inventory.dto.CompraDTO;
+import com.interonda.inventory.entity.Compra;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDate;
 
 public interface CompraService {
 
@@ -13,11 +15,14 @@ public interface CompraService {
 
     CompraDTO createCompra(CompraDTO compraDTO);
 
-    CompraDTO updateCompra(Long id, CompraDTO compraDTO);
+    CompraDTO updateCompra(CompraDTO compraDTO);
 
     void deleteCompra(Long id);
 
+    CompraDTO getCompra(Long id);
+
     Page<CompraDTO> getAllCompras(Pageable pageable);
 
-    CompraDTO getCompraById(Long id);
+    Page<CompraDTO> searchComprasByFecha(LocalDate fecha, Pageable pageable);
+
 }

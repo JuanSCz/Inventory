@@ -19,4 +19,6 @@ public interface CompraMapper {
     DetalleCompraDTO toDetalleCompraDto(DetalleCompra detalleCompra);
 
     DetalleCompra toDetalleCompraEntity(DetalleCompraDTO detalleCompraDTO);
+
+
 }

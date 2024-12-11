@@ -821,6 +821,158 @@ body {
     background-color: var(--hover-color) !important;
 }
 
+#detalleVentaForm .form-control {
+    background-color: var(--second-bg-color);
+    color: var(--text-color) !important;
+    border: 1px solid var(--bg-color);
+}
+
+#detalleVentaForm .form-control:focus {
+    background-color: var(--second-bg-color);
+    color: var(--text-color) !important;
+    border-color: var(--main-color);
+    box-shadow: 0 0 0 0.2rem rgba(0, 150, 255, 0.25);
+}
+
+.totalVenta {
+    font-weight: bold;
+    color: var(--second-color);
+}
+
+.modal-content-detalle {
+    background: var(--gradient-bg) !important;
+    color: var(--highlight-color) !important;
+    border: 2px solid var(--main-color) !important;
+    border-radius: 15px !important;
+    padding: 1rem !important;
+    box-shadow: 0 4px 8px var(--shadow-color) !important;
+}
+
+.modal-header-detalle {
+    display: flex;
+    justify-content: space-between !important;
+    align-items: center !important;
+    border-bottom: 2px solid var(--main-color) !important;
+    color: #ffffff !important;
+}
+
+.modal-body-detalle {
+    border-top: 2px solid var(--main-color) !important;
+    border-bottom: 2px solid var(--main-color) !important;
+    color: #ffffff !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+}
+
+.modal-footer-detalle {
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+    border-top: 2px solid var(--main-color) !important;
+    color: #ffffff !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+}
+
+.modal.fade .modal-dialog-detalle {
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out !important;
+    transform: translateY(-10px) !important;
+    opacity: 0 !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+}
+
+.modal.show .modal-dialog-detalle {
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+}
+
+.btn-close-detalle {
+    transform: translateY(-50%) !important;
+    background-color: var(--main-color) !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+}
+
+.btn-close-detalle:hover {
+    background-color: var(--hover-color) !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+}
+
+.table-detalle {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    width: 100% !important;
+    margin-bottom: 1rem !important;
+    color: var(--text-color) !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+}
+
+.table-detalle thead th {
+    color: #ffcc00 !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+}
+
+.total {
+    color: #ffcc00 !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+    font-size: 1.45rem !important; /* Tamaño de fuente recomendado */
+}
+
+.table-detalle th,
+.table-detalle td,
+.table-detalle thead th {
+    border-color: var(--bg-color);
+    background-color: #1a1a1a;
+    color: var(--second-color);
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+}
+
+.form-control-detalle::placeholder {
+    color: var(--text-color) !important;
+    opacity: 1 !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+}
+
+.form-control-detalle:focus::placeholder {
+    opacity: 0 !important;
+}
+
+.form-control-detalle {
+    background-color: var(--second-bg-color) !important;
+}
+
+.form-control-detalle,
+.form-control-detalle option {
+    font-size: 0.875rem !important;
+    color: #ffffff !important;
+}
+
+.btn-guardar, .btn-cerrar, .btn-success {
+    background-color: var(--main-color) !important;
+    color: var(--text-color) !important;
+    border: none !important;
+    border-radius: 5px !important;
+    height: auto !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.btn-guardar:hover, .btn-success:hover {
+    background: linear-gradient(45deg, var(--main-color), var(--hover-color));
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+    color: var(--text-color);
+}
+
+.btn-cerrar:hover {
+    background: linear-gradient(45deg, #666666, #4d4d4d);
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+    color: var(--text-color);
+}
+
+.btn-cerrar {
+    background-color: #666666 !important;
+}
+
 @media (max-width: 768px) {
     .contentPersist {
         width: 100%;

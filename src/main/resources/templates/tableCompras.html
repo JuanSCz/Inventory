@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interonda IO</title>
+    <link rel="stylesheet" th:href="@{/css/tableProveedores.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="icon" th:href="@{/images/wifi.png}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="body-table" th:data-error-message="${errorMessage}">
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm responsive-navbar">
+    <div class="container-fluid">
+        <img th:src="@{/images/logo.png}" alt="Interonda Logo"
+             class="d-inline-block align-text-top me-2 interonda navbar-logo">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-expanded="false">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto navbar-menu">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" th:href="@{/}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/usuario}">Usuario</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/salir}">Salir</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid d-flex p-0">
+    <aside class="sidebar bg-secondary text-white p-3 fixed-sidebar responsive-sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/dashboard}">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/proveedores}">Proveedores</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/clientes}">Clientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/ventas}">Ventas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/compras}">Compras</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/depositos}">Depósitos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/historiales}">Historiales de Stock</a>
+            </li>
+        </ul>
+    </aside>
+    <main class="contentPersist p-3 text-center">
+        <h2 class="mb-4 titlePersist">Compras</h2>
+
+        <div>
+            <button class="btn buttonPersist navbar-menu buttonPersistCompra" data-bs-toggle="modal"
+                    data-bs-target="#compraModal">
+                Crear Compra
+            </button>
+        </div>
+
+        <form th:action="@{/tableCompras/search}" method="get" class="search-form-container">
+            <div class="input-group-buscar">
+                <input type="date" name="fecha" placeholder="Fecha" class="form-control search-input">
+                <input type="hidden" name="page" value="0">
+                <input type="hidden" name="size" value="15">
+            </div>
+        </form>
+
+        <div class="table-responsive mt-3">
+            <table class="table table-dark table-striped table-bordered custom-table table-sm">
+                <thead class="table-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Fecha</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Método de Pago</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Impuestos</th>
+                    <th scope="col">Proveedor</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="compra : ${compras}">
+                    <td th:data-label="ID" th:text="${compra.id}"></td>
+                    <td th:data-label="Fecha" th:text="${compra.fecha}"></td>
+                    <td th:data-label="Total" th:text="${compra.total}"></td>
+                    <td th:data-label="Método de Pago" th:text="${compra.metodoPago}"></td>
+                    <td th:data-label="Estado" th:text="${compra.estado}"></td>
+                    <td th:data-label="Impuestos" th:text="${compra.impuestos}"></td>
+                    <td th:data-label="Proveedor" th:text="${compra.proveedorId}"></td>
+                    <td th:data-label="Acciones">
+                        <div class="btn-group">
+                            <button class="btn btn-info btn-sm navbar-menu me-2">
+                                Detalle
+                            </button>
+                            <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateCompra"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#updateCompraModal" th:data-id="${compra.id}">
+                                Editar
+                            </button>
+                            <form th:action="@{/tableCompras/{id}(id=${compra.id})}" method="post"
+                                  onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta compra?');">
+                                <input type="hidden" name="_method" value="delete"/>
+                                <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/tableCompras(page=${page.number - 1}, size=${page.size}, name=${param.name})}">Anterior</a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                    th:classappend="${page.number == i} ? 'active'">
+                    <a class="page-link" th:href="@{/tableCompras(page=${i}, size=${page.size}, name=${param.name})}"
+                       th:text="${i + 1}">1</a>
+                </li>
+                <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/tableCompras(page=${page.number + 1}, size=${page.size}, name=${param.name})}">Siguiente</a>
+                </li>
+            </ul>
+        </nav>
+    </main>
+</div>
+
+<div th:replace="~{fragments/formCreateCompras :: createModalClientes}"></div>
+<div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/indexCompras.js"></script>
+</body>
+
+</html>
+</body>
+
+</html>

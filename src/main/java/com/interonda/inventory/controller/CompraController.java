@@ -2,64 +2,109 @@ package com.interonda.inventory.controller;
 
 import com.interonda.inventory.dto.CompraDTO;
 import com.interonda.inventory.service.CompraService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
+import java.time.LocalDate;
+import java.util.stream.Collectors;
 
-@RestController
-@RequestMapping("/api/compras")
+@Controller
+@RequestMapping("/tableCompras")
 public class CompraController {
 
     private static final Logger logger = LoggerFactory.getLogger(CompraController.class);
 
     private final CompraService compraService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public CompraController(CompraService compraService) {
+    public CompraController(CompraService compraService, MessageSource messageSource) {
         this.compraService = compraService;
+        this.messageSource = messageSource;
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<CompraDTO> createCompra(@Valid @RequestBody CompraDTO compraDTO) {
-        logger.info("Solicitud recibida para crear compra con detalles: {}", compraDTO);
-        CompraDTO createdCompra = compraService.createCompra(compraDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdCompra);
+    public String createCompra(@Valid CompraDTO compraDTO, BindingResult result, Model model, Pageable pageable) {
+        if (result.hasErrors()) {
+            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
+            model.addAttribute("errorMessage", errorMessage);
+            model.addAttribute("compras", compraService.getAllCompras(pageable).getContent());
+            model.addAttribute("compraDTO", compraDTO);
+            return "tableCompras";
+        }
+        compraService.createCompra(compraDTO);
+        return "redirect:/tableCompras";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CompraDTO> updateCompra(@PathVariable Long id, @Valid @RequestBody CompraDTO compraDTO) {
-        logger.info("Solicitud recibida para actualizar compra con id: {}", id);
-        CompraDTO updatedCompra = compraService.updateCompra(id, compraDTO);
-        return ResponseEntity.ok(updatedCompra);
+    @PostMapping("/update")
+    public String updateCompra(@Valid CompraDTO compraDTO, BindingResult result, Model model, Pageable pageable) {
+        if (result.hasErrors()) {
+            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
+            model.addAttribute("errorMessage", errorMessage);
+            model.addAttribute("compraDTO", compraDTO);
+            model.addAttribute("compras", compraService.getAllCompras(pageable).getContent());
+            return "tableCompras";
+        }
+        compraService.updateCompra(compraDTO);
+        return "redirect:/tableCompras";
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> deleteCompra(@PathVariable Long id) {
-        logger.info("Solicitud recibida para eliminar compra con id: {}", id);
+    @PostMapping("/{id}")
+    public String deleteCompra(@PathVariable Long id) {
+        logger.debug("Llamando al método deleteCompra con id: {}", id);
         compraService.deleteCompra(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @GetMapping
-    public ResponseEntity<Page<CompraDTO>> getAllCompras(Pageable pageable) {
-        logger.info("Solicitud recibida para obtener todas las compras");
-        Page<CompraDTO> compras = compraService.getAllCompras(pageable);
-        return ResponseEntity.ok(compras);
+        logger.debug("Compra con id: {} eliminada correctamente", id);
+        return "redirect:/tableCompras";
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CompraDTO> getCompraById(@PathVariable Long id) {
-        logger.info("Solicitud recibida para obtener compra con id: {}", id);
-        CompraDTO compra = compraService.getCompraById(id);
-        return ResponseEntity.ok(compra);
+        CompraDTO compraDTO = compraService.getCompra(id);
+        return new ResponseEntity<>(compraDTO, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public String showCompras(@RequestParam(required = false) String fecha, Model model, Pageable pageable) {
+        int pageSize = 15;
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
+        Page<CompraDTO> compras;
+        if (fecha != null && !fecha.isEmpty()) {
+            logger.info("Solicitud recibida para buscar compras por fecha: {}", fecha);
+            LocalDate localDate = LocalDate.parse(fecha);
+            compras = compraService.searchComprasByFecha(localDate, newPageable);
+        } else {
+            compras = compraService.getAllCompras(newPageable);
+        }
+        model.addAttribute("compras", compras.getContent());
+        model.addAttribute("compraDTO", new CompraDTO());
+        model.addAttribute("page", compras);
+
+        return "tableCompras";
+    }
+
+    @GetMapping("/search")
+    public String searchComprasByFecha(@RequestParam String fecha, Model model, Pageable pageable) {
+        int pageSize = 15;
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
+        logger.info("Solicitud recibida para buscar compras por fecha: {}", fecha);
+        LocalDate localDate = LocalDate.parse(fecha);
+        Page<CompraDTO> compras = compraService.searchComprasByFecha(localDate, newPageable);
+        model.addAttribute("compras", compras.getContent());
+        model.addAttribute("compraDTO", new CompraDTO());
+        model.addAttribute("page", compras);
+        return "tableCompras";
     }
 }
