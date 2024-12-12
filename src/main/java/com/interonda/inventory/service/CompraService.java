@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface CompraService {
 
@@ -25,7 +26,4 @@ public interface CompraService {
     Page<CompraDTO> getAllCompras(Pageable pageable);
 
     Page<CompraDTO> searchComprasByFecha(LocalDate fecha, Pageable pageable);
-
-    DetalleCompraDTO addDetalleCompra(DetalleCompraDTO detalleCompraDTO);
-
 }

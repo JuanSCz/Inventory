@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-12-11T21:16:35-0300",
-    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.9 (Oracle Corporation)"
+    date = "2024-12-12T15:28:54-0300",
+    comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
 )
 @Component
 public class CompraMapperImpl implements CompraMapper {
@@ -56,37 +56,7 @@ public class CompraMapperImpl implements CompraMapper {
     }
 
     @Override
-    public void updateEntityFromDto(CompraDTO compraDTO, Compra compra) {
-        if ( compraDTO == null ) {
-            return;
-        }
-
-        compra.setId( compraDTO.getId() );
-        compra.setFecha( compraDTO.getFecha() );
-        compra.setTotal( compraDTO.getTotal() );
-        compra.setMetodoPago( compraDTO.getMetodoPago() );
-        compra.setEstado( compraDTO.getEstado() );
-        compra.setImpuestos( compraDTO.getImpuestos() );
-        if ( compra.getDetallesCompra() != null ) {
-            List<DetalleCompra> list = detalleCompraDTOListToDetalleCompraList( compraDTO.getDetallesCompra() );
-            if ( list != null ) {
-                compra.getDetallesCompra().clear();
-                compra.getDetallesCompra().addAll( list );
-            }
-            else {
-                compra.setDetallesCompra( null );
-            }
-        }
-        else {
-            List<DetalleCompra> list = detalleCompraDTOListToDetalleCompraList( compraDTO.getDetallesCompra() );
-            if ( list != null ) {
-                compra.setDetallesCompra( list );
-            }
-        }
-    }
-
-    @Override
-    public DetalleCompraDTO toDetalleCompraDto(DetalleCompra detalleCompra) {
+    public DetalleCompraDTO toDetalleDto(DetalleCompra detalleCompra) {
         if ( detalleCompra == null ) {
             return null;
         }
@@ -101,7 +71,7 @@ public class CompraMapperImpl implements CompraMapper {
     }
 
     @Override
-    public DetalleCompra toDetalleCompraEntity(DetalleCompraDTO detalleCompraDTO) {
+    public DetalleCompra toDetalleEntity(DetalleCompraDTO detalleCompraDTO) {
         if ( detalleCompraDTO == null ) {
             return null;
         }
@@ -122,7 +92,7 @@ public class CompraMapperImpl implements CompraMapper {
 
         List<DetalleCompraDTO> list1 = new ArrayList<DetalleCompraDTO>( list.size() );
         for ( DetalleCompra detalleCompra : list ) {
-            list1.add( toDetalleCompraDto( detalleCompra ) );
+            list1.add( toDetalleDto( detalleCompra ) );
         }
 
         return list1;
@@ -135,7 +105,7 @@ public class CompraMapperImpl implements CompraMapper {
 
         List<DetalleCompra> list1 = new ArrayList<DetalleCompra>( list.size() );
         for ( DetalleCompraDTO detalleCompraDTO : list ) {
-            list1.add( toDetalleCompraEntity( detalleCompraDTO ) );
+            list1.add( toDetalleEntity( detalleCompraDTO ) );
         }
 
         return list1;

@@ -18,5 +18,4 @@ public interface CompraRepository extends JpaRepository<Compra, Long> {
 
     Page<Compra> findByFecha(LocalDate fecha, Pageable pageable);
 
-
 }

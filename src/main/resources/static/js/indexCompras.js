@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
     handleErrorModal();
     initializeSearch();
+    initializeCreateModal();
     initializeUpdateModal();
-    initializeCreateCompraModal();
 });
 
+// Manejo del modal de error
 function handleErrorModal() {
     const errorMessage = document.body.getAttribute('data-error-message');
 
@@ -17,10 +18,11 @@ function handleErrorModal() {
     }
 }
 
+// Manejo de la búsqueda en tiempo real
 function initializeSearch() {
     const searchInput = document.querySelector('.search-input');
     if (searchInput) {
-        searchInput.addEventListener('input', debounce(filterTable, 300));
+        searchInput.addEventListener('input', debounce(filterTable, 300)); // Agregamos debounce para evitar múltiples solicitudes
     }
 }
 
@@ -45,7 +47,7 @@ function filterTable() {
             const pagination = doc.querySelector('.pagination');
             tableBody.innerHTML = newTableBody ? newTableBody.innerHTML : '<tr><td colspan="8" class="text-center">No se encontraron resultados</td></tr>';
             document.querySelector('.pagination').innerHTML = pagination ? pagination.innerHTML : '';
-            initializeUpdateModal();
+            initializeUpdateModal(); // Re-inicializar los eventos de los botones de edición
         })
         .catch(error => {
             console.error('Error al realizar la búsqueda:', error);
@@ -53,91 +55,40 @@ function filterTable() {
         });
 }
 
-function initializeCreateCompraModal() {
-    const addDetalleButton = document.getElementById('addDetalleButton');
-    const generateDetalleButton = document.querySelector('button[data-bs-target="#createDetalleModal"]');
-
-    if (generateDetalleButton) {
-        generateDetalleButton.addEventListener('click', function (event) {
-            if (!validateCreateCompraForm()) {
-                event.preventDefault();
-                alert('Por favor, complete todos los campos requeridos antes de generar detalles.');
-            }
-        });
-    }
-
-    if (addDetalleButton) {
-        addDetalleButton.addEventListener('click', function (event) {
-            event.preventDefault();
-            const detalleVentaForm = document.getElementById('detalleVentaForm');
-            const formData = new FormData(detalleVentaForm);
-
-            fetch(detalleVentaForm.action, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Detalle guardado:', data);
-                updateDetalleTable(data);
-                const detalleModal = bootstrap.Modal.getInstance(document.getElementById('createDetalleModal'));
-                detalleModal.hide();
-            })
-            .catch(error => {
-                console.error('Error al guardar el detalle:', error);
-            });
-        });
-    }
-}
-
-function validateCreateCompraForm() {
-    const requiredFields = ['fecha', 'total', 'metodoPago', 'estado', 'impuestos', 'proveedor'];
-    let isValid = true;
-
-    requiredFields.forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        if (!field.value) {
-            isValid = false;
-            field.classList.add('is-invalid');
-        } else {
-            field.classList.remove('is-invalid');
-        }
+// Manejo del modal "Crear Compra"
+function initializeCreateModal() {
+    const createCompraModal = new bootstrap.Modal(document.getElementById('createCompraModal'), {
+        keyboard: false
     });
 
-    return isValid;
+    const createButton = document.querySelector('.buttonPersistCompra');
+    if (createButton) {
+        createButton.addEventListener('click', function () {
+            createCompraModal.show();
+        });
+    }
 }
 
-function updateDetalleTable(data) {
-    const detalleVentaBody = document.getElementById('detalleVentaBody');
-    const newRow = document.createElement('tr');
-    newRow.innerHTML = `
-        <td>${data.productoNombre}</td>
-        <td>${data.cantidad}</td>
-        <td>${data.precioUnitario}</td>
-        <td>${data.total}</td>
-    `;
-    detalleVentaBody.appendChild(newRow);
-}
-
+// Inicializar modal de actualización para compras
 function initializeUpdateModal() {
+    // Crear una única instancia del modal
     const updateModal = new bootstrap.Modal(document.getElementById('updateCompraModal'));
+
+    // Seleccionar todos los botones relacionados con la actualización
     const updateButtons = document.querySelectorAll('.buttonUpdateCompra[data-id]');
 
     updateButtons.forEach(button => {
         button.addEventListener('click', function () {
-            const id = this.getAttribute('data-id');
-            populateUpdateModal(id);
-            updateModal.show();
+            const id = this.getAttribute('data-id'); // Obtener el ID de la compra
+            populateUpdateModal(id); // Llenar los datos del modal con el ID de la compra
+            updateModal.show(); // Mostrar el modal usando la misma instancia
         });
     });
 
+    // Limpiar el modal cuando se cierra
     const updateModalElement = document.getElementById('updateCompraModal');
     updateModalElement.addEventListener('hidden.bs.modal', function () {
+        // Limpiar los campos del formulario
         document.getElementById('id').value = '';
         document.getElementById('fecha').value = '';
         document.getElementById('total').value = '';
@@ -146,6 +97,7 @@ function initializeUpdateModal() {
         document.getElementById('impuestos').value = '';
         document.getElementById('proveedor').value = '';
 
+        // Opcional: limpiar clases de validación, si usas alguna
         const form = updateModalElement.querySelector('form');
         if (form) form.reset();
     });
@@ -167,6 +119,7 @@ function populateUpdateModal(id) {
         .catch(error => console.error('Error al cargar los datos de la compra:', error));
 }
 
+// Utilidad: Función de debounce para limitar solicitudes frecuentes
 function debounce(func, delay) {
     let timeout;
     return function (...args) {

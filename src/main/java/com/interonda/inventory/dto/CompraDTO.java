@@ -11,32 +11,29 @@ public class CompraDTO {
 
     private Long id;
 
-    @NotNull(message = "{compraDTO.fecha.notNull}")
-    @FutureOrPresent(message = "{compraDTO.fecha.futureOrPresent}")
     private LocalDate fecha;
 
-    @NotNull(message = "{compraDTO.total.notNull}")
-    @DecimalMin(value = "0.0", message = "{compraDTO.total.decimalMin}")
-    @Digits(integer = 10, fraction = 2, message = "{compraDTO.total.digits}")
     private BigDecimal total;
 
-    @NotBlank(message = "{compraDTO.metodoPago.notBlank}")
     private String metodoPago;
 
-    @NotBlank(message = "{compraDTO.estado.notBlank}")
     private String estado;
 
-    @NotNull(message = "{compraDTO.impuestos.notNull}")
-    @DecimalMin(value = "0.0", message = "{compraDTO.impuestos.decimalMin}")
-    @Digits(integer = 10, fraction = 2, message = "{compraDTO.impuestos.digits}")
     private BigDecimal impuestos;
 
-    @NotNull(message = "{compraDTO.proveedor.notNull}")
     private Long proveedorId;
 
     private String proveedorNombre;
 
-    private List<DetalleCompraDTO> detallesCompra;
+    public String getProveedorNombre() {
+        return proveedorNombre;
+    }
+
+    public void setProveedorNombre(String proveedorNombre) {
+        this.proveedorNombre = proveedorNombre;
+    }
+
+    private List<DetalleCompraDTO> detallesCompra = new ArrayList<>();
 
     public CompraDTO() {
     }
@@ -97,14 +94,6 @@ public class CompraDTO {
 
     public void setProveedorId(Long proveedorId) {
         this.proveedorId = proveedorId;
-    }
-
-    public String getProveedorNombre() {
-        return proveedorNombre;
-    }
-
-    public void setProveedorNombre(String proveedorNombre) {
-        this.proveedorNombre = proveedorNombre;
     }
 
     public List<DetalleCompraDTO> getDetallesCompra() {

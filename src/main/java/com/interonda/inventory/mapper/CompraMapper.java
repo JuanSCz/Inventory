@@ -1,24 +1,22 @@
 package com.interonda.inventory.mapper;
 
-import com.interonda.inventory.entity.Compra;
-import com.interonda.inventory.entity.DetalleCompra;
-import com.interonda.inventory.dto.CompraDTO;
 import com.interonda.inventory.dto.DetalleCompraDTO;
+import com.interonda.inventory.entity.Compra;
 
+import com.interonda.inventory.dto.CompraDTO;
+
+import com.interonda.inventory.entity.DetalleCompra;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+import org.springframework.stereotype.Component;
 
 @Mapper(componentModel = "spring")
+@Component
 public interface CompraMapper {
     CompraDTO toDto(Compra compra);
 
     Compra toEntity(CompraDTO compraDTO);
 
-    void updateEntityFromDto(CompraDTO compraDTO, @MappingTarget Compra compra);
+    DetalleCompraDTO toDetalleDto(DetalleCompra detalleCompra);
 
-    DetalleCompraDTO toDetalleCompraDto(DetalleCompra detalleCompra);
-
-    DetalleCompra toDetalleCompraEntity(DetalleCompraDTO detalleCompraDTO);
-
-
+    DetalleCompra toDetalleEntity(DetalleCompraDTO detalleCompraDTO);
 }

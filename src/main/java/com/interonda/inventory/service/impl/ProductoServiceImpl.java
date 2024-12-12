@@ -19,6 +19,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ProductoServiceImpl implements ProductoService {
 
@@ -166,9 +168,7 @@ public class ProductoServiceImpl implements ProductoService {
             throw new DataAccessException("Error obteniendo todos los Productos con paginación", e);
         }
     }
-
-
-
+    
     @Override
     @Transactional(readOnly = true)
     public Page<ProductoDTO> searchProductosByName(String nombre, Pageable pageable) {
@@ -192,6 +192,18 @@ public class ProductoServiceImpl implements ProductoService {
         } catch (Exception e) {
             logger.error("Error contando todos los Productos", e);
             throw new DataAccessException("Error contando todos los Productos", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Producto> obtenerTodosLosProductos() {
+        try {
+            logger.info("Obteniendo todos los productos");
+            return productoRepository.findAll();
+        } catch (Exception e) {
+            logger.error("Error obteniendo todos los productos", e);
+            throw new DataAccessException("Error obteniendo todos los productos", e);
         }
     }
 }
