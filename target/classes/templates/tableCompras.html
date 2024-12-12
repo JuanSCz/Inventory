@@ -71,7 +71,7 @@
 
         <div>
             <button class="btn buttonPersist navbar-menu buttonPersistCompra" data-bs-toggle="modal"
-                    data-bs-target="#compraModal">
+                    data-bs-target="#createCompraModal">
                 Crear Compra
             </button>
         </div>
@@ -148,7 +148,8 @@
     </main>
 </div>
 
-<div th:replace="~{fragments/formCreateCompras :: createModalClientes}"></div>
+<div th:replace="~{fragments/formCreateCompras :: createModalCompras}"></div>
+<div th:replace="~{fragments/formDetalleCompra :: detalleCompraModal}"></div>
 <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/indexCompras.js"></script>

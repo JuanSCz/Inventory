@@ -34,12 +34,15 @@ public class CompraDTO {
     @NotNull(message = "{compraDTO.proveedor.notNull}")
     private Long proveedorId;
 
-    private List<DetalleCompraDTO> detallesCompra = new ArrayList<>();
+    private String proveedorNombre;
+
+    private List<DetalleCompraDTO> detallesCompra;
 
     public CompraDTO() {
     }
 
     // Getters y Setters
+
     public Long getId() {
         return id;
     }
@@ -94,6 +97,14 @@ public class CompraDTO {
 
     public void setProveedorId(Long proveedorId) {
         this.proveedorId = proveedorId;
+    }
+
+    public String getProveedorNombre() {
+        return proveedorNombre;
+    }
+
+    public void setProveedorNombre(String proveedorNombre) {
+        this.proveedorNombre = proveedorNombre;
     }
 
     public List<DetalleCompraDTO> getDetallesCompra() {

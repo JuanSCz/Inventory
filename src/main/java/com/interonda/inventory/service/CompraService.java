@@ -1,6 +1,7 @@
 package com.interonda.inventory.service;
 
 import com.interonda.inventory.dto.CompraDTO;
+import com.interonda.inventory.dto.DetalleCompraDTO;
 import com.interonda.inventory.entity.Compra;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,5 +25,7 @@ public interface CompraService {
     Page<CompraDTO> getAllCompras(Pageable pageable);
 
     Page<CompraDTO> searchComprasByFecha(LocalDate fecha, Pageable pageable);
+
+    DetalleCompraDTO addDetalleCompra(DetalleCompraDTO detalleCompraDTO);
 
 }

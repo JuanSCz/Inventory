@@ -1,12 +1,17 @@
 package com.interonda.inventory.service.impl;
 
 import com.interonda.inventory.dto.CompraDTO;
+import com.interonda.inventory.dto.DetalleCompraDTO;
 import com.interonda.inventory.entity.Compra;
+import com.interonda.inventory.entity.DetalleCompra;
+import com.interonda.inventory.entity.Producto;
 import com.interonda.inventory.entity.Proveedor;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.CompraMapper;
 import com.interonda.inventory.repository.CompraRepository;
+import com.interonda.inventory.repository.DetalleCompraRepository;
+import com.interonda.inventory.repository.ProductoRepository;
 import com.interonda.inventory.repository.ProveedorRepository;
 import com.interonda.inventory.service.CompraService;
 import com.interonda.inventory.utils.ValidatorUtils;
@@ -20,6 +25,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CompraServiceImpl implements CompraService {
@@ -27,13 +34,19 @@ public class CompraServiceImpl implements CompraService {
 
     private final CompraRepository compraRepository;
     private final ProveedorRepository proveedorRepository;
+    private final ProductoRepository productoRepository;
+    private final DetalleCompraRepository detalleCompraRepository;
+    @Autowired
     private final CompraMapper compraMapper;
+
     private final Validator validator;
 
     @Autowired
-    public CompraServiceImpl(CompraRepository compraRepository, ProveedorRepository proveedorRepository, CompraMapper compraMapper, Validator validator) {
+    public CompraServiceImpl(CompraRepository compraRepository, ProveedorRepository proveedorRepository, ProductoRepository productoRepository, DetalleCompraRepository detalleCompraRepository, CompraMapper compraMapper, Validator validator) {
         this.compraRepository = compraRepository;
         this.proveedorRepository = proveedorRepository;
+        this.productoRepository = productoRepository;
+        this.detalleCompraRepository = detalleCompraRepository;
         this.compraMapper = compraMapper;
         this.validator = validator;
     }
@@ -53,19 +66,28 @@ public class CompraServiceImpl implements CompraService {
     public CompraDTO createCompra(CompraDTO compraDTO) {
         ValidatorUtils.validateEntity(compraDTO, validator);
         try {
-            logger.info("Creando nueva Compra");
             Compra compra = compraMapper.toEntity(compraDTO);
-
-            // Manejar la relación con Proveedor manualmente
             Proveedor proveedor = proveedorRepository.findById(compraDTO.getProveedorId())
                     .orElseThrow(() -> new ResourceNotFoundException("Proveedor no encontrado con el id: " + compraDTO.getProveedorId()));
             compra.setProveedor(proveedor);
 
+            // Manejar los detalles de la compra
+            List<DetalleCompra> detallesCompra = compraDTO.getDetallesCompra().stream()
+                    .map(detalleDTO -> {
+                        DetalleCompra detalle = new DetalleCompra();
+                        detalle.setCantidad(detalleDTO.getCantidad());
+                        detalle.setPrecioUnitario(detalleDTO.getPrecioUnitario());
+                        Producto producto = productoRepository.findById(detalleDTO.getProductoId())
+                                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId()));
+                        detalle.setProducto(producto);
+                        detalle.setCompra(compra);
+                        return detalle;
+                    }).collect(Collectors.toList());
+            compra.setDetallesCompra(detallesCompra);
+
             Compra savedCompra = compraRepository.save(compra);
-            logger.info("Compra creada exitosamente con id: {}", savedCompra.getId());
             return compraMapper.toDto(savedCompra);
         } catch (Exception e) {
-            logger.error("Error guardando Compra", e);
             throw new DataAccessException("Error guardando Compra", e);
         }
     }
@@ -161,6 +183,30 @@ public class CompraServiceImpl implements CompraService {
         } catch (Exception e) {
             logger.error("Error buscando Compras por fecha", e);
             throw new DataAccessException("Error buscando Compras por fecha", e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public DetalleCompraDTO addDetalleCompra(DetalleCompraDTO detalleCompraDTO) {
+        ValidatorUtils.validateEntity(detalleCompraDTO, validator);
+        try {
+            DetalleCompra detalleCompra = new DetalleCompra();
+            detalleCompra.setCantidad(detalleCompraDTO.getCantidad());
+            detalleCompra.setPrecioUnitario(detalleCompraDTO.getPrecioUnitario());
+
+            Compra compra = compraRepository.findById(detalleCompraDTO.getCompraId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Compra no encontrada con el id: " + detalleCompraDTO.getCompraId()));
+            Producto producto = productoRepository.findById(detalleCompraDTO.getProductoId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleCompraDTO.getProductoId()));
+
+            detalleCompra.setCompra(compra);
+            detalleCompra.setProducto(producto);
+
+            DetalleCompra savedDetalle = detalleCompraRepository.save(detalleCompra);
+            return compraMapper.toDetalleCompraDto(savedDetalle);
+        } catch (Exception e) {
+            throw new DataAccessException("Error guardando DetalleCompra", e);
         }
     }
 }

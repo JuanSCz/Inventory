@@ -1,12 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     handleErrorModal();
     initializeSearch();
-    initializeCreateModal();
     initializeUpdateModal();
-    initializeDetalleModal();
+    initializeCreateCompraModal();
 });
 
-// Manejo del modal de error
 function handleErrorModal() {
     const errorMessage = document.body.getAttribute('data-error-message');
 
@@ -19,7 +17,6 @@ function handleErrorModal() {
     }
 }
 
-// Manejo de la búsqueda en tiempo real
 function initializeSearch() {
     const searchInput = document.querySelector('.search-input');
     if (searchInput) {
@@ -56,51 +53,79 @@ function filterTable() {
         });
 }
 
-// Manejo del modal "Crear Compra"
-function initializeCreateModal() {
-    const createCompraModal = new bootstrap.Modal(document.getElementById('createCompraModal'), {
-        keyboard: false
-    });
+function initializeCreateCompraModal() {
+    const addDetalleButton = document.getElementById('addDetalleButton');
+    const generateDetalleButton = document.querySelector('button[data-bs-target="#createDetalleModal"]');
 
-    const createButton = document.querySelector('.buttonPersistCompra');
-    if (createButton) {
-        createButton.addEventListener('click', function () {
-            createCompraModal.show();
+    if (generateDetalleButton) {
+        generateDetalleButton.addEventListener('click', function (event) {
+            if (!validateCreateCompraForm()) {
+                event.preventDefault();
+                alert('Por favor, complete todos los campos requeridos antes de generar detalles.');
+            }
         });
     }
-}
 
-// Manejo del modal de detalle
-function initializeDetalleModal() {
-    const createDetalleModal = new bootstrap.Modal(document.getElementById('createDetalleModal'), {
-        keyboard: false
-    });
-
-    const generarDetalleButton = document.querySelector('.buttonPersistDetalle');
-    if (generarDetalleButton) {
-        generarDetalleButton.addEventListener('click', function (event) {
+    if (addDetalleButton) {
+        addDetalleButton.addEventListener('click', function (event) {
             event.preventDefault();
-            event.stopPropagation();
-            createDetalleModal.show();
+            const detalleVentaForm = document.getElementById('detalleVentaForm');
+            const formData = new FormData(detalleVentaForm);
+
+            fetch(detalleVentaForm.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Detalle guardado:', data);
+                updateDetalleTable(data);
+                const detalleModal = bootstrap.Modal.getInstance(document.getElementById('createDetalleModal'));
+                detalleModal.hide();
+            })
+            .catch(error => {
+                console.error('Error al guardar el detalle:', error);
+            });
         });
     }
-
-    // Ajustar z-index de los modales y sus fondos
-    document.getElementById('createDetalleModal').addEventListener('shown.bs.modal', function () {
-        const modals = document.querySelectorAll('.modal');
-        const tier = modals.length - 1;
-        const backdrop = document.querySelector('.modal-backdrop');
-        if (backdrop) {
-            backdrop.style.zIndex = 1030 + tier * 30;
-        }
-        this.style.zIndex = 1040 + tier * 30;
-    });
 }
 
-// Inicializar modal de actualización para compras
+function validateCreateCompraForm() {
+    const requiredFields = ['fecha', 'total', 'metodoPago', 'estado', 'impuestos', 'proveedor'];
+    let isValid = true;
+
+    requiredFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (!field.value) {
+            isValid = false;
+            field.classList.add('is-invalid');
+        } else {
+            field.classList.remove('is-invalid');
+        }
+    });
+
+    return isValid;
+}
+
+function updateDetalleTable(data) {
+    const detalleVentaBody = document.getElementById('detalleVentaBody');
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td>${data.productoNombre}</td>
+        <td>${data.cantidad}</td>
+        <td>${data.precioUnitario}</td>
+        <td>${data.total}</td>
+    `;
+    detalleVentaBody.appendChild(newRow);
+}
+
 function initializeUpdateModal() {
     const updateModal = new bootstrap.Modal(document.getElementById('updateCompraModal'));
-
     const updateButtons = document.querySelectorAll('.buttonUpdateCompra[data-id]');
 
     updateButtons.forEach(button => {
