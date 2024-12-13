@@ -842,7 +842,7 @@ body {
 }
 
 .modal-body-detalle {
-    border-top: 0.2px solid var(--main-color) !important;
+    border-top: 2px solid var(--main-color) !important;
     border-bottom: 2px solid var(--main-color) !important;
     color: #ffffff !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
@@ -960,6 +960,11 @@ body {
     text-shadow: 2px 2px 4px var(--bg-color) !important;
     text-align: center !important;
     width: 100% !important;
+}
+
+.bg-success-compra {
+    color: var(--text-color) !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
 }
 
 @media (max-width: 768px) {

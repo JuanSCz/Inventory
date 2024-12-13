@@ -63,33 +63,33 @@
                                             th:text="${proveedor.nombre}"></option>
                                 </select>
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="producto" class="form-label">Producto</label>
-                                <select class="form-control form-control-detalle"
-                                        th:field="*{detallesCompra[0].productoId}" id="producto" required>
-                                    <option value="" selected>Seleccione un producto...</option>
-                                    <option th:each="producto : ${productos}" th:value="${producto.id}"
-                                            th:text="${producto.nombre}"></option>
-                                </select>
+                            <div id="detalleContainer">
+                                <div class="row detalle-row">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="producto" class="form-label">Producto</label>
+                                        <select class="form-control form-control-detalle" th:field="*{detallesCompra[0].productoId}" id="producto" required>
+                                            <option value="" selected>Seleccione un producto...</option>
+                                            <option th:each="producto : ${productos}" th:value="${producto.id}" th:text="${producto.nombre}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="cantidad" class="form-label">Cantidad</label>
+                                        <input type="number" class="form-control form-control-detalle" th:field="*{detallesCompra[0].cantidad}" id="cantidad" placeholder="Ingrese la cantidad..." required>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="precioUnitario" class="form-label">Precio Unitario</label>
+                                        <input type="number" class="form-control form-control-detalle" th:field="*{detallesCompra[0].precioUnitario}" id="precioUnitario" placeholder="Ingrese el precio unitario..." required>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="cantidad" class="form-label">Cantidad</label>
-                                <input type="number" class="form-control form-control-detalle"
-                                       th:field="*{detallesCompra[0].cantidad}" id="cantidad"
-                                       placeholder="Ingrese la cantidad..." required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="precioUnitario" class="form-label">Precio Unitario</label>
-                                <input type="number" class="form-control form-control-detalle"
-                                       th:field="*{detallesCompra[0].precioUnitario}" id="precioUnitario"
-                                       placeholder="Ingrese el precio unitario..." required>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <button type="submit" class="btn btn-success btn-success-detalle">Agregar Detalle</button>
+                                <button type="button" class="btn btn-primary btn-success-detalle" id="addDetalleButton">
+                                    Sumar Detalle
+                                </button>
                             </div>
                         </div>
                         <div class="modal-footer" id="modal-footer-detalle">
-                            <button type="submit" class="btn button-detalle">Registrar Compra</button>
+                            <button type="submit" class="btn button-detalle">Crear</button>
                             <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
                         </div>
                     </form>

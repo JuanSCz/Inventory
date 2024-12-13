@@ -26,4 +26,6 @@ public interface CompraService {
     Page<CompraDTO> getAllCompras(Pageable pageable);
 
     Page<CompraDTO> searchComprasByFecha(LocalDate fecha, Pageable pageable);
+
+    Page<CompraDTO> searchComprasByProveedorNombre(String nombreProveedor, Pageable pageable);
 }

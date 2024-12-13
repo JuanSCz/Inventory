@@ -80,7 +80,8 @@ public class CompraController {
             model.addAttribute("proveedores", proveedorService.getAllProveedores(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
             return "tableCompras";
         }
-        compraService.updateCompra(compraDTO);
+        CompraDTO updatedCompraDTO = compraService.updateCompra(compraDTO);
+        model.addAttribute("compraDTO", updatedCompraDTO);
         return "redirect:/tableCompras";
     }
 
@@ -113,19 +114,28 @@ public class CompraController {
         model.addAttribute("compraDTO", new CompraDTO());
         model.addAttribute("page", compras);
         model.addAttribute("proveedores", proveedorService.getAllProveedores(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
-        model.addAttribute("productos", productoService.obtenerTodosLosProductos()); // Añadir esta línea
+        model.addAttribute("productos", productoService.obtenerTodosLosProductos());
         return "tableCompras";
     }
 
     @GetMapping("/search")
-    public String searchComprasByFecha(@RequestParam String fecha, Model model, Pageable pageable) {
+    public String searchCompras(@RequestParam(required = false) String nombreProveedor,
+                                Model model, Pageable pageable) {
         int pageSize = 15;
         Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
-        logger.info("Solicitud recibida para buscar compras por fecha: {}", fecha);
-        Page<CompraDTO> compras = compraService.searchComprasByFecha(LocalDate.parse(fecha), newPageable);
+        Page<CompraDTO> compras;
+
+        if (nombreProveedor != null && !nombreProveedor.isEmpty()) {
+            logger.info("Solicitud recibida para buscar compras por nombre de proveedor: {}", nombreProveedor);
+            compras = compraService.searchComprasByProveedorNombre(nombreProveedor, newPageable);
+        } else {
+            compras = compraService.getAllCompras(newPageable);
+        }
+
         model.addAttribute("compras", compras.getContent());
         model.addAttribute("compraDTO", new CompraDTO());
         model.addAttribute("page", compras);
+        model.addAttribute("proveedores", proveedorService.getAllProveedores(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
         return "tableCompras";
     }
 }

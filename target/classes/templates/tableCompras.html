@@ -78,7 +78,7 @@
 
         <form th:action="@{/tableCompras/search}" method="get" class="search-form-container">
             <div class="input-group-buscar">
-                <input type="date" name="fecha" placeholder="Fecha" class="form-control search-input">
+                <input type="text" name="nombreProveedor" placeholder="Proveedor" class="form-control search-input">
                 <input type="hidden" name="page" value="0">
                 <input type="hidden" name="size" value="15">
             </div>
@@ -89,27 +89,27 @@
                 <thead class="table-light">
                 <tr>
                     <th scope="col">ID</th>
+                    <th scope="col">Proveedor</th>
                     <th scope="col">Fecha</th>
-                    <th scope="col">Total</th>
                     <th scope="col">Método de Pago</th>
                     <th scope="col">Estado</th>
                     <th scope="col">Impuestos</th>
-                    <th scope="col">Proveedor</th>
+                    <th scope="col">Total</th>
                     <th scope="col">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="compra : ${compras}">
                     <td th:data-label="ID" th:text="${compra.id}"></td>
+                    <td th:data-label="Proveedor" th:text="${compra.proveedorNombre}"></td>
                     <td th:data-label="Fecha" th:text="${compra.fecha}"></td>
-                    <td th:data-label="Total" th:text="${compra.total}"></td>
                     <td th:data-label="Metodo_de_Pago" th:text="${compra.metodoPago}"></td>
                     <td th:data-label="Estado" th:text="${compra.estado}"></td>
                     <td th:data-label="Impuestos" th:text="${compra.impuestos}"></td>
-                    <td th:data-label="Proveedor" th:text="${compra.proveedorNombre}"></td>
+                    <td th:data-label="Total" th:text="${compra.total}"></td>
                     <td th:data-label="Acciones">
                         <div class="btn-group">
-                            <button class="btn btn-info btn-sm navbar-menu me-2">
+                            <button class="btn bg-success bg-success-compra btn-sm navbar-menu me-2">
                                 Detalle
                             </button>
                             <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateCompra"
@@ -148,6 +148,7 @@
     </main>
 </div>
 
+<div th:replace="~{fragments/formUpdateCompras :: updateModalCompras}"></div>
 <div th:replace="~{fragments/formCreateCompras :: createModalCompras}"></div>
 <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

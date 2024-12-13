@@ -962,6 +962,11 @@ body {
     width: 100% !important;
 }
 
+.bg-success-compra {
+    color: var(--text-color) !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+}
+
 @media (max-width: 768px) {
     .contentPersist {
         width: 100%;

@@ -18,4 +18,7 @@ public interface CompraRepository extends JpaRepository<Compra, Long> {
 
     Page<Compra> findByFecha(LocalDate fecha, Pageable pageable);
 
+    @Query("SELECT c FROM Compra c WHERE c.proveedor.nombre LIKE %:nombreProveedor%")
+    Page<Compra> findByProveedorNombre(@Param("nombreProveedor") String nombreProveedor, Pageable pageable);
+
 }

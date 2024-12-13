@@ -4,6 +4,7 @@ import com.interonda.inventory.dto.CompraDTO;
 import com.interonda.inventory.dto.DetalleCompraDTO;
 import com.interonda.inventory.entity.Compra;
 import com.interonda.inventory.entity.DetalleCompra;
+import com.interonda.inventory.entity.Producto;
 import com.interonda.inventory.entity.Proveedor;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
@@ -107,13 +108,35 @@ public class CompraServiceImpl implements CompraService {
             Proveedor proveedor = proveedorRepository.findById(compraDTO.getProveedorId()).orElseThrow(() -> new ResourceNotFoundException("Proveedor no encontrado con el id: " + compraDTO.getProveedorId()));
             compra.setProveedor(proveedor);
 
-            // Asignar los detalles de compra
-            compra.setDetallesCompra(compraDTO.getDetallesCompra().stream().map(detalleDTO -> {
-                DetalleCompra detalle = compraMapper.toDetalleEntity(detalleDTO);
+            // Actualizar los detalles de compra
+            List<DetalleCompra> detallesExistentes = compra.getDetallesCompra();
+            List<DetalleCompraDTO> nuevosDetallesDTO = compraDTO.getDetallesCompra();
+
+            // Eliminar detalles que ya no están presentes
+            detallesExistentes.removeIf(detalle ->
+                    nuevosDetallesDTO.stream().noneMatch(nuevoDetalle ->
+                            nuevoDetalle.getId() != null && nuevoDetalle.getId().equals(detalle.getId())
+                    )
+            );
+
+            // Actualizar o añadir nuevos detalles
+            for (DetalleCompraDTO nuevoDetalleDTO : nuevosDetallesDTO) {
+                DetalleCompra detalle = detallesExistentes.stream()
+                        .filter(d -> nuevoDetalleDTO.getId() != null && d.getId().equals(nuevoDetalleDTO.getId()))
+                        .findFirst()
+                        .orElse(new DetalleCompra());
+
+                detalle.setCantidad(nuevoDetalleDTO.getCantidad());
+                detalle.setPrecioUnitario(nuevoDetalleDTO.getPrecioUnitario());
+                detalle.setProducto(productoRepository.findById(nuevoDetalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + nuevoDetalleDTO.getProductoId())));
                 detalle.setCompra(compra);
-                detalle.setProducto(productoRepository.findById(detalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId())));
-                return detalle;
-            }).collect(Collectors.toList()));
+
+                if (detalle.getId() == null) {
+                    detallesExistentes.add(detalle);
+                }
+            }
+
+            compra.setDetallesCompra(detallesExistentes);
 
             Compra updatedCompra = compraRepository.save(compra);
             logger.info("Compra actualizada exitosamente con id: {}", updatedCompra.getId());
@@ -152,7 +175,16 @@ public class CompraServiceImpl implements CompraService {
         try {
             logger.info("Obteniendo Compra con id: {}", id);
             Compra compra = compraRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Compra no encontrada con el id: " + id));
-            return compraMapper.toDto(compra);
+            CompraDTO compraDTO = compraMapper.toDto(compra);
+            compraDTO.setProveedorId(compra.getProveedor().getId()); // Asegúrate de establecer el proveedorId
+            compraDTO.setProveedorNombre(compra.getProveedor().getNombre());
+            compraDTO.setDetallesCompra(compra.getDetallesCompra().stream().map(detalle -> {
+                DetalleCompraDTO detalleDTO = compraMapper.toDetalleDto(detalle);
+                detalleDTO.setProductoId(detalle.getProducto().getId());
+                detalleDTO.setProductoNombre(detalle.getProducto().getNombre());
+                return detalleDTO;
+            }).collect(Collectors.toList()));
+            return compraDTO;
         } catch (ResourceNotFoundException e) {
             logger.warn("Compra no encontrada: {}", e.getMessage());
             throw e;
@@ -189,6 +221,23 @@ public class CompraServiceImpl implements CompraService {
         } catch (Exception e) {
             logger.error("Error buscando Compras por fecha", e);
             throw new DataAccessException("Error buscando Compras por fecha", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<CompraDTO> searchComprasByProveedorNombre(String nombreProveedor, Pageable pageable) {
+        try {
+            logger.info("Buscando Compras por nombre de proveedor: {}", nombreProveedor);
+            Page<Compra> compras = compraRepository.findByProveedorNombre(nombreProveedor, pageable);
+            return compras.map(compra -> {
+                CompraDTO dto = compraMapper.toDto(compra);
+                dto.setProveedorNombre(compra.getProveedor().getNombre()); // Asegúrate de establecer el proveedorNombre
+                return dto;
+            });
+        } catch (Exception e) {
+            logger.error("Error buscando Compras por nombre de proveedor", e);
+            throw new DataAccessException("Error buscando Compras por nombre de proveedor", e);
         }
     }
 }

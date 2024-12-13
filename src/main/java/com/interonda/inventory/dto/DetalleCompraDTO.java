@@ -26,7 +26,27 @@ public class DetalleCompraDTO {
     @NotNull(message = "{detalleCompraDTO.producto.notNull}")
     private Long productoId;
 
+    private String productoNombre;
+
+    private String proveedorNombre;
+
+    public String getProveedorNombre() {
+        return proveedorNombre;
+    }
+
+    public void setProveedorNombre(String proveedorNombre) {
+        this.proveedorNombre = proveedorNombre;
+    }
+
     public DetalleCompraDTO() {
+    }
+
+    public String getProductoNombre() {
+        return productoNombre;
+    }
+
+    public void setProductoNombre(String productoNombre) {
+        this.productoNombre = productoNombre;
     }
 
     // Getters y Setters
