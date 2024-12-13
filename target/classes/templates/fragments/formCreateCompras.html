@@ -12,7 +12,7 @@
         <div class="modal-dialog modal-lg modal-dialog-detalle">
             <div class="modal-content modal-content-detalle">
                 <div class="modal-header modal-header-detalle">
-                    <h5 class="modal-title" id="compraModalLabel">Crear Compra</h5>
+                    <h5 class="modal-title modal-title-detalle" id="compraModalLabel">Crear Compra</h5>
                     <button type="button" class="btn-close btn-close-detalle" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
@@ -84,10 +84,13 @@
                                        th:field="*{detallesCompra[0].precioUnitario}" id="precioUnitario"
                                        placeholder="Ingrese el precio unitario..." required>
                             </div>
+                            <div class="col-md-4 mb-3">
+                                <button type="submit" class="btn btn-success btn-success-detalle">Agregar Detalle</button>
+                            </div>
                         </div>
-                        <div class="modal-footer modal-footer-detalle">
-                            <button type="submit" class="btn btn-primary">Registrar Compra</button>
-                            <button type="button" class="btn btn-guardar" data-bs-dismiss="modal">Salir</button>
+                        <div class="modal-footer" id="modal-footer-detalle">
+                            <button type="submit" class="btn button-detalle">Registrar Compra</button>
+                            <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
                         </div>
                     </form>
                 </div>

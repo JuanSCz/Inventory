@@ -821,24 +821,6 @@ body {
     background-color: var(--hover-color) !important;
 }
 
-#detalleVentaForm .form-control {
-    background-color: var(--second-bg-color);
-    color: var(--text-color) !important;
-    border: 1px solid var(--bg-color);
-}
-
-#detalleVentaForm .form-control:focus {
-    background-color: var(--second-bg-color);
-    color: var(--text-color) !important;
-    border-color: var(--main-color);
-    box-shadow: 0 0 0 0.2rem rgba(0, 150, 255, 0.25);
-}
-
-.totalVenta {
-    font-weight: bold;
-    color: var(--second-color);
-}
-
 .modal-content-detalle {
     background: var(--gradient-bg) !important;
     color: var(--highlight-color) !important;
@@ -846,13 +828,13 @@ body {
     border-radius: 15px !important;
     padding: 1rem !important;
     box-shadow: 0 4px 8px var(--shadow-color) !important;
-    max-width: 100%;
+    max-width: 100% !important;
     width: auto !important;
-    padding: 1rem;
+    padding: 1rem !important;
 }
 
 .modal-header-detalle {
-    display: flex;
+    display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
     border-bottom: 2px solid var(--main-color) !important;
@@ -866,8 +848,8 @@ body {
     text-shadow: 1px 1px 2px var(--bg-color) !important;
 }
 
-.modal-footer-detalle {
-    display: flex;
+#modal-footer-detalle {
+    display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     border-top: 2px solid var(--main-color) !important;
@@ -888,49 +870,9 @@ body {
     text-shadow: 1px 1px 2px var(--bg-color) !important;
 }
 
-.modal-dialog.modal-lg {
-    max-width: 90%;
-    margin: auto;
-}
-
-.btn-close-detalle {
-    transform: translateY(-50%) !important;
-    background-color: var(--main-color) !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-}
-
-.btn-close-detalle:hover {
-    background-color: var(--hover-color) !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-}
-
-.table-detalle {
-    border-collapse: separate !important;
-    border-spacing: 0 !important;
-    width: 100% !important;
-    margin-bottom: 1rem !important;
-    color: var(--text-color) !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-}
-
-.table-detalle thead th {
-    color: #ffcc00 !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-}
-
-.total {
-    color: #ffcc00 !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    font-size: 1.45rem !important; /* Tamaño de fuente recomendado */
-}
-
-.table-detalle th,
-.table-detalle td,
-.table-detalle thead th {
-    border-color: var(--bg-color);
-    background-color: #1a1a1a;
-    color: var(--second-color);
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
+.modal-dialog.modal-lg.modal-dialog-detalle {
+    max-width: 90% !important;
+    margin: auto !important;
 }
 
 .form-control-detalle::placeholder {
@@ -953,32 +895,19 @@ body {
     color: #ffffff !important;
 }
 
-.btn-guardar, .btn-cerrar, .btn-success {
+.button-detalle {
+    font-weight: 500 !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
     background-color: var(--main-color) !important;
     color: var(--text-color) !important;
     border: none !important;
     border-radius: 5px !important;
-    height: auto !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
 }
 
-.btn-guardar:hover, .btn-success:hover {
+.button-detalle:hover {
     background: linear-gradient(45deg, var(--main-color), var(--hover-color));
     text-shadow: 1px 1px 2px var(--bg-color) !important;
     color: var(--text-color);
-}
-
-.btn-cerrar:hover {
-    background: linear-gradient(45deg, #666666, #4d4d4d);
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    color: var(--text-color);
-}
-
-.btn-cerrar {
-    background-color: #666666 !important;
 }
 
 .btn-close-detalle {
@@ -992,81 +921,45 @@ body {
     text-shadow: 1px 1px 2px var(--bg-color) !important;
 }
 
-.table-detalle {
-    border-collapse: separate !important;
-    border-spacing: 0 !important;
-    width: 100% !important;
-    margin-bottom: 1rem !important;
+.btn-salir {
+    background-color: #666666 !important;
     color: var(--text-color) !important;
+    font-weight: 500 !important;
+    border: none !important;
+    border-radius: 5px !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
 }
 
-.table-detalle thead th {
-    color: #ffcc00 !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-}
-
-.total {
-    color: #ffcc00 !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    font-size: 1.45rem !important; /* Tamaño de fuente recomendado */
-}
-
-.table-detalle th,
-.table-detalle td,
-.table-detalle thead th {
-    border-color: var(--bg-color);
-    background-color: #1a1a1a;
-    color: var(--second-color);
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-}
-
-.form-control-detalle::placeholder {
+.btn-salir:hover {
+    background-color: #4d4d4d !important; /* Un tono más oscuro de gris para el hover */
     color: var(--text-color) !important;
-    opacity: 1 !important;
+}
+
+.btn-success-detalle{
+    background-color: #28a745!important;
+    font-weight: 500 !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
-}
-
-.form-control-detalle:focus::placeholder {
-    opacity: 0 !important;
-}
-
-.form-control-detalle {
-    background-color: var(--second-bg-color) !important;
-}
-
-.form-control-detalle,
-.form-control-detalle option {
-    font-size: 0.875rem !important;
-    color: #ffffff !important;
-}
-
-.btn-guardar, .btn-cerrar, .btn-success {
-    background-color: var(--main-color) !important;
     color: var(--text-color) !important;
     border: none !important;
     border-radius: 5px !important;
-    height: auto !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
 }
 
-.btn-guardar:hover, .btn-success:hover {
-    background: linear-gradient(45deg, var(--main-color), var(--hover-color));
+.btn-success-detalle:hover {
+    background-color: #1e7e34 !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
-    color: var(--text-color);
+    color: var(--text-color) !important;
 }
 
-.btn-cerrar:hover {
-    background: linear-gradient(45deg, #666666, #4d4d4d);
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    color: var(--text-color);
-}
-
-.btn-cerrar {
-    background-color: #666666 !important;
+.modal-title-detalle {
+    font-size: var(--h3-font) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    transition: color 0.3s ease !important;
+    margin: 0 !important;
+    text-shadow: 2px 2px 4px var(--bg-color) !important;
+    text-align: center !important;
+    width: 100% !important;
 }
 
 @media (max-width: 768px) {
@@ -1153,48 +1046,34 @@ body {
         order: 2;
     }
 
-    .modal-dialog.modal-lg {
+    .modal-dialog.modal-lg.modal-dialog-detalle {
             max-width: 100%;
             margin: 0.5rem;
-        }
+    }
 
-        .modal-content-detalle {
-            padding: 0.5rem !important;
-        }
+    .modal-content-detalle {
+            padding: 0.5rem;
+    }
 
-        .form-control-detalle,
-        .btn-guardar, .btn-cerrar, .btn-success {
-            font-size: 0.875rem !important;
+    .form-control-detalle,
+        .button-detalle, .btn-salir, .btn-success-detalle {
+            font-size: 0.875rem;
         }
 
         .modal-header-detalle h5 {
-            font-size: 1.25rem !important;
+            font-size: 1.25rem;
         }
 
         .modal-footer-detalle {
-            flex-direction: column !important;
+            flex-direction: column;
         }
 
-        .modal-footer-detalle .btn {
-            width: 100% !important;
-            margin-bottom: 0.5rem !important;
+        #modal-footer-detalle .btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
         }
-
-        .modal-dialog-detalle.modal-lg {
-                max-width: 100%;
-                margin: 0.5rem;
-            }
-
-            .modal-content-detalle {
-                padding: 0.5rem !important;
-            }
-
-            .form-control-detalle,
-            .btn-guardar, .btn-cerrar, .btn-success {
-                font-size: 0.875rem !important;
-            }
-
 }
+
 
 @media (max-width: 576px) {
     .titlePersist {
@@ -1312,20 +1191,20 @@ body {
     }
 
     .modal-content-detalle {
-            padding: 0.25rem !important;
+            padding: 0.25rem;
         }
 
         .form-control-detalle,
-        .btn-guardar, .btn-cerrar, .btn-success {
-            font-size: 0.75rem !important;
+        .button-detalle, .btn-salir, .btn-success-detalle {
+            font-size: 0.75rem;
         }
 
         .modal-header-detalle h5 {
-            font-size: 1rem !important;
+            font-size: 1rem;
         }
 
-        .modal-footer-detalle .btn {
-            font-size: 0.75rem !important;
+        #modal-footer-detalle .btn {
+            font-size: 0.75rem;
         }
 }
 
@@ -1479,7 +1358,7 @@ body {
 }
 
 @media (max-width: 992px) {
-    .modal-dialog.modal-lg {
+    .modal-dialog.modal-lg.modal-dialog-detalle {
         max-width: 95%;
     }
 }
