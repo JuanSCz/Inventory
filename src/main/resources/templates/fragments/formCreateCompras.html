@@ -67,18 +67,24 @@
                                 <div class="row detalle-row">
                                     <div class="col-md-4 mb-3">
                                         <label for="producto" class="form-label">Producto</label>
-                                        <select class="form-control form-control-detalle" th:field="*{detallesCompra[0].productoId}" id="producto" required>
+                                        <select class="form-control form-control-detalle"
+                                                th:field="*{detallesCompra[0].productoId}" id="producto" required>
                                             <option value="" selected>Seleccione un producto...</option>
-                                            <option th:each="producto : ${productos}" th:value="${producto.id}" th:text="${producto.nombre}"></option>
+                                            <option th:each="producto : ${productos}" th:value="${producto.id}"
+                                                    th:text="${producto.nombre}"></option>
                                         </select>
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="cantidad" class="form-label">Cantidad</label>
-                                        <input type="number" class="form-control form-control-detalle" th:field="*{detallesCompra[0].cantidad}" id="cantidad" placeholder="Ingrese la cantidad..." required>
+                                        <input type="number" class="form-control form-control-detalle"
+                                               th:field="*{detallesCompra[0].cantidad}" id="cantidad"
+                                               placeholder="Ingrese la cantidad..." required>
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="precioUnitario" class="form-label">Precio Unitario</label>
-                                        <input type="number" class="form-control form-control-detalle" th:field="*{detallesCompra[0].precioUnitario}" id="precioUnitario" placeholder="Ingrese el precio unitario..." required>
+                                        <input type="number" class="form-control form-control-detalle"
+                                               th:field="*{detallesCompra[0].precioUnitario}" id="precioUnitario"
+                                               placeholder="Ingrese el precio unitario..." required>
                                     </div>
                                 </div>
                             </div>

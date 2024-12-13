@@ -32,12 +32,14 @@ function agregarFilaDetalle() {
     newRow.classList.add("row", "detalle-row");
     const currentIndex = detalleContainer.querySelectorAll('.detalle-row').length;
 
+    // Obtener el HTML del select de productos del primer detalle
+    const productoSelectHTML = document.querySelector('select[name="detallesCompra[0].productoId"]').innerHTML;
+
     newRow.innerHTML = `
         <div class="col-md-4 mb-3">
             <label for="producto${currentIndex}" class="form-label">Producto</label>
             <select class="form-control form-control-detalle" name="detallesCompra[${currentIndex}].productoId" id="producto${currentIndex}" required>
-                <option value="" selected>Seleccione un producto...</option>
-                <option th:each="producto : \${productos}" th:value="\${producto.id}" th:text="\${producto.nombre}"></option>
+                ${productoSelectHTML}
             </select>
         </div>
         <div class="col-md-4 mb-3">
