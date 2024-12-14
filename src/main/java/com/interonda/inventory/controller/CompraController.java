@@ -1,8 +1,6 @@
 package com.interonda.inventory.controller;
 
 import com.interonda.inventory.dto.CompraDTO;
-import com.interonda.inventory.entity.Compra;
-import com.interonda.inventory.entity.Producto;
 import com.interonda.inventory.service.CompraService;
 import com.interonda.inventory.service.ProductoService;
 import com.interonda.inventory.service.ProveedorService;
@@ -23,8 +21,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -33,15 +29,11 @@ public class CompraController {
 
     private static final Logger logger = LoggerFactory.getLogger(CompraController.class);
 
-
     private final ProductoService productoService;
-
 
     private final CompraService compraService;
 
-
     private final ProveedorService proveedorService;
-
 
     private final MessageSource messageSource;
 

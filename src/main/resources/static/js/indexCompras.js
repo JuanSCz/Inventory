@@ -141,30 +141,43 @@ function populateUpdateModal(id) {
             const updateModalElement = document.getElementById('updateCompraModal');
             updateModalElement.querySelector('#id').value = data.id;
             updateModalElement.querySelector('#fecha').value = data.fecha;
-            updateModalElement.querySelector('#total').value = data.total;
+            updateModalElement.querySelector('#total').value = data.total.toFixed(2);
             updateModalElement.querySelector('#metodoPago').value = data.metodoPago;
             updateModalElement.querySelector('#estado').value = data.estado;
-            updateModalElement.querySelector('#impuestos').value = data.impuestos;
+            updateModalElement.querySelector('#impuestos').value = data.impuestos.toFixed(2);
             updateModalElement.querySelector('#proveedor').value = data.proveedorId;
-        })
-        .catch(error => console.error('Error al cargar los datos de la compra:', error));
-}
 
-function populateUpdateModal(id) {
-    fetch(`/tableCompras/${id}`)
-        .then(response => response.json())
-        .then(data => {
-            const updateModalElement = document.getElementById('updateCompraModal');
-            updateModalElement.querySelector('#id').value = data.id;
-            updateModalElement.querySelector('#fecha').value = data.fecha;
-            updateModalElement.querySelector('#total').value = data.total;
-            updateModalElement.querySelector('#metodoPago').value = data.metodoPago;
-            updateModalElement.querySelector('#estado').value = data.estado;
-            updateModalElement.querySelector('#impuestos').value = data.impuestos;
-            updateModalElement.querySelector('#proveedor').value = data.proveedorId;
-            updateModalElement.querySelector('#producto').value = data.detallesCompra[0].productoId;
-            updateModalElement.querySelector('#cantidad').value = data.detallesCompra[0].cantidad;
-            updateModalElement.querySelector('#precioUnitario').value = data.detallesCompra[0].precioUnitario;
+            const detalleContainer = document.getElementById('detalleContainerUpdate');
+            detalleContainer.innerHTML = ''; // Limpiar detalles existentes
+
+            data.detallesCompra.forEach((detalle, index) => {
+                const newRow = document.createElement('div');
+                newRow.classList.add('row', 'detalle-row');
+
+                newRow.innerHTML = `
+                    <div class="col-md-4 mb-3">
+                        <label for="producto${index}" class="form-label">Producto</label>
+                        <select class="form-control form-control-detalle" name="detallesCompra[${index}].productoId" id="producto${index}" required>
+                            ${document.querySelector('select[name="detallesCompra[0].productoId"]').innerHTML}
+                        </select>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="cantidad${index}" class="form-label">Cantidad</label>
+                        <input type="number" class="form-control form-control-detalle" name="detallesCompra[${index}].cantidad" id="cantidad${index}" placeholder="Ingrese la cantidad..." required>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="precioUnitario${index}" class="form-label">Precio Unitario</label>
+                        <input type="number" step="0.01" class="form-control form-control-detalle" name="detallesCompra[${index}].precioUnitario" id="precioUnitario${index}" placeholder="Ingrese el precio unitario..." required>
+                    </div>
+                `;
+
+                detalleContainer.appendChild(newRow);
+
+                // Set values
+                newRow.querySelector(`#producto${index}`).value = detalle.productoId;
+                newRow.querySelector(`#cantidad${index}`).value = detalle.cantidad.toFixed(2);
+                newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitario.toFixed(2);
+            });
         })
         .catch(error => console.error('Error al cargar los datos de la compra:', error));
 }
