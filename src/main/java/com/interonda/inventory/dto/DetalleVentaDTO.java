@@ -26,6 +26,26 @@ public class DetalleVentaDTO {
     @NotNull(message = "{detalleVentaDTO.producto.notNull}")
     private Long productoId;
 
+    private String productoNombre;
+
+    private String proveedorNombre;
+
+    public String getProductoNombre() {
+        return productoNombre;
+    }
+
+    public void setProductoNombre(String productoNombre) {
+        this.productoNombre = productoNombre;
+    }
+
+    public String getProveedorNombre() {
+        return proveedorNombre;
+    }
+
+    public void setProveedorNombre(String proveedorNombre) {
+        this.proveedorNombre = proveedorNombre;
+    }
+
     public DetalleVentaDTO() {
     }
 

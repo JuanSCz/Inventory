@@ -67,18 +67,18 @@
         </ul>
     </aside>
     <main class="contentPersist p-3 text-center">
-        <h2 class="mb-4 titlePersist">Compras</h2>
+        <h2 class="mb-4 titlePersist">Ventas</h2>
 
         <div>
-            <button class="btn buttonPersist navbar-menu buttonPersistCompra" data-bs-toggle="modal"
-                    data-bs-target="#createCompraModal">
-                Crear Compra
+            <button class="btn buttonPersist navbar-menu buttonPersistVenta" data-bs-toggle="modal"
+                    data-bs-target="#createVentaModal">
+                Crear Venta
             </button>
         </div>
 
-        <form th:action="@{/tableCompras/search}" method="get" class="search-form-container">
+        <form th:action="@{/tableVentas/search}" method="get" class="search-form-container">
             <div class="input-group-buscar">
-                <input type="text" name="nombreProveedor" placeholder="Proveedor" class="form-control search-input">
+                <input type="text" name="nombreCliente" placeholder="Cliente" class="form-control search-input">
                 <input type="hidden" name="page" value="0">
                 <input type="hidden" name="size" value="15">
             </div>
@@ -89,7 +89,7 @@
                 <thead class="table-light">
                 <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">Proveedor</th>
+                    <th scope="col">Cliente</th>
                     <th scope="col">Fecha</th>
                     <th scope="col">Estado</th>
                     <th scope="col">Método de Pago</th>
@@ -99,26 +99,26 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="compra : ${compras}">
-                    <td th:data-label="ID" th:text="${compra.id}"></td>
-                    <td th:data-label="Proveedor" th:text="${compra.proveedorNombre}"></td>
-                    <td th:data-label="Fecha" th:text="${compra.fecha}"></td>
-                    <td th:data-label="Metodo_de_Pago" th:text="${compra.metodoPago}"></td>
-                    <td th:data-label="Estado" th:text="${compra.estado}"></td>
-                    <td th:data-label="Impuestos" th:text="${compra.impuestos}"></td>
-                    <td th:data-label="Total" th:text="${compra.total}"></td>
+                <tr th:each="venta : ${ventas}">
+                    <td th:data-label="ID" th:text="${venta.id}"></td>
+                    <td th:data-label="Cliente" th:text="${venta.clienteNombre}"></td>
+                    <td th:data-label="Fecha" th:text="${venta.fecha}"></td>
+                    <td th:data-label="Metodo_de_Pago" th:text="${venta.metodoPago}"></td>
+                    <td th:data-label="Estado" th:text="${venta.estado}"></td>
+                    <td th:data-label="Impuestos" th:text="${venta.impuestos}"></td>
+                    <td th:data-label="Total" th:text="${venta.total}"></td>
                     <td th:data-label="Acciones">
                         <div class="btn-group">
-                            <button class="btn bg-success bg-success-compra btn-sm navbar-menu me-2">
+                            <button class="btn bg-success bg-success-venta btn-sm navbar-menu me-2">
                                 Detalle
                             </button>
-                            <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateCompra"
+                            <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateVenta"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#updateCompraModal" th:data-id="${compra.id}">
+                                    data-bs-target="#updateVentaModal" th:data-id="${venta.id}">
                                 Editar
                             </button>
-                            <form th:action="@{/tableCompras/{id}(id=${compra.id})}" method="post"
-                                  onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta compra?');">
+                            <form th:action="@{/tableVentas/{id}(id=${venta.id})}" method="post"
+                                  onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta venta?');">
                                 <input type="hidden" name="_method" value="delete"/>
                                 <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
                             </form>
@@ -132,27 +132,26 @@
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
                     <a class="page-link"
-                       th:href="@{/tableCompras(page=${page.number - 1}, size=${page.size}, fecha=${param.fecha})}">Anterior</a>
+                       th:href="@{/tableVentas(page=${page.number - 1}, size=${page.size}, fecha=${param.fecha})}">Anterior</a>
                 </li>
                 <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
                     th:classappend="${page.number == i} ? 'active'">
-                    <a class="page-link" th:href="@{/tableCompras(page=${i}, size=${page.size}, fecha=${param.fecha})}"
+                    <a class="page-link" th:href="@{/tableVentas(page=${i}, size=${page.size}, fecha=${param.fecha})}"
                        th:text="${i + 1}">1</a>
                 </li>
                 <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
                     <a class="page-link"
-                       th:href="@{/tableCompras(page=${page.number + 1}, size=${page.size}, fecha=${param.fecha})}">Siguiente</a>
+                       th:href="@{/tableVentas(page=${page.number + 1}, size=${page.size}, fecha=${param.fecha})}">Siguiente</a>
                 </li>
             </ul>
         </nav>
     </main>
 </div>
 
-<div th:replace="~{fragments/formUpdateCompras :: updateModalCompras}"></div>
-<div th:replace="~{fragments/formCreateCompras :: createModalCompras}"></div>
+<div th:replace="~{fragments/formCreateVentas :: createModalVentas}"></div>
 <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/indexCompras.js"></script>
+<script src="js/indexVentas.js"></script>
 </body>
 
 </html>

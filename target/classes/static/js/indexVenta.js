@@ -33,22 +33,22 @@ function agregarFilaDetalle() {
     const currentIndex = detalleContainer.querySelectorAll('.detalle-row').length;
 
     // Obtener el HTML del select de productos del primer detalle
-    const productoSelectHTML = document.querySelector('select[name="detallesCompra[0].productoId"]').innerHTML;
+    const productoSelectHTML = document.querySelector('select[name="detallesVenta[0].productoId"]').innerHTML;
 
     newRow.innerHTML = `
         <div class="col-md-4 mb-3">
             <label for="producto${currentIndex}" class="form-label">Producto</label>
-            <select class="form-control form-control-detalle" name="detallesCompra[${currentIndex}].productoId" id="producto${currentIndex}" required>
+            <select class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].productoId" id="producto${currentIndex}" required>
                 ${productoSelectHTML}
             </select>
         </div>
         <div class="col-md-4 mb-3">
             <label for="cantidad${currentIndex}" class="form-label">Cantidad</label>
-            <input type="number" class="form-control form-control-detalle" name="detallesCompra[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad..." required>
+            <input type="number" class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad..." required>
         </div>
         <div class="col-md-4 mb-3">
             <label for="precioUnitario${currentIndex}" class="form-label">Precio Unitario</label>
-            <input type="number" class="form-control form-control-detalle" name="detallesCompra[${currentIndex}].precioUnitario" id="precioUnitario${currentIndex}" placeholder="Ingrese el precio unitario..." required>
+            <input type="number" class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].precioUnitario" id="precioUnitario${currentIndex}" placeholder="Ingrese el precio unitario..." required>
         </div>
     `;
 
@@ -70,10 +70,10 @@ function filterTable() {
 
     tableBody.innerHTML = '<tr><td colspan="8" class="text-center">Cargando...</td></tr>';
 
-    fetch(`/tableCompras/search?nombreProveedor=${filter}&page=0&size=15`)
+    fetch(`/tableVentas/search?nombreCliente=${filter}&page=0&size=15`)
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al buscar compras');
+                throw new Error('Error al buscar ventas');
             }
             return response.text();
         })
@@ -92,24 +92,24 @@ function filterTable() {
         });
 }
 
-// Manejo del modal "Crear Compra"
+// Manejo del modal "Crear Venta"
 function initializeCreateModal() {
-    const createCompraModal = new bootstrap.Modal(document.getElementById('createCompraModal'), {
+    const createVentaModal = new bootstrap.Modal(document.getElementById('createVentaModal'), {
         keyboard: false
     });
 
-    const createButton = document.querySelector('.buttonPersistCompra');
+    const createButton = document.querySelector('.buttonPersistVenta');
     if (createButton) {
         createButton.addEventListener('click', function () {
-            createCompraModal.show();
+            createVentaModal.show();
         });
     }
 }
 
-// Inicializar modal de actualización para compras
+// Inicializar modal de actualización para ventas
 function initializeUpdateModal() {
-    const updateModal = new bootstrap.Modal(document.getElementById('updateCompraModal'));
-    const updateButtons = document.querySelectorAll('.buttonUpdateCompra[data-id]');
+    const updateModal = new bootstrap.Modal(document.getElementById('updateVentaModal'));
+    const updateButtons = document.querySelectorAll('.buttonUpdateVenta[data-id]');
 
     updateButtons.forEach(button => {
         button.addEventListener('click', function () {
@@ -119,7 +119,7 @@ function initializeUpdateModal() {
         });
     });
 
-    const updateModalElement = document.getElementById('updateCompraModal');
+    const updateModalElement = document.getElementById('updateVentaModal');
     updateModalElement.addEventListener('hidden.bs.modal', function () {
         document.getElementById('id').value = '';
         document.getElementById('fecha').value = '';
@@ -127,46 +127,46 @@ function initializeUpdateModal() {
         document.getElementById('metodoPago').value = '';
         document.getElementById('estado').value = '';
         document.getElementById('impuestos').value = '';
-        document.getElementById('proveedor').value = '';
+        document.getElementById('cliente').value = '';
         const form = updateModalElement.querySelector('form');
         if (form) form.reset();
     });
 }
 
 function populateUpdateModal(id) {
-    fetch(`/tableCompras/${id}`)
+    fetch(`/tableVentas/${id}`)
         .then(response => response.json())
         .then(data => {
-            const updateModalElement = document.getElementById('updateCompraModal');
+            const updateModalElement = document.getElementById('updateVentaModal');
             updateModalElement.querySelector('#id').value = data.id;
             updateModalElement.querySelector('#fecha').value = data.fecha;
             updateModalElement.querySelector('#total').value = data.total.toFixed(2);
             updateModalElement.querySelector('#metodoPago').value = data.metodoPago;
             updateModalElement.querySelector('#estado').value = data.estado;
             updateModalElement.querySelector('#impuestos').value = data.impuestos.toFixed(2);
-            updateModalElement.querySelector('#proveedor').value = data.proveedorId;
+            updateModalElement.querySelector('#cliente').value = data.clienteId;
 
             const detalleContainer = document.getElementById('detalleContainerUpdate');
             detalleContainer.innerHTML = ''; // Limpiar detalles existentes
 
-            data.detallesCompra.forEach((detalle, index) => {
+            data.detallesVenta.forEach((detalle, index) => {
                 const newRow = document.createElement('div');
                 newRow.classList.add('row', 'detalle-row');
 
                 newRow.innerHTML = `
                     <div class="col-md-4 mb-3">
                         <label for="producto${index}" class="form-label">Producto</label>
-                        <select class="form-control form-control-detalle" name="detallesCompra[${index}].productoId" id="producto${index}" required>
-                            ${document.querySelector('select[name="detallesCompra[0].productoId"]').innerHTML}
+                        <select class="form-control form-control-detalle" name="detallesVenta[${index}].productoId" id="producto${index}" required>
+                            ${document.querySelector('select[name="detallesVenta[0].productoId"]').innerHTML}
                         </select>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="cantidad${index}" class="form-label">Cantidad</label>
-                        <input type="number" class="form-control form-control-detalle" name="detallesCompra[${index}].cantidad" id="cantidad${index}" placeholder="Ingrese la cantidad..." required>
+                        <input type="number" class="form-control form-control-detalle" name="detallesVenta[${index}].cantidad" id="cantidad${index}" placeholder="Ingrese la cantidad..." required>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="precioUnitario${index}" class="form-label">Precio Unitario</label>
-                        <input type="number" step="0.01" class="form-control form-control-detalle" name="detallesCompra[${index}].precioUnitario" id="precioUnitario${index}" placeholder="Ingrese el precio unitario..." required>
+                        <input type="number" step="0.01" class="form-control form-control-detalle" name="detallesVenta[${index}].precioUnitario" id="precioUnitario${index}" placeholder="Ingrese el precio unitario..." required>
                     </div>
                 `;
 
@@ -178,7 +178,7 @@ function populateUpdateModal(id) {
                 newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitario.toFixed(2);
             });
         })
-        .catch(error => console.error('Error al cargar los datos de la compra:', error));
+        .catch(error => console.error('Error al cargar los datos de la venta:', error));
 }
 
 // Utilidad: Función de debounce para limitar solicitudes frecuentes

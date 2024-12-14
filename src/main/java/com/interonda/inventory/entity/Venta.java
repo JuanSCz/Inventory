@@ -107,5 +107,6 @@ public class Venta {
     public void setDetallesVenta(List<DetalleVenta> detallesVenta) {
         this.detallesVenta = detallesVenta;
     }
+
 }
 

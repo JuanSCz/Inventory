@@ -55,7 +55,6 @@ function agregarFilaDetalle() {
     detalleContainer.appendChild(newRow);
 }
 
-
 // Manejo de la búsqueda en tiempo real
 function initializeSearch() {
     const searchInput = document.querySelector('.search-input');

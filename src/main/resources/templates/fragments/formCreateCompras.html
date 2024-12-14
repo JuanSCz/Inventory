@@ -26,9 +26,13 @@
                                        id="fecha" required>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="total" class="form-label">Total</label>
-                                <input type="number" step="0.01" class="form-control form-control-detalle"
-                                       th:field="*{total}" id="total" placeholder="Ingrese el total..." required>
+                                <label for="proveedor" class="form-label">Proveedor</label>
+                                <select class="form-control form-control-detalle" th:field="*{proveedorId}"
+                                        id="proveedor" required>
+                                    <option value="" selected>Seleccione un proveedor...</option>
+                                    <option th:each="proveedor : ${proveedores}" th:value="${proveedor.id}"
+                                            th:text="${proveedor.nombre}"></option>
+                                </select>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="metodoPago" class="form-label">Método de Pago</label>
@@ -55,13 +59,9 @@
                                        required>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="proveedor" class="form-label">Proveedor</label>
-                                <select class="form-control form-control-detalle" th:field="*{proveedorId}"
-                                        id="proveedor" required>
-                                    <option value="" selected>Seleccione un proveedor...</option>
-                                    <option th:each="proveedor : ${proveedores}" th:value="${proveedor.id}"
-                                            th:text="${proveedor.nombre}"></option>
-                                </select>
+                                <label for="total" class="form-label">Total</label>
+                                <input type="number" step="0.01" class="form-control form-control-detalle"
+                                       th:field="*{total}" id="total" placeholder="Ingrese el total..." required>
                             </div>
                             <div id="detalleContainer">
                                 <div class="row detalle-row">

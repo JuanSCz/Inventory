@@ -1,37 +1,29 @@
 package com.interonda.inventory.dto;
 
-import jakarta.validation.constraints.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VentaDTO {
 
     private Long id;
 
-    @NotNull(message = "{ventaDTO.fecha.notNull}")
-    @FutureOrPresent(message = "{venta.fecha.futureOrPresent}")
     private LocalDate fecha;
 
-    @NotNull(message = "{ventaDTO.total.notNull}")
-    @DecimalMin(value = "0.0", message = "{ventaDTO.total.decimalMin}")
-    @Digits(integer = 10, fraction = 2, message = "{ventaDTO.total.digits}")
     private BigDecimal total;
 
-    @NotBlank(message = "{ventaDTO.metodoPago.notBlank}")
     private String metodoPago;
 
-    @NotBlank(message = "{ventaDTO.estado.notBlank}")
     private String estado;
 
-    @NotNull(message = "{ventaDTO.impuestos.notNull}")
-    @DecimalMin(value = "0.0", message = "{ventaDTO.impuestos.decimalMin}")
-    @Digits(integer = 10, fraction = 2, message = "{ventaDTO.impuestos.digits}")
     private BigDecimal impuestos;
 
-    @NotNull(message = "{ventaDTO.cliente.notNull}")
     private Long clienteId;
+
+    private String clienteNombre;
+
+    private List<DetalleVentaDTO> detallesVenta = new ArrayList<>();
 
     private List<Long> detallesVentaIds;
 
@@ -102,5 +94,21 @@ public class VentaDTO {
 
     public void setDetallesVentaIds(List<Long> detallesVentaIds) {
         this.detallesVentaIds = detallesVentaIds;
+    }
+
+    public String getClienteNombre() {
+        return clienteNombre;
+    }
+
+    public void setClienteNombre(String clienteNombre) {
+        this.clienteNombre = clienteNombre;
+    }
+
+    public List<DetalleVentaDTO> getDetallesVenta() {
+        return detallesVenta;
+    }
+
+    public void setDetallesVenta(List<DetalleVentaDTO> detallesVenta) {
+        this.detallesVenta = detallesVenta;
     }
 }

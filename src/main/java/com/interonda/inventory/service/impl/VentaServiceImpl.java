@@ -1,36 +1,51 @@
 package com.interonda.inventory.service.impl;
 
-import com.interonda.inventory.entity.Venta;
+import com.interonda.inventory.dto.DetalleVentaDTO;
 import com.interonda.inventory.dto.VentaDTO;
+import com.interonda.inventory.entity.Cliente;
+import com.interonda.inventory.entity.DetalleVenta;
+import com.interonda.inventory.entity.Venta;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.VentaMapper;
+import com.interonda.inventory.repository.ClienteRepository;
+import com.interonda.inventory.repository.DetalleVentaRepository;
+import com.interonda.inventory.repository.ProductoRepository;
 import com.interonda.inventory.repository.VentaRepository;
 import com.interonda.inventory.service.VentaService;
-
 import com.interonda.inventory.utils.ValidatorUtils;
 import jakarta.validation.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class VentaServiceImpl implements VentaService {
     private static final Logger logger = LoggerFactory.getLogger(VentaServiceImpl.class);
 
     private final VentaRepository ventaRepository;
-    private final VentaMapper ventaMapper;
+    private final ClienteRepository clienteRepository;
+    private final ProductoRepository productoRepository;
+    private final DetalleVentaRepository detalleVentaRepository;
     private final Validator validator;
+    private final VentaMapper ventaMapper;
 
     @Autowired
-    public VentaServiceImpl(VentaRepository ventaRepository, VentaMapper ventaMapper, Validator validator) {
+    public VentaServiceImpl(VentaRepository ventaRepository, ClienteRepository clienteRepository, ProductoRepository productoRepository, DetalleVentaRepository detalleVentaRepository, Validator validator, VentaMapper ventaMapper) {
         this.ventaRepository = ventaRepository;
-        this.ventaMapper = ventaMapper;
+        this.clienteRepository = clienteRepository;
+        this.productoRepository = productoRepository;
+        this.detalleVentaRepository = detalleVentaRepository;
         this.validator = validator;
+        this.ventaMapper = ventaMapper;
     }
 
     @Override
@@ -50,6 +65,19 @@ public class VentaServiceImpl implements VentaService {
         try {
             logger.info("Creando nueva Venta");
             Venta venta = ventaMapper.toEntity(ventaDTO);
+
+            // Asignar el cliente a la venta
+            Cliente cliente = clienteRepository.findById(ventaDTO.getClienteId()).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con el id: " + ventaDTO.getClienteId()));
+            venta.setCliente(cliente);
+
+            // Asignar los detalles de venta
+            venta.setDetallesVenta(ventaDTO.getDetallesVenta().stream().map(detalleDTO -> {
+                DetalleVenta detalle = ventaMapper.toDetalleEntity(detalleDTO);
+                detalle.setVenta(venta);
+                detalle.setProducto(productoRepository.findById(detalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId())));
+                return detalle;
+            }).collect(Collectors.toList()));
+
             Venta savedVenta = ventaRepository.save(venta);
             logger.info("Venta creada exitosamente con id: {}", savedVenta.getId());
             return ventaMapper.toDto(savedVenta);
@@ -66,7 +94,41 @@ public class VentaServiceImpl implements VentaService {
         try {
             logger.info("Actualizando Venta con id: {}", ventaDTO.getId());
             Venta venta = ventaRepository.findById(ventaDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + ventaDTO.getId()));
-            venta = ventaMapper.toEntity(ventaDTO);
+
+            // Actualizar los campos de la venta
+            venta.setFecha(ventaDTO.getFecha());
+            venta.setTotal(ventaDTO.getTotal());
+            venta.setMetodoPago(ventaDTO.getMetodoPago());
+            venta.setEstado(ventaDTO.getEstado());
+            venta.setImpuestos(ventaDTO.getImpuestos());
+
+            // Asignar el cliente a la venta
+            Cliente cliente = clienteRepository.findById(ventaDTO.getClienteId()).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con el id: " + ventaDTO.getClienteId()));
+            venta.setCliente(cliente);
+
+            // Actualizar los detalles de venta
+            List<DetalleVenta> detallesExistentes = venta.getDetallesVenta();
+            List<DetalleVentaDTO> nuevosDetallesDTO = ventaDTO.getDetallesVenta();
+
+            // Eliminar detalles que ya no están presentes
+            detallesExistentes.removeIf(detalle -> nuevosDetallesDTO.stream().noneMatch(nuevoDetalle -> nuevoDetalle.getId() != null && nuevoDetalle.getId().equals(detalle.getId())));
+
+            // Actualizar o añadir nuevos detalles
+            for (DetalleVentaDTO nuevoDetalleDTO : nuevosDetallesDTO) {
+                DetalleVenta detalle = detallesExistentes.stream().filter(d -> nuevoDetalleDTO.getId() != null && d.getId().equals(nuevoDetalleDTO.getId())).findFirst().orElse(new DetalleVenta());
+
+                detalle.setCantidad(nuevoDetalleDTO.getCantidad());
+                detalle.setPrecioUnitario(nuevoDetalleDTO.getPrecioUnitario());
+                detalle.setProducto(productoRepository.findById(nuevoDetalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + nuevoDetalleDTO.getProductoId())));
+                detalle.setVenta(venta);
+
+                if (detalle.getId() == null) {
+                    detallesExistentes.add(detalle);
+                }
+            }
+
+            venta.setDetallesVenta(detallesExistentes);
+
             Venta updatedVenta = ventaRepository.save(venta);
             logger.info("Venta actualizada exitosamente con id: {}", updatedVenta.getId());
             return ventaMapper.toDto(updatedVenta);
@@ -104,7 +166,16 @@ public class VentaServiceImpl implements VentaService {
         try {
             logger.info("Obteniendo Venta con id: {}", id);
             Venta venta = ventaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + id));
-            return ventaMapper.toDto(venta);
+            VentaDTO ventaDTO = ventaMapper.toDto(venta);
+            ventaDTO.setClienteId(venta.getCliente().getId());
+            ventaDTO.setClienteNombre(venta.getCliente().getNombre());
+            ventaDTO.setDetallesVenta(venta.getDetallesVenta().stream().map(detalle -> {
+                DetalleVentaDTO detalleDTO = ventaMapper.toDetalleDto(detalle);
+                detalleDTO.setProductoId(detalle.getProducto().getId());
+                detalleDTO.setProductoNombre(detalle.getProducto().getNombre());
+                return detalleDTO;
+            }).collect(Collectors.toList()));
+            return ventaDTO;
         } catch (ResourceNotFoundException e) {
             logger.warn("Venta no encontrada: {}", e.getMessage());
             throw e;
@@ -120,10 +191,44 @@ public class VentaServiceImpl implements VentaService {
         try {
             logger.info("Obteniendo todas las Ventas con paginación");
             Page<Venta> ventas = ventaRepository.findAll(pageable);
-            return ventas.map(ventaMapper::toDto);
+            return ventas.map(venta -> {
+                VentaDTO dto = ventaMapper.toDto(venta);
+                dto.setClienteNombre(venta.getCliente().getNombre());
+                return dto;
+            });
         } catch (Exception e) {
             logger.error("Error obteniendo todas las Ventas con paginación", e);
             throw new DataAccessException("Error obteniendo todas las Ventas con paginación", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<VentaDTO> searchVentasByFecha(LocalDate fecha, Pageable pageable) {
+        try {
+            logger.info("Buscando Ventas por fecha: {}", fecha);
+            Page<Venta> ventas = ventaRepository.findByFecha(fecha, pageable);
+            return ventas.map(ventaMapper::toDto);
+        } catch (Exception e) {
+            logger.error("Error buscando Ventas por fecha", e);
+            throw new DataAccessException("Error buscando Ventas por fecha", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<VentaDTO> searchVentasByClienteNombre(String nombreCliente, Pageable pageable) {
+        try {
+            logger.info("Buscando Ventas por nombre de cliente: {}", nombreCliente);
+            Page<Venta> ventas = ventaRepository.findByClienteNombre(nombreCliente, pageable);
+            return ventas.map(venta -> {
+                VentaDTO dto = ventaMapper.toDto(venta);
+                dto.setClienteNombre(venta.getCliente().getNombre());
+                return dto;
+            });
+        } catch (Exception e) {
+            logger.error("Error buscando Ventas por nombre de cliente", e);
+            throw new DataAccessException("Error buscando Ventas por nombre de cliente", e);
         }
     }
 }
