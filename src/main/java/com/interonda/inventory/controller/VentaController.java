@@ -105,7 +105,8 @@ public class VentaController {
     }
 
     @GetMapping("/search")
-    public String searchVentas(@RequestParam(required = false) String nombreCliente, Model model, Pageable pageable) {
+    public String searchVentas(@RequestParam(required = false) String nombreCliente,
+                               Model model, Pageable pageable) {
         int pageSize = 15;
         Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
         Page<VentaDTO> ventas;

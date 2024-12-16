@@ -44,7 +44,7 @@ function agregarFilaDetalle() {
         </div>
         <div class="col-md-4 mb-3">
             <label for="cantidad${currentIndex}" class="form-label">Cantidad</label>
-            <input type="number" class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad..." required>
+            <input type="number" step="1" class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad..." required>
         </div>
         <div class="col-md-4 mb-3">
             <label for="precioUnitario${currentIndex}" class="form-label">Precio Unitario</label>
@@ -174,7 +174,7 @@ function populateUpdateModal(id) {
 
                 // Set values
                 newRow.querySelector(`#producto${index}`).value = detalle.productoId;
-                newRow.querySelector(`#cantidad${index}`).value = detalle.cantidad.toFixed(2);
+                newRow.querySelector(`#cantidad${index}`).value = detalle.cantidad;
                 newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitario.toFixed(2);
             });
         })

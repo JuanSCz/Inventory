@@ -174,7 +174,7 @@ function populateUpdateModal(id) {
 
                 // Set values
                 newRow.querySelector(`#producto${index}`).value = detalle.productoId;
-                newRow.querySelector(`#cantidad${index}`).value = detalle.cantidad.toFixed(2);
+                newRow.querySelector(`#cantidad${index}`).value = detalle.cantidad;
                 newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitario.toFixed(2);
             });
         })
