@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeSearch();
     initializeCreateModal();
     initializeUpdateModal();
+    initializeDeleteModal();
 });
 
 // Manejo del modal de error
@@ -117,6 +118,63 @@ function populateUpdateModal(id) {
             document.getElementById('ciudad').value = data.ciudad;
         })
         .catch(error => console.error('Error al cargar los datos del cliente:', error));
+}
+
+function initializeDeleteModal() {
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+    let deleteId = null;
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Evita el envío automático del formulario
+            deleteId = this.getAttribute('data-id');
+            const advertenciaMessage = '¿Está seguro que desea eliminar este dato?'; // Mensaje predeterminado
+            const modalBody = document.querySelector('#advertenciaModalGlobal .modal-body p');
+            modalBody.textContent = advertenciaMessage;
+
+            const modal = new bootstrap.Modal(document.getElementById('advertenciaModalGlobal'));
+            modal.show();
+        });
+    });
+
+    if (confirmDeleteButton) {
+        confirmDeleteButton.addEventListener('click', function () {
+            if (deleteId) {
+                fetch(`/tableClientes/${deleteId}`, {
+                    method: 'DELETE'
+                }).then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Error al eliminar el dato.');
+                    }
+                });
+            }
+        });
+    }
+}
+
+function confirmDelete(form) {
+    const deleteId = form.querySelector('.delete-button').getAttribute('data-id');
+    const modal = new bootstrap.Modal(document.getElementById('advertenciaModalGlobal'));
+    const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+
+    modal.show();
+
+    confirmDeleteButton.addEventListener('click', function () {
+        fetch(`/tableClientes/${deleteId}`, {
+            method: 'DELETE'
+        }).then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Error al eliminar el dato.');
+            }
+        });
+    });
+
+    return false; // Evita el envío del formulario hasta que se confirme la eliminación
 }
 
 // Utilidad: Función de debounce para limitar solicitudes frecuentes

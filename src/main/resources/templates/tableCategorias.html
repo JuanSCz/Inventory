@@ -84,6 +84,7 @@
             </div>
         </form>
 
+
         <div class="table-responsive mt-3">
             <table class="table table-dark table-striped table-bordered custom-table table-sm">
                 <thead class="table-light">
@@ -107,9 +108,15 @@
                                 Editar
                             </button>
                             <form th:action="@{/tableCategorias/{id}(id=${categoria.id})}" method="post"
-                                  onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta categoria?');">
+                                  onsubmit="return confirmDelete(this);">
                                 <input type="hidden" name="_method" value="delete"/>
-                                <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
+                                <form th:action="@{/tableCategorias/{id}(id=${categoria.id})}" method="post"
+                                      onsubmit="return confirmDelete(this);">
+                                    <input type="hidden" name="_method" value="delete"/>
+                                    <button type="submit" class="btn btn-danger btn-sm delete-button"
+                                            th:data-id="${categoria.id}">Borrar
+                                    </button>
+                                </form>
                             </form>
                         </div>
                     </td>
@@ -135,6 +142,7 @@
     </main>
 </div>
 
+<div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
 <div th:replace="~{fragments/formUpdateCategorias :: updateModalCategorias}"></div>
 <div th:replace="~{fragments/formCreateCategorias :: createModalCategorias}"></div>
 <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>

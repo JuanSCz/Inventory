@@ -17,7 +17,7 @@ public interface ProductoService {
 
     ProductoDTO updateProducto(ProductoDTO productoDTO);
 
-    void deleteProducto(Long id);
+    boolean deleteProducto(Long id);
 
     ProductoDTO getProducto(Long id);
 
@@ -26,6 +26,7 @@ public interface ProductoService {
     Page<ProductoDTO> searchProductosByName(String nombre, Pageable pageable);
 
     long countProductos();
+
 
     List<Producto> obtenerTodosLosProductos();
 }

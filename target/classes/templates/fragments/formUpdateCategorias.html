@@ -10,7 +10,7 @@
 <div th:fragment="updateModalCategorias">
     <div class="modal fade" id="updateCategoriaModal" tabindex="-1" aria-labelledby="updateCategoriaLabel"
          aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content modal-content-updateProveedor">
                 <div class="modal-header modal-header-updateProveedor">
                     <h5 class="modal-title modal-title-updateProveedor" id="exampleModalLabel">Actualizar Categoría</h5>
@@ -18,18 +18,22 @@
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form th:action="@{/tableCategorias/update}" method="post" th:object="${categoriaDTO}">
+                    <form th:action="@{/tableCategorias/update}" method="post" th:object="${categoriaDTO}" autocomplete="off">
                         <input type="hidden" id="id" th:field="*{id}">
-                        <div class="mb-3 text-center">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" class="form-control form-control-updateProveedor" id="nombre"
-                                   th:field="*{nombre}" placeholder="Ingrese el nombre">
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control form-control-updateProveedor" id="nombre"
+                                       th:field="*{nombre}" placeholder="Ingrese el nombre">
+                            </div>
                         </div>
-                        <div class="mb-3 text-center">
-                            <label for="descripcion" class="form-label">Descripción</label>
-                            <textarea class="form-control form-control-updateProveedor" id="descripcion"
-                                      th:field="*{descripcion}" placeholder="Ingrese la descripción"
-                                      rows="4"></textarea>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="descripcion" class="form-label">Descripción</label>
+                                <textarea class="form-control form-control-updateProveedor" id="descripcion"
+                                          th:field="*{descripcion}" placeholder="Ingrese la descripción"
+                                          rows="4"></textarea>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-primary-updateProveedor w-100">Actualizar
                         </button>

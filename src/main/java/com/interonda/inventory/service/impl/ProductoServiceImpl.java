@@ -113,7 +113,7 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional
-    public void deleteProducto(Long id) {
+    public boolean deleteProducto(Long id) {
         try {
             logger.info("Eliminando Producto con id: {}", id);
             if (!productoRepository.existsById(id)) {
@@ -121,29 +121,27 @@ public class ProductoServiceImpl implements ProductoService {
             }
             productoRepository.deleteById(id);
             logger.info("Producto eliminado exitosamente con id: {}", id);
+            return true;
         } catch (ResourceNotFoundException e) {
             logger.warn("Producto no encontrado: {}", e.getMessage());
-            throw e;
+            return false;
         } catch (Exception e) {
             logger.error("Error eliminando Producto", e);
-            throw new DataAccessException("Error eliminando Producto", e);
+            return false;
         }
     }
 
     @Override
     @Transactional(readOnly = true)
     public ProductoDTO getProducto(Long id) {
-        try {
-            logger.info("Obteniendo Producto con id: {}", id);
-            Producto producto = productoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + id));
-            return productoMapper.toDto(producto);
-        } catch (ResourceNotFoundException e) {
-            logger.warn("Producto no encontrado: {}", e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            logger.error("Error obteniendo Producto", e);
-            throw new DataAccessException("Error obteniendo Producto", e);
+        Producto producto = productoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + id));
+        ProductoDTO productoDTO = productoMapper.toDto(producto);
+        if (producto.getCategoria() != null) {
+            productoDTO.setCategoriaId(producto.getCategoria().getId());
+            productoDTO.setCategoriaNombre(producto.getCategoria().getNombre());
         }
+        return productoDTO;
     }
 
     @Override
@@ -168,7 +166,7 @@ public class ProductoServiceImpl implements ProductoService {
             throw new DataAccessException("Error obteniendo todos los Productos con paginación", e);
         }
     }
-    
+
     @Override
     @Transactional(readOnly = true)
     public Page<ProductoDTO> searchProductosByName(String nombre, Pageable pageable) {

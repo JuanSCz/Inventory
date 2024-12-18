@@ -19,9 +19,6 @@ public class Usuario {
     @Column(name = "contraseña", nullable = false)
     private String contrasenia;
 
-    @Column(name = "foto_usuario")
-    private byte[] imagenUsuario;
-
     @Column(length = 15, nullable = false)
     private String contacto;
 
@@ -75,14 +72,6 @@ public class Usuario {
 
     public void setHistorialStock(List<HistorialStock> historialStock) {
         this.historialStock = historialStock;
-    }
-
-    public byte[] getImagenUsuario() {
-        return imagenUsuario;
-    }
-
-    public void setImagenUsuario(byte[] imagenUsuario) {
-        this.imagenUsuario = imagenUsuario;
     }
 
     public String getContacto() {

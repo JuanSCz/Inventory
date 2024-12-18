@@ -10,7 +10,7 @@
 <div th:fragment="createModalCategorias">
     <div class="modal fade" id="createCategoriaModal" tabindex="-1" aria-labelledby="createCategoriaLabel"
          aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content modal-content-createProveedor">
                 <div class="modal-header modal-header-createProveedor">
                     <h5 class="modal-title modal-title-createProveedor" id="exampleModalLabel">Crear Categoría</h5>
@@ -19,17 +19,21 @@
                 </div>
                 <div class="modal-body">
                     <form th:action="@{/tableCategorias}" method="post" th:object="${categoriaDTO}" autocomplete="off">
-                        <div class="mb-3 text-center">
-                            <label for="name" class="form-label">Nombre</label>
-                            <input type="text" class="form-control form-control-createProveedor" id="name"
-                                   th:field="*{nombre}" placeholder="Ingrese el nombre">
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="name" class="form-label">Nombre</label>
+                                <input type="text" class="form-control form-control-createProveedor" id="name"
+                                       th:field="*{nombre}" placeholder="Ingrese el nombre">
+                            </div>
                         </div>
-                        <div class="mb-3 text-center">
-                            <label for="descripcion" class="form-label">Descripción</label>
-                            <textarea class="form-control form-control-createProveedor textareaCategoria"
-                                      id="descripcion"
-                                      th:field="*{descripcion}" placeholder="Ingrese la descripción"
-                                      rows="4"></textarea>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="descripcion" class="form-label">Descripción</label>
+                                <textarea class="form-control form-control-createProveedor textareaCategoria"
+                                          id="descripcion"
+                                          th:field="*{descripcion}" placeholder="Ingrese la descripción"
+                                          rows="4"></textarea>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-primary-createProveedor w-100">Crear</button>
                     </form>

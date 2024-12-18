@@ -82,7 +82,7 @@ public class ProveedorServiceImpl implements ProveedorService {
 
     @Override
     @Transactional
-    public void deleteProveedor(Long id) {
+    public boolean deleteProveedor(Long id) {
         try {
             logger.info("Eliminando Proveedor con id: {}", id);
             if (!proveedorRepository.existsById(id)) {
@@ -90,12 +90,13 @@ public class ProveedorServiceImpl implements ProveedorService {
             }
             proveedorRepository.deleteById(id);
             logger.info("Proveedor eliminado exitosamente con id: {}", id);
+            return true;
         } catch (ResourceNotFoundException e) {
             logger.warn("Proveedor no encontrado: {}", e.getMessage());
-            throw e;
+            return false;
         } catch (Exception e) {
             logger.error("Error eliminando Proveedor", e);
-            throw new DataAccessException("Error eliminando Proveedor", e);
+            return false;
         }
     }
 

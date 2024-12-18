@@ -15,11 +15,11 @@ public interface ProveedorService {
 
     ProveedorDTO updateProveedor(ProveedorDTO proveedorDTO);
 
-    void deleteProveedor(Long id);
-
     ProveedorDTO getProveedor(Long id);
 
     Page<ProveedorDTO> getAllProveedores(Pageable pageable);
 
     Page<ProveedorDTO> searchProveedoresByName(String nombre, Pageable pageable);
+
+    boolean deleteProveedor(Long id);
 }

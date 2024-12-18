@@ -113,9 +113,11 @@
                                 Editar
                             </button>
                             <form th:action="@{/tableProveedores/{id}(id=${proveedor.id})}" method="post"
-                                  onsubmit="return confirm('¿Estás seguro de que deseas eliminar este proveedor?');">
+                                  onsubmit="return confirmDelete(this);">
                                 <input type="hidden" name="_method" value="delete"/>
-                                <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
+                                <button type="submit" class="btn btn-danger btn-sm delete-button"
+                                        th:data-id="${proveedor.id}">Borrar
+                                </button>
                             </form>
                         </div>
                     </td>
@@ -141,8 +143,9 @@
     </main>
 </div>
 
-<div th:replace="~{fragments/formUpdate :: updateModal}"></div>
-<div th:replace="~{fragments/formCreate :: createModal}"></div>
+<div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
+<div th:replace="~{fragments/formUpdateProveedores :: updateModal}"></div>
+<div th:replace="~{fragments/formCreateProveedores :: createModal}"></div>
 <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/index.js"></script>

@@ -10,24 +10,24 @@
 <div th:fragment="createModalUsuarios">
     <div class="modal fade" id="createUsuarioModal" tabindex="-1" aria-labelledby="createUsuarioLabel"
          aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content modal-content-createProveedor">
-                <div class="modal-header modal-header-createProveedor">
-                    <h5 class="modal-title modal-title-createProveedor" id="exampleModalLabel">Crear Usuario</h5>
-                    <button type="button" class="btn-close btn-close-createProveedor" data-bs-dismiss="modal"
+        <div class="modal-dialog modal-lg modal-dialog-detalle">
+            <div class="modal-content modal-content-detalle">
+                <div class="modal-header modal-header-detalle">
+                    <h5 class="modal-title modal-title-detalle" id="exampleModalLabel">Crear Usuario</h5>
+                    <button type="button" class="btn-close btn-close-detalle" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body modal-body-detalle">
                     <form th:action="@{/tableUsuarios}" method="post" th:object="${usuarioDTO}" autocomplete="off">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="name" class="form-label">Nombre</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="name"
+                                <input type="text" class="form-control form-control-detalle" id="name"
                                        th:field="*{nombre}" placeholder="Ingrese el nombre">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="contrasenia" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control form-control-createProveedor"
+                                <input type="password" class="form-control form-control-detalle"
                                        id="contrasenia"
                                        th:field="*{contrasenia}" placeholder="Ingrese la contraseña">
                             </div>
@@ -35,19 +35,20 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="contacto" class="form-label">Contacto</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="contacto"
+                                <input type="text" class="form-control form-control-detalle" id="contacto"
                                        th:field="*{contacto}" placeholder="Ingrese el contacto">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="rol" class="form-label">Rol</label>
-                                <select class="form-control form-control-createProveedor" id="rol" th:field="*{rolId}">
+                                <select class="form-control form-control-detalle" id="rol" th:field="*{rolId}">
                                     <option value="">Seleccionar rol</option>
                                     <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}"></option>
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-primary-createProveedor w-100">Crear
-                        </button>
+                        <div class="modal-footer" id="modal-footer-detalle">
+                            <button type="submit" class="btn button-detalle">Crear</button>
+                        </div>
                     </form>
                 </div>
             </div>

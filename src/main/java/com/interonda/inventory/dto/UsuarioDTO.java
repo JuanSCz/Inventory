@@ -12,9 +12,10 @@ public class UsuarioDTO {
     private String nombre;
 
     @NotBlank(message = "{usuarioDTO.contrasenia.notBlank}")
-    @Size(min = 8, max = 50, message = "{usuarioDTO.contrasenia.size}")
+    @Size(min = 8, max = 20, message = "{usuarioDTO.contrasenia.size}")
     private String contrasenia;
 
+    @NotBlank(message = "{usuarioDTO.contacto.notBlank}")
     private String contacto;
 
     private Long rolId;

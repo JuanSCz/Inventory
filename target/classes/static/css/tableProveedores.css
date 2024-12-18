@@ -474,30 +474,41 @@ body {
     background-color: var(--hover-color) !important;
 }
 
-.btn-primary {
-    background-color: var(--main-color) !important;
+.btn-primary, .btn-danger, .bg-success-compra {
     text-shadow: 1px 1px 2px var(--bg-color) !important;
     color: var(--text-color) !important;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--main-color) !important;
 }
 
 .btn-primary:hover {
     background: linear-gradient(45deg, var(--main-color), var(--hover-color));
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    color: var(--text-color);
 }
 
 .btn-danger {
     background-color: #e60000 !important;
     border-color: #cc0000 !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    color: var(--text-color) !important;
 }
 
 .btn-danger:hover {
     background-color: #b30000 !important;
     border-color: #990000 !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    color: var(--text-color) !important;
+}
+
+.bg-success-compra {
+    background-color: #28a745 !important;
+    border-color: #218838 !important;
+}
+
+.bg-success-compra:hover {
+    background-color: #218838 !important;
+    border-color: #1e7e34 !important;
 }
 
 .table td.text-end {
@@ -570,10 +581,10 @@ body {
 }
 
 .pagination {
-    margin-top: 0.1rem !important !important;
-    display: flex !important;
-    justify-content: center !important;
-    flex-wrap: wrap !important;
+    margin-top: 0.1rem !important;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .page-link {
@@ -583,30 +594,27 @@ body {
     text-shadow: 1px 1px 2px var(--bg-color) !important;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.3s ease-in-out !important;
     border-radius: 5px !important;
-    padding: 0.5rem 0.75rem !important;
+    padding: 0.25rem 0.5rem !important; /* Ajusta el padding para hacer la paginación más pequeña */
 }
 
 .page-link:hover {
     color: var(--text-color) !important;
     background-color: var(--main-color) !important;
-    transform: scale(1.05) !important;
     border: 1px solid var(--main-color) !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
 }
 
 .page-item .page-link {
     color: var(--text-color) !important;
-    background-color: var(--second-bg-color) !important;
-    border-color: var(--main-color) !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
+    background-color: var(--second-bg-color);
+    border-color: var(--main-color);
+    cursor: not-allowed;
 }
 
 .page-item.active .page-link {
-    color: var(--text-color) !important;
-    background-color: var(--main-color) !important;
-    border-color: var(--main-color) !important;
-    transform: scale(1.1) !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
+    color: var(--text-color);
+    background-color: var(--main-color);
+    border-color: var(--main-color);
 }
 
 .modal-content-createProveedor {
@@ -616,13 +624,17 @@ body {
     border-radius: 15px !important;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
     background-origin: border-box !important;
+    padding: 0rem !important;
+    margin: 0rem !important;
 }
+
+padding-bottom: 0 !important;
 
 .modal-header-createProveedor {
     display: flex !important;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid var(--main-color) !important;
+    border-bottom: 2px solid var(--main-color) !important;
     position: relative;
     padding-right: 1rem;
 }
@@ -692,21 +704,21 @@ body {
 }
 
 .modal-content-updateProveedor {
-    background: var(--gradient-bg) !important;
-    color: var(--text-color) !important;
-    border: 2px solid var(--main-color) !important;
-    border-radius: 15px !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
-    background-origin: border-box !important;
+   background: var(--gradient-bg) !important;
+       color: var(--text-color) !important;
+       border: 2px solid var(--main-color) !important;
+       border-radius: 15px !important;
+       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+       background-origin: border-box !important;
 }
 
 .modal-header-updateProveedor {
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 1px solid var(--main-color) !important;
-    position: relative;
-    padding-right: 1rem;
+     display: flex !important;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 2px solid var(--main-color) !important;
+        position: relative;
+        padding-right: 1rem;
 }
 
 .modal-header .btn-close-updateProveedor {
@@ -761,55 +773,43 @@ body {
 
 .modalContentErrors {
     background: var(--gradient-bg) !important;
-        color: var(--highlight-color) !important;
-        border: 2px solid var(--main-color) !important;
-        border-radius: 15px !important;
-        padding: 1rem !important;
-        box-shadow: 0 4px 8px var(--shadow-color) !important;
+    color: var(--text-color) !important;
+    border: 2px solid var(--main-color) !important;
+    border-radius: 15px !important;
+    padding: 1rem !important;
+    box-shadow: 0 4px 8px var(--shadow-color) !important;
 }
 
-.modalHeaderErrors{
+.modalHeaderErrors {
     display: flex;
-        justify-content: space-between !important;
-        align-items: center !important;
-        border-bottom: 2px solid var(--main-color) !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    border-bottom: 2px solid var(--main-color) !important;
 }
 
 .modalBodyErrors {
     border-top: 2px solid var(--main-color) !important;
-        border-bottom: 2px solid var(--main-color) !important;
+    border-bottom: 2px solid var(--main-color) !important;
+    color: var(--text-color) !important;
+    margin: 0 !important;
 }
 
 .modalFooterErrors {
     display: flex;
-        justify-content: center !important;
-        align-items: center !important;
-        border-top: 2px solid var(--main-color) !important
-}
-
-.modalFooterErrors .btn-secondary {
-    background-color: var(--main-color) !important;
-        color: var(--text-color) !important;
-        padding: 0.5rem 1rem !important;
-        border-radius: 4px !important;
-        font-size: 1rem !important;
-        transition: background-color 0.3s ease !important;
-        box-shadow: 0 2px 4px var(--shadow-color) !important;
-}
-
-.modalFooterErrors .btn-secondary:hover {
-    background-color: var(--hover-color) !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border-top: 2px solid var(--main-color) !important;
 }
 
 .modal.fade .modalDialogErrors {
     transition: transform 0.3s ease-out, opacity 0.3s ease-out !important;
-        transform: translateY(-10px) !important;
-        opacity: 0 !important !important;
+    transform: translateY(-10px) !important;
+    opacity: 0 !important;
 }
 
 .modal.show .modalDialogErrors {
     transform: translateY(0) !important;
-        opacity: 1 !important;
+    opacity: 1 !important;
 }
 
 .btnCloseErrors {
@@ -821,16 +821,18 @@ body {
     background-color: var(--hover-color) !important;
 }
 
+.modalBodyErrors p {
+    margin-bottom: 0 !important;
+}
+
 .modal-content-detalle {
     background: var(--gradient-bg) !important;
     color: var(--highlight-color) !important;
     border: 2px solid var(--main-color) !important;
     border-radius: 15px !important;
-    padding: 1rem !important;
     box-shadow: 0 4px 8px var(--shadow-color) !important;
     max-width: 100% !important;
     width: auto !important;
-    padding: 1rem !important;
 }
 
 .modal-header-detalle {
@@ -842,10 +844,10 @@ body {
 }
 
 .modal-body-detalle {
-    border-top: 2px solid var(--main-color) !important;
-    border-bottom: 2px solid var(--main-color) !important;
     color: #ffffff !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
+    border-button: 2px solid var(--main-color) !important;
+    padding-bottom: 0 !important;
 }
 
 #modal-footer-detalle {
@@ -960,11 +962,6 @@ body {
     text-shadow: 2px 2px 4px var(--bg-color) !important;
     text-align: center !important;
     width: 100% !important;
-}
-
-.bg-success-compra {
-    color: var(--text-color) !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
 }
 
 @media (max-width: 768px) {

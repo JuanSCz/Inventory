@@ -2,10 +2,9 @@ package com.interonda.inventory.service.impl;
 
 import com.interonda.inventory.dto.CompraDTO;
 import com.interonda.inventory.dto.DetalleCompraDTO;
-import com.interonda.inventory.entity.Compra;
-import com.interonda.inventory.entity.DetalleCompra;
-import com.interonda.inventory.entity.Producto;
-import com.interonda.inventory.entity.Proveedor;
+import com.interonda.inventory.dto.DetalleVentaDTO;
+import com.interonda.inventory.dto.VentaDTO;
+import com.interonda.inventory.entity.*;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.CompraMapper;
@@ -113,18 +112,11 @@ public class CompraServiceImpl implements CompraService {
             List<DetalleCompraDTO> nuevosDetallesDTO = compraDTO.getDetallesCompra();
 
             // Eliminar detalles que ya no están presentes
-            detallesExistentes.removeIf(detalle ->
-                    nuevosDetallesDTO.stream().noneMatch(nuevoDetalle ->
-                            nuevoDetalle.getId() != null && nuevoDetalle.getId().equals(detalle.getId())
-                    )
-            );
+            detallesExistentes.removeIf(detalle -> nuevosDetallesDTO.stream().noneMatch(nuevoDetalle -> nuevoDetalle.getId() != null && nuevoDetalle.getId().equals(detalle.getId())));
 
             // Actualizar o añadir nuevos detalles
             for (DetalleCompraDTO nuevoDetalleDTO : nuevosDetallesDTO) {
-                DetalleCompra detalle = detallesExistentes.stream()
-                        .filter(d -> nuevoDetalleDTO.getId() != null && d.getId().equals(nuevoDetalleDTO.getId()))
-                        .findFirst()
-                        .orElse(new DetalleCompra());
+                DetalleCompra detalle = detallesExistentes.stream().filter(d -> nuevoDetalleDTO.getId() != null && d.getId().equals(nuevoDetalleDTO.getId())).findFirst().orElse(new DetalleCompra());
 
                 detalle.setCantidad(nuevoDetalleDTO.getCantidad());
                 detalle.setPrecioUnitario(nuevoDetalleDTO.getPrecioUnitario());
@@ -152,7 +144,7 @@ public class CompraServiceImpl implements CompraService {
 
     @Override
     @Transactional
-    public void deleteCompra(Long id) {
+    public boolean deleteCompra(Long id) {
         try {
             logger.info("Eliminando Compra con id: {}", id);
             if (!compraRepository.existsById(id)) {
@@ -160,12 +152,13 @@ public class CompraServiceImpl implements CompraService {
             }
             compraRepository.deleteById(id);
             logger.info("Compra eliminada exitosamente con id: {}", id);
+            return true;
         } catch (ResourceNotFoundException e) {
             logger.warn("Compra no encontrada: {}", e.getMessage());
-            throw e;
+            return false;
         } catch (Exception e) {
             logger.error("Error eliminando Compra", e);
-            throw new DataAccessException("Error eliminando Compra", e);
+            return false;
         }
     }
 
@@ -232,7 +225,7 @@ public class CompraServiceImpl implements CompraService {
             Page<Compra> compras = compraRepository.findByProveedorNombre(nombreProveedor, pageable);
             return compras.map(compra -> {
                 CompraDTO dto = compraMapper.toDto(compra);
-                dto.setProveedorNombre(compra.getProveedor().getNombre()); // Asegúrate de establecer el proveedorNombre
+                dto.setProveedorNombre(compra.getProveedor().getNombre());
                 return dto;
             });
         } catch (Exception e) {

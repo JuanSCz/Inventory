@@ -15,7 +15,7 @@ public interface DepositoService {
 
     DepositoDTO updateDeposito(DepositoDTO depositoDTO);
 
-    void deleteDeposito(Long id);
+    boolean deleteDeposito(Long id);
 
     DepositoDTO getDeposito(Long id);
 

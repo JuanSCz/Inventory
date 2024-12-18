@@ -19,7 +19,7 @@ public interface CompraService {
 
     CompraDTO updateCompra(CompraDTO compraDTO);
 
-    void deleteCompra(Long id);
+    boolean deleteCompra(Long id);
 
     CompraDTO getCompra(Long id);
 

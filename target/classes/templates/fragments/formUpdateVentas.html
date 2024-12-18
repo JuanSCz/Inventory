@@ -18,7 +18,7 @@
                 </div>
                 <div class="modal-body modal-body-detalle">
                     <form id="updateVentaForm" th:action="@{/tableVentas/update}" method="post"
-                          th:object="${ventaDTO}">
+                          th:object="${ventaDTO}" autocomplete="off">
                         <input type="hidden" th:field="*{id}" id="id">
                         <div class="row">
                             <div class="col-md-4 mb-3">
@@ -78,7 +78,7 @@
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="cantidad" class="form-label">Cantidad</label>
-                                        <input type="number" class="form-control form-control-detalle"
+                                        <input type="number"  class="form-control form-control-detalle"
                                                th:field="*{detallesVenta[__${iterStat.index}__].cantidad}"
                                                id="cantidad" placeholder="Ingrese la cantidad..." required>
                                     </div>

@@ -18,7 +18,7 @@
                 </div>
                 <div class="modal-body modal-body-detalle">
                     <form id="updateVentaForm" th:action="@{/tableVentas/update}" method="post"
-                          th:object="${ventaDTO}">
+                          th:object="${ventaDTO}" autocomplete="off">
                         <input type="hidden" th:field="*{id}" id="id">
                         <div class="row">
                             <div class="col-md-4 mb-3">

@@ -143,7 +143,7 @@ public class VentaServiceImpl implements VentaService {
 
     @Override
     @Transactional
-    public void deleteVenta(Long id) {
+    public boolean deleteVenta(Long id) {
         try {
             logger.info("Eliminando Venta con id: {}", id);
             if (!ventaRepository.existsById(id)) {
@@ -151,12 +151,13 @@ public class VentaServiceImpl implements VentaService {
             }
             ventaRepository.deleteById(id);
             logger.info("Venta eliminada exitosamente con id: {}", id);
+            return true;
         } catch (ResourceNotFoundException e) {
             logger.warn("Venta no encontrada: {}", e.getMessage());
-            throw e;
+            return false;
         } catch (Exception e) {
             logger.error("Error eliminando Venta", e);
-            throw new DataAccessException("Error eliminando Venta", e);
+            return false;
         }
     }
 

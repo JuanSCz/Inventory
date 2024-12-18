@@ -80,12 +80,10 @@ public class UsuarioServiceImpl implements UsuarioService {
             Usuario usuario = usuarioRepository.findById(usuarioDTO.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el id: " + usuarioDTO.getId()));
 
-            // Actualizar los campos del usuario
             usuario.setNombre(usuarioDTO.getNombre());
             usuario.setContrasenia(usuarioDTO.getContrasenia());
             usuario.setContacto(usuarioDTO.getContacto());
 
-            // Asignar el rol al usuario
             if (usuarioDTO.getRolId() != null) {
                 Rol rol = rolRepository.findById(usuarioDTO.getRolId())
                         .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con el id: " + usuarioDTO.getRolId()));
@@ -108,7 +106,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public void deleteUsuario(Long id) {
+    public boolean deleteUsuario(Long id) {
         try {
             logger.info("Eliminando Usuario con id: {}", id);
             if (!usuarioRepository.existsById(id)) {
@@ -116,29 +114,27 @@ public class UsuarioServiceImpl implements UsuarioService {
             }
             usuarioRepository.deleteById(id);
             logger.info("Usuario eliminado exitosamente con id: {}", id);
+            return true;
         } catch (ResourceNotFoundException e) {
             logger.warn("Usuario no encontrado: {}", e.getMessage());
-            throw e;
+            return false;
         } catch (Exception e) {
             logger.error("Error eliminando Usuario", e);
-            throw new DataAccessException("Error eliminando Usuario", e);
+            return false;
         }
     }
 
     @Override
     @Transactional(readOnly = true)
     public UsuarioDTO getUsuario(Long id) {
-        try {
-            logger.info("Obteniendo Usuario con id: {}", id);
-            Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el id: " + id));
-            return usuarioMapper.toDto(usuario);
-        } catch (ResourceNotFoundException e) {
-            logger.warn("Usuario no encontrado: {}", e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            logger.error("Error obteniendo Usuario", e);
-            throw new DataAccessException("Error obteniendo Usuario", e);
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el id: " + id));
+        UsuarioDTO usuarioDTO = usuarioMapper.toDto(usuario);
+        if (usuario.getRol() != null) {
+            usuarioDTO.setRolId(usuario.getRol().getId());
+            usuarioDTO.setRolNombre(usuario.getRol().getNombre());
         }
+        return usuarioDTO;
     }
 
     @Override

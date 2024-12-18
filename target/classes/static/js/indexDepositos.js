@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeSearch();
     initializeCreateModal();
     initializeUpdateModal();
+    initializeDeleteModal();
 });
 
 // Manejo del modal de error
@@ -113,6 +114,42 @@ function populateUpdateModal(id) {
             document.getElementById('contacto').value = data.contactoDeposito;
         })
         .catch(error => console.error('Error al cargar los datos del depósito:', error));
+}
+
+// Inicializar modal de eliminación para compras
+function initializeDeleteModal() {
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+    let deleteId = null;
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Evita el envío automático del formulario
+            deleteId = this.getAttribute('data-id');
+            const advertenciaMessage = '¿Está seguro que desea eliminar este dato?'; // Mensaje predeterminado
+            const modalBody = document.querySelector('#advertenciaModalGlobal .modal-body p');
+            modalBody.textContent = advertenciaMessage;
+
+            const modal = new bootstrap.Modal(document.getElementById('advertenciaModalGlobal'));
+            modal.show();
+        });
+    });
+
+    if (confirmDeleteButton) {
+        confirmDeleteButton.addEventListener('click', function () {
+            if (deleteId) {
+                fetch(`/tableDepositos/${deleteId}`, {
+                    method: 'DELETE'
+                }).then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Error al eliminar el dato.');
+                    }
+                });
+            }
+        });
+    }
 }
 
 // Utilidad: Función de debounce para limitar solicitudes frecuentes

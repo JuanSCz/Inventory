@@ -5,6 +5,8 @@ import com.interonda.inventory.dto.DetalleCompraDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface DetalleCompraService {
 
     DetalleCompraDTO convertToDto(DetalleCompra detalleCompra);
@@ -20,4 +22,6 @@ public interface DetalleCompraService {
     Page<DetalleCompraDTO> getAllDetalleCompra(Pageable pageable);
 
     DetalleCompraDTO getDetalleCompraById(Long id);
+
+    List<DetalleCompraDTO> getDetallesByCompraId(Long compraId);
 }

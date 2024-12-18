@@ -17,7 +17,7 @@
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body modal-body-detalle">
-                    <form id="createVentaForm" th:action="@{/tableVentas}" method="post" th:object="${ventaDTO}">
+                    <form id="createVentaForm" th:action="@{/tableVentas}" method="post" th:object="${ventaDTO}" autocomplete="off">
                         <div class="row">
                             <!-- Campos de Venta -->
                             <div class="col-md-4 mb-3">

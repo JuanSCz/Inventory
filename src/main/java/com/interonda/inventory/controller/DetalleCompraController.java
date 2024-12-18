@@ -9,12 +9,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/detalles-compra")
+@RequestMapping("/detallesCompra")
 public class DetalleCompraController {
 
     private static final Logger logger = LoggerFactory.getLogger(DetalleCompraController.class);
@@ -24,6 +27,19 @@ public class DetalleCompraController {
     @Autowired
     public DetalleCompraController(DetalleCompraService detalleCompraService) {
         this.detalleCompraService = detalleCompraService;
+    }
+
+    @GetMapping("/detalle/{id}")
+    public ResponseEntity<DetalleCompraDTO> getDetalleCompraById(@PathVariable Long id) {
+        logger.info("Solicitud recibida para obtener detalle de compra con id: {}", id);
+        DetalleCompraDTO detalleCompra = detalleCompraService.getDetalleCompraById(id);
+        return new ResponseEntity<>(detalleCompra, HttpStatus.OK);
+    }
+
+    @GetMapping("/{compraId}")
+    public ResponseEntity<List<DetalleCompraDTO>> getDetallesByCompraId(@PathVariable Long compraId) {
+        List<DetalleCompraDTO> detallesCompra = detalleCompraService.getDetallesByCompraId(compraId);
+        return new ResponseEntity<>(detallesCompra, HttpStatus.OK);
     }
 
     @PostMapping
@@ -54,12 +70,5 @@ public class DetalleCompraController {
         logger.info("Solicitud recibida para obtener todos los detalles de compra");
         Page<DetalleCompraDTO> detallesCompra = detalleCompraService.getAllDetalleCompra(pageable);
         return new ResponseEntity<>(detallesCompra, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<DetalleCompraDTO> getDetalleCompraById(@PathVariable Long id) {
-        logger.info("Solicitud recibida para obtener detalle de compra con id: {}", id);
-        DetalleCompraDTO detalleCompra = detalleCompraService.getDetalleCompraById(id);
-        return new ResponseEntity<>(detalleCompra, HttpStatus.OK);
     }
 }

@@ -10,45 +10,47 @@
 <div th:fragment="updateModalUsuarios">
     <div class="modal fade" id="updateUsuarioModal" tabindex="-1" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content modal-content-updateProveedor">
-                <div class="modal-header modal-header-updateProveedor">
-                    <h5 class="modal-title modal-title-updateProveedor" id="exampleModalLabel">Actualizar Usuario</h5>
-                    <button type="button" class="btn-close btn-close-updateProveedor" data-bs-dismiss="modal"
+        <div class="modal-dialog modal-lg modal-dialog-detalle">
+            <div class="modal-content modal-content-detalle">
+                <div class="modal-header modal-header-detalle">
+                    <h5 class="modal-title modal-title-detalle" id="exampleModalLabel">Actualizar Usuario</h5>
+                    <button type="button" class="btn-close btn-close-detalle" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form th:action="@{/tableUsuarios/update}" method="post" th:object="${usuarioDTO}">
+                <div class="modal-body modal-body-detalle">
+                    <form th:action="@{/tableUsuarios/update}" method="post" th:object="${usuarioDTO}"
+                          autocomplete="off">
                         <input type="hidden" id="id" th:field="*{id}">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control form-control-updateProveedor" id="nombre"
+                                <input type="text" class="form-control form-control-detalle" id="nombre"
                                        th:field="*{nombre}">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="contrasenia" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control form-control-updateProveedor"
-                                       id="contrasenia"
+                                <input type="password" class="form-control form-control-detalle" id="contrasenia"
                                        th:field="*{contrasenia}">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="contacto" class="form-label">Contacto</label>
-                                <input type="text" class="form-control form-control-updateProveedor" id="contacto"
+                                <input type="text" class="form-control form-control-detalle" id="contacto"
                                        th:field="*{contacto}">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="rol" class="form-label">Rol</label>
-                                <select class="form-control form-control-updateProveedor" id="rol" th:field="*{rolId}">
+                                <select class="form-control form-control-detalle" id="rol" th:field="*{rolId}">
                                     <option value="">Seleccione un rol</option>
-                                    <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}" th:selected="${rol.id} == *{rolId}"></option>
+                                    <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}"
+                                            th:selected="${rol.id} == *{rolId}"></option>
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-primary-updateProveedor w-100">Actualizar
-                        </button>
+                        <div class="modal-footer" id="modal-footer-detalle">
+                            <button type="submit" class="btn button-detalle">Actualizar</button>
+                        </div>
                     </form>
                 </div>
             </div>

@@ -18,23 +18,23 @@
                 </div>
                 <div class="modal-body modal-body-detalle">
                     <form id="updateCompraForm" th:action="@{/tableCompras/update}" method="post"
-                          th:object="${compraDTO}">
+                          th:object="${compraDTO}" autocomplete="off">
                         <input type="hidden" th:field="*{id}" id="id">
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="fecha" class="form-label">Fecha</label>
                                 <input type="date" class="form-control form-control-detalle" th:field="*{fecha}"
-                                       id="fecha" required>
+                                       id="fecha">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="total" class="form-label">Total</label>
                                 <input type="number" step="0.01" class="form-control form-control-detalle"
-                                       th:field="*{total}" id="total" placeholder="Ingrese el total..." required>
+                                       th:field="*{total}" id="total" placeholder="Ingrese el total...">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="metodoPago" class="form-label">Método de Pago</label>
                                 <select class="form-control form-control-detalle" th:field="*{metodoPago}"
-                                        id="metodoPago" required>
+                                        id="metodoPago">
                                     <option value="" selected>Seleccione un método...</option>
                                     <option value="metodo1">Método 1</option>
                                     <option value="metodo2">Método 2</option>
@@ -42,8 +42,7 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="estado" class="form-label">Estado</label>
-                                <select class="form-control form-control-detalle" th:field="*{estado}" id="estado"
-                                        required>
+                                <select class="form-control form-control-detalle" th:field="*{estado}" id="estado">
                                     <option value="" selected>Seleccione un estado...</option>
                                     <option value="estado1">Estado 1</option>
                                     <option value="estado2">Estado 2</option>
@@ -52,13 +51,12 @@
                             <div class="col-md-4 mb-3">
                                 <label for="impuestos" class="form-label">Impuestos</label>
                                 <input type="number" step="0.01" class="form-control form-control-detalle"
-                                       th:field="*{impuestos}" id="impuestos" placeholder="Ingrese los impuestos..."
-                                       required>
+                                       th:field="*{impuestos}" id="impuestos" placeholder="Ingrese los impuestos...">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="proveedor" class="form-label">Proveedor</label>
                                 <select class="form-control form-control-detalle" th:field="*{proveedorId}"
-                                        id="proveedor" required>
+                                        id="proveedor">
                                     <option value="" selected>Seleccione un proveedor...</option>
                                     <option th:each="proveedor : ${proveedores}" th:value="${proveedor.id}"
                                             th:text="${proveedor.nombre}"></option>
@@ -70,23 +68,23 @@
                                         <label for="producto" class="form-label">Producto</label>
                                         <select class="form-control form-control-detalle"
                                                 th:field="*{detallesCompra[__${iterStat.index}__].productoId}"
-                                                id="producto" required>
+                                                id="producto">
                                             <option value="" selected>Seleccione un producto...</option>
                                             <option th:each="producto : ${productos}" th:value="${producto.id}"
-                                                    th:text="${producto.nombre}"></option>
+                                                    th:selected="${producto.id} == *{productoId}"></option>
                                         </select>
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="cantidad" class="form-label">Cantidad</label>
                                         <input type="number" class="form-control form-control-detalle"
                                                th:field="*{detallesCompra[__${iterStat.index}__].cantidad}"
-                                               id="cantidad" placeholder="Ingrese la cantidad..." required>
+                                               id="cantidad" placeholder="Ingrese la cantidad...">
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="precioUnitario" class="form-label">Precio Unitario</label>
                                         <input type="number" step="0.01" class="form-control form-control-detalle"
                                                th:field="*{detallesCompra[__${iterStat.index}__].precioUnitario}"
-                                               id="precioUnitario" placeholder="Ingrese el precio unitario..." required>
+                                               id="precioUnitario" placeholder="Ingrese el precio unitario...">
                                     </div>
                                 </div>
                             </div>

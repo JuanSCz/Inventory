@@ -101,7 +101,7 @@ public class DepositoServiceImpl implements DepositoService {
 
     @Override
     @Transactional
-    public void deleteDeposito(Long id) {
+    public boolean deleteDeposito(Long id) {
         try {
             logger.info("Eliminando Deposito con id: {}", id);
             if (!depositoRepository.existsById(id)) {
@@ -109,12 +109,13 @@ public class DepositoServiceImpl implements DepositoService {
             }
             depositoRepository.deleteById(id);
             logger.info("Deposito eliminado exitosamente con id: {}", id);
+            return true;
         } catch (ResourceNotFoundException e) {
             logger.warn("Deposito no encontrado: {}", e.getMessage());
-            throw e;
+            return false;
         } catch (Exception e) {
             logger.error("Error eliminando Deposito", e);
-            throw new DataAccessException("Error eliminando Deposito", e);
+            return false;
         }
     }
 

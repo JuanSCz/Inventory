@@ -88,7 +88,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional
-    public void deleteCategoria(Long id) {
+    public boolean deleteCategoria(Long id) {
         try {
             logger.info("Eliminando Categoria con id: {}", id);
             if (!categoriaRepository.existsById(id)) {
@@ -96,12 +96,13 @@ public class CategoriaServiceImpl implements CategoriaService {
             }
             categoriaRepository.deleteById(id);
             logger.info("Categoria eliminada exitosamente con id: {}", id);
+            return true;
         } catch (ResourceNotFoundException e) {
             logger.warn("Categoria no encontrada: {}", e.getMessage());
-            throw e;
+            return false;
         } catch (Exception e) {
             logger.error("Error eliminando Categoria", e);
-            throw new DataAccessException("Error eliminando Categoria", e);
+            return false;
         }
     }
 

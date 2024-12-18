@@ -67,12 +67,16 @@ public class ClienteController {
         return "redirect:/tableClientes";
     }
 
-    @PostMapping("/{id}")
-    public String deleteCliente(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCliente(@PathVariable Long id) {
         logger.debug("Llamando al método deleteCliente con id: {}", id);
-        clienteService.deleteCliente(id);
+        boolean isRemoved = clienteService.deleteCliente(id);
+        if (!isRemoved) {
+            logger.warn("Cliente con id: {} no encontrado", id);
+            return ResponseEntity.notFound().build();
+        }
         logger.debug("Cliente con id: {} eliminado correctamente", id);
-        return "redirect:/tableClientes";  // Redirige después de la eliminación
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")

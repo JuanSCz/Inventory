@@ -111,9 +111,11 @@
                                 Editar
                             </button>
                             <form th:action="@{/tableUsuarios/{id}(id=${usuario.id})}" method="post"
-                                  onsubmit="return confirm('¿Estás seguro de que deseas eliminar este cliente?');">
+                                  onsubmit="return confirmDelete(this);">
                                 <input type="hidden" name="_method" value="delete"/>
-                                <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
+                                <button type="submit" class="btn btn-danger btn-sm delete-button"
+                                        th:data-id="${usuario.id}">Borrar
+                                </button>
                             </form>
                         </div>
                     </td>
@@ -141,11 +143,14 @@
     </main>
 </div>
 
+<div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
 <div th:replace="~{fragments/formUpdateUsuarios :: updateModalUsuarios}"></div>
 <div th:replace="~{fragments/formCreateUsuarios :: createModalUsuarios}"></div>
 <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/indexUsuarios.js"></script>
-</body>
 
+</body>
 </html>
+
+

@@ -109,7 +109,8 @@
                     <td th:data-label="Total" th:text="${venta.total}"></td>
                     <td th:data-label="Acciones">
                         <div class="btn-group">
-                            <button class="btn bg-success bg-success-compra btn-sm navbar-menu me-2">
+                            <button class="btn bg-success bg-success-compra btn-sm navbar-menu me-2"
+                                    onclick="showDetalleVentaModal(this)" th:data-id="${venta.id}">
                                 Detalle
                             </button>
                             <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateVenta"
@@ -118,9 +119,11 @@
                                 Editar
                             </button>
                             <form th:action="@{/tableVentas/{id}(id=${venta.id})}" method="post"
-                                  onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta venta?');">
+                                  onsubmit="return confirmDelete(this);">
                                 <input type="hidden" name="_method" value="delete"/>
-                                <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
+                                <button type="submit" class="btn btn-danger btn-sm delete-button"
+                                        th:data-id="${venta.id}">Borrar
+                                </button>
                             </form>
                         </div>
                     </td>
@@ -148,6 +151,8 @@
     </main>
 </div>
 
+<div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
+<div th:replace="~{fragments/tableDetalleVentas :: createModalTableVentas}"></div>
 <div th:replace="~{fragments/formUpdateVentas :: updateModalVentas}"></div>
 <div th:replace="~{fragments/formCreateVentas :: createModalVentas}"></div>
 <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>

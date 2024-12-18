@@ -8,6 +8,7 @@ public class ClienteDTO {
 
     private Long id;
 
+
     @NotBlank(message = "{clienteDTO.nombre.notBlank}")
     @Size(max = 50, message = "{clienteDTO.nombre.size}")
     private String nombre;

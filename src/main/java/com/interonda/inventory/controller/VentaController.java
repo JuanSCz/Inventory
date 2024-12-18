@@ -71,12 +71,16 @@ public class VentaController {
         return "redirect:/tableVentas";
     }
 
-    @PostMapping("/{id}")
-    public String deleteVenta(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVenta(@PathVariable Long id) {
         logger.debug("Llamando al método deleteVenta con id: {}", id);
-        ventaService.deleteVenta(id);
+        boolean isRemoved = ventaService.deleteVenta(id);
+        if (!isRemoved) {
+            logger.warn("Venta con id: {} no encontrada", id);
+            return ResponseEntity.notFound().build();
+        }
         logger.debug("Venta con id: {} eliminada correctamente", id);
-        return "redirect:/tableVentas";
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")

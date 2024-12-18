@@ -18,7 +18,7 @@
 
 <body class="body-table" th:data-error-message="${errorMessage}">
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm responsive-navbar">
-    <div class="container-fluid d-flex p-0">
+    <div class="container-fluid">
         <img th:src="@{/images/logo.png}" alt="Interonda Logo"
              class="d-inline-block align-text-top me-2 interonda navbar-logo">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -95,8 +95,6 @@
                     <th scope="col">Costo</th>
                     <th scope="col">Cód. Barra</th>
                     <th scope="col">N° Serie</th>
-                    <th scope="col">Stock</th>
-                    <th scope="col">Stock/M</th>
                     <th scope="col">MAC</th>
                     <th scope="col">Categoria</th>
                     <th scope="col">Acciones</th>
@@ -111,8 +109,6 @@
                     <td th:data-label="Costo" th:text="${producto.costo}"></td>
                     <td th:data-label="CodigoBarras" th:text="${producto.codigoBarras}"></td>
                     <td th:data-label="NSerie" th:text="${producto.numeroDeSerie}"></td>
-                    <td th:data-label="Stock" th:text="${producto.stockActual}"></td>
-                    <td th:data-label="StockMin" th:text="${producto.stockMinimo}"></td>
                     <td th:data-label="MAC" th:text="${producto.macAddress}"></td>
                     <td th:data-label="Categoria" th:text="${producto.categoriaNombre}"></td>
                     <td th:data-label="Acciones">
@@ -123,9 +119,11 @@
                                 Editar
                             </button>
                             <form th:action="@{/tableProductos/{id}(id=${producto.id})}" method="post"
-                                  onsubmit="return confirm('¿Estás seguro de que deseas eliminar este producto?');">
+                                  onsubmit="return confirmDelete(this);">
                                 <input type="hidden" name="_method" value="delete"/>
-                                <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
+                                <button type="submit" class="btn btn-danger btn-sm delete-button"
+                                        th:data-id="${producto.id}">Borrar
+                                </button>
                             </form>
                         </div>
                     </td>
@@ -154,6 +152,7 @@
 </div>
 
 
+<div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
 <div th:replace="~{fragments/formUpdateProductos :: updateModalProductos}"></div>
 <div th:replace="~{fragments/formCreateProductos :: createModalProductos}"></div>
 <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>

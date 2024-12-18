@@ -1,6 +1,7 @@
 package com.interonda.inventory.controller;
 
 import com.interonda.inventory.dto.UsuarioDTO;
+import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.service.RolService;
 import com.interonda.inventory.service.UsuarioService;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -69,12 +71,16 @@ public class UsuarioController {
         return "redirect:/tableUsuarios";
     }
 
-    @PostMapping("/{id}")
-    public String deleteUsuario(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUsuario(@PathVariable Long id) {
         logger.debug("Llamando al método deleteUsuario con id: {}", id);
-        usuarioService.deleteUsuario(id);
+        boolean isRemoved = usuarioService.deleteUsuario(id);
+        if (!isRemoved) {
+            logger.warn("Usuario con id: {} no encontrado", id);
+            return ResponseEntity.notFound().build();
+        }
         logger.debug("Usuario con id: {} eliminado correctamente", id);
-        return "redirect:/tableUsuarios";  // Redirige después de la eliminación
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")

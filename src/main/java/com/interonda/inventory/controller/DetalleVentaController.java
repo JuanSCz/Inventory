@@ -1,5 +1,6 @@
 package com.interonda.inventory.controller;
 
+import com.interonda.inventory.dto.DetalleCompraDTO;
 import com.interonda.inventory.dto.DetalleVentaDTO;
 import com.interonda.inventory.service.DetalleVentaService;
 import org.slf4j.Logger;
@@ -13,8 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/detalle-ventas")
+@RequestMapping("/detallesVentas")
 public class DetalleVentaController {
 
     private static final Logger logger = LoggerFactory.getLogger(DetalleVentaController.class);
@@ -24,6 +27,19 @@ public class DetalleVentaController {
     @Autowired
     public DetalleVentaController(DetalleVentaService detalleVentaService) {
         this.detalleVentaService = detalleVentaService;
+    }
+
+    @GetMapping("/detalle/{id}")
+    public ResponseEntity<DetalleVentaDTO> getDetalleVentaById(@PathVariable Long id) {
+        logger.info("Solicitud recibida para obtener detalle de venta con id: {}", id);
+        DetalleVentaDTO detalleVenta = detalleVentaService.getDetalleVentaById(id);
+        return new ResponseEntity<>(detalleVenta, HttpStatus.OK);
+    }
+
+    @GetMapping("/{ventaId}")
+    public ResponseEntity<List<DetalleVentaDTO>> getDetallesByVentaId(@PathVariable Long ventaId) {
+        List<DetalleVentaDTO> detallesVenta = detalleVentaService.getDetallesByVentaId(ventaId);
+        return new ResponseEntity<>(detallesVenta, HttpStatus.OK);
     }
 
     @PostMapping
@@ -38,7 +54,7 @@ public class DetalleVentaController {
     public ResponseEntity<DetalleVentaDTO> updateDetalleVenta(@PathVariable Long id, @Valid @RequestBody DetalleVentaDTO detalleVentaDTO) {
         logger.info("Solicitud recibida para actualizar detalle de venta con id: {}", id);
         DetalleVentaDTO updatedDetalleVenta = detalleVentaService.updateDetalleVenta(id, detalleVentaDTO);
-        return ResponseEntity.ok(updatedDetalleVenta);
+        return new ResponseEntity<>(updatedDetalleVenta, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -46,20 +62,13 @@ public class DetalleVentaController {
     public ResponseEntity<Void> deleteDetalleVenta(@PathVariable Long id) {
         logger.info("Solicitud recibida para eliminar detalle de venta con id: {}", id);
         detalleVentaService.deleteDetalleVenta(id);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping
-    public ResponseEntity<Page<DetalleVentaDTO>> getAllDetalleVentas(Pageable pageable) {
+    public ResponseEntity<Page<DetalleVentaDTO>> getAllDetalleVenta(Pageable pageable) {
         logger.info("Solicitud recibida para obtener todos los detalles de venta");
-        Page<DetalleVentaDTO> detalleVentas = detalleVentaService.getAllDetalleVentas(pageable);
-        return ResponseEntity.ok(detalleVentas);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<DetalleVentaDTO> getDetalleVentaById(@PathVariable Long id) {
-        logger.info("Solicitud recibida para obtener detalle de venta con id: {}", id);
-        DetalleVentaDTO detalleVenta = detalleVentaService.getDetalleVentaById(id);
-        return ResponseEntity.ok(detalleVenta);
+        Page<DetalleVentaDTO> detallesVenta = detalleVentaService.getAllDetalleVenta(pageable);
+        return new ResponseEntity<>(detallesVenta, HttpStatus.OK);
     }
 }

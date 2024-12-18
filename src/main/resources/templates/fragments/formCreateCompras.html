@@ -17,7 +17,8 @@
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body modal-body-detalle">
-                    <form id="createCompraForm" th:action="@{/tableCompras}" method="post" th:object="${compraDTO}">
+                    <form id="createCompraForm" th:action="@{/tableCompras}" method="post" th:object="${compraDTO}"
+                          autocomplete="off">
                         <div class="row">
                             <!-- Campos de Compra -->
                             <div class="col-md-4 mb-3">
@@ -61,14 +62,14 @@
                             <div class="col-md-4 mb-3">
                                 <label for="total" class="form-label">Total</label>
                                 <input type="number" step="0.01" class="form-control form-control-detalle"
-                                       th:field="*{total}" id="total" placeholder="Ingrese el total..." required>
+                                       th:field="*{total}" id="total" placeholder="Ingrese el total...">
                             </div>
                             <div id="detalleContainer">
                                 <div class="row detalle-row">
                                     <div class="col-md-4 mb-3">
                                         <label for="producto" class="form-label">Producto</label>
                                         <select class="form-control form-control-detalle"
-                                                th:field="*{detallesCompra[0].productoId}" id="producto" required>
+                                                th:field="*{detallesCompra[0].productoId}" id="producto">
                                             <option value="" selected>Seleccione un producto...</option>
                                             <option th:each="producto : ${productos}" th:value="${producto.id}"
                                                     th:text="${producto.nombre}"></option>
@@ -78,13 +79,13 @@
                                         <label for="cantidad" class="form-label">Cantidad</label>
                                         <input type="number" class="form-control form-control-detalle"
                                                th:field="*{detallesCompra[0].cantidad}" id="cantidad"
-                                               placeholder="Ingrese la cantidad..." required>
+                                               placeholder="Ingrese la cantidad...">
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="precioUnitario" class="form-label">Precio Unitario</label>
                                         <input type="number" step="0.01" class="form-control form-control-detalle"
                                                th:field="*{detallesCompra[0].precioUnitario}" id="precioUnitario"
-                                               placeholder="Ingrese el precio unitario..." required>
+                                               placeholder="Ingrese el precio unitario...">
                                     </div>
                                 </div>
                             </div>

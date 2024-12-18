@@ -1,5 +1,7 @@
 package com.interonda.inventory.dto;
 
+import jakarta.validation.constraints.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,16 +11,27 @@ public class VentaDTO {
 
     private Long id;
 
+    @NotNull(message = "{ventaDTO.fecha.notNull}")
+    @FutureOrPresent(message = "{ventaDTO.fecha.futureOrPresent}")
     private LocalDate fecha;
 
+    @NotNull(message = "{ventaDTO.total.notNull}")
+    @DecimalMin(value = "0.0", inclusive = true, message = "{ventaDTO.total.decimalMin}")
+    @Digits(integer = 10, fraction = 2, message = "{ventaDTO.total.digits}")
     private BigDecimal total;
 
+    @NotBlank(message = "{ventaDTO.metodoPago.notBlank}")
     private String metodoPago;
 
+    @NotBlank(message = "{ventaDTO.estado.notBlank}")
     private String estado;
 
+    @NotNull(message = "{ventaDTO.impuestos.notNull}")
+    @DecimalMin(value = "0.0", inclusive = true, message = "{ventaDTO.impuestos.decimalMin}")
+    @Digits(integer = 10, fraction = 2, message = "{ventaDTO.impuestos.digits}")
     private BigDecimal impuestos;
 
+    @NotNull(message = "{ventaDTO.cliente.notNull}")
     private Long clienteId;
 
     private String clienteNombre;

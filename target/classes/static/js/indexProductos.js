@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeSearch();
     initializeCreateModal();
     initializeUpdateModal();
+    initializeDeleteModal();
 });
 
 // Manejo del modal de error
@@ -111,7 +112,6 @@ function populateUpdateModal(id) {
     fetch(`/tableProductos/${id}`)
         .then(response => response.json())
         .then(data => {
-            console.log(data); // Verificar los datos recibidos
             document.getElementById('id').value = data.id;
             document.getElementById('nombre').value = data.nombre;
             document.getElementById('descripcion').value = data.descripcion;
@@ -125,6 +125,42 @@ function populateUpdateModal(id) {
             document.getElementById('categoriaId').value = data.categoriaId;
         })
         .catch(error => console.error('Error al cargar los datos del producto:', error));
+}
+
+// Inicializar modal de eliminación para productos
+function initializeDeleteModal() {
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+    let deleteId = null;
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Evita el envío automático del formulario
+            deleteId = this.getAttribute('data-id');
+            const advertenciaMessage = '¿Está seguro que desea eliminar este producto?'; // Mensaje predeterminado
+            const modalBody = document.querySelector('#advertenciaModalGlobal .modal-body p');
+            modalBody.textContent = advertenciaMessage;
+
+            const modal = new bootstrap.Modal(document.getElementById('advertenciaModalGlobal'));
+            modal.show();
+        });
+    });
+
+    if (confirmDeleteButton) {
+        confirmDeleteButton.addEventListener('click', function () {
+            if (deleteId) {
+                fetch(`/tableProductos/${deleteId}`, {
+                    method: 'DELETE'
+                }).then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Error al eliminar el producto.');
+                    }
+                });
+            }
+        });
+    }
 }
 
 // Utilidad: Función de debounce para limitar solicitudes frecuentes

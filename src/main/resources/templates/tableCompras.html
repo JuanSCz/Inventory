@@ -109,7 +109,8 @@
                     <td th:data-label="Total" th:text="${compra.total}"></td>
                     <td th:data-label="Acciones">
                         <div class="btn-group">
-                            <button class="btn bg-success bg-success-compra btn-sm navbar-menu me-2">
+                            <button class="btn bg-success bg-success-compra btn-sm navbar-menu me-2"
+                                    th:data-id="${compra.id}" onclick="showDetalleCompraModal(this)">
                                 Detalle
                             </button>
                             <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateCompra"
@@ -118,9 +119,11 @@
                                 Editar
                             </button>
                             <form th:action="@{/tableCompras/{id}(id=${compra.id})}" method="post"
-                                  onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta compra?');">
+                                  onsubmit="return confirmDelete(this);">
                                 <input type="hidden" name="_method" value="delete"/>
-                                <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
+                                <button type="submit" class="btn btn-danger btn-sm delete-button"
+                                        th:data-id="${compra.id}">Borrar
+                                </button>
                             </form>
                         </div>
                     </td>
@@ -132,27 +135,30 @@
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
                     <a class="page-link"
-                       th:href="@{/tableCompras(page=${page.number - 1}, size=${page.size}, fecha=${param.fecha})}">Anterior</a>
+                       th:href="@{/tableVentas(page=${page.number - 1}, size=${page.size}, fecha=${param.fecha})}">Anterior</a>
                 </li>
                 <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
                     th:classappend="${page.number == i} ? 'active'">
-                    <a class="page-link" th:href="@{/tableCompras(page=${i}, size=${page.size}, fecha=${param.fecha})}"
+                    <a class="page-link" th:href="@{/tableVentas(page=${i}, size=${page.size}, fecha=${param.fecha})}"
                        th:text="${i + 1}">1</a>
                 </li>
                 <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
                     <a class="page-link"
-                       th:href="@{/tableCompras(page=${page.number + 1}, size=${page.size}, fecha=${param.fecha})}">Siguiente</a>
+                       th:href="@{/tableVentas(page=${page.number + 1}, size=${page.size}, fecha=${param.fecha})}">Siguiente</a>
                 </li>
             </ul>
         </nav>
     </main>
 </div>
 
+<div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
+<div th:replace="~{fragments/tableDetalleCompras :: createModalTableCompras}"></div>
 <div th:replace="~{fragments/formUpdateCompras :: updateModalCompras}"></div>
 <div th:replace="~{fragments/formCreateCompras :: createModalCompras}"></div>
 <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/indexCompras.js"></script>
+
 </body>
 
 </html>

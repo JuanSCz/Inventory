@@ -23,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class DetalleCompraServiceImpl implements DetalleCompraService {
 
@@ -134,6 +137,7 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
         }
     }
 
+
     @Override
     @Transactional(readOnly = true)
     public DetalleCompraDTO getDetalleCompraById(Long id) {
@@ -147,6 +151,25 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
         } catch (Exception e) {
             logger.error("Error obteniendo DetalleCompra por id: " + id, e);
             throw new DataAccessException("Error obteniendo DetalleCompra por id: " + id, e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DetalleCompraDTO> getDetallesByCompraId(Long compraId) {
+        try {
+            logger.info("Obteniendo detalles de compra para la compra con id: {}", compraId);
+            List<DetalleCompra> detallesCompra = detalleCompraRepository.findByCompraId(compraId);
+            return detallesCompra.stream()
+                    .map(detalle -> {
+                        DetalleCompraDTO dto = convertToDto(detalle);
+                        dto.setProductoNombre(detalle.getProducto().getNombre());
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error("Error obteniendo detalles de compra para la compra con id: " + compraId, e);
+            throw new DataAccessException("Error obteniendo detalles de compra para la compra con id: " + compraId, e);
         }
     }
 }

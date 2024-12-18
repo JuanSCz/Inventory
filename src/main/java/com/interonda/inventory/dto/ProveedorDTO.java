@@ -15,21 +15,21 @@ public class ProveedorDTO {
     @Size(max = 50, message = "{proveedorDTO.nombre.size}")
     private String nombre;
 
-    @NotBlank(message = "{proveedorDTO.contactoProveedor.notBlank}")
     @Size(max = 15, message = "{proveedorDTO.contactoProveedor.size}")
+    @NotBlank(message = "{proveedorDTO.contactoProveedor.notBlank}")
     private String contactoProveedor;
 
-    @NotBlank(message = "{proveedorDTO.direccion.notBlank}")
     @Size(max = 50, message = "{proveedorDTO.direccion.size}")
+    @NotBlank(message = "{proveedorDTO.direccion.notBlank}")
     private String direccion;
 
+    @Size(max = 254, message = "{proveedorDTO.pais.size}")
     @NotBlank(message = "{proveedorDTO.pais.notBlank}")
-    @Length(max = 254, message = "{proveedorDTO.pais.length}")
     private String pais;
 
+    @Size(max = 254, message = "{proveedorDTO.eEmailProveedor.size}")
+    @Email(message = "{proveedorDTO.eEmailProveedor.email}")
     @NotBlank(message = "{proveedorDTO.emailProveedor.notBlank}")
-    @Size(max = 254, message = "{proveedorDTO.emailProveedor.size}")
-    @Email(message = "{proveedorDTO.emailProveedor.email}")
     private String emailProveedor;
 
     private List<Long> productosIds;

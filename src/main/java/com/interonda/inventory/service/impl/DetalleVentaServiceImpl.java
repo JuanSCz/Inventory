@@ -1,8 +1,7 @@
 package com.interonda.inventory.service.impl;
 
-import com.interonda.inventory.entity.DetalleVenta;
-import com.interonda.inventory.entity.Producto;
-import com.interonda.inventory.entity.Venta;
+import com.interonda.inventory.dto.DetalleCompraDTO;
+import com.interonda.inventory.entity.*;
 import com.interonda.inventory.dto.DetalleVentaDTO;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
@@ -22,6 +21,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -54,31 +56,23 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
         return detalleVentaMapper.toEntity(detalleVentaDTO);
     }
 
+    @Override
     @Transactional
     public DetalleVentaDTO createDetalleVenta(DetalleVentaDTO detalleVentaDTO) {
-        // Validar la entidad
         ValidatorUtils.validateEntity(detalleVentaDTO, validator);
 
-        // Buscar la venta asociada
-        Venta venta = ventaRepository.findById(detalleVentaDTO.getVentaId())
-                .orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + detalleVentaDTO.getVentaId()));
+        Venta venta = ventaRepository.findById(detalleVentaDTO.getVentaId()).orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + detalleVentaDTO.getVentaId()));
 
-        // Buscar el producto asociado
-        Producto producto = productoRepository.findById(detalleVentaDTO.getProductoId())
-                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleVentaDTO.getProductoId()));
+        Producto producto = productoRepository.findById(detalleVentaDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleVentaDTO.getProductoId()));
 
-        // Convertir DTO a entidad
         DetalleVenta detalleVenta = detalleVentaMapper.toEntity(detalleVentaDTO);
         detalleVenta.setVenta(venta);
         detalleVenta.setProducto(producto);
 
         try {
-            // Guardar la entidad
             DetalleVenta savedDetalleVenta = detalleVentaRepository.save(detalleVenta);
-            // Convertir entidad guardada a DTO y devolver
             return detalleVentaMapper.toDto(savedDetalleVenta);
         } catch (PersistenceException e) {
-            // Manejar excepción de persistencia
             throw new DataAccessException("Error creando DetalleVenta", e);
         }
     }
@@ -87,10 +81,9 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
     @Transactional
     public DetalleVentaDTO updateDetalleVenta(Long id, DetalleVentaDTO detalleVentaDTO) {
         ValidatorUtils.validateEntity(detalleVentaDTO, validator);
-
         try {
             logger.info("Actualizando DetalleVenta con id: {}", id);
-            DetalleVenta detalleVenta = detalleVentaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("DetalleVenta no encontrado con el id: " + id));
+            DetalleVenta detalleVenta = detalleVentaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("DetalleVenta no encontrada con el id: " + id));
             detalleVenta.setCantidad(detalleVentaDTO.getCantidad());
             detalleVenta.setPrecioUnitario(detalleVentaDTO.getPrecioUnitario());
 
@@ -118,7 +111,7 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
         try {
             logger.info("Eliminando DetalleVenta con id: {}", id);
             if (!detalleVentaRepository.existsById(id)) {
-                throw new ResourceNotFoundException("DetalleVenta no encontrado con el id: " + id);
+                throw new ResourceNotFoundException("DetalleVenta no encontrada con el id: " + id);
             }
             detalleVentaRepository.deleteById(id);
             logger.info("DetalleVenta eliminado exitosamente con id: {}", id);
@@ -133,11 +126,11 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<DetalleVentaDTO> getAllDetalleVentas(Pageable pageable) {
+    public Page<DetalleVentaDTO> getAllDetalleVenta(Pageable pageable) {
         try {
             logger.info("Obteniendo todos los DetalleVenta con paginación");
             Page<DetalleVenta> detalleVentaPage = detalleVentaRepository.findAll(pageable);
-            return detalleVentaPage.map(this::convertToDto);
+            return detalleVentaPage.map(detalleVentaMapper::toDto);
         } catch (Exception e) {
             logger.error("Error obteniendo todos los DetalleVenta con paginación", e);
             throw new DataAccessException("Error obteniendo todos los DetalleVenta con paginación", e);
@@ -149,7 +142,7 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
     public DetalleVentaDTO getDetalleVentaById(Long id) {
         try {
             logger.info("Obteniendo DetalleVenta con id: {}", id);
-            DetalleVenta detalleVenta = detalleVentaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("DetalleVenta no encontrado con el id: " + id));
+            DetalleVenta detalleVenta = detalleVentaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Detalle de venta no encontrado con el id: " + id));
             return convertToDto(detalleVenta);
         } catch (ResourceNotFoundException e) {
             logger.warn("DetalleVenta no encontrado: {}", e.getMessage());
@@ -157,6 +150,25 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
         } catch (Exception e) {
             logger.error("Error obteniendo DetalleVenta por id: " + id, e);
             throw new DataAccessException("Error obteniendo DetalleVenta por id: " + id, e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DetalleVentaDTO> getDetallesByVentaId(Long ventaId) {
+        try {
+            logger.info("Obteniendo detalles de venta para la venta con id: {}", ventaId);
+            List<DetalleVenta> detallesVenta = detalleVentaRepository.findByVentaId(ventaId);
+            return detallesVenta.stream()
+                    .map(detalle -> {
+                        DetalleVentaDTO dto = convertToDto(detalle);
+                        dto.setProductoNombre(detalle.getProducto().getNombre());
+                        return dto;
+                    })
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.error("Error obteniendo detalles de venta para la venta con id: " + ventaId, e);
+            throw new DataAccessException("Error obteniendo detalles de venta para la venta con id: " + ventaId, e);
         }
     }
 }

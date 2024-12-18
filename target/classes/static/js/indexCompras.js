@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeSearch();
     initializeCreateModal();
     initializeUpdateModal();
+    initializeDeleteModal();
     initializeAddDetalleButton();
 });
 
@@ -179,6 +180,76 @@ function populateUpdateModal(id) {
             });
         })
         .catch(error => console.error('Error al cargar los datos de la compra:', error));
+}
+
+function showDetalleCompraModal(button) {
+    const compraId = button.getAttribute('data-id');
+    fetch(`/detallesCompra/${compraId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener los detalles de la compra');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!Array.isArray(data)) {
+                throw new Error('La respuesta no es un array');
+            }
+            const modalBody = document.querySelector('#createDetalleComprasModal .modal-body tbody');
+            modalBody.innerHTML = '';
+
+            data.forEach(detalle => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${detalle.id}</td>
+                    <td>${detalle.productoNombre}</td>
+                    <td>${detalle.cantidad}</td>
+                    <td>${detalle.precioUnitario.toFixed(2)}</td>
+                    <td>${(detalle.cantidad * detalle.precioUnitario).toFixed(2)}</td>
+                `;
+                modalBody.appendChild(row);
+            });
+
+            const detalleModal = new bootstrap.Modal(document.getElementById('createDetalleComprasModal'));
+            detalleModal.show();
+        })
+        .catch(error => console.error('Error al cargar los detalles de la compra:', error));
+}
+
+// Inicializar modal de eliminación para compras
+function initializeDeleteModal() {
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+    let deleteId = null;
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Evita el envío automático del formulario
+            deleteId = this.getAttribute('data-id');
+            const advertenciaMessage = '¿Está seguro que desea eliminar este dato?'; // Mensaje predeterminado
+            const modalBody = document.querySelector('#advertenciaModalGlobal .modal-body p');
+            modalBody.textContent = advertenciaMessage;
+
+            const modal = new bootstrap.Modal(document.getElementById('advertenciaModalGlobal'));
+            modal.show();
+        });
+    });
+
+    if (confirmDeleteButton) {
+        confirmDeleteButton.addEventListener('click', function () {
+            if (deleteId) {
+                fetch(`/tableCompras/${deleteId}`, {
+                    method: 'DELETE'
+                }).then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Error al eliminar el dato.');
+                    }
+                });
+            }
+        });
+    }
 }
 
 // Utilidad: Función de debounce para limitar solicitudes frecuentes

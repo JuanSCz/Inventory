@@ -10,40 +10,40 @@
 <div th:fragment="createModalDepositos">
     <div class="modal fade" id="createDepositoModal" tabindex="-1" aria-labelledby="createDepositoLabel"
          aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content modal-content-createDeposito">
-                <div class="modal-header modal-header-createDeposito">
-                    <h5 class="modal-title modal-title-createDeposito" id="exampleModalLabel">Crear Depósito</h5>
-                    <button type="button" class="btn-close btn-close-createDeposito" data-bs-dismiss="modal"
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content modal-content-createProveedor">
+                <div class="modal-header modal-header-createProveedor">
+                    <h5 class="modal-title modal-title-createProveedor" id="exampleModalLabel">Crear Depósito</h5>
+                    <button type="button" class="btn-close btn-close-createProveedor" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form th:action="@{/tableDepositos}" method="post" th:object="${depositoDTO}" autocomplete="off">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 col-sm-12 mb-3">
                                 <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control form-control-createDeposito" id="nombre"
+                                <input type="text" class="form-control form-control-createProveedor" id="nombre"
                                        th:field="*{nombre}" placeholder="Ingrese el nombre">
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 col-sm-12 mb-3">
                                 <label for="provincia" class="form-label">Provincia</label>
-                                <input type="text" class="form-control form-control-createDeposito" id="provincia"
+                                <input type="text" class="form-control form-control-createProveedor" id="provincia"
                                        th:field="*{provincia}" placeholder="Ingrese la provincia">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 col-sm-12 mb-3">
                                 <label for="direccion" class="form-label">Dirección</label>
-                                <input type="text" class="form-control form-control-createDeposito" id="direccion"
+                                <input type="text" class="form-control form-control-createProveedor" id="direccion"
                                        th:field="*{direccion}" placeholder="Ingrese la dirección">
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-6 col-sm-12 mb-3">
                                 <label for="contacto" class="form-label">Contacto</label>
-                                <input type="text" class="form-control form-control-createDeposito" id="contacto"
+                                <input type="text" class="form-control form-control-createProveedor" id="contacto"
                                        th:field="*{contactoDeposito}" placeholder="Ingrese el contacto">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-primary-createDeposito w-100">Crear</button>
+                        <button type="submit" class="btn btn-primary btn-primary-createProveedor w-100">Crear</button>
                     </form>
                 </div>
             </div>

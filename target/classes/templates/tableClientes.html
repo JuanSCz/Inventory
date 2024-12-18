@@ -115,9 +115,11 @@
                                 Editar
                             </button>
                             <form th:action="@{/tableClientes/{id}(id=${cliente.id})}" method="post"
-                                  onsubmit="return confirm('¿Estás seguro de que deseas eliminar este cliente?');">
+                                  onsubmit="return confirmDelete(this);">
                                 <input type="hidden" name="_method" value="delete"/>
-                                <button type="submit" class="btn btn-danger btn-sm">Borrar</button>
+                                <button type="submit" class="btn btn-danger btn-sm delete-button"
+                                        th:data-id="${cliente.id}">Borrar
+                                </button>
                             </form>
                         </div>
                     </td>
@@ -144,6 +146,8 @@
         </nav>
     </main>
 </div>
+
+<div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
 <div th:replace="~{fragments/formUpdateClientes.html :: updateModalClientes}"></div>
 <div th:replace="~{fragments/formCreateClientes :: createModalClientes}"></div>
 <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>

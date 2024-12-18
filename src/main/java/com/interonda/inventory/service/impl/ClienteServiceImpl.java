@@ -85,7 +85,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public void deleteCliente(Long id) {
+    public boolean deleteCliente(Long id) {
         try {
             logger.info("Eliminando Cliente con id: {}", id);
             if (!clienteRepository.existsById(id)) {
@@ -93,12 +93,13 @@ public class ClienteServiceImpl implements ClienteService {
             }
             clienteRepository.deleteById(id);
             logger.info("Cliente eliminado exitosamente con id: {}", id);
+            return true;
         } catch (ResourceNotFoundException e) {
             logger.warn("Cliente no encontrado: {}", e.getMessage());
-            throw e;
+            return false;
         } catch (Exception e) {
             logger.error("Error eliminando Cliente", e);
-            throw new DataAccessException("Error eliminando Cliente", e);
+            return false;
         }
     }
 

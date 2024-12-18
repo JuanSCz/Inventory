@@ -38,9 +38,7 @@ public class CategoriaController {
     @PostMapping
     public String createCategoria(@Valid CategoriaDTO categoriaDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("categorias", categoriaService.getAllCategorias(pageable).getContent());
             model.addAttribute("categoriaDTO", categoriaDTO);
@@ -53,9 +51,7 @@ public class CategoriaController {
     @PostMapping("/update")
     public String updateCategoria(@Valid CategoriaDTO categoriaDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("categoriaDTO", categoriaDTO);
             model.addAttribute("categorias", categoriaService.getAllCategorias(pageable).getContent());
@@ -65,12 +61,16 @@ public class CategoriaController {
         return "redirect:/tableCategorias";
     }
 
-    @PostMapping("/{id}")
-    public String deleteCategoria(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCategoria(@PathVariable Long id) {
         logger.debug("Llamando al método deleteCategoria con id: {}", id);
-        categoriaService.deleteCategoria(id);
+        boolean isRemoved = categoriaService.deleteCategoria(id);
+        if (!isRemoved) {
+            logger.warn("Categoria con id: {} no encontrada", id);
+            return ResponseEntity.notFound().build();
+        }
         logger.debug("Categoria con id: {} eliminada correctamente", id);
-        return "redirect:/tableCategorias";
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")

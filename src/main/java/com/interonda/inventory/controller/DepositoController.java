@@ -64,12 +64,16 @@ public class DepositoController {
         return "redirect:/tableDepositos";
     }
 
-    @PostMapping("/{id}")
-    public String deleteDeposito(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteDeposito(@PathVariable Long id) {
         logger.debug("Llamando al método deleteDeposito con id: {}", id);
-        depositoService.deleteDeposito(id);
+        boolean isRemoved = depositoService.deleteDeposito(id);
+        if (!isRemoved) {
+            logger.warn("Deposito con id: {} no encontrado", id);
+            return ResponseEntity.notFound().build();
+        }
         logger.debug("Deposito con id: {} eliminado correctamente", id);
-        return "redirect:/tableDepositos";
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")

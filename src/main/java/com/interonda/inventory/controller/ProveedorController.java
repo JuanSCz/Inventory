@@ -66,13 +66,16 @@ public class ProveedorController {
         return "redirect:/tableProveedores";
     }
 
-
-    @PostMapping("/{id}")
-    public String deleteProveedor(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProveedor(@PathVariable Long id) {
         logger.debug("Llamando al método deleteProveedor con id: {}", id);
-        proveedorService.deleteProveedor(id);
+        boolean isRemoved = proveedorService.deleteProveedor(id);
+        if (!isRemoved) {
+            logger.warn("Proveedor con id: {} no encontrado", id);
+            return ResponseEntity.notFound().build();
+        }
         logger.debug("Proveedor con id: {} eliminado correctamente", id);
-        return "redirect:/tableProveedores";  // Redirige después de la eliminación
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")

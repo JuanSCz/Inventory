@@ -10,82 +10,80 @@
 <div th:fragment="createModalProductos">
     <div class="modal fade" id="createProductoModal" tabindex="-1" aria-labelledby="createProductoModal"
          aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content modal-content-createProveedor">
-                <div class="modal-header modal-header-createProveedor">
-                    <h5 class="modal-title modal-title-createProveedor" id="exampleModalLabel">Crear Producto</h5>
-                    <button type="button" class="btn-close btn-close-createProveedor" data-bs-dismiss="modal"
+        <div class="modal-dialog modal-lg modal-dialog-detalle">
+            <div class="modal-content modal-content-detalle">
+                <div class="modal-header modal-header-detalle">
+                    <h5 class="modal-title modal-title-detalle" id="exampleModalLabel">Crear Producto</h5>
+                    <button type="button" class="btn-close btn-close-detalle" data-bs-dismiss="modal"
                             aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body modal-body-detalle">
                     <form th:action="@{/tableProductos}" method="post" th:object="${productoDTO}" autocomplete="off">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="nombre"
+                                <input type="text" class="form-control form-control-detalle" id="nombre"
                                        th:field="*{nombre}" placeholder="Ingrese el nombre">
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="descripcion" class="form-label">Descripción</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="descripcion"
+                                <input type="text" class="form-control form-control-detalle" id="descripcion"
                                        th:field="*{descripcion}" placeholder="Ingrese la descripción">
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="precio" class="form-label">Precio</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="precio"
+                                <input type="text" class="form-control form-control-detalle" id="precio"
                                        th:field="*{precio}" placeholder="Ingrese el precio">
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="costo" class="form-label">Costo</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="costo"
-                                       th:field="*{costo}" placeholder="Ingrese el costo">
-                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
+                                <label for="costo" class="form-label">Costo</label>
+                                <input type="text" class="form-control form-control-detalle" id="costo"
+                                       th:field="*{costo}" placeholder="Ingrese el costo">
+                            </div>
+                            <div class="col-md-4 mb-3">
                                 <label for="codigoBarras" class="form-label">Código de Barras</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="codigoBarras"
+                                <input type="text" class="form-control form-control-detalle" id="codigoBarras"
                                        th:field="*{codigoBarras}" placeholder="Ingrese el código">
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="numeroDeSerie" class="form-label">Número de Serie</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="numeroDeSerie"
+                                <input type="text" class="form-control form-control-detalle" id="numeroDeSerie"
                                        th:field="*{numeroDeSerie}" placeholder="Ingrese el número">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="stockActual" class="form-label">Stock Actual</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="stockActual"
+                                <input type="text" class="form-control form-control-detalle" id="stockActual"
                                        th:field="*{stockActual}" placeholder="Ingrese el stock actual">
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="stockMinimo" class="form-label">Stock Mínimo</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="stockMinimo"
+                                <input type="text" class="form-control form-control-detalle" id="stockMinimo"
                                        th:field="*{stockMinimo}" placeholder="Ingrese el stock mínimo">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="macAddress" class="form-label">MAC Address</label>
+                                <input type="text" class="form-control form-control-detalle" id="macAddress"
+                                       th:field="*{macAddress}" placeholder="Ingrese la MAC Address">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="macAddress" class="form-label">MAC Address</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="macAddress"
-                                       th:field="*{macAddress}" placeholder="Ingrese la MAC Address">
-                            </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3 mx-auto">
                                 <label for="categoriaId" class="form-label">Categoría</label>
-                                <select class="form-select form-control-createProveedor" id="categoriaId"
-                                        th:field="*{categoriaId}">
-                                    <option value="">Seleccionar Categoria</option>
+                                <select class="form-control form-control-detalle" id="categoriaId" th:field="*{categoriaId}">
+                                    <option value="">Seleccione una categoría</option>
                                     <option th:each="categoria : ${categorias}" th:value="${categoria.id}"
-                                            th:text="${categoria.nombre}">
-                                    </option>
+                                            th:text="${categoria.nombre}"></option>
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-primary-createProducto w-100">Crear
-                        </button>
+                        <div class="modal-footer" id="modal-footer-detalle">
+                            <button type="submit" class="btn button-detalle">Crear</button>
+                            <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
+                        </div>
                     </form>
                 </div>
             </div>

@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeSearch();
     initializeCreateModal();
     initializeUpdateModal();
+    initializeDeleteModal();
 });
 
 // Manejo del modal de error
@@ -71,48 +72,81 @@ function initializeCreateModal() {
 
 // Inicializar modal de actualización para usuarios
 function initializeUpdateModal() {
-    // Crear una única instancia del modal
     const updateModal = new bootstrap.Modal(document.getElementById('updateUsuarioModal'));
 
-    // Seleccionar todos los botones relacionados con la actualización
     const updateButtons = document.querySelectorAll('.buttonUpdateUsuario[data-id]');
 
     updateButtons.forEach(button => {
         button.addEventListener('click', function () {
-            const id = this.getAttribute('data-id'); // Obtener el ID del usuario
-            populateUpdateModal(id); // Llenar los datos del modal con el ID del usuario
-            updateModal.show(); // Mostrar el modal usando la misma instancia
+            const id = this.getAttribute('data-id');
+            populateUpdateModal(id);
+            updateModal.show();
         });
     });
 
-    // Limpiar el modal cuando se cierra
     const updateModalElement = document.getElementById('updateUsuarioModal');
     updateModalElement.addEventListener('hidden.bs.modal', function () {
-        // Limpiar los campos del formulario
-        document.getElementById('id').value = '';
-        document.getElementById('nombre').value = '';
-        document.getElementById('contrasenia').value = '';
-        document.getElementById('contacto').value = '';
-        document.getElementById('rol').value = '';
-
-        // Opcional: limpiar clases de validación, si usas alguna
         const form = updateModalElement.querySelector('form');
         if (form) form.reset();
     });
 }
 
 function populateUpdateModal(id) {
-    fetch(`/tableDepositos/${id}`)
+    fetch(`/tableUsuarios/${id}`)
         .then(response => response.json())
         .then(data => {
-            const updateModalElement = document.getElementById('updateDepositoModal');
-            updateModalElement.querySelector('#id').value = data.id;
-            updateModalElement.querySelector('#nombre').value = data.nombre;
-            updateModalElement.querySelector('#provincia').value = data.provincia;
-            updateModalElement.querySelector('#direccion').value = data.direccion;
-            updateModalElement.querySelector('#contactoDeposito').value = data.contactoDeposito;
+            document.getElementById('id').value = data.id;
+            document.getElementById('nombre').value = data.nombre;
+            document.getElementById('contrasenia').value = data.contrasenia;
+            document.getElementById('contacto').value = data.contacto;
+            document.getElementById('rol').value = data.rolId;
+
+            // Establecer el nombre del rol seleccionado
+            const rolSelect = document.getElementById('rol');
+            for (let i = 0; i < rolSelect.options.length; i++) {
+                if (rolSelect.options[i].value == data.rolId) {
+                    rolSelect.options[i].selected = true;
+                    break;
+                }
+            }
         })
-        .catch(error => console.error('Error al cargar los datos del depósito:', error));
+        .catch(error => console.error('Error al cargar los datos del usuario:', error));
+}
+
+// Inicializar modal de eliminación para usuarios
+function initializeDeleteModal() {
+    const deleteButtons = document.querySelectorAll('.delete-button');
+    const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+    let deleteId = null;
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.preventDefault(); // Evita el envío automático del formulario
+            deleteId = this.getAttribute('data-id');
+            const advertenciaMessage = '¿Está seguro que desea eliminar este usuario?'; // Mensaje predeterminado
+            const modalBody = document.querySelector('#advertenciaModalGlobal .modal-body p');
+            modalBody.textContent = advertenciaMessage;
+
+            const modal = new bootstrap.Modal(document.getElementById('advertenciaModalGlobal'));
+            modal.show();
+        });
+    });
+
+    if (confirmDeleteButton) {
+        confirmDeleteButton.addEventListener('click', function () {
+            if (deleteId) {
+                fetch(`/tableUsuarios/${deleteId}`, {
+                    method: 'DELETE'
+                }).then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Error al eliminar el usuario.');
+                    }
+                });
+            }
+        });
+    }
 }
 
 // Utilidad: Función de debounce para limitar solicitudes frecuentes

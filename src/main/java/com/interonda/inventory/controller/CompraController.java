@@ -1,6 +1,7 @@
 package com.interonda.inventory.controller;
 
 import com.interonda.inventory.dto.CompraDTO;
+import com.interonda.inventory.dto.VentaDTO;
 import com.interonda.inventory.service.CompraService;
 import com.interonda.inventory.service.ProductoService;
 import com.interonda.inventory.service.ProveedorService;
@@ -48,9 +49,7 @@ public class CompraController {
     @PostMapping
     public String createCompra(@Valid CompraDTO compraDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("compras", compraService.getAllCompras(pageable).getContent());
             model.addAttribute("compraDTO", compraDTO);
@@ -63,9 +62,7 @@ public class CompraController {
     @PostMapping("/update")
     public String updateCompra(@Valid CompraDTO compraDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("compraDTO", compraDTO);
             model.addAttribute("compras", compraService.getAllCompras(pageable).getContent());
@@ -77,12 +74,16 @@ public class CompraController {
         return "redirect:/tableCompras";
     }
 
-    @PostMapping("/{id}")
-    public String deleteCompra(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCompra(@PathVariable Long id) {
         logger.debug("Llamando al método deleteCompra con id: {}", id);
-        compraService.deleteCompra(id);
+        boolean isRemoved = compraService.deleteCompra(id);
+        if (!isRemoved) {
+            logger.warn("Compra con id: {} no encontrada", id);
+            return ResponseEntity.notFound().build();
+        }
         logger.debug("Compra con id: {} eliminada correctamente", id);
-        return "redirect:/tableCompras";
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
@@ -111,8 +112,7 @@ public class CompraController {
     }
 
     @GetMapping("/search")
-    public String searchCompras(@RequestParam(required = false) String nombreProveedor,
-                                Model model, Pageable pageable) {
+    public String searchCompras(@RequestParam(required = false) String nombreProveedor, Model model, Pageable pageable) {
         int pageSize = 15;
         Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
         Page<CompraDTO> compras;

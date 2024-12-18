@@ -66,7 +66,7 @@ public class ProductoController {
             Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
             model.addAttribute("productos", productos.getContent());
             model.addAttribute("productoDTO", productoDTO);
-            model.addAttribute("page", productos); // Asegúrate de agregar el objeto 'page' al modelo
+            model.addAttribute("page", productos);
             model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
             return "tableProductos";
         }
@@ -74,12 +74,16 @@ public class ProductoController {
         return "redirect:/tableProductos";
     }
 
-    @PostMapping("/{id}")
-    public String deleteProducto(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProducto(@PathVariable Long id) {
         logger.debug("Llamando al método deleteProducto con id: {}", id);
-        productoService.deleteProducto(id);
+        boolean isRemoved = productoService.deleteProducto(id);
+        if (!isRemoved) {
+            logger.warn("Producto con id: {} no encontrado", id);
+            return ResponseEntity.notFound().build();
+        }
         logger.debug("Producto con id: {} eliminado correctamente", id);
-        return "redirect:/tableProductos";
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")
