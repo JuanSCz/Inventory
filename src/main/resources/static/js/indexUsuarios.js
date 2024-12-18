@@ -123,7 +123,7 @@ function initializeDeleteModal() {
         button.addEventListener('click', function (event) {
             event.preventDefault(); // Evita el envío automático del formulario
             deleteId = this.getAttribute('data-id');
-            const advertenciaMessage = '¿Está seguro que desea eliminar este usuario?'; // Mensaje predeterminado
+            const advertenciaMessage = '¿Está seguro que desea eliminar este dato?'; // Mensaje predeterminado
             const modalBody = document.querySelector('#advertenciaModalGlobal .modal-body p');
             modalBody.textContent = advertenciaMessage;
 

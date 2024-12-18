@@ -22,5 +22,7 @@ public interface DepositoService {
     Page<DepositoDTO> getAllDepositos(Pageable pageable);
 
     Page<DepositoDTO> searchDepositosByName(String nombre, Pageable pageable);
+
+    long countDepositos();
 }
 

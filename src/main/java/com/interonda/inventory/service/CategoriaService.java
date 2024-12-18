@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CategoriaService {
+    
     CategoriaDTO getCategoria(Long id);
 
     CategoriaDTO createCategoria(CategoriaDTO categoriaDTO);
@@ -17,4 +18,6 @@ public interface CategoriaService {
     Page<CategoriaDTO> getAllCategorias(Pageable pageable);
 
     Page<CategoriaDTO> searchCategoriasByName(String nombre, Pageable pageable);
+
+    long countCategorias();
 }

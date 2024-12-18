@@ -26,4 +26,6 @@ public interface VentaService {
     Page<VentaDTO> searchVentasByFecha(LocalDate fecha, Pageable pageable);
 
     Page<VentaDTO> searchVentasByClienteNombre(String nombreCliente, Pageable pageable);
+
+    long countVentas();
 }

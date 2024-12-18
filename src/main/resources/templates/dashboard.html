@@ -17,7 +17,7 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm responsive-navbar">
     <div class="container-fluid">
         <img th:src="@{/images/logo.png}" alt="Interonda Logo"
              class="d-inline-block align-text-top me-2 interonda navbar-logo">
@@ -31,10 +31,10 @@
                     <a class="nav-link active" aria-current="page" th:href="@{/dashboard}">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/}">Admin</a>
+                    <a class="nav-link" th:href="@{/usuario}">Usuario</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/login}">Salir</a>
+                    <a class="nav-link" th:href="@{/index}">Salir</a>
                 </li>
             </ul>
         </div>
@@ -53,13 +53,22 @@
                 <a class="nav-link text-white" th:href="@{/tableClientes}">Clientes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/}">Ventas</a>
+                <a class="nav-link text-white" th:href="@{/tableProductos}">Productos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/}">Compras</a>
+                <a class="nav-link text-white" th:href="@{/tableCategorias}">Categorias</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/}">Depósitos</a>
+                <a class="nav-link text-white" th:href="@{/tableDepositos}">Depósitos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/tableCompras}">Compras</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/tableVentas}">Ventas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/tableUsuarios}">Usuarios</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/}">Historiales de Stock</a>
@@ -72,13 +81,69 @@
             <div class="card-container">
                 <div class="card mb-3 shadow-sm elegant-card">
                     <div class="card-body body-dashboard">
-                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalProductos}"></h2>
-                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Productos</h5>
-
+                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalProveedores}"></h2>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Proveedores</h5>
                     </div>
                 </div>
             </div>
-            <!-- Repite el bloque anterior para cada tarjeta, cambiando el valor de la variable según sea necesario -->
+            <div class="card-container">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body body-dashboard">
+                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalProductos}"></h2>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Productos</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body body-dashboard">
+                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalClientes}"></h2>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Clientes</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body body-dashboard">
+                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalCompras}"></h2>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Compras</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body body-dashboard">
+                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalVentas}"></h2>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Ventas</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row-dashboard">
+            <div class="card-container">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body body-dashboard">
+                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalUsuarios}"></h2>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Usuarios</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body body-dashboard">
+                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalDepositos}"></h2>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Depositos</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="card mb-3 shadow-sm elegant-card">
+                    <div class="card-body body-dashboard">
+                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalCategorias}"></h2>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Categorias</h5>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 </div>

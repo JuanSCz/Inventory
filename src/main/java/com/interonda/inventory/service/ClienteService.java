@@ -25,5 +25,5 @@ public interface ClienteService {
 
     Page<ClienteDTO> searchClientesByName(String nombre, Pageable pageable);
 
-
+    long countClientes();
 }

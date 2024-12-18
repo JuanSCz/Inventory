@@ -162,6 +162,19 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional(readOnly = true)
+    public long countUsuarios() {
+        try {
+            long total = usuarioRepository.count();
+            logger.info("Total de proveedores: {}", total);
+            return total;
+        } catch (Exception e) {
+            logger.error("Error contando todas los Proveedores", e);
+            throw new DataAccessException("Error contando todos los Proveedores", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<UsuarioDTO> searchUsuariosByName(String nombre, Pageable pageable) {
         try {
             logger.info("Buscando Usuarios por nombre: {}", nombre);

@@ -108,6 +108,8 @@ public class UsuarioController {
         return "tableUsuarios";
     }
 
+
+
     @GetMapping("/search")
     public String searchUsuariosByName(@RequestParam String name, Model model, Pageable pageable) {
         int pageSize = 15;

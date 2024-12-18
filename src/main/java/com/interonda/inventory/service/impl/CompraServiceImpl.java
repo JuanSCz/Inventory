@@ -206,6 +206,19 @@ public class CompraServiceImpl implements CompraService {
 
     @Override
     @Transactional(readOnly = true)
+    public long countCompras() {
+        try {
+            long total = compraRepository.count();
+            logger.info("Total de compras: {}", total);
+            return total;
+        } catch (Exception e) {
+            logger.error("Error contando todas las Compras", e);
+            throw new DataAccessException("Error contando todas las Compras", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<CompraDTO> searchComprasByFecha(LocalDate fecha, Pageable pageable) {
         try {
             logger.info("Buscando Compras por fecha: {}", fecha);

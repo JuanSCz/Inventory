@@ -22,4 +22,6 @@ public interface UsuarioService {
     Page<UsuarioDTO> getAllUsuarios(Pageable pageable);
 
     Page<UsuarioDTO> searchUsuariosByName(String nombre, Pageable pageable);
+
+    long countUsuarios();
 }

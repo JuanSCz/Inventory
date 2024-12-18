@@ -113,6 +113,4 @@ public class ClienteController {
         model.addAttribute("page", clientes);
         return "tableClientes";
     }
-
-
 }

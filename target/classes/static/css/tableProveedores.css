@@ -346,12 +346,6 @@ body {
     color: var(--text-color);
 }
 
-.table-responsive {
-    width: 100%;
-    overflow-x: auto;
-    margin-top: 2rem;
-}
-
 .table {
     border-collapse: separate;
     border-spacing: 0;
@@ -490,7 +484,6 @@ body {
 .btn-primary:hover {
     background: linear-gradient(45deg, var(--main-color), var(--hover-color));
 }
-
 .btn-danger {
     background-color: #e60000 !important;
     border-color: #cc0000 !important;
@@ -627,8 +620,6 @@ body {
     padding: 0rem !important;
     margin: 0rem !important;
 }
-
-padding-bottom: 0 !important;
 
 .modal-header-createProveedor {
     display: flex !important;
@@ -1007,6 +998,8 @@ padding-bottom: 0 !important;
         padding: 0.5rem;
     }
 
+
+
     .custom-table thead th {
         font-size: 1rem;
     }
@@ -1075,7 +1068,6 @@ padding-bottom: 0 !important;
             margin-bottom: 0.5rem;
         }
 }
-
 
 @media (max-width: 576px) {
     .titlePersist {

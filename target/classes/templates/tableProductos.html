@@ -28,13 +28,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto navbar-menu">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/}">Inicio</a>
+                    <a class="nav-link active" aria-current="page" th:href="@{/dashboard}">Inicio</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/usuario}">Usuario</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/salir}">Salir</a>
+                    <a class="nav-link" th:href="@{/login}">Salir</a>
                 </li>
             </ul>
         </div>
@@ -47,22 +47,31 @@
                 <a class="nav-link text-white" th:href="@{/dashboard}">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/proveedores}">Proveedores</a>
+                <a class="nav-link text-white" th:href="@{/tableProveedores}">Proveedores</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/clientes}">Clientes</a>
+                <a class="nav-link text-white" th:href="@{/tableClientes}">Clientes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/ventas}">Ventas</a>
+                <a class="nav-link text-white" th:href="@{/tableProductos}">Productos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/compras}">Compras</a>
+                <a class="nav-link text-white" th:href="@{/tableCategorias}">Categorias</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/depositos}">Depósitos</a>
+                <a class="nav-link text-white" th:href="@{/tableDepositos}">Depósitos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/historiales}">Historiales de Stock</a>
+                <a class="nav-link text-white" th:href="@{/tableCompras}">Compras</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/tableVentas}">Ventas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/tableUsuarios}">Usuarios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/}">Historiales de Stock</a>
             </li>
         </ul>
     </aside>

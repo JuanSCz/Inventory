@@ -22,4 +22,6 @@ public interface ProveedorService {
     Page<ProveedorDTO> searchProveedoresByName(String nombre, Pageable pageable);
 
     boolean deleteProveedor(Long id);
+
+    long countProveedores();
 }

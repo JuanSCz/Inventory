@@ -131,6 +131,19 @@ public class ProveedorServiceImpl implements ProveedorService {
 
     @Override
     @Transactional(readOnly = true)
+    public long countProveedores() {
+        try {
+            long total = proveedorRepository.count();
+            logger.info("Total de proveedores: {}", total);
+            return total;
+        } catch (Exception e) {
+            logger.error("Error contando todas los Proveedores", e);
+            throw new DataAccessException("Error contando todos los Proveedores", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<ProveedorDTO> searchProveedoresByName(String nombre, Pageable pageable) {
         try {
             logger.info("Buscando Proveedores por nombre: {}", nombre);
@@ -141,5 +154,6 @@ public class ProveedorServiceImpl implements ProveedorService {
             throw new DataAccessException("Error buscando Proveedores por nombre", e);
         }
     }
+
 }
 

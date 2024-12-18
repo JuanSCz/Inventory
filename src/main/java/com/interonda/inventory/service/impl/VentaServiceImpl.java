@@ -205,6 +205,19 @@ public class VentaServiceImpl implements VentaService {
 
     @Override
     @Transactional(readOnly = true)
+    public long countVentas() {
+        try {
+            long total = ventaRepository.count();
+            logger.info("Total de ventas: {}", total);
+            return total;
+        } catch (Exception e) {
+            logger.error("Error contando todas los Ventas", e);
+            throw new DataAccessException("Error contando todos los Ventas", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<VentaDTO> searchVentasByFecha(LocalDate fecha, Pageable pageable) {
         try {
             logger.info("Buscando Ventas por fecha: {}", fecha);

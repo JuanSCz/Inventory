@@ -150,6 +150,19 @@ public class DepositoServiceImpl implements DepositoService {
 
     @Override
     @Transactional(readOnly = true)
+    public long countDepositos() {
+        try {
+            long total = depositoRepository.count();
+            logger.info("Total de depositos: {}", total);
+            return total;
+        } catch (Exception e) {
+            logger.error("Error contando todas los Depositos", e);
+            throw new DataAccessException("Error contando todos los Depositos", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<DepositoDTO> searchDepositosByName(String nombre, Pageable pageable) {
         try {
             logger.info("Buscando Depositos por nombre: {}", nombre);

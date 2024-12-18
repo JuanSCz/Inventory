@@ -134,6 +134,19 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional(readOnly = true)
+    public long countClientes() {
+        try {
+            long total = clienteRepository.count();
+            logger.info("Total de categorias: {}", total);
+            return total;
+        } catch (Exception e) {
+            logger.error("Error contando todas las Categorias", e);
+            throw new DataAccessException("Error contando todas las Categorias", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<ClienteDTO> searchClientesByName(String nombre, Pageable pageable) {
         try {
             logger.info("Buscando Clientes por nombre: {}", nombre);
