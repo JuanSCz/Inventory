@@ -44,7 +44,8 @@
     <aside class="sidebar bg-secondary text-white p-3 fixed-sidebar responsive-sidebar">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/dashboard}">Dashboard</a>
+                <a class="nav-link text-white" th:href="@{/dashboard}"
+                   th:classappend="${currentPage == 'dashboard'} ? 'active' : ''">Dashboard</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableProveedores}">Proveedores</a>
@@ -79,76 +80,93 @@
         <h2 class="mb-5 titleDashboard">Sistema de Gestion de Inventarios</h2>
         <div class="row-dashboard">
             <div class="card-container">
-                <div class="card mb-3 shadow-sm elegant-card">
-                    <div class="card-body body-dashboard">
-                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalProveedores}"></h2>
-                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Proveedores</h5>
+                <a th:href="@{/chartProveedores}" class="etiqueta-chart">
+                    <div class="card mb-3 shadow-sm elegant-card">
+                        <div class="card-body body-dashboard">
+                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalProveedores}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Proveedores</h5>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="card-container">
-                <div class="card mb-3 shadow-sm elegant-card">
-                    <div class="card-body body-dashboard">
-                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalProductos}"></h2>
-                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Productos</h5>
+                <a th:href="@{/chartProductos}" class="etiqueta-chart">
+                    <div class="card mb-3 shadow-sm elegant-card">
+                        <div class="card-body body-dashboard">
+                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalProductos}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Productos</h5>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="card-container">
-                <div class="card mb-3 shadow-sm elegant-card">
-                    <div class="card-body body-dashboard">
-                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalClientes}"></h2>
-                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Clientes</h5>
+                <a th:href="@{/chartClientes}" class="etiqueta-chart">
+                    <div class="card mb-3 shadow-sm elegant-card">
+                        <div class="card-body body-dashboard">
+                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalClientes}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Clientes</h5>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="card-container">
-                <div class="card mb-3 shadow-sm elegant-card">
-                    <div class="card-body body-dashboard">
-                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalCompras}"></h2>
-                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Compras</h5>
+                <a th:href="@{/chartCompras}" class="etiqueta-chart">
+                    <div class="card mb-3 shadow-sm elegant-card">
+                        <div class="card-body body-dashboard">
+                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalCompras}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Compras</h5>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="card-container">
-                <div class="card mb-3 shadow-sm elegant-card">
-                    <div class="card-body body-dashboard">
-                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalVentas}"></h2>
-                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Ventas</h5>
+                <a th:href="@{/chartVentas}" class="etiqueta-chart">
+                    <div class="card mb-3 shadow-sm elegant-card">
+                        <div class="card-body body-dashboard">
+                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalVentas}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Ventas</h5>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
         <div class="row-dashboard">
             <div class="card-container">
-                <div class="card mb-3 shadow-sm elegant-card">
-                    <div class="card-body body-dashboard">
-                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalUsuarios}"></h2>
-                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Usuarios</h5>
+                <a th:href="@{/chartUsuarios}" class="etiqueta-chart">
+                    <div class="card mb-3 shadow-sm elegant-card">
+                        <div class="card-body body-dashboard">
+                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalUsuarios}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Usuarios</h5>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="card-container">
-                <div class="card mb-3 shadow-sm elegant-card">
-                    <div class="card-body body-dashboard">
-                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalDepositos}"></h2>
-                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Depositos</h5>
+                <a th:href="@{/chartDepositos}" class="etiqueta-chart">
+                    <div class="card mb-3 shadow-sm elegant-card">
+                        <div class="card-body body-dashboard">
+                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalDepositos}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Depositos</h5>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="card-container">
-                <div class="card mb-3 shadow-sm elegant-card">
-                    <div class="card-body body-dashboard">
-                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalCategorias}"></h2>
-                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Categorias</h5>
+                <a th:href="@{/chartCategorias}" class="etiqueta-chart">
+                    <div class="card mb-3 shadow-sm elegant-card">
+                        <div class="card-body body-dashboard">
+                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalCategorias}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Categorias</h5>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </main>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="js/index.js"></script>
 </body>
 
 </html>

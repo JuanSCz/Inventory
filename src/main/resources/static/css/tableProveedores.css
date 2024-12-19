@@ -955,6 +955,19 @@ body {
     width: 100% !important;
 }
 
+.chart-container {
+    width: 100%;
+    height: 73vh; /* Ajusta la altura al 80% de la altura de la ventana */
+    margin: 0 auto;
+}
+.chart-container-uno {
+ margin-bottom: 20px;
+}
+
+.table-smaller-text {
+    font-size: 2.3vh; /* Ajusta el tamaño del t /* Ajusta el tamaño del texto según tus necesidades */
+}
+
 @media (max-width: 768px) {
     .contentPersist {
         width: 100%;

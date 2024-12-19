@@ -363,6 +363,12 @@ span {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+.etiqueta-chart {
+    text-decoration: none !important;
+    color: inherit !important;
+        display: block !important;
+}
+
 @media screen and (max-width: 768px) {
     .sidebar {
         width: 200px;

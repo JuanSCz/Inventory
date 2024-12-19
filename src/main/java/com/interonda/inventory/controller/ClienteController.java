@@ -13,6 +13,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -88,7 +89,7 @@ public class ClienteController {
     @GetMapping
     public String showClientes(@RequestParam(required = false) String name, Model model, Pageable pageable) {
         int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize, Sort.by("id").descending());
         Page<ClienteDTO> clientes;
         if (name != null && !name.isEmpty()) {
             logger.info("Solicitud recibida para buscar clientes por nombre: {}", name);
@@ -99,6 +100,7 @@ public class ClienteController {
         model.addAttribute("clientes", clientes.getContent());
         model.addAttribute("clienteDTO", new ClienteDTO());
         model.addAttribute("page", clientes);
+        model.addAttribute("currentPage", "tableClientes");
         return "tableClientes";
     }
 

@@ -10,6 +10,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -43,7 +44,9 @@ public class ProveedorController {
                     .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
                     .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
-            model.addAttribute("proveedores", proveedorService.getAllProveedores(pageable).getContent());
+            Sort sort = Sort.by(Sort.Direction.DESC, "id");
+            Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+            model.addAttribute("proveedores", proveedorService.getAllProveedores(newPageable, sort).getContent());
             model.addAttribute("proveedorDTO", proveedorDTO);
             return "tableProveedores";
         }
@@ -59,8 +62,10 @@ public class ProveedorController {
                     .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("proveedorDTO", proveedorDTO);
-            model.addAttribute("proveedores", proveedorService.getAllProveedores(pageable).getContent());
-            return "tableProveedores"; // Asegúrate de renderizar con datos correctos
+            Sort sort = Sort.by(Sort.Direction.DESC, "id");
+            Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+            model.addAttribute("proveedores", proveedorService.getAllProveedores(newPageable, sort).getContent());
+            return "tableProveedores";
         }
         proveedorService.updateProveedor(proveedorDTO);
         return "redirect:/tableProveedores";
@@ -87,17 +92,19 @@ public class ProveedorController {
     @GetMapping
     public String showProveedores(@RequestParam(required = false) String name, Model model, Pageable pageable) {
         int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize, sort);
         Page<ProveedorDTO> proveedores;
         if (name != null && !name.isEmpty()) {
             logger.info("Solicitud recibida para buscar proveedores por nombre: {}", name);
             proveedores = proveedorService.searchProveedoresByName(name, newPageable);
         } else {
-            proveedores = proveedorService.getAllProveedores(newPageable);
+            proveedores = proveedorService.getAllProveedores(newPageable, sort);
         }
         model.addAttribute("proveedores", proveedores.getContent());
         model.addAttribute("proveedorDTO", new ProveedorDTO());
         model.addAttribute("page", proveedores);
+        model.addAttribute("currentPage", "tableProveedores");
         return "tableProveedores";
     }
 

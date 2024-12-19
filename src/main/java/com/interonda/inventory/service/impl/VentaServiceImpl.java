@@ -19,7 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -191,7 +193,8 @@ public class VentaServiceImpl implements VentaService {
     public Page<VentaDTO> getAllVentas(Pageable pageable) {
         try {
             logger.info("Obteniendo todas las Ventas con paginación");
-            Page<Venta> ventas = ventaRepository.findAll(pageable);
+            Pageable sortedByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("id").descending());
+            Page<Venta> ventas = ventaRepository.findAll(sortedByIdDesc);
             return ventas.map(venta -> {
                 VentaDTO dto = ventaMapper.toDto(venta);
                 dto.setClienteNombre(venta.getCliente().getNombre());

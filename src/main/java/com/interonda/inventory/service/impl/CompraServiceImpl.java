@@ -17,7 +17,9 @@ import com.interonda.inventory.utils.ValidatorUtils;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -192,7 +194,8 @@ public class CompraServiceImpl implements CompraService {
     public Page<CompraDTO> getAllCompras(Pageable pageable) {
         try {
             logger.info("Obteniendo todas las Compras con paginación");
-            Page<Compra> compras = compraRepository.findAll(pageable);
+            Pageable sortedByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("id").descending());
+            Page<Compra> compras = compraRepository.findAll(sortedByIdDesc);
             return compras.map(compra -> {
                 CompraDTO dto = compraMapper.toDto(compra);
                 dto.setProveedorNombre(compra.getProveedor().getNombre());

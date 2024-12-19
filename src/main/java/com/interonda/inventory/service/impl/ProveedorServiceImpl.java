@@ -12,7 +12,9 @@ import com.interonda.inventory.utils.ValidatorUtils;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,14 +120,14 @@ public class ProveedorServiceImpl implements ProveedorService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ProveedorDTO> getAllProveedores(Pageable pageable) {
+    public Page<ProveedorDTO> getAllProveedores(Pageable pageable, Sort sort) {
         try {
-            logger.info("Obteniendo todos los Proveedores con paginación");
-            Page<Proveedor> proveedores = proveedorRepository.findAll(pageable);
+            logger.info("Obteniendo todos los Proveedores con paginación y orden");
+            Page<Proveedor> proveedores = proveedorRepository.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort));
             return proveedores.map(proveedorMapper::toDto);
         } catch (Exception e) {
-            logger.error("Error obteniendo todos los Proveedores con paginación", e);
-            throw new DataAccessException("Error obteniendo todos los Proveedores con paginación", e);
+            logger.error("Error obteniendo todos los Proveedores con paginación y orden", e);
+            throw new DataAccessException("Error obteniendo todos los Proveedores con paginación y orden", e);
         }
     }
 

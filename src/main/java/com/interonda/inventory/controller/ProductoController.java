@@ -12,6 +12,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -95,7 +96,7 @@ public class ProductoController {
     @GetMapping
     public String showProductos(@RequestParam(required = false) String name, Model model, Pageable pageable) {
         int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize, Sort.by("id").descending());
         Page<ProductoDTO> productos;
         if (name != null && !name.isEmpty()) {
             logger.info("Solicitud recibida para buscar productos por nombre: {}", name);
@@ -107,7 +108,7 @@ public class ProductoController {
         model.addAttribute("productoDTO", new ProductoDTO());
         model.addAttribute("page", productos);
         model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
-
+        model.addAttribute("currentPage", "tableProductos");
         return "tableProductos";
     }
 

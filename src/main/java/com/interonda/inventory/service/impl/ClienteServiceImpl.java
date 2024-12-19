@@ -15,7 +15,9 @@ import com.interonda.inventory.utils.ValidatorUtils;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,7 +126,8 @@ public class ClienteServiceImpl implements ClienteService {
     public Page<ClienteDTO> getAllClientes(Pageable pageable) {
         try {
             logger.info("Obteniendo todos los Clientes con paginación");
-            Page<Cliente> clientes = clienteRepository.findAll(pageable);
+            Pageable sortedByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("id").descending());
+            Page<Cliente> clientes = clienteRepository.findAll(sortedByIdDesc);
             return clientes.map(clienteMapper::toDto);
         } catch (Exception e) {
             logger.error("Error obteniendo todos los Clientes con paginación", e);

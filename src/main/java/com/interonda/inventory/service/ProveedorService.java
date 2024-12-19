@@ -4,6 +4,7 @@ import com.interonda.inventory.entity.Proveedor;
 import com.interonda.inventory.dto.ProveedorDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 public interface ProveedorService {
 
@@ -17,7 +18,7 @@ public interface ProveedorService {
 
     ProveedorDTO getProveedor(Long id);
 
-    Page<ProveedorDTO> getAllProveedores(Pageable pageable);
+    Page<ProveedorDTO> getAllProveedores(Pageable pageable, Sort sort);
 
     Page<ProveedorDTO> searchProveedoresByName(String nombre, Pageable pageable);
 

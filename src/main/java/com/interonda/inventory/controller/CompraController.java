@@ -14,6 +14,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -66,7 +67,9 @@ public class CompraController {
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("compraDTO", compraDTO);
             model.addAttribute("compras", compraService.getAllCompras(pageable).getContent());
-            model.addAttribute("proveedores", proveedorService.getAllProveedores(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+            Sort sort = Sort.by(Sort.Direction.DESC, "id");
+            Pageable newPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
+            model.addAttribute("proveedores", proveedorService.getAllProveedores(newPageable, sort).getContent());
             return "tableCompras";
         }
         CompraDTO updatedCompraDTO = compraService.updateCompra(compraDTO);
@@ -95,7 +98,7 @@ public class CompraController {
     @GetMapping
     public String showCompras(@RequestParam(required = false) String fecha, Model model, Pageable pageable) {
         int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize, Sort.by("id").descending());
         Page<CompraDTO> compras;
         if (fecha != null && !fecha.isEmpty()) {
             logger.info("Solicitud recibida para buscar compras por fecha: {}", fecha);
@@ -106,8 +109,11 @@ public class CompraController {
         model.addAttribute("compras", compras.getContent());
         model.addAttribute("compraDTO", new CompraDTO());
         model.addAttribute("page", compras);
-        model.addAttribute("proveedores", proveedorService.getAllProveedores(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable proveedoresPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
+        model.addAttribute("proveedores", proveedorService.getAllProveedores(proveedoresPageable, sort).getContent());
         model.addAttribute("productos", productoService.obtenerTodosLosProductos());
+        model.addAttribute("currentPage", "tableCompras");
         return "tableCompras";
     }
 
@@ -124,10 +130,13 @@ public class CompraController {
             compras = compraService.getAllCompras(newPageable);
         }
 
+
         model.addAttribute("compras", compras.getContent());
         model.addAttribute("compraDTO", new CompraDTO());
         model.addAttribute("page", compras);
-        model.addAttribute("proveedores", proveedorService.getAllProveedores(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable proveedoresPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
+        model.addAttribute("proveedores", proveedorService.getAllProveedores(proveedoresPageable, sort).getContent());
         return "tableCompras";
     }
 }

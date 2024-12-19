@@ -13,7 +13,9 @@ import com.interonda.inventory.utils.ValidatorUtils;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,8 +136,7 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     @Transactional(readOnly = true)
     public ProductoDTO getProducto(Long id) {
-        Producto producto = productoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + id));
+        Producto producto = productoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + id));
         ProductoDTO productoDTO = productoMapper.toDto(producto);
         if (producto.getCategoria() != null) {
             productoDTO.setCategoriaId(producto.getCategoria().getId());
@@ -149,7 +150,8 @@ public class ProductoServiceImpl implements ProductoService {
     public Page<ProductoDTO> getAllProductos(Pageable pageable) {
         try {
             logger.info("Obteniendo todos los Productos con paginación");
-            Page<Producto> productos = productoRepository.findAll(pageable);
+            Pageable sortedByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("id").descending());
+            Page<Producto> productos = productoRepository.findAll(sortedByIdDesc);
             return productos.map(producto -> {
                 ProductoDTO productoDTO = productoMapper.toDto(producto);
                 if (producto.getCategoria() != null) {

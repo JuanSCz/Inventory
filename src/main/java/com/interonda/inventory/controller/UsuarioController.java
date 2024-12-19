@@ -13,6 +13,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -43,9 +44,7 @@ public class UsuarioController {
     @PostMapping
     public String createUsuario(@Valid UsuarioDTO usuarioDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("usuarios", usuarioService.getAllUsuarios(pageable).getContent());
             model.addAttribute("usuarioDTO", usuarioDTO);
@@ -58,9 +57,7 @@ public class UsuarioController {
     @PostMapping("/update")
     public String updateUsuario(@Valid UsuarioDTO usuarioDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("usuarioDTO", usuarioDTO);
             model.addAttribute("usuarios", usuarioService.getAllUsuarios(pageable).getContent());
@@ -92,7 +89,7 @@ public class UsuarioController {
     @GetMapping
     public String showUsuarios(@RequestParam(required = false) String name, Model model, Pageable pageable) {
         int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
+        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize, Sort.by("id").descending());
         Page<UsuarioDTO> usuarios;
         if (name != null && !name.isEmpty()) {
             logger.info("Solicitud recibida para buscar usuarios por nombre: {}", name);
@@ -104,11 +101,9 @@ public class UsuarioController {
         model.addAttribute("usuarioDTO", new UsuarioDTO());
         model.addAttribute("page", usuarios);
         model.addAttribute("roles", rolService.getAllRoles(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
-
+        model.addAttribute("currentPage", "tableUsuarios");
         return "tableUsuarios";
     }
-
-
 
     @GetMapping("/search")
     public String searchUsuariosByName(@RequestParam String name, Model model, Pageable pageable) {

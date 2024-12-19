@@ -71,9 +71,10 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4 mb-3 mx-auto">
+                            <div class="col-md-4 mb-3">
                                 <label for="categoriaId" class="form-label">Categoría</label>
-                                <select class="form-control form-control-detalle" id="categoriaId" th:field="*{categoriaId}">
+                                <select class="form-control form-control-detalle" id="categoriaId"
+                                        th:field="*{categoriaId}">
                                     <option value="">Seleccione una categoría</option>
                                     <option th:each="categoria : ${categorias}" th:value="${categoria.id}"
                                             th:text="${categoria.nombre}"></option>

@@ -56,7 +56,8 @@
                 <a class="nav-link text-white" th:href="@{/tableProductos}">Productos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableCategorias}">Categorias</a>
+                <a class="nav-link text-white" th:href="@{/tableCategorias}"
+                   th:classappend="${currentPage == 'tableCategorias'} ? 'active' : ''">Categorias</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableDepositos}">Depósitos</a>
@@ -95,7 +96,7 @@
 
 
         <div class="table-responsive mt-3">
-            <table class="table table-dark table-striped table-bordered custom-table table-sm">
+            <table class="table table-dark table-striped table-bordered custom-table table-sm table-smaller-text">
                 <thead class="table-light">
                 <tr>
                     <th scope="col">ID</th>

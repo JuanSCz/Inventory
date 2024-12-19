@@ -13,7 +13,9 @@ import com.interonda.inventory.utils.ValidatorUtils;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,8 +59,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
             // Asignar el rol al usuario
             if (usuarioDTO.getRolId() != null) {
-                Rol rol = rolRepository.findById(usuarioDTO.getRolId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con el id: " + usuarioDTO.getRolId()));
+                Rol rol = rolRepository.findById(usuarioDTO.getRolId()).orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con el id: " + usuarioDTO.getRolId()));
                 usuario.setRol(rol);
             }
 
@@ -77,16 +78,14 @@ public class UsuarioServiceImpl implements UsuarioService {
         ValidatorUtils.validateEntity(usuarioDTO, validator);
         try {
             logger.info("Actualizando Usuario con id: {}", usuarioDTO.getId());
-            Usuario usuario = usuarioRepository.findById(usuarioDTO.getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el id: " + usuarioDTO.getId()));
+            Usuario usuario = usuarioRepository.findById(usuarioDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el id: " + usuarioDTO.getId()));
 
             usuario.setNombre(usuarioDTO.getNombre());
             usuario.setContrasenia(usuarioDTO.getContrasenia());
             usuario.setContacto(usuarioDTO.getContacto());
 
             if (usuarioDTO.getRolId() != null) {
-                Rol rol = rolRepository.findById(usuarioDTO.getRolId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con el id: " + usuarioDTO.getRolId()));
+                Rol rol = rolRepository.findById(usuarioDTO.getRolId()).orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con el id: " + usuarioDTO.getRolId()));
                 usuario.setRol(rol);
             } else {
                 usuario.setRol(null);
@@ -127,8 +126,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     @Transactional(readOnly = true)
     public UsuarioDTO getUsuario(Long id) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el id: " + id));
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado con el id: " + id));
         UsuarioDTO usuarioDTO = usuarioMapper.toDto(usuario);
         if (usuario.getRol() != null) {
             usuarioDTO.setRolId(usuario.getRol().getId());
@@ -142,7 +140,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Page<UsuarioDTO> getAllUsuarios(Pageable pageable) {
         try {
             logger.info("Obteniendo todos los Usuarios con paginación");
-            Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
+            Pageable sortedByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("id").descending());
+            Page<Usuario> usuarios = usuarioRepository.findAll(sortedByIdDesc);
             return usuarios.map(usuario -> {
                 UsuarioDTO usuarioDTO = usuarioMapper.toDto(usuario);
                 if (usuario.getRol() != null) {

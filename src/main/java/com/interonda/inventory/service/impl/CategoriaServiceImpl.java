@@ -12,7 +12,9 @@ import com.interonda.inventory.utils.ValidatorUtils;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
@@ -111,7 +113,8 @@ public class CategoriaServiceImpl implements CategoriaService {
     public Page<CategoriaDTO> getAllCategorias(Pageable pageable) {
         try {
             logger.info("Obteniendo todas las Categorias con paginación");
-            Page<Categoria> categorias = categoriaRepository.findAll(pageable);
+            Pageable sortedByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("id").descending());
+            Page<Categoria> categorias = categoriaRepository.findAll(sortedByIdDesc);
             return categorias.map(categoriaMapper::toDto);
         } catch (Exception e) {
             logger.error("Error obteniendo todas las Categorias con paginación", e);
