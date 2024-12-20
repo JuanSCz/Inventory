@@ -1,13 +1,18 @@
 package com.interonda.inventory.service.impl;
 
 import com.interonda.inventory.dto.ProductoDTO;
+import com.interonda.inventory.dto.StockDTO;
+import com.interonda.inventory.entity.Deposito;
 import com.interonda.inventory.entity.Producto;
 import com.interonda.inventory.entity.Categoria;
+import com.interonda.inventory.entity.Stock;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.ProductoMapper;
 import com.interonda.inventory.repository.CategoriaRepository;
+import com.interonda.inventory.repository.DepositoRepository;
 import com.interonda.inventory.repository.ProductoRepository;
+import com.interonda.inventory.repository.StockRepository;
 import com.interonda.inventory.service.ProductoService;
 import com.interonda.inventory.utils.ValidatorUtils;
 import jakarta.validation.Validator;
@@ -21,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -31,13 +37,17 @@ public class ProductoServiceImpl implements ProductoService {
     private final ProductoRepository productoRepository;
     private final ProductoMapper productoMapper;
     private final CategoriaRepository categoriaRepository;
+    private final DepositoRepository depositoRepository;
+    private final StockRepository stockRepository;
     private final Validator validator;
 
     @Autowired
-    public ProductoServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper, CategoriaRepository categoriaRepository, Validator validator) {
+    public ProductoServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper, CategoriaRepository categoriaRepository, DepositoRepository depositoRepository, StockRepository stockRepository, Validator validator) {
         this.productoRepository = productoRepository;
         this.productoMapper = productoMapper;
         this.categoriaRepository = categoriaRepository;
+        this.depositoRepository = depositoRepository;
+        this.stockRepository = stockRepository;
         this.validator = validator;
     }
 
@@ -66,6 +76,23 @@ public class ProductoServiceImpl implements ProductoService {
             }
 
             Producto savedProducto = productoRepository.save(producto);
+
+            // Asignar los depósitos y las cantidades de stock
+            for (StockDTO stockDTO : productoDTO.getStocks()) {
+                Deposito deposito = depositoRepository.findById(stockDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + stockDTO.getDepositoId()));
+                Stock stock = new Stock();
+                stock.setProducto(savedProducto);
+                stock.setDeposito(deposito);
+                stock.setCantidad(stockDTO.getCantidad());
+                stock.setFechaActualizacion(LocalDateTime.now());
+                stock.setOperacion("Entrada");
+                stockRepository.save(stock);
+
+                // Actualizar el stock actual del producto
+                savedProducto.setStockActual(savedProducto.getStockActual() + stockDTO.getCantidad());
+            }
+            productoRepository.save(savedProducto);
+
             logger.info("Producto creado exitosamente con id: {}", savedProducto.getId());
             return productoMapper.toDto(savedProducto);
         } catch (Exception e) {

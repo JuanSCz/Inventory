@@ -20,13 +20,6 @@ function handleErrorModal() {
     }
 }
 
-function initializeAddDetalleButton() {
-    const addDetalleButton = document.getElementById("addDetalleButton");
-    if (addDetalleButton) {
-        addDetalleButton.addEventListener("click", agregarFilaDetalle);
-    }
-}
-
 function agregarFilaDetalle() {
     const detalleContainer = document.getElementById("detalleContainer");
     const newRow = document.createElement("div");
@@ -180,6 +173,13 @@ function populateUpdateModal(id) {
             });
         })
         .catch(error => console.error('Error al cargar los datos de la compra:', error));
+}
+
+function initializeAddDetalleButton() {
+    const addDetalleButton = document.getElementById("addDetalleButton");
+    if (addDetalleButton) {
+        addDetalleButton.addEventListener("click", agregarFilaDetalle);
+    }
 }
 
 function showDetalleCompraModal(button) {

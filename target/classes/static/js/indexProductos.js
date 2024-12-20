@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeCreateModal();
     initializeUpdateModal();
     initializeDeleteModal();
+    initializeAddStockButton();
 });
 
 // Manejo del modal de error
@@ -161,6 +162,44 @@ function initializeDeleteModal() {
             }
         });
     }
+}
+
+function initializeAddStockButton() {
+    const addStockButton = document.getElementById("addStockButton");
+    if (addStockButton) {
+        addStockButton.addEventListener("click", agregarFilaStock);
+    }
+}
+
+function agregarFilaStock() {
+    const stockContainer = document.getElementById("stockContainer");
+    const newRow = document.createElement("div");
+    newRow.classList.add("row", "stock-row");
+    const currentIndex = stockContainer.querySelectorAll('.stock-row').length;
+
+    // Verificar si el select de depósitos existe antes de acceder a su innerHTML
+    const depositoSelect = document.querySelector('select[name="stocks[0].depositoId"]');
+    if (!depositoSelect) {
+        console.error('El select de depósitos no se encontró en el DOM.');
+        return;
+    }
+
+    const depositoSelectHTML = depositoSelect.innerHTML;
+
+    newRow.innerHTML = `
+        <div class="col-md-6 mb-3">
+            <label for="depositoId${currentIndex}" class="form-label">Depósito</label>
+            <select class="form-control form-control-producto" name="stocks[${currentIndex}].depositoId" id="depositoId${currentIndex}" required>
+                ${depositoSelectHTML}
+            </select>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="cantidad${currentIndex}" class="form-label">Cantidad</label>
+            <input type="number" class="form-control form-control-producto" name="stocks[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad" required>
+        </div>
+    `;
+
+    stockContainer.appendChild(newRow);
 }
 
 // Utilidad: Función de debounce para limitar solicitudes frecuentes

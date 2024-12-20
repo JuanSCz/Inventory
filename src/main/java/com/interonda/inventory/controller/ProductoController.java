@@ -2,6 +2,7 @@ package com.interonda.inventory.controller;
 
 import com.interonda.inventory.dto.ProductoDTO;
 import com.interonda.inventory.service.CategoriaService;
+import com.interonda.inventory.service.DepositoService;
 import com.interonda.inventory.service.ProductoService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -30,12 +31,14 @@ public class ProductoController {
 
     private final ProductoService productoService;
     private final CategoriaService categoriaService;
+    private final DepositoService depositoService;
     private final MessageSource messageSource;
 
     @Autowired
-    public ProductoController(ProductoService productoService, CategoriaService categoriaService, MessageSource messageSource) {
+    public ProductoController(ProductoService productoService, CategoriaService categoriaService, DepositoService depositoService, MessageSource messageSource) {
         this.productoService = productoService;
         this.categoriaService = categoriaService;
+        this.depositoService = depositoService;
         this.messageSource = messageSource;
     }
 
@@ -49,7 +52,7 @@ public class ProductoController {
             Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
             model.addAttribute("productos", productos.getContent());
             model.addAttribute("productoDTO", productoDTO);
-            model.addAttribute("page", productos); // Asegúrate de agregar el objeto 'page' al modelo
+            model.addAttribute("page", productos);
             model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
             return "tableProductos";
         }
@@ -108,6 +111,7 @@ public class ProductoController {
         model.addAttribute("productoDTO", new ProductoDTO());
         model.addAttribute("page", productos);
         model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+        model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)));
         model.addAttribute("currentPage", "tableProductos");
         return "tableProductos";
     }

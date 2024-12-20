@@ -3,6 +3,7 @@ package com.interonda.inventory.dto;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class ProductoDTO {
 
@@ -29,6 +30,20 @@ public class ProductoDTO {
     private Long categoriaId;
 
     private String categoriaNombre;
+
+    private Long depositoId;
+
+    private Integer cantidad;
+
+    public List<StockDTO> getStocks() {
+        return stocks;
+    }
+
+    public void setStocks(List<StockDTO> stocks) {
+        this.stocks = stocks;
+    }
+
+    private List<StockDTO> stocks;
 
     public ProductoDTO() {
     }
@@ -129,5 +144,21 @@ public class ProductoDTO {
 
     public void setCategoriaNombre(String rolNombre) {
         this.categoriaNombre = rolNombre;
+    }
+
+    public Long getDepositoId() {
+        return depositoId;
+    }
+
+    public void setDepositoId(Long depositoId) {
+        this.depositoId = depositoId;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
     }
 }

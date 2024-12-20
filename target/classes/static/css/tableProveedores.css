@@ -888,6 +888,55 @@ body {
     color: #ffffff !important;
 }
 
+.form-control-producto::placeholder {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+}
+
+.form-control-producto:focus::placeholder {
+    opacity: 0 !important;
+}
+
+.form-control-producto {
+    background-color: var(--second-bg-color) !important;
+}
+
+.form-control-producto,
+.form-control-producto option {
+    font-size: 2vh !important;
+    color: #ffffff !important;
+}
+
+.btn-success-producto {
+    background-color: #28a745 !important;
+    font-weight: 500 !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+    color: var(--text-color) !important;
+    border: none !important;
+    border-radius: 5px !important;
+    padding: 0.25rem 0.5rem !important; /* Ajusta el padding para hacer el botón más pequeño */
+    /* Ajusta el tamaño de la fuente */
+}
+
+.btn-success-producto:hover {
+    background-color: #1e7e34 !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+    color: var(--text-color) !important;
+}
+
+.title-stock {
+        font-size: var(--h4-font) !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 2px !important;
+        transition: color 0.3s ease !important;
+        margin: 0 !important;
+        text-shadow: 2px 2px 4px var(--bg-color) !important;
+        text-align: center !important;
+        width: 100% !important;
+}
+
 .button-detalle {
     font-weight: 500 !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
@@ -966,6 +1015,11 @@ body {
 
 .table-smaller-text {
     font-size: 2.3vh; /* Ajusta el tamaño del t /* Ajusta el tamaño del texto según tus necesidades */
+}
+
+#text-stock {
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 @media (max-width: 768px) {
@@ -1080,6 +1134,24 @@ body {
             width: 100%;
             margin-bottom: 0.5rem;
         }
+
+        .form-control-producto,
+                .button-detalle, .btn-salir, .btn-success-detalle {
+                    font-size: 0.875rem;
+                }
+
+                .modal-header-detalle h5 {
+                    font-size: 1.25rem;
+                }
+
+                .modal-footer-detalle {
+                    flex-direction: column;
+                }
+
+                #modal-footer-detalle .btn {
+                    width: 100%;
+                    margin-bottom: 0.5rem;
+                }
 }
 
 @media (max-width: 576px) {
@@ -1205,6 +1277,11 @@ body {
         .button-detalle, .btn-salir, .btn-success-detalle {
             font-size: 0.75rem;
         }
+
+        .form-control-producto,
+                .button-detalle, .btn-salir, .btn-success-detalle {
+                    font-size: 0.75rem;
+                }
 
         .modal-header-detalle h5 {
             font-size: 1rem;
