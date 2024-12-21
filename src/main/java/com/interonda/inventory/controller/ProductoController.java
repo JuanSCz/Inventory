@@ -1,9 +1,16 @@
 package com.interonda.inventory.controller;
 
+import com.interonda.inventory.dto.CompraDTO;
 import com.interonda.inventory.dto.ProductoDTO;
+import com.interonda.inventory.entity.Compra;
+import com.interonda.inventory.entity.DetalleCompra;
+import com.interonda.inventory.entity.Proveedor;
+import com.interonda.inventory.exceptions.DataAccessException;
+import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.service.CategoriaService;
 import com.interonda.inventory.service.DepositoService;
 import com.interonda.inventory.service.ProductoService;
+import com.interonda.inventory.utils.ValidatorUtils;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -45,15 +53,14 @@ public class ProductoController {
     @PostMapping
     public String createProducto(@Valid ProductoDTO productoDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
             model.addAttribute("productos", productos.getContent());
             model.addAttribute("productoDTO", productoDTO);
             model.addAttribute("page", productos);
             model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+            model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
             return "tableProductos";
         }
         productoService.createProducto(productoDTO);
@@ -63,9 +70,7 @@ public class ProductoController {
     @PostMapping("/update")
     public String updateProducto(@Valid ProductoDTO productoDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
             model.addAttribute("productos", productos.getContent());

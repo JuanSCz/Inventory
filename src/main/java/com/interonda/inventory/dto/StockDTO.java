@@ -8,19 +8,17 @@ public class StockDTO {
 
     private Long id;
 
-
+    @NotNull(message = "La cantidad no puede ser nula")
     private Integer cantidad;
-
 
     private LocalDateTime fechaActualizacion;
 
-
     private String operacion;
 
-
+    @NotNull(message = "El ID del producto no puede ser nulo")
     private Long productoId;
 
-
+    @NotNull(message = "El ID del depósito no puede ser nulo")
     private Long depositoId;
 
     public StockDTO() {

@@ -37,8 +37,6 @@
                                 <input type="text" class="form-control form-control-detalle" id="precio"
                                        th:field="*{precio}">
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="costo" class="form-label">Costo</label>
                                 <input type="text" class="form-control form-control-detalle" id="costo"
@@ -54,8 +52,6 @@
                                 <input type="text" class="form-control form-control-detalle" id="numeroDeSerie"
                                        th:field="*{numeroDeSerie}">
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="stockActual" class="form-label">Stock Actual</label>
                                 <input type="text" class="form-control form-control-detalle" id="stockActual"
@@ -71,8 +67,6 @@
                                 <input type="text" class="form-control form-control-detalle" id="macAddress"
                                        th:field="*{macAddress}">
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-4 mb-3 mx-auto">
                                 <label for="categoriaId" class="form-label">Categoría</label>
                                 <select class="form-control form-control-detalle" id="categoriaId"
@@ -83,6 +77,7 @@
                                             th:selected="${categoria.id} == *{categoriaId}"></option>
                                 </select>
                             </div>
+
                         </div>
                         <div class="modal-footer" id="modal-footer-detalle">
                             <button type="submit" class="btn button-detalle">Actualizar</button>

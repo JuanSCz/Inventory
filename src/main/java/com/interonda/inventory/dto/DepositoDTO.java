@@ -1,8 +1,6 @@
 package com.interonda.inventory.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -10,6 +8,7 @@ public class DepositoDTO {
 
     private Long id;
 
+    @NotBlank(message = "El nombre no puede estar en blanco")
     private String nombre;
 
     private String provincia;
@@ -24,6 +23,7 @@ public class DepositoDTO {
     }
 
     // Getters y Setters
+
     public Long getId() {
         return id;
     }

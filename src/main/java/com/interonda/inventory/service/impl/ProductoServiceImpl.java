@@ -1,11 +1,9 @@
 package com.interonda.inventory.service.impl;
 
+import com.interonda.inventory.dto.CompraDTO;
 import com.interonda.inventory.dto.ProductoDTO;
 import com.interonda.inventory.dto.StockDTO;
-import com.interonda.inventory.entity.Deposito;
-import com.interonda.inventory.entity.Producto;
-import com.interonda.inventory.entity.Categoria;
-import com.interonda.inventory.entity.Stock;
+import com.interonda.inventory.entity.*;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.ProductoMapper;
@@ -28,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductoServiceImpl implements ProductoService {
@@ -70,29 +69,23 @@ public class ProductoServiceImpl implements ProductoService {
             Producto producto = productoMapper.toEntity(productoDTO);
 
             // Asignar la categoría al producto
-            if (productoDTO.getCategoriaId() != null) {
-                Categoria categoria = categoriaRepository.findById(productoDTO.getCategoriaId()).orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con el id: " + productoDTO.getCategoriaId()));
-                producto.setCategoria(categoria);
-            }
+            Categoria categoria = categoriaRepository.findById(productoDTO.getCategoriaId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con el id: " + productoDTO.getCategoriaId()));
+            producto.setCategoria(categoria);
 
-            Producto savedProducto = productoRepository.save(producto);
-
-            // Asignar los depósitos y las cantidades de stock
-            for (StockDTO stockDTO : productoDTO.getStocks()) {
-                Deposito deposito = depositoRepository.findById(stockDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + stockDTO.getDepositoId()));
+            // Asignar los stocks al producto
+            producto.setStocks(productoDTO.getStocks().stream().map(stockDTO -> {
                 Stock stock = new Stock();
-                stock.setProducto(savedProducto);
-                stock.setDeposito(deposito);
                 stock.setCantidad(stockDTO.getCantidad());
                 stock.setFechaActualizacion(LocalDateTime.now());
-                stock.setOperacion("Entrada");
-                stockRepository.save(stock);
+                stock.setOperacion("CREACIÓN");
+                stock.setProducto(producto);
+                stock.setDeposito(depositoRepository.findById(stockDTO.getDepositoId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + stockDTO.getDepositoId())));
+                return stock;
+            }).collect(Collectors.toList()));
 
-                // Actualizar el stock actual del producto
-                savedProducto.setStockActual(savedProducto.getStockActual() + stockDTO.getCantidad());
-            }
-            productoRepository.save(savedProducto);
-
+            Producto savedProducto = productoRepository.save(producto);
             logger.info("Producto creado exitosamente con id: {}", savedProducto.getId());
             return productoMapper.toDto(savedProducto);
         } catch (Exception e) {

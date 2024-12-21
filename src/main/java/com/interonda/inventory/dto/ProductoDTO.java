@@ -3,16 +3,19 @@ package com.interonda.inventory.dto;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoDTO {
 
     private Long id;
 
+    @NotBlank(message = "El nombre no puede estar en blanco")
     private String nombre;
 
     private String descripcion;
 
+    @NotNull(message = "El precio no puede ser nulo")
     private BigDecimal precio;
 
     private BigDecimal costo;
@@ -27,25 +30,15 @@ public class ProductoDTO {
 
     private String macAddress;
 
+    @NotNull(message = "La categoría no puede ser nula")
     private Long categoriaId;
 
     private String categoriaNombre;
 
-    private Long depositoId;
-
-    private Integer cantidad;
-
-    public List<StockDTO> getStocks() {
-        return stocks;
-    }
-
-    public void setStocks(List<StockDTO> stocks) {
-        this.stocks = stocks;
-    }
-
     private List<StockDTO> stocks;
 
     public ProductoDTO() {
+        this.stocks = new ArrayList<>();
     }
 
     // Getters y Setters
@@ -142,23 +135,16 @@ public class ProductoDTO {
         return categoriaNombre;
     }
 
-    public void setCategoriaNombre(String rolNombre) {
-        this.categoriaNombre = rolNombre;
+    public void setCategoriaNombre(String categoriaNombre) {
+        this.categoriaNombre = categoriaNombre;
     }
 
-    public Long getDepositoId() {
-        return depositoId;
+    public List<StockDTO> getStocks() {
+        return stocks;
     }
 
-    public void setDepositoId(Long depositoId) {
-        this.depositoId = depositoId;
+    public void setStocks(List<StockDTO> stocks) {
+        this.stocks = stocks;
     }
 
-    public Integer getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(Integer cantidad) {
-        this.cantidad = cantidad;
-    }
 }

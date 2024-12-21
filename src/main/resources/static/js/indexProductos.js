@@ -73,24 +73,19 @@ function initializeCreateModal() {
 
 // Inicializar modal de actualización para productos
 function initializeUpdateModal() {
-    // Crear una única instancia del modal
     const updateModal = new bootstrap.Modal(document.getElementById('updateProductoModal'));
-
-    // Seleccionar todos los botones relacionados con la actualización
     const updateButtons = document.querySelectorAll('.buttonUpdateProducto[data-id]');
 
     updateButtons.forEach(button => {
         button.addEventListener('click', function () {
-            const id = this.getAttribute('data-id'); // Obtener el ID del producto
-            populateUpdateModal(id); // Llenar los datos del modal con el ID del producto
-            updateModal.show(); // Mostrar el modal usando la misma instancia
+            const id = this.getAttribute('data-id');
+            populateUpdateModal(id);
+            updateModal.show();
         });
     });
 
-    // Limpiar el modal cuando se cierra
     const updateModalElement = document.getElementById('updateProductoModal');
     updateModalElement.addEventListener('hidden.bs.modal', function () {
-        // Limpiar los campos del formulario
         document.getElementById('id').value = '';
         document.getElementById('nombre').value = '';
         document.getElementById('descripcion').value = '';
@@ -103,7 +98,6 @@ function initializeUpdateModal() {
         document.getElementById('macAddress').value = '';
         document.getElementById('categoriaId').value = '';
 
-        // Opcional: limpiar clases de validación, si usas alguna
         const form = updateModalElement.querySelector('form');
         if (form) form.reset();
     });
@@ -124,11 +118,36 @@ function populateUpdateModal(id) {
             document.getElementById('stockMinimo').value = data.stockMinimo;
             document.getElementById('macAddress').value = data.macAddress;
             document.getElementById('categoriaId').value = data.categoriaId;
+
+            const stockContainer = document.getElementById('stockContainerUpdate');
+            stockContainer.innerHTML = '';
+
+            data.stocks.forEach((stock, index) => {
+                const newRow = document.createElement('div');
+                newRow.classList.add('row', 'stock-row');
+
+                newRow.innerHTML = `
+                    <div class="col-md-6 mb-3">
+                        <label for="depositoId${index}" class="form-label">Depósito</label>
+                        <select class="form-control form-control-producto" name="stocks[${index}].depositoId" id="depositoId${index}" required>
+                            ${document.querySelector('select[name="stocks[0].depositoId"]').innerHTML}
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="cantidad${index}" class="form-label">Cantidad</label>
+                        <input type="number" class="form-control form-control-producto" name="stocks[${index}].cantidad" id="cantidad${index}" placeholder="Ingrese la cantidad" required>
+                    </div>
+                `;
+
+                stockContainer.appendChild(newRow);
+
+                newRow.querySelector(`#depositoId${index}`).value = stock.depositoId;
+                newRow.querySelector(`#cantidad${index}`).value = stock.cantidad;
+            });
         })
         .catch(error => console.error('Error al cargar los datos del producto:', error));
 }
 
-// Inicializar modal de eliminación para productos
 function initializeDeleteModal() {
     const deleteButtons = document.querySelectorAll('.delete-button');
     const confirmDeleteButton = document.getElementById('confirmDeleteButton');
@@ -136,9 +155,9 @@ function initializeDeleteModal() {
 
     deleteButtons.forEach(button => {
         button.addEventListener('click', function (event) {
-            event.preventDefault(); // Evita el envío automático del formulario
+            event.preventDefault();
             deleteId = this.getAttribute('data-id');
-            const advertenciaMessage = '¿Está seguro que desea eliminar este producto?'; // Mensaje predeterminado
+            const advertenciaMessage = '¿Está seguro que desea eliminar este producto?';
             const modalBody = document.querySelector('#advertenciaModalGlobal .modal-body p');
             modalBody.textContent = advertenciaMessage;
 
@@ -174,22 +193,16 @@ function initializeAddStockButton() {
 function agregarFilaStock() {
     const stockContainer = document.getElementById("stockContainer");
     const newRow = document.createElement("div");
-    newRow.classList.add("row", "stock-row");
-    const currentIndex = stockContainer.querySelectorAll('.stock-row').length;
+    newRow.classList.add("row", "stocks-row");
+    const currentIndex = stockContainer.querySelectorAll('.stocks-row').length;
 
-    // Verificar si el select de depósitos existe antes de acceder a su innerHTML
-    const depositoSelect = document.querySelector('select[name="stocks[0].depositoId"]');
-    if (!depositoSelect) {
-        console.error('El select de depósitos no se encontró en el DOM.');
-        return;
-    }
-
-    const depositoSelectHTML = depositoSelect.innerHTML;
+    // Obtener el HTML del select de depósitos del primer stock
+    const depositoSelectHTML = document.querySelector('select[name="stocks[0].depositoId"]').innerHTML;
 
     newRow.innerHTML = `
         <div class="col-md-6 mb-3">
             <label for="depositoId${currentIndex}" class="form-label">Depósito</label>
-            <select class="form-control form-control-producto" name="stocks[${currentIndex}].depositoId" id="depositoId${currentIndex}" required>
+            <select class="form-control form-control-detalle" name="stocks[${currentIndex}].depositoId" id="depositoId${currentIndex}" required>
                 ${depositoSelectHTML}
             </select>
         </div>
