@@ -142,6 +142,7 @@ function populateUpdateModal(id) {
                 stockContainer.appendChild(newRow);
 
                 newRow.querySelector(`#depositoId${index}`).value = stock.depositoId;
+                newRow.querySelector(`#depositoId${index} option[value="${stock.depositoId}"]`).text = stock.depositoNombre; // Asignar el nombre del depósito
                 newRow.querySelector(`#cantidad${index}`).value = stock.cantidad;
             });
         })

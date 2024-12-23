@@ -21,6 +21,8 @@ public class StockDTO {
     @NotNull(message = "El ID del depósito no puede ser nulo")
     private Long depositoId;
 
+    private String depositoNombre; // Nuevo campo
+
     public StockDTO() {
     }
 
@@ -72,5 +74,13 @@ public class StockDTO {
 
     public void setDepositoId(Long depositoId) {
         this.depositoId = depositoId;
+    }
+
+    public String getDepositoNombre() {
+        return depositoNombre;
+    }
+
+    public void setDepositoNombre(String depositoNombre) {
+        this.depositoNombre = depositoNombre;
     }
 }

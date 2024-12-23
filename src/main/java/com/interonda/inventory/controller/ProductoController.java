@@ -70,13 +70,16 @@ public class ProductoController {
     @PostMapping("/update")
     public String updateProducto(@Valid ProductoDTO productoDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
             model.addAttribute("productos", productos.getContent());
             model.addAttribute("productoDTO", productoDTO);
             model.addAttribute("page", productos);
             model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+            model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
             return "tableProductos";
         }
         productoService.updateProducto(productoDTO);

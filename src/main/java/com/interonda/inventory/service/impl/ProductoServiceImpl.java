@@ -100,7 +100,8 @@ public class ProductoServiceImpl implements ProductoService {
         ValidatorUtils.validateEntity(productoDTO, validator);
         try {
             logger.info("Actualizando Producto con id: {}", productoDTO.getId());
-            Producto producto = productoRepository.findById(productoDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + productoDTO.getId()));
+            Producto producto = productoRepository.findById(productoDTO.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + productoDTO.getId()));
 
             // Actualizar los campos del producto
             producto.setNombre(productoDTO.getNombre());
@@ -115,11 +116,25 @@ public class ProductoServiceImpl implements ProductoService {
 
             // Asignar la categoría al producto
             if (productoDTO.getCategoriaId() != null) {
-                Categoria categoria = categoriaRepository.findById(productoDTO.getCategoriaId()).orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con el id: " + productoDTO.getCategoriaId()));
+                Categoria categoria = categoriaRepository.findById(productoDTO.getCategoriaId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con el id: " + productoDTO.getCategoriaId()));
                 producto.setCategoria(categoria);
             } else {
                 producto.setCategoria(null);
             }
+
+            // Actualizar los stocks del producto
+            producto.getStocks().clear();
+            producto.getStocks().addAll(productoDTO.getStocks().stream().map(stockDTO -> {
+                Stock stock = new Stock();
+                stock.setCantidad(stockDTO.getCantidad());
+                stock.setFechaActualizacion(LocalDateTime.now());
+                stock.setOperacion("ACTUALIZACIÓN");
+                stock.setProducto(producto);
+                stock.setDeposito(depositoRepository.findById(stockDTO.getDepositoId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + stockDTO.getDepositoId())));
+                return stock;
+            }).collect(Collectors.toList()));
 
             Producto updatedProducto = productoRepository.save(producto);
             logger.info("Producto actualizado exitosamente con id: {}", updatedProducto.getId());
@@ -162,6 +177,17 @@ public class ProductoServiceImpl implements ProductoService {
             productoDTO.setCategoriaId(producto.getCategoria().getId());
             productoDTO.setCategoriaNombre(producto.getCategoria().getNombre());
         }
+        productoDTO.setStocks(producto.getStocks().stream().map(stock -> {
+            StockDTO stockDTO = new StockDTO();
+            stockDTO.setId(stock.getId());
+            stockDTO.setCantidad(stock.getCantidad());
+            stockDTO.setFechaActualizacion(stock.getFechaActualizacion());
+            stockDTO.setOperacion(stock.getOperacion());
+            stockDTO.setProductoId(stock.getProducto().getId());
+            stockDTO.setDepositoId(stock.getDeposito().getId());
+            stockDTO.setDepositoNombre(stock.getDeposito().getNombre()); // Asignar el nombre del depósito
+            return stockDTO;
+        }).collect(Collectors.toList()));
         return productoDTO;
     }
 
