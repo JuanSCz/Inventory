@@ -27,8 +27,8 @@ public class Venta {
     @Column(nullable = false)
     private String estado;
 
-    @Column(nullable = false)
-    private BigDecimal impuestos;
+    @Column(nullable = false, length = 30)
+    private String impuestos; // Cambiado a String
 
     // Relación muchos-a-uno con Cliente (muchas ventas pueden tener un cliente)
     @ManyToOne
@@ -84,14 +84,6 @@ public class Venta {
         this.estado = estado;
     }
 
-    public BigDecimal getImpuestos() {
-        return impuestos;
-    }
-
-    public void setImpuestos(BigDecimal impuestos) {
-        this.impuestos = impuestos;
-    }
-
     public Cliente getCliente() {
         return cliente;
     }
@@ -108,5 +100,12 @@ public class Venta {
         this.detallesVenta = detallesVenta;
     }
 
+    public String getImpuestos() {
+        return impuestos;
+    }
+
+    public void setImpuestos(String impuestos) {
+        this.impuestos = impuestos;
+    }
 }
 

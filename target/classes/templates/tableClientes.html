@@ -112,10 +112,10 @@
                 <tr th:each="cliente : ${clientes}">
                     <td th:data-label="ID" th:text="${cliente.id}"></td>
                     <td th:data-label="Nombre" th:text="${cliente.nombre}"></td>
+                    <td th:data-label="Contacto" th:text="${cliente.contactoCliente}"></td>
+                    <td th:data-label="Direccion" th:text="${cliente.direccion}"></td>
                     <td th:data-label="País" th:text="${cliente.pais}"></td>
                     <td th:data-label="Ciudad" th:text="${cliente.ciudad}"></td>
-                    <td th:data-label="Direccion" th:text="${cliente.direccion}"></td>
-                    <td th:data-label="Contacto" th:text="${cliente.contactoCliente}"></td>
                     <td th:data-label="Email" th:text="${cliente.eMailCliente}"></td>
                     <td th:data-label="Acciones">
                         <div class="btn-group">

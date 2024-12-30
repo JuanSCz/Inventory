@@ -60,7 +60,9 @@ public class VentaController {
     @PostMapping("/update")
     public String updateVenta(@Valid VentaDTO ventaDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("ventaDTO", ventaDTO);
             model.addAttribute("ventas", ventaService.getAllVentas(pageable).getContent());

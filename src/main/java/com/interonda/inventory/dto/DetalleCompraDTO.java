@@ -38,6 +38,10 @@ public class DetalleCompraDTO {
         this.proveedorNombre = proveedorNombre;
     }
 
+    private String precioUnitarioFormatted;
+
+    private String totalFormatted;
+
     public DetalleCompraDTO() {
     }
 
@@ -88,5 +92,21 @@ public class DetalleCompraDTO {
 
     public void setProductoId(Long productoId) {
         this.productoId = productoId;
+    }
+
+    public String getPrecioUnitarioFormatted() {
+        return precioUnitarioFormatted;
+    }
+
+    public void setPrecioUnitarioFormatted(String precioUnitarioFormatted) {
+        this.precioUnitarioFormatted = precioUnitarioFormatted;
+    }
+
+    public String getTotalFormatted() {
+        return totalFormatted;
+    }
+
+    public void setTotalFormatted(String totalFormatted) {
+        this.totalFormatted = totalFormatted;
     }
 }

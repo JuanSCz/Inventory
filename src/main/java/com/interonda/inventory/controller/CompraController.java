@@ -2,7 +2,6 @@ package com.interonda.inventory.controller;
 
 import com.interonda.inventory.dto.CompraDTO;
 import com.interonda.inventory.dto.ProductoDTO;
-import com.interonda.inventory.dto.VentaDTO;
 import com.interonda.inventory.service.*;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -36,42 +35,36 @@ public class CompraController {
 
     private final ProveedorService proveedorService;
 
-    private CategoriaService categoriaService;
-
-    private DepositoService depositoService;
-
     private final MessageSource messageSource;
 
     @Autowired
-    public CompraController(ProductoService productoService, CompraService compraService, ProveedorService proveedorService, MessageSource messageSource, CategoriaService categoriaService) {
+    public CompraController(ProductoService productoService, CompraService compraService, ProveedorService proveedorService, MessageSource messageSource) {
         this.productoService = productoService;
         this.compraService = compraService;
         this.proveedorService = proveedorService;
-        this.categoriaService = categoriaService;
         this.messageSource = messageSource;
     }
 
     @PostMapping
-    public String createProducto(@Valid ProductoDTO productoDTO, BindingResult result, Model model, Pageable pageable) {
+    public String createCompra(@Valid CompraDTO compraDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
             String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
-            model.addAttribute("productos", productos.getContent());
-            model.addAttribute("productoDTO", productoDTO);
-            model.addAttribute("page", productos);
-            model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
-            model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
-            return "tableProductos";
+            model.addAttribute("compras", compraService.getAllCompras(pageable).getContent());
+            model.addAttribute("compraDTO", compraDTO);
+            return "tableCompras";
         }
-        productoService.createProducto(productoDTO);
-        return "redirect:/tableProductos";
+        compraService.createCompra(compraDTO);
+        return "redirect:/tableCompras";
     }
 
     @PostMapping("/update")
     public String updateCompra(@Valid CompraDTO compraDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("compraDTO", compraDTO);
             model.addAttribute("compras", compraService.getAllCompras(pageable).getContent());

@@ -25,6 +25,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -80,6 +82,10 @@ public class VentaServiceImpl implements VentaService {
                 return detalle;
             }).collect(Collectors.toList()));
 
+            // Establecer el total directamente desde el DTO
+            venta.setTotal(ventaDTO.getTotal());
+            venta.setImpuestos(ventaDTO.getImpuestos());
+
             Venta savedVenta = ventaRepository.save(venta);
             logger.info("Venta creada exitosamente con id: {}", savedVenta.getId());
             return ventaMapper.toDto(savedVenta);
@@ -108,28 +114,17 @@ public class VentaServiceImpl implements VentaService {
             Cliente cliente = clienteRepository.findById(ventaDTO.getClienteId()).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con el id: " + ventaDTO.getClienteId()));
             venta.setCliente(cliente);
 
-            // Actualizar los detalles de venta
-            List<DetalleVenta> detallesExistentes = venta.getDetallesVenta();
-            List<DetalleVentaDTO> nuevosDetallesDTO = ventaDTO.getDetallesVenta();
+            // Eliminar detalles existentes
+            detalleVentaRepository.deleteAll(venta.getDetallesVenta());
 
-            // Eliminar detalles que ya no están presentes
-            detallesExistentes.removeIf(detalle -> nuevosDetallesDTO.stream().noneMatch(nuevoDetalle -> nuevoDetalle.getId() != null && nuevoDetalle.getId().equals(detalle.getId())));
-
-            // Actualizar o añadir nuevos detalles
-            for (DetalleVentaDTO nuevoDetalleDTO : nuevosDetallesDTO) {
-                DetalleVenta detalle = detallesExistentes.stream().filter(d -> nuevoDetalleDTO.getId() != null && d.getId().equals(nuevoDetalleDTO.getId())).findFirst().orElse(new DetalleVenta());
-
-                detalle.setCantidad(nuevoDetalleDTO.getCantidad());
-                detalle.setPrecioUnitario(nuevoDetalleDTO.getPrecioUnitario());
-                detalle.setProducto(productoRepository.findById(nuevoDetalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + nuevoDetalleDTO.getProductoId())));
+            // Asignar los nuevos detalles de venta
+            List<DetalleVenta> nuevosDetalles = ventaDTO.getDetallesVenta().stream().map(detalleDTO -> {
+                DetalleVenta detalle = ventaMapper.toDetalleEntity(detalleDTO);
                 detalle.setVenta(venta);
-
-                if (detalle.getId() == null) {
-                    detallesExistentes.add(detalle);
-                }
-            }
-
-            venta.setDetallesVenta(detallesExistentes);
+                detalle.setProducto(productoRepository.findById(detalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId())));
+                return detalle;
+            }).collect(Collectors.toList());
+            venta.setDetallesVenta(nuevosDetalles);
 
             Venta updatedVenta = ventaRepository.save(venta);
             logger.info("Venta actualizada exitosamente con id: {}", updatedVenta.getId());
@@ -161,6 +156,23 @@ public class VentaServiceImpl implements VentaService {
             logger.error("Error eliminando Venta", e);
             return false;
         }
+    }
+
+    private String formatImpuestos(String impuestos) {
+        switch (impuestos) {
+            case "0.10":
+                return "IVA: 10%";
+            case "0.20":
+                return "IVA: 20%";
+            case "0.30":
+                return "IVA: 30%";
+            default:
+                return "IVA: " + (new BigDecimal(impuestos).multiply(new BigDecimal("100")).stripTrailingZeros().toPlainString()) + "%";
+        }
+    }
+
+    private BigDecimal formatTotal(BigDecimal total) {
+        return total.setScale(3, RoundingMode.HALF_UP);
     }
 
     @Override
@@ -198,6 +210,8 @@ public class VentaServiceImpl implements VentaService {
             return ventas.map(venta -> {
                 VentaDTO dto = ventaMapper.toDto(venta);
                 dto.setClienteNombre(venta.getCliente().getNombre());
+                dto.setImpuestos(formatImpuestos(venta.getImpuestos())); // Formatear impuestos
+                dto.setTotal(formatTotal(venta.getTotal())); // Formatear total
                 return dto;
             });
         } catch (Exception e) {

@@ -27,8 +27,8 @@ public class Compra {
     @Column(nullable = false, length = 30)
     private String estado;
 
-    @Column(nullable = false)
-    private BigDecimal impuestos;
+    @Column(nullable = false, length = 30)
+    private String impuestos; // Cambiado a String
 
     // Relaciones
 
@@ -86,11 +86,11 @@ public class Compra {
         this.estado = estado;
     }
 
-    public BigDecimal getImpuestos() {
+    public String getImpuestos() {
         return impuestos;
     }
 
-    public void setImpuestos(BigDecimal impuestos) {
+    public void setImpuestos(String impuestos) {
         this.impuestos = impuestos;
     }
 

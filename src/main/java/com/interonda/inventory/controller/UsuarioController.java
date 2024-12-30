@@ -99,7 +99,7 @@ public class UsuarioController {
         }
         model.addAttribute("usuarios", usuarios.getContent());
         model.addAttribute("usuarioDTO", new UsuarioDTO());
-        model.addAttribute("page", usuarios);
+        model.addAttribute("page", usuarios); // Asegúrate de que esta línea esté presente
         model.addAttribute("roles", rolService.getAllRoles(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
         model.addAttribute("currentPage", "tableUsuarios");
         return "tableUsuarios";

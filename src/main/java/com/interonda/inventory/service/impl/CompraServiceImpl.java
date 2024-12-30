@@ -25,6 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -80,6 +82,10 @@ public class CompraServiceImpl implements CompraService {
                 detalle.setProducto(productoRepository.findById(detalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId())));
                 return detalle;
             }).collect(Collectors.toList()));
+
+            // Establecer el total directamente desde el DTO
+            compra.setTotal(compraDTO.getTotal());
+            compra.setImpuestos(compraDTO.getImpuestos());
 
             Compra savedCompra = compraRepository.save(compra);
             logger.info("Compra creada exitosamente con id: {}", savedCompra.getId());
@@ -164,6 +170,23 @@ public class CompraServiceImpl implements CompraService {
         }
     }
 
+    private String formatImpuestos(String impuestos) {
+        switch (impuestos) {
+            case "0.10":
+                return "IVA: 10%";
+            case "0.20":
+                return "IVA: 20%";
+            case "0.30":
+                return "IVA: 30%";
+            default:
+                return "IVA: " + (new BigDecimal(impuestos).multiply(new BigDecimal("100")).stripTrailingZeros().toPlainString()) + "%";
+        }
+    }
+
+    private BigDecimal formatTotal(BigDecimal total) {
+        return total.setScale(3, RoundingMode.HALF_UP);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public CompraDTO getCompra(Long id) {
@@ -199,6 +222,8 @@ public class CompraServiceImpl implements CompraService {
             return compras.map(compra -> {
                 CompraDTO dto = compraMapper.toDto(compra);
                 dto.setProveedorNombre(compra.getProveedor().getNombre());
+                dto.setImpuestos(formatImpuestos(compra.getImpuestos())); // Formatear impuestos
+                dto.setTotal(formatTotal(compra.getTotal())); // Formatear total
                 return dto;
             });
         } catch (Exception e) {

@@ -11,19 +11,16 @@ public class DetalleVentaDTO {
 
     private Long id;
 
-    @NotNull(message = "{detalleVentaDTO.cantidad.notNull}")
-    @Positive(message = "{detalleVentaDTO.cantidad.positive}")
     private Integer cantidad;
 
-    @NotNull(message = "{detalleVentaDTO.precioUnitario.notNull}")
-    @DecimalMin(value = "0.0", inclusive = false, message = "{detalleVentaDTO.precioUnitario.decimalMin}")
-    @Digits(integer = 10, fraction = 2, message = "{detalleVentaDTO.precioUnitario.digits}")
+    private String precioUnitarioFormatted;
+
     private BigDecimal precioUnitario;
 
-    @NotNull(message = "{detalleVentaDTO.venta.notNull}")
+    private String totalFormatted;
+
     private Long ventaId;
 
-    @NotNull(message = "{detalleVentaDTO.producto.notNull}")
     private Long productoId;
 
     private String productoNombre;
@@ -66,14 +63,6 @@ public class DetalleVentaDTO {
         this.cantidad = cantidad;
     }
 
-    public BigDecimal getPrecioUnitario() {
-        return precioUnitario;
-    }
-
-    public void setPrecioUnitario(BigDecimal precioUnitario) {
-        this.precioUnitario = precioUnitario;
-    }
-
     public Long getVentaId() {
         return ventaId;
     }
@@ -88,5 +77,29 @@ public class DetalleVentaDTO {
 
     public void setProductoId(Long productoId) {
         this.productoId = productoId;
+    }
+
+    public String getPrecioUnitarioFormatted() {
+        return precioUnitarioFormatted;
+    }
+
+    public void setPrecioUnitarioFormatted(String precioUnitarioFormatted) {
+        this.precioUnitarioFormatted = precioUnitarioFormatted;
+    }
+
+    public String getTotalFormatted() {
+        return totalFormatted;
+    }
+
+    public void setTotalFormatted(String totalFormatted) {
+        this.totalFormatted = totalFormatted;
+    }
+
+    public BigDecimal getPrecioUnitario() {
+        return precioUnitario;
+    }
+
+    public void setPrecioUnitario(BigDecimal precioUnitario) {
+        this.precioUnitario = precioUnitario;
     }
 }

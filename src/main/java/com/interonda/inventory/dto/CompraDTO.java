@@ -1,7 +1,5 @@
 package com.interonda.inventory.dto;
 
-import jakarta.validation.constraints.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,7 +17,7 @@ public class CompraDTO {
 
     private String estado;
 
-    private BigDecimal impuestos;
+    private String impuestos; // Cambiado a String
 
     private Long proveedorId;
 
@@ -80,11 +78,11 @@ public class CompraDTO {
         this.estado = estado;
     }
 
-    public BigDecimal getImpuestos() {
+    public String getImpuestos() {
         return impuestos;
     }
 
-    public void setImpuestos(BigDecimal impuestos) {
+    public void setImpuestos(String impuestos) {
         this.impuestos = impuestos;
     }
 

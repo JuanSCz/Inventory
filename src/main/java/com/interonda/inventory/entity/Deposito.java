@@ -23,7 +23,7 @@ public class Deposito {
     @Column(nullable = false, length = 20)
     private String direccion;
 
-    @Column(name = "contacto", length = 15, nullable = false)
+    @Column(name = "contacto", length = 20, nullable = false)
     private String contactoDeposito;
 
     // Relaciones

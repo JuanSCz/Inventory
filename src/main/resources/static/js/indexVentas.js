@@ -141,10 +141,10 @@ function populateUpdateModal(id) {
             const updateModalElement = document.getElementById('updateVentaModal');
             updateModalElement.querySelector('#id').value = data.id;
             updateModalElement.querySelector('#fecha').value = data.fecha;
-            updateModalElement.querySelector('#total').value = data.total.toFixed(2);
+            updateModalElement.querySelector('#total').value = data.total.toFixed(3);
             updateModalElement.querySelector('#metodoPago').value = data.metodoPago;
             updateModalElement.querySelector('#estado').value = data.estado;
-            updateModalElement.querySelector('#impuestos').value = data.impuestos.toFixed(2);
+            updateModalElement.querySelector('#impuestos').value = data.impuestos;
             updateModalElement.querySelector('#cliente').value = data.clienteId;
 
             const detalleContainer = document.getElementById('detalleContainerUpdate');
@@ -167,7 +167,7 @@ function populateUpdateModal(id) {
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="precioUnitario${index}" class="form-label">Precio Unitario</label>
-                        <input type="number" step="0.01" class="form-control form-control-detalle" name="detallesVenta[${index}].precioUnitario" id="precioUnitario${index}" placeholder="Ingrese el precio unitario..." required>
+                        <input type="number" step="0.001" class="form-control form-control-detalle" name="detallesVenta[${index}].precioUnitario" id="precioUnitario${index}" placeholder="Ingrese el precio unitario..." required>
                     </div>
                 `;
 
@@ -176,7 +176,7 @@ function populateUpdateModal(id) {
                 // Set values
                 newRow.querySelector(`#producto${index}`).value = detalle.productoId;
                 newRow.querySelector(`#cantidad${index}`).value = detalle.cantidad;
-                newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitario.toFixed(2);
+                newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitario.toFixed(3);
             });
         })
         .catch(error => console.error('Error al cargar los datos de la venta:', error));
@@ -204,8 +204,8 @@ function showDetalleVentaModal(button) {
                     <td>${detalle.id}</td>
                     <td>${detalle.productoNombre}</td>
                     <td>${detalle.cantidad}</td>
-                    <td>${detalle.precioUnitario.toFixed(2)}</td>
-                    <td>${(detalle.cantidad * detalle.precioUnitario).toFixed(2)}</td>
+                    <td>${detalle.precioUnitario.toFixed(3)}</td>
+                    <td>${(detalle.cantidad * detalle.precioUnitario).toFixed(3)}</td>
                 `;
                 modalBody.appendChild(row);
             });

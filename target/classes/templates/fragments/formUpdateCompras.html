@@ -28,8 +28,9 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="total" class="form-label">Total</label>
-                                <input type="number" step="0.01" class="form-control form-control-detalle"
-                                       th:field="*{total}" id="total" placeholder="Ingrese el total...">
+                                <input type="number" step="0.001" class="form-control form-control-detalle"
+                                       th:field="*{total}" th:value="${#numbers.formatDecimal(compraDTO.total, 3, 3)}"
+                                       id="total">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="metodoPago" class="form-label">Método de Pago</label>
@@ -50,8 +51,12 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="impuestos" class="form-label">Impuestos</label>
-                                <input type="number" step="0.01" class="form-control form-control-detalle"
-                                       th:field="*{impuestos}" id="impuestos" placeholder="Ingrese los impuestos...">
+                                <select class="form-control form-control-detalle" th:field="*{impuestos}" id="impuestos"
+                                        required>
+                                    <option value="0.10">IVA: 10%</option>
+                                    <option value="0.20">IVA: 20%</option>
+                                    <option value="0.30">IVA: 30%</option>
+                                </select>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="proveedor" class="form-label">Proveedor</label>
@@ -82,8 +87,9 @@
                                     </div>
                                     <div class="col-md-4 mb-3">
                                         <label for="precioUnitario" class="form-label">Precio Unitario</label>
-                                        <input type="number" step="0.01" class="form-control form-control-detalle"
+                                        <input type="number" step="0.001" class="form-control form-control-detalle"
                                                th:field="*{detallesCompra[__${iterStat.index}__].precioUnitario}"
+                                               th:value="${#numbers.formatDecimal(detalle.precioUnitario, 3, 3)}"
                                                id="precioUnitario" placeholder="Ingrese el precio unitario...">
                                     </div>
                                 </div>
