@@ -1,6 +1,7 @@
 package com.interonda.inventory.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -8,13 +9,20 @@ public class DepositoDTO {
 
     private Long id;
 
-    @NotBlank(message = "El nombre no puede estar en blanco")
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
     private String nombre;
 
+    @NotBlank(message = "La provincia no puede estar vacía")
+    @Size(max = 20, message = "La provincia no puede tener más de 20 caracteres")
     private String provincia;
 
+    @NotBlank(message = "La dirección no puede estar vacía")
+    @Size(max = 50, message = "La dirección no puede tener más de 50 caracteres")
     private String direccion;
 
+    @NotBlank(message = "El contacto no puede estar vacío")
+    @Size(max = 20, message = "El contacto no puede tener más de 20 caracteres")
     private String contactoDeposito;
 
     private List<StockDTO> stocks;

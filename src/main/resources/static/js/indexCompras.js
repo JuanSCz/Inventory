@@ -5,7 +5,40 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeUpdateModal();
     initializeDeleteModal();
     initializeAddDetalleButton();
+    initializeTotalInput();
+    initializeFormSubmit();
 });
+
+function initializeTotalInput() {
+    const totalInput = document.getElementById('total');
+    if (totalInput) {
+        totalInput.addEventListener('input', function () {
+            this.value = formatNumber(this.value);
+        });
+    }
+}
+
+function formatNumber(value) {
+    value = value.replace(/[^\d.,]/g, '');
+    value = value.replace(/,/g, '.');
+    const parts = value.split('.');
+    if (parts.length > 2) {
+        value = parts[0] + '.' + parts.slice(1).join('');
+    }
+    return value;
+}
+
+function initializeFormSubmit() {
+    const form = document.getElementById('createCompraForm');
+    if (form) {
+        form.addEventListener('submit', function (event) {
+            const totalInput = document.getElementById('total');
+            if (totalInput) {
+                totalInput.value = formatNumber(totalInput.value);
+            }
+        });
+    }
+}
 
 // Manejo del modal de error
 function handleErrorModal() {
@@ -134,7 +167,7 @@ function populateUpdateModal(id) {
             const updateModalElement = document.getElementById('updateCompraModal');
             updateModalElement.querySelector('#id').value = data.id;
             updateModalElement.querySelector('#fecha').value = data.fecha;
-            updateModalElement.querySelector('#total').value = data.total.toFixed(3);
+            updateModalElement.querySelector('#total').value = data.total;
             updateModalElement.querySelector('#metodoPago').value = data.metodoPago;
             updateModalElement.querySelector('#estado').value = data.estado;
             updateModalElement.querySelector('#impuestos').value = data.impuestos;
@@ -169,7 +202,7 @@ function populateUpdateModal(id) {
                 // Set values
                 newRow.querySelector(`#producto${index}`).value = detalle.productoId;
                 newRow.querySelector(`#cantidad${index}`).value = detalle.cantidad;
-                newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitario.toFixed(3);
+                newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitario;
             });
         })
         .catch(error => console.error('Error al cargar los datos de la compra:', error));
@@ -213,7 +246,14 @@ function showDetalleCompraModal(button) {
             const detalleModal = new bootstrap.Modal(document.getElementById('createDetalleComprasModal'));
             detalleModal.show();
         })
-        .catch(error => console.error('Error al cargar los detalles de la compra:', error));
+        .catch(error => {
+            console.error('Error al cargar los detalles de la compra:', error);
+            const modalBody = document.getElementById('errorModalBody');
+            modalBody.innerHTML = error.message;
+
+            const errorModal = new bootstrap.Modal(document.getElementById('errorModalGlobal'));
+            errorModal.show();
+        });
 }
 
 // Inicializar modal de eliminación para compras

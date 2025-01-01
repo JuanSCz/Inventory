@@ -46,8 +46,10 @@ public class ProveedorController {
             model.addAttribute("errorMessage", errorMessage);
             Sort sort = Sort.by(Sort.Direction.DESC, "id");
             Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-            model.addAttribute("proveedores", proveedorService.getAllProveedores(newPageable, sort).getContent());
+            Page<ProveedorDTO> proveedores = proveedorService.getAllProveedores(newPageable, sort);
+            model.addAttribute("proveedores", proveedores.getContent());
             model.addAttribute("proveedorDTO", proveedorDTO);
+            model.addAttribute("page", proveedores);
             return "tableProveedores";
         }
         proveedorService.createProveedor(proveedorDTO);
@@ -64,7 +66,9 @@ public class ProveedorController {
             model.addAttribute("proveedorDTO", proveedorDTO);
             Sort sort = Sort.by(Sort.Direction.DESC, "id");
             Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-            model.addAttribute("proveedores", proveedorService.getAllProveedores(newPageable, sort).getContent());
+            Page<ProveedorDTO> proveedores = proveedorService.getAllProveedores(newPageable, sort);
+            model.addAttribute("proveedores", proveedores.getContent());
+            model.addAttribute("page", proveedores);
             return "tableProveedores";
         }
         proveedorService.updateProveedor(proveedorDTO);

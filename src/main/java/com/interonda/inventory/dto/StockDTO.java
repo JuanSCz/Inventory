@@ -5,14 +5,17 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
 public class StockDTO {
-
     private Long id;
 
     @NotNull(message = "La cantidad no puede ser nula")
+    @Min(value = 0, message = "La cantidad no puede ser negativa")
     private Integer cantidad;
 
+    @NotNull(message = "La fecha de actualización no puede ser nula")
     private LocalDateTime fechaActualizacion;
 
+    @NotBlank(message = "La operación no puede estar vacía")
+    @Size(max = 50, message = "La operación debe tener un máximo de 50 caracteres")
     private String operacion;
 
     @NotNull(message = "El ID del producto no puede ser nulo")
@@ -21,7 +24,8 @@ public class StockDTO {
     @NotNull(message = "El ID del depósito no puede ser nulo")
     private Long depositoId;
 
-    private String depositoNombre; // Nuevo campo
+    @NotBlank(message = "El nombre del depósito no puede estar vacío")
+    private String depositoNombre;
 
     public StockDTO() {
     }

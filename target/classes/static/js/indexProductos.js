@@ -112,11 +112,8 @@ function populateUpdateModal(id) {
             document.getElementById('descripcion').value = data.descripcion;
             document.getElementById('precio').value = data.precio;
             document.getElementById('costo').value = data.costo;
-            document.getElementById('codigoBarras').value = data.codigoBarras;
-            document.getElementById('numeroDeSerie').value = data.numeroDeSerie;
             document.getElementById('stockActual').value = data.stockActual;
             document.getElementById('stockMinimo').value = data.stockMinimo;
-            document.getElementById('macAddress').value = data.macAddress;
             document.getElementById('categoriaId').value = data.categoriaId;
 
             const stockContainer = document.getElementById('stockContainerUpdate');
@@ -142,7 +139,7 @@ function populateUpdateModal(id) {
                 stockContainer.appendChild(newRow);
 
                 newRow.querySelector(`#depositoId${index}`).value = stock.depositoId;
-                newRow.querySelector(`#depositoId${index} option[value="${stock.depositoId}"]`).text = stock.depositoNombre; // Asignar el nombre del depósito
+                newRow.querySelector(`#depositoId${index} option[value="${stock.depositoId}"]`).text = stock.depositoNombre;
                 newRow.querySelector(`#cantidad${index}`).value = stock.cantidad;
             });
         })

@@ -1,5 +1,6 @@
 package com.interonda.inventory.controller;
 
+import com.interonda.inventory.dto.CategoriaDTO;
 import com.interonda.inventory.dto.ClienteDTO;
 import com.interonda.inventory.dto.ProveedorDTO;
 import com.interonda.inventory.service.ClienteService;
@@ -39,14 +40,16 @@ public class ClienteController {
     }
 
     @PostMapping
-    public String createCliente(@Valid ClienteDTO clienteDTO, BindingResult result, Model model, Pageable pageable) {
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
+    public String createCliente(@Valid ClienteDTO clienteDTO, BindingResult bindingResult, Model model, Pageable pageable) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
                     .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
                     .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
-            model.addAttribute("clientes", clienteService.getAllClientes(pageable).getContent());
+            Page<ClienteDTO> clientes = clienteService.getAllClientes(pageable);
+            model.addAttribute("clientes", clientes.getContent());
             model.addAttribute("clienteDTO", clienteDTO);
+            model.addAttribute("page", clientes);
             return "tableClientes";
         }
         clienteService.createCliente(clienteDTO);
@@ -54,14 +57,16 @@ public class ClienteController {
     }
 
     @PostMapping("/update")
-    public String updateCliente(@Valid ClienteDTO clienteDTO, BindingResult result, Model model, Pageable pageable) {
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
+    public String updateCliente(@Valid ClienteDTO clienteDTO, BindingResult bindingResult, Model model, Pageable pageable) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
                     .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
                     .collect(Collectors.joining("<br>"));
+            Page<ClienteDTO> clientes = clienteService.getAllClientes(pageable);
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("clienteDTO", clienteDTO);
             model.addAttribute("clientes", clienteService.getAllClientes(pageable).getContent());
+            model.addAttribute("page", clientes);
             return "tableClientes"; // Asegúrate de renderizar con datos correctos
         }
         clienteService.updateCliente(clienteDTO);

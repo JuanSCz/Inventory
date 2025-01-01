@@ -85,6 +85,11 @@ public class ProductoServiceImpl implements ProductoService {
                 return stock;
             }).collect(Collectors.toList()));
 
+            // Establecer los atributos como null
+            producto.setCodigoBarras(null);
+            producto.setNumeroDeSerie(null);
+            producto.setMacAddress(null);
+
             Producto savedProducto = productoRepository.save(producto);
             logger.info("Producto creado exitosamente con id: {}", savedProducto.getId());
             return productoMapper.toDto(savedProducto);
@@ -108,11 +113,14 @@ public class ProductoServiceImpl implements ProductoService {
             producto.setDescripcion(productoDTO.getDescripcion());
             producto.setPrecio(productoDTO.getPrecio());
             producto.setCosto(productoDTO.getCosto());
-            producto.setCodigoBarras(productoDTO.getCodigoBarras());
-            producto.setNumeroDeSerie(productoDTO.getNumeroDeSerie());
+
+            // Establecer los atributos como null
+            producto.setCodigoBarras(null);
+            producto.setNumeroDeSerie(null);
+            producto.setMacAddress(null);
+
             producto.setStockActual(productoDTO.getStockActual());
             producto.setStockMinimo(productoDTO.getStockMinimo());
-            producto.setMacAddress(productoDTO.getMacAddress());
 
             // Asignar la categoría al producto
             if (productoDTO.getCategoriaId() != null) {

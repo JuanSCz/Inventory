@@ -9,28 +9,29 @@ public class ClienteDTO {
     private Long id;
 
 
-    @NotBlank(message = "{clienteDTO.nombre.notBlank}")
-    @Size(max = 50, message = "{clienteDTO.nombre.size}")
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
     private String nombre;
 
-    @NotBlank(message = "{clienteDTO.pais.notBlank}")
-    @Size(max = 30, message = "{clienteDTO.pais.size}")
+    @NotBlank(message = "El país no puede estar vacío")
+    @Size(max = 30, message = "El país no puede tener más de 30 caracteres")
     private String pais;
 
-    @NotBlank(message = "{clienteDTO.ciudad.notBlank}")
-    @Size(max = 30, message = "{clienteDTO.ciudad.size}")
+    @NotBlank(message = "La ciudad no puede estar vacía")
+    @Size(max = 30, message = "La ciudad no puede tener más de 30 caracteres")
     private String ciudad;
 
-    @NotBlank(message = "{clienteDTO.direccion.notBlank}")
-    @Size(max = 50, message = "{clienteDTO.direccion.size}")
+    @NotBlank(message = "La dirección no puede estar vacía")
+    @Size(max = 50, message = "La dirección no puede tener más de 50 caracteres")
     private String direccion;
 
-    @NotBlank(message = "{clienteDTO.contactoCliente.notBlank}")
-    @Size(max = 15, message = "{clienteDTO.contactoCliente.size}")
+    @NotBlank(message = "El contacto no puede estar vacío")
+    @Size(max = 15, message = "El contacto no puede tener más de 15 caracteres")
     private String contactoCliente;
 
-    @Email(message = "{clienteDTO.eMailCliente.email}")
-    @Size(max = 254, message = "{clienteDTO.eMailCliente.size}")
+    @NotBlank(message = "El email no puede estar vacío")
+    @Email(message = "El correo electrónico debe ser válido")
+    @Size(max = 254, message = "El correo electrónico no puede tener más de 254 caracteres")
     private String eMailCliente;
 
     public ClienteDTO() {

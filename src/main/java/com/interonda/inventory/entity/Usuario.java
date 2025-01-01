@@ -1,6 +1,9 @@
 package com.interonda.inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +16,17 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(max = 50, message = "El nombre debe tener un máximo de 50 caracteres")
     @Column(nullable = false, length = 50)
     private String nombre;
 
+    @NotBlank(message = "La contraseña no puede estar vacía")
     @Column(name = "contraseña", nullable = false)
     private String contrasenia;
 
+    @NotBlank(message = "El contacto no puede estar vacío")
+    @Size(max = 15, message = "El contacto debe tener un máximo de 15 caracteres")
     @Column(length = 15, nullable = false)
     private String contacto;
 
@@ -27,6 +35,7 @@ public class Usuario {
     private List<HistorialStock> historialStock = new ArrayList<>();
 
     //Relación muchos-a-uno con Rol (muchos usuarios pueden tener un rol)
+    @NotNull(message = "El rol no puede ser nulo")
     @ManyToOne
     @JoinColumn(name = "rol_id")
     private Rol rol;

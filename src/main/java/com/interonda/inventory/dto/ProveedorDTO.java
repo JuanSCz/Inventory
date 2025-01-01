@@ -11,14 +11,25 @@ public class ProveedorDTO {
 
     private Long id;
 
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(max = 50, message = "El nombre debe tener un máximo de 50 caracteres")
     private String nombre;
 
+    @NotBlank(message = "El contacto no puede estar vacío")
+    @Size(max = 15, message = "El contacto debe tener un máximo de 15 caracteres")
     private String contactoProveedor;
-    
+
+    @NotBlank(message = "El dirección no puede estar vacío")
+    @Size(max = 50, message = "La dirección debe tener un máximo de 50 caracteres")
     private String direccion;
 
+    @NotBlank(message = "El país no puede estar vacío")
+    @Size(max = 254, message = "El país debe tener un máximo de 254 caracteres")
     private String pais;
 
+    @NotBlank(message = "El email no puede estar vacío")
+    @Email(message = "El email debe ser válido")
+    @Size(max = 254, message = "El email debe tener un máximo de 254 caracteres")
     private String emailProveedor;
 
     private List<Long> productosIds;

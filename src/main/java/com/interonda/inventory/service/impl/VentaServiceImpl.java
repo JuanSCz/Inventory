@@ -27,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -88,6 +90,10 @@ public class VentaServiceImpl implements VentaService {
 
             Venta savedVenta = ventaRepository.save(venta);
             logger.info("Venta creada exitosamente con id: {}", savedVenta.getId());
+
+            // Formatear el total
+            ventaDTO.setTotalString(formatTotal(savedVenta.getTotal()));
+
             return ventaMapper.toDto(savedVenta);
         } catch (Exception e) {
             logger.error("Error guardando Venta", e);
@@ -171,8 +177,14 @@ public class VentaServiceImpl implements VentaService {
         }
     }
 
-    private BigDecimal formatTotal(BigDecimal total) {
-        return total.setScale(3, RoundingMode.HALF_UP);
+    public String formatTotal(BigDecimal total) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator(',');
+        symbols.setGroupingSeparator('.');
+
+        DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+        formatter.setRoundingMode(RoundingMode.DOWN);
+        return formatter.format(total);
     }
 
     @Override
@@ -211,7 +223,8 @@ public class VentaServiceImpl implements VentaService {
                 VentaDTO dto = ventaMapper.toDto(venta);
                 dto.setClienteNombre(venta.getCliente().getNombre());
                 dto.setImpuestos(formatImpuestos(venta.getImpuestos())); // Formatear impuestos
-                dto.setTotal(formatTotal(venta.getTotal())); // Formatear total
+                dto.setTotal(venta.getTotal()); // Establecer el total como BigDecimal
+                dto.setTotalString(formatTotal(venta.getTotal())); // Formatear total como String para visualización
                 return dto;
             });
         } catch (Exception e) {

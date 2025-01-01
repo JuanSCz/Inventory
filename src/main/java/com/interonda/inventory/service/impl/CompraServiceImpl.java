@@ -27,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -183,8 +185,14 @@ public class CompraServiceImpl implements CompraService {
         }
     }
 
-    private BigDecimal formatTotal(BigDecimal total) {
-        return total.setScale(3, RoundingMode.HALF_UP);
+    public String formatTotal(BigDecimal total) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator(',');
+        symbols.setGroupingSeparator('.');
+
+        DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+        formatter.setRoundingMode(RoundingMode.DOWN);
+        return formatter.format(total);
     }
 
     @Override
@@ -223,7 +231,8 @@ public class CompraServiceImpl implements CompraService {
                 CompraDTO dto = compraMapper.toDto(compra);
                 dto.setProveedorNombre(compra.getProveedor().getNombre());
                 dto.setImpuestos(formatImpuestos(compra.getImpuestos())); // Formatear impuestos
-                dto.setTotal(formatTotal(compra.getTotal())); // Formatear total
+                dto.setTotal(compra.getTotal()); // Establecer el total como BigDecimal
+                dto.setTotalString(formatTotal(compra.getTotal())); // Formatear total como String para visualización
                 return dto;
             });
         } catch (Exception e) {

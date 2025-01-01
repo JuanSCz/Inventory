@@ -1,5 +1,7 @@
 package com.interonda.inventory.dto;
 
+import jakarta.validation.constraints.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -9,29 +11,35 @@ public class CompraDTO {
 
     private Long id;
 
+    @NotNull(message = "La fecha no puede estar vacía")
     private LocalDate fecha;
 
+    @NotNull(message = "El total no puede estar vacío")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El total debe ser mayor que 0")
     private BigDecimal total;
 
+    @NotBlank(message = "El método de pago no puede estar vacío")
+    @Size(max = 30, message = "El método de pago no puede tener más de 30 caracteres")
     private String metodoPago;
 
+    @NotBlank(message = "El estado no puede estar vacío")
+    @Size(max = 30, message = "El estado no puede tener más de 30 caracteres")
     private String estado;
 
-    private String impuestos; // Cambiado a String
+    @NotBlank(message = "Los impuestos no pueden estar vacíos")
+    @Size(max = 30, message = "Los impuestos no pueden tener más de 30 caracteres")
+    private String impuestos;
 
+    @NotNull(message = "El ID del proveedor no puede ser nulo")
     private Long proveedorId;
 
     private String proveedorNombre;
 
-    public String getProveedorNombre() {
-        return proveedorNombre;
-    }
-
-    public void setProveedorNombre(String proveedorNombre) {
-        this.proveedorNombre = proveedorNombre;
-    }
-
     private List<DetalleCompraDTO> detallesCompra = new ArrayList<>();
+
+    @NotBlank(message = "El total no puede estar vacío")
+    @Pattern(regexp = "\\d{1,3}(\\.\\d{3})*(,\\d{1,2})?", message = "El total debe tener un formato válido (e.g., 1.000.000,00)")
+    private String totalString;
 
     public CompraDTO() {
     }
@@ -100,5 +108,24 @@ public class CompraDTO {
 
     public void setDetallesCompra(List<DetalleCompraDTO> detallesCompra) {
         this.detallesCompra = detallesCompra;
+    }
+
+    public String getProveedorNombre() {
+        return proveedorNombre;
+    }
+
+    public void setProveedorNombre(String proveedorNombre) {
+        this.proveedorNombre = proveedorNombre;
+    }
+
+    public void setTotalString(String totalString) {
+        this.totalString = totalString;
+        if (totalString != null && !totalString.isEmpty()) {
+            this.total = new BigDecimal(totalString.replace(".", "").replace(",", "."));
+        }
+    }
+
+    public String getTotalString() {
+        return this.totalString;
     }
 }

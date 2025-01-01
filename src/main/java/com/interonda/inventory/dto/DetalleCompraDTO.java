@@ -11,23 +11,25 @@ public class DetalleCompraDTO {
 
     private Long id;
 
-    @NotNull(message = "{detalleCompraDTO.cantidad.notNull}")
-    @Positive(message = "{detalleCompraDTO.cantidad.positive}")
+    @NotNull(message = "La cantidad no puede estar vacía")
+    @Positive(message = "La cantidad debe ser un número positivo")
     private Integer cantidad;
 
-    @NotNull(message = "{detalleCompraDTO.precioUnitario.notNull}")
-    @DecimalMin(value = "0.0", inclusive = false, message = "{detalleCompraDTO.precioUnitario.decimalMin}")
-    @Digits(integer = 10, fraction = 2, message = "{detalleCompraDTO.precioUnitario.digits}")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El precio unitario debe ser mayor que 0")
+    @NotNull(message = "El precio unitario no puede estar vacío")
+    @Digits(integer = 10, fraction = 3, message = "El precio unitario debe tener un máximo de 10 dígitos enteros y 3 decimales")
     private BigDecimal precioUnitario;
 
-    @NotNull(message = "{detalleCompraDTO.compra.notNull}")
+    @NotNull(message = "La compra no puede estar vacía")
     private Long compraId;
 
-    @NotNull(message = "{detalleCompraDTO.producto.notNull}")
+    @NotNull(message = "El producto no puede estar vacío")
     private Long productoId;
 
+    @NotNull(message = "El producto no puede estar vacío")
     private String productoNombre;
 
+    @NotNull(message = "El proveedor no puede estar vacío")
     private String proveedorNombre;
 
     public String getProveedorNombre() {

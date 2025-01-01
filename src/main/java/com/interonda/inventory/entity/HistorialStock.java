@@ -1,6 +1,7 @@
 package com.interonda.inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
@@ -12,21 +13,33 @@ public class HistorialStock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "La cantidad anterior no puede estar vacía")
+    @PositiveOrZero(message = "La cantidad anterior debe ser un número positivo o cero")
     @Column(name = "cantidad_anterior", nullable = false)
     private Integer cantidadAnterior;
 
+    @NotNull(message = "La cantidad nueva no puede estar vacía")
+    @PositiveOrZero(message = "La cantidad nueva debe ser un número positivo o cero")
     @Column(name = "cantidad_actual", nullable = false)
     private Integer cantidadNueva;
 
+    @NotNull(message = "La fecha de actualización no puede estar vacía")
+    @FutureOrPresent(message = "La fecha de actualización debe ser en el presente o futuro")
     @Column(name = "actualizacion", nullable = false)
     private LocalDateTime fechaActualizacion;
 
+    @NotBlank(message = "El motivo no puede estar vacío")
+    @Size(min = 3, max = 50, message = "El motivo debe tener entre 3 y 50 caracteres")
     @Column(nullable = false)
     private String motivo;
 
+    @NotBlank(message = "El tipo de movimiento no puede estar vacío")
+    @Size(min = 3, max = 50, message = "El tipo de movimiento debe tener entre 3 y 50 caracteres")
     @Column(name = "tipo_movimiento", length = 50, nullable = false)
     private String tipoMovimiento;
 
+    @NotBlank(message = "La observacion no puede estar vacío")
+    @Size(max = 200, message = "La observación debe tener un máximo de 200 caracteres")
     @Column(length = 200)
     private String observacion;
 

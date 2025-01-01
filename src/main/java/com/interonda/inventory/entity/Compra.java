@@ -1,6 +1,10 @@
 package com.interonda.inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,24 +19,35 @@ public class Compra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "La fecha no puede estar vacía")
     @Column(nullable = false)
     private LocalDate fecha;
 
+    @NotNull(message = "El total no puede estar vacío")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El total debe ser mayor que 0")
     @Column(nullable = false)
     private BigDecimal total;
 
+    @NotBlank(message = "El método de pago no puede estar vacío")
+    @Size(max = 30, message = "El método de pago no puede tener más de 30 caracteres")
     @Column(name = "metodo_de_pago", nullable = false, length = 30)
     private String metodoPago;
 
+    @NotBlank(message = "El estado no puede estar vacío")
+    @Size(max = 30, message = "El estado no puede tener más de 30 caracteres")
     @Column(nullable = false, length = 30)
     private String estado;
 
+    @NotBlank(message = "Los impuestos no pueden estar vacíos")
+    @Size(max = 30, message = "Los impuestos no pueden tener más de 30 caracteres")
     @Column(nullable = false, length = 30)
-    private String impuestos; // Cambiado a String
+    private String impuestos;
 
-    // Relaciones
+// Relaciones
 
     // Relación muchos-a-uno con Proveedor(una compra pertenece a un proveedor)
+
+    @NotNull(message = "El proveedor no puede ser nulo")
     @ManyToOne
     @JoinColumn(name = "proveedor_id", nullable = false)
     private Proveedor proveedor;

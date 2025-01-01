@@ -1,6 +1,7 @@
 package com.interonda.inventory.controller;
 
 import com.interonda.inventory.dto.UsuarioDTO;
+import com.interonda.inventory.dto.indexDTO;
 import com.interonda.inventory.exceptions.AuthenticationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,20 +27,22 @@ public class IndexController {
 
     @GetMapping("/login")
     public String showLoginForm(Model model) {
-        model.addAttribute("usuarioDTO", new UsuarioDTO());
+        model.addAttribute("indexDTO", new indexDTO());
         return "index"; // Nombre de la vista de login
     }
 
     @PostMapping("/login")
-    public String login(@Valid UsuarioDTO usuarioDTO, BindingResult bindingResult, Model model) {
+    public String login(@Valid indexDTO indexDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             return "index";
         }
 
         try {
-            if ("admin".equals(usuarioDTO.getNombre()) && "password".equals(usuarioDTO.getContrasenia())) {
+            if ("admin".equals(indexDTO.getNombre()) && "password".equals(indexDTO.getContrasenia())) {
                 return "redirect:/dashboard";
             } else {
                 throw new AuthenticationException("Nombre de usuario o contraseña inválidos");

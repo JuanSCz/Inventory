@@ -8,39 +8,39 @@ public class HistorialStockDTO {
 
     private Long id;
 
-    @NotNull(message = "{historialStockDTO.cantidadAnterior.notNull}")
-    @PositiveOrZero(message = "{historialStockDTO.cantidadAnterior.positiveOrZero}")
+    @NotNull(message = "La cantidad anterior no puede estar vacía")
+    @PositiveOrZero(message = "La cantidad anterior debe ser un número positivo o cero")
     private Integer cantidadAnterior;
 
-    @NotNull(message = "{historialStockDTO.cantidadNueva.notNull}")
-    @PositiveOrZero(message = "{historialStockDTO.cantidadNueva.positiveOrZero}")
+    @NotNull(message = "La cantidad nueva no puede estar vacía")
+    @PositiveOrZero(message = "La cantidad nueva debe ser un número positivo o cero")
     private Integer cantidadNueva;
 
-    @NotNull(message = "{historialStockDTO.fechaActualizacion.notNull}")
-    @FutureOrPresent(message = "{historialStockDTO.fechaActualizacion.futureOrPresent}")
+    @NotNull(message = "La fecha de actualización no puede estar vacía")
+    @FutureOrPresent(message = "La fecha de actualización debe ser en el presente o futuro")
     private LocalDateTime fechaActualizacion;
 
-    @NotBlank(message = "{historialStockDTO.motivo.notBlank}")
-    @Size(min = 3, max = 50, message = "{historialStockDTO.motivo.size}")
+    @NotBlank(message = "El motivo no puede estar vacío")
+    @Size(min = 3, max = 50, message = "El motivo debe tener entre 3 y 50 caracteres")
     private String motivo;
 
-    @NotBlank(message = "{historialStockDTO.tipoMovimiento.notBlank}")
-    @Size(min = 3, max = 50, message = "{historialStockDTO.tipoMovimiento.size}")
+    @NotBlank(message = "El tipo de movimiento no puede estar vacío")
+    @Size(min = 3, max = 50, message = "El tipo de movimiento debe tener entre 3 y 50 caracteres")
     private String tipoMovimiento;
 
-    @Size(max = 200, message = "{historialStockDTO.observacion.size}")
+    @Size(max = 200, message = "La observación debe tener un máximo de 200 caracteres")
     private String observacion;
 
-    @NotNull(message = "{historialStockDTO.producto.notNull}")
+    @NotNull(message = "El producto no puede estar vacío")
     private Long productoId;
 
-    @NotNull(message = "{historialStockDTO.deposito.notNull}")
+    @NotNull(message = "El depósito no puede estar vacío")
     private Long depositoId;
 
-    @NotNull(message = "{historialStockDTO.usuario.notNull}")
+    @NotNull(message = "El usuario no puede estar vacío")
     private Long usuarioId;
 
-    @NotNull(message = "{historialStockDTO.stock.notNull}")
+    @NotNull(message = "El stock no puede estar vacío")
     private Long stockId;
 
     public HistorialStockDTO() {

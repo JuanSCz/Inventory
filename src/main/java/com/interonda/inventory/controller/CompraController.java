@@ -1,6 +1,7 @@
 package com.interonda.inventory.controller;
 
 import com.interonda.inventory.dto.CompraDTO;
+import com.interonda.inventory.dto.DetalleCompraDTO;
 import com.interonda.inventory.dto.ProductoDTO;
 import com.interonda.inventory.service.*;
 import jakarta.validation.Valid;
@@ -20,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
@@ -46,35 +48,63 @@ public class CompraController {
     }
 
     @PostMapping
-    public String createCompra(@Valid CompraDTO compraDTO, BindingResult result, Model model, Pageable pageable) {
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
+    public String createCompra(@Valid CompraDTO compraDTO, BindingResult bindingResult, Model model, Pageable pageable) {
+        for (int i = 0; i < compraDTO.getDetallesCompra().size(); i++) {
+            DetalleCompraDTO detalle = compraDTO.getDetallesCompra().get(i);
+            if (detalle.getCantidad() == null || detalle.getCantidad() <= 0) {
+                bindingResult.rejectValue("detallesCompra[" + i + "].cantidad", "error.detalle", "La cantidad debe ser un número positivo");
+            }
+            if (detalle.getPrecioUnitario() == null || detalle.getPrecioUnitario().compareTo(BigDecimal.ZERO) <= 0) {
+                bindingResult.rejectValue("detallesCompra[" + i + "].precioUnitario", "error.detalle", "El precio unitario debe ser mayor que 0");
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
+            model.addAttribute("compraFormattedTotal", compraService.formatTotal(compraDTO.getTotal()));
             model.addAttribute("compras", compraService.getAllCompras(pageable).getContent());
             model.addAttribute("compraDTO", compraDTO);
+            model.addAttribute("page", productos);
             return "tableCompras";
         }
+
         compraService.createCompra(compraDTO);
         return "redirect:/tableCompras";
     }
 
     @PostMapping("/update")
-    public String updateCompra(@Valid CompraDTO compraDTO, BindingResult result, Model model, Pageable pageable) {
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
+    public String updateCompra(@Valid CompraDTO compraDTO, BindingResult bindingResult, Model model, Pageable pageable) {
+        for (int i = 0; i < compraDTO.getDetallesCompra().size(); i++) {
+            DetalleCompraDTO detalle = compraDTO.getDetallesCompra().get(i);
+            if (detalle.getCantidad() == null || detalle.getCantidad() <= 0) {
+                bindingResult.rejectValue("detallesCompra[" + i + "].cantidad", "error.detalle", "La cantidad debe ser un número positivo");
+            }
+            if (detalle.getPrecioUnitario() == null || detalle.getPrecioUnitario().compareTo(BigDecimal.ZERO) <= 0) {
+                bindingResult.rejectValue("detallesCompra[" + i + "].precioUnitario", "error.detalle", "El precio unitario debe ser mayor que 0");
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
                     .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
                     .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
+            Page<CompraDTO> compras = compraService.getAllCompras(pageable);
+            model.addAttribute("compras", compras.getContent());
             model.addAttribute("compraDTO", compraDTO);
-            model.addAttribute("compras", compraService.getAllCompras(pageable).getContent());
+            model.addAttribute("page", compras);
             Sort sort = Sort.by(Sort.Direction.DESC, "id");
-            Pageable newPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
-            model.addAttribute("proveedores", proveedorService.getAllProveedores(newPageable, sort).getContent());
+            Pageable proveedoresPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
+            model.addAttribute("proveedores", proveedorService.getAllProveedores(proveedoresPageable, sort).getContent());
+            model.addAttribute("productos", productoService.obtenerTodosLosProductos());
             return "tableCompras";
         }
-        CompraDTO updatedCompraDTO = compraService.updateCompra(compraDTO);
-        model.addAttribute("compraDTO", updatedCompraDTO);
+
+        compraService.updateCompra(compraDTO);
         return "redirect:/tableCompras";
     }
 

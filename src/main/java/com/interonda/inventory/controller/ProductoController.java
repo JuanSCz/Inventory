@@ -51,9 +51,11 @@ public class ProductoController {
     }
 
     @PostMapping
-    public String createProducto(@Valid ProductoDTO productoDTO, BindingResult result, Model model, Pageable pageable) {
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
+    public String createProducto(@Valid ProductoDTO productoDTO, BindingResult bindingResult, Model model, Pageable pageable) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
             model.addAttribute("productos", productos.getContent());
@@ -63,6 +65,12 @@ public class ProductoController {
             model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
             return "tableProductos";
         }
+
+        // Establecer los atributos como null
+        productoDTO.setCodigoBarras(null);
+        productoDTO.setNumeroDeSerie(null);
+        productoDTO.setMacAddress(null);
+
         productoService.createProducto(productoDTO);
         return "redirect:/tableProductos";
     }
@@ -82,6 +90,12 @@ public class ProductoController {
             model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
             return "tableProductos";
         }
+
+        // Establecer los atributos como null
+        productoDTO.setCodigoBarras(null);
+        productoDTO.setNumeroDeSerie(null);
+        productoDTO.setMacAddress(null);
+
         productoService.updateProducto(productoDTO);
         return "redirect:/tableProductos";
     }

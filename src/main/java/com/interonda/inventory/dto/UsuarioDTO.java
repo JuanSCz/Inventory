@@ -1,25 +1,28 @@
 package com.interonda.inventory.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class UsuarioDTO {
 
     private Long id;
 
-    @NotBlank(message = "{usuarioDTO.nombre.notBlank}")
-    @Size(max = 50, message = "{usuarioDTO.nombre.size}")
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(max = 50, message = "El nombre debe tener un máximo de 50 caracteres")
     private String nombre;
 
-    @NotBlank(message = "{usuarioDTO.contrasenia.notBlank}")
-    @Size(min = 8, max = 20, message = "{usuarioDTO.contrasenia.size}")
+    @NotBlank(message = "La contraseña no puede estar vacía")
     private String contrasenia;
 
-    @NotBlank(message = "{usuarioDTO.contacto.notBlank}")
+    @NotBlank(message = "El contacto no puede estar vacío")
+    @Size(max = 15, message = "El contacto debe tener un máximo de 15 caracteres")
     private String contacto;
 
+    @NotNull(message = "El ID del rol no puede ser nulo")
     private Long rolId;
 
+    @NotBlank(message = "El nombre del rol no puede estar vacío")
     private String rolNombre;
 
     public UsuarioDTO() {

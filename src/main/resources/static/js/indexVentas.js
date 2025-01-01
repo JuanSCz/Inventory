@@ -3,9 +3,42 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeSearch();
     initializeCreateModal();
     initializeUpdateModal();
+    initializeDeleteModal();
     initializeAddDetalleButton();
-    initializeDeleteModal()
+    initializeTotalInput();
+    initializeFormSubmit();
 });
+
+function initializeTotalInput() {
+    const totalInput = document.getElementById('total');
+    if (totalInput) {
+        totalInput.addEventListener('input', function () {
+            this.value = formatNumber(this.value);
+        });
+    }
+}
+
+function formatNumber(value) {
+    value = value.replace(/[^\d.,]/g, '');
+    value = value.replace(/,/g, '.');
+    const parts = value.split('.');
+    if (parts.length > 2) {
+        value = parts[0] + '.' + parts.slice(1).join('');
+    }
+    return value;
+}
+
+function initializeFormSubmit() {
+    const form = document.getElementById('createVentaForm');
+    if (form) {
+        form.addEventListener('submit', function (event) {
+            const totalInput = document.getElementById('total');
+            if (totalInput) {
+                totalInput.value = formatNumber(totalInput.value);
+            }
+        });
+    }
+}
 
 // Manejo del modal de error
 function handleErrorModal() {

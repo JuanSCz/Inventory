@@ -10,27 +10,42 @@ public class ProductoDTO {
 
     private Long id;
 
-    @NotBlank(message = "El nombre no puede estar en blanco")
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(max = 50, message = "El nombre debe tener un máximo de 50 caracteres")
     private String nombre;
 
+    @NotBlank(message = "La descripcion no puede estar vacía")
+    @Size(max = 100, message = "La descripción debe tener un máximo de 100 caracteres")
     private String descripcion;
 
-    @NotNull(message = "El precio no puede ser nulo")
+    @NotNull(message = "El precio no puede estar vacío")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El precio debe ser mayor que 0")
+    @Digits(integer = 10, fraction = 3, message = "El precio debe tener un máximo de 10 dígitos enteros y 3 decimales")
     private BigDecimal precio;
 
+    @NotNull(message = "El costo no puede estar vacío")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El costo debe ser mayor que 0")
+    @Digits(integer = 10, fraction = 3, message = "El costo debe tener un máximo de 10 dígitos enteros y 3 decimales")
     private BigDecimal costo;
 
+    @Size(max = 13, message = "El código de barras debe tener un máximo de 13 caracteres")
     private String codigoBarras;
 
+    @Size(max = 50, message = "El número de serie debe tener un máximo de 50 caracteres")
     private String numeroDeSerie;
 
+    @NotNull(message = "El stock actual no puede estar vacío")
+    @PositiveOrZero(message = "El stock actual debe ser un número positivo o cero")
     private Integer stockActual;
 
+    @NotNull(message = "El stock mínimo no puede estar vacío")
+    @PositiveOrZero(message = "El stock mínimo debe ser un número positivo o cero")
     private Integer stockMinimo;
 
+    @Size(max = 17, message = "La dirección MAC debe tener un máximo de 17 caracteres")
     private String macAddress;
 
-    @NotNull(message = "La categoría no puede ser nula")
+    @NotNull(message = "La categoría no puede estar vacía")
     private Long categoriaId;
 
     private String categoriaNombre;

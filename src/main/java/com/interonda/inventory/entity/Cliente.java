@@ -1,6 +1,9 @@
 package com.interonda.inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,21 +16,34 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
     @Column(nullable = false, length = 50)
     private String nombre;
 
+    @NotBlank(message = "El país no puede estar vacío")
+    @Size(max = 30, message = "El país no puede tener más de 30 caracteres")
     @Column(nullable = false, length = 30)
     private String pais;
 
+    @NotBlank(message = "La ciudad no puede estar vacía")
+    @Size(max = 30, message = "La ciudad no puede tener más de 30 caracteres")
     @Column(nullable = false, length = 30)
     private String ciudad;
 
+    @NotBlank(message = "La dirección no puede estar vacía")
+    @Size(max = 50, message = "La dirección no puede tener más de 50 caracteres")
     @Column(nullable = false, length = 50)
     private String direccion;
 
+    @NotBlank(message = "El contacto no puede estar vacío")
+    @Size(max = 15, message = "El contacto no puede tener más de 15 caracteres")
     @Column(name = "contacto", nullable = false, length = 15)
     private String contactoCliente;
 
+    @NotBlank(message = "El email no puede estar vacío")
+    @Email(message = "El correo electrónico debe ser válido")
+    @Size(max = 254, message = "El correo electrónico no puede tener más de 254 caracteres")
     @Column(name = "email", length = 254)
     private String eMailCliente;
 

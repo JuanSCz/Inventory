@@ -8,9 +8,8 @@ public class RolDTO {
 
     private Long id;
 
-    @Size(max = 50, message = "{rolDTO.nombre.size}")
-    @NotBlank(message = "{rolDTO.nombre.notBlank}")
-    @Column(nullable = false, length = 50)
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(max = 50, message = "El nombre debe tener un máximo de 50 caracteres")
     private String nombre;
 
     public RolDTO() {

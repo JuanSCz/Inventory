@@ -1,6 +1,7 @@
 package com.interonda.inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,36 +15,54 @@ public class Producto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(max = 50, message = "El nombre debe tener un máximo de 50 caracteres")
     @Column(nullable = false, length = 50)
     private String nombre;
 
+    @NotBlank(message = "La descripcion no puede estar vacía")
+    @Size(max = 100, message = "La descripción debe tener un máximo de 100 caracteres")
     @Column(length = 100)
     private String descripcion;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @NotNull(message = "El precio no puede estar vacío")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El precio debe ser mayor que 0")
+    @Digits(integer = 10, fraction = 3, message = "El precio debe tener un máximo de 10 dígitos enteros y 3 decimales")
+    @Column(nullable = false, precision = 10, scale = 3)
     private BigDecimal precio;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @NotNull(message = "El costo no puede estar vacío")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El costo debe ser mayor que 0")
+    @Digits(integer = 10, fraction = 3, message = "El costo debe tener un máximo de 10 dígitos enteros y 3 decimales")
+    @Column(nullable = false, precision = 10, scale = 3)
     private BigDecimal costo;
 
+    @Size(max = 13, message = "El código de barras debe tener un máximo de 13 caracteres")
     @Column(name = "codigo_barra", length = 13, unique = true)
     private String codigoBarras;
 
+    @Size(max = 50, message = "El número de serie debe tener un máximo de 50 caracteres")
     @Column(name = "numero_serie", length = 50, unique = true)
     private String numeroDeSerie;
 
+    @NotNull(message = "El stock actual no puede estar vacío")
+    @PositiveOrZero(message = "El stock actual debe ser un número positivo o cero")
     @Column(name = "stock_actual", nullable = false)
     private Integer stockActual;
 
+    @NotNull(message = "El stock mínimo no puede estar vacío")
+    @PositiveOrZero(message = "El stock mínimo debe ser un número positivo o cero")
     @Column(nullable = false)
     private Integer stockMinimo;
 
+    @Size(max = 17, message = "La dirección MAC debe tener un máximo de 17 caracteres")
     @Column(name = "mac_address", length = 17, unique = true)
     private String macAddress;
 
     // Relaciones
 
     // Relación muchos a uno con la entidad Categoria (un producto pertenece a una categoría)
+    @NotNull(message = "La categoría no puede ser nula")
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;

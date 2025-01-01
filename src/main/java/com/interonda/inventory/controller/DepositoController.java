@@ -1,5 +1,6 @@
 package com.interonda.inventory.controller;
 
+import com.interonda.inventory.dto.CategoriaDTO;
 import com.interonda.inventory.dto.DepositoDTO;
 import com.interonda.inventory.service.DepositoService;
 import jakarta.validation.Valid;
@@ -36,14 +37,16 @@ public class DepositoController {
     }
 
     @PostMapping
-    public String createDeposito(@Valid DepositoDTO depositoDTO, BindingResult result, Model model, Pageable pageable) {
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
+    public String createDeposito(@Valid DepositoDTO depositoDTO, BindingResult bindingResult, Model model, Pageable pageable) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
                     .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
                     .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
+            Page<DepositoDTO> depositos = depositoService.getAllDepositos(pageable);
             model.addAttribute("depositos", depositoService.getAllDepositos(pageable).getContent());
             model.addAttribute("depositoDTO", depositoDTO);
+            model.addAttribute("page", depositos);
             return "tableDepositos";
         }
         depositoService.createDeposito(depositoDTO);
@@ -51,14 +54,16 @@ public class DepositoController {
     }
 
     @PostMapping("/update")
-    public String updateDeposito(@Valid DepositoDTO depositoDTO, BindingResult result, Model model, Pageable pageable) {
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
+    public String updateDeposito(@Valid DepositoDTO depositoDTO, BindingResult bindingResult, Model model, Pageable pageable) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream()
                     .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
                     .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
+            Page<DepositoDTO> depositos = depositoService.getAllDepositos(pageable);
             model.addAttribute("depositoDTO", depositoDTO);
             model.addAttribute("depositos", depositoService.getAllDepositos(pageable).getContent());
+            model.addAttribute("page", depositos);
             return "tableDepositos";
         }
         depositoService.updateDeposito(depositoDTO);

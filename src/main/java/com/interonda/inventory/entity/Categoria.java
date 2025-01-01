@@ -1,6 +1,8 @@
 package com.interonda.inventory.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +15,13 @@ public class Categoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre de la categoria no puede estar vacío")
+    @Size(max = 50, message = "El nombre de la categoria no puede tener más de 50 caracteres")
     @Column(nullable = false, length = 50)
     private String nombre;
 
+    @NotBlank(message = "La descripcion de la categoria no puede estar vacía")
+    @Size(max = 75, message = "La descripción de la categoria no puede tener más de 75 caracteres")
     @Column(length = 75)
     private String descripcion;
 

@@ -68,6 +68,17 @@ function initializeCreateModal() {
             createCategoriaModal.show();
         });
     }
+
+    const createModalElement = document.getElementById('createCategoriaModal');
+    createModalElement.addEventListener('hidden.bs.modal', function () {
+        const form = createModalElement.querySelector('form');
+        if (form) {
+            form.reset();
+            // Limpiar mensajes de error
+            form.querySelectorAll('.is-invalid').forEach(element => element.classList.remove('is-invalid'));
+            form.querySelectorAll('.invalid-feedback').forEach(element => element.remove());
+        }
+    });
 }
 
 // Inicializar modal de actualización para categorías
@@ -86,11 +97,13 @@ function initializeUpdateModal() {
 
     const updateModalElement = document.getElementById('updateCategoriaModal');
     updateModalElement.addEventListener('hidden.bs.modal', function () {
-        document.getElementById('id').value = '';
-        document.getElementById('nombre').value = '';
-        document.getElementById('descripcion').value = '';
         const form = updateModalElement.querySelector('form');
-        if (form) form.reset();
+        if (form) {
+            form.reset();
+            // Limpiar mensajes de error
+            form.querySelectorAll('.is-invalid').forEach(element => element.classList.remove('is-invalid'));
+            form.querySelectorAll('.invalid-feedback').forEach(element => element.remove());
+        }
     });
 }
 

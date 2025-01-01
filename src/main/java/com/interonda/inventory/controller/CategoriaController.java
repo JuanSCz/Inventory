@@ -37,12 +37,14 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public String createCategoria(@Valid CategoriaDTO categoriaDTO, BindingResult result, Model model, Pageable pageable) {
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
+    public String createCategoria(@Valid CategoriaDTO categoriaDTO, BindingResult bindingResult, Model model, Pageable pageable) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
-            model.addAttribute("categorias", categoriaService.getAllCategorias(pageable).getContent());
+            Page<CategoriaDTO> categorias = categoriaService.getAllCategorias(pageable);
+            model.addAttribute("categorias", categorias.getContent());
             model.addAttribute("categoriaDTO", categoriaDTO);
+            model.addAttribute("page", categorias);
             return "tableCategorias";
         }
         categoriaService.createCategoria(categoriaDTO);
@@ -50,12 +52,14 @@ public class CategoriaController {
     }
 
     @PostMapping("/update")
-    public String updateCategoria(@Valid CategoriaDTO categoriaDTO, BindingResult result, Model model, Pageable pageable) {
-        if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
+    public String updateCategoria(@Valid CategoriaDTO categoriaDTO, BindingResult bindingResult, Model model, Pageable pageable) {
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
+            Page<CategoriaDTO> categorias = categoriaService.getAllCategorias(pageable);
+            model.addAttribute("categorias", categorias.getContent());
             model.addAttribute("categoriaDTO", categoriaDTO);
-            model.addAttribute("categorias", categoriaService.getAllCategorias(pageable).getContent());
+            model.addAttribute("page", categorias);
             return "tableCategorias";
         }
         categoriaService.updateCategoria(categoriaDTO);

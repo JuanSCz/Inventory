@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Presupuesto</title>
+    <style>
+        body {
+    font-family: 'Times New Roman', serif;
+    color: #333;
+    background-color: #ffffff;
+    margin: auto;
+    padding: 10mm;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 210mm;
+    height: 297mm;
+    page-break-after: always;
+    }
+
+    .header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 8px 12px;
+    border-bottom: 2px solid #18bc9c;
+    margin-bottom: 20px;
+    page-break-inside: avoid;
+    overflow: hidden;
+    }
+
+    .header-content {
+    display: table;
+    width: 100%;
+    padding: 4px 0;
+    }
+
+    .logo {
+    display: table-cell;
+    vertical-align: middle;
+    height: 80px;
+    text-align: center;
+    padding: 4px;
+    }
+
+    .logo img {
+    max-width: 120px;
+    height: auto;
+    display: inline-block;
+    }
+
+    .company-info {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right;
+    padding: 4px;
+    }
+
+    .company-info h4 {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: bold;
+    }
+
+    .company-info p {
+    margin: 3px 0;
+    font-size: 0.9em;
+    }
+
+    .company-info span {
+    color: #18bc9c;
+    }
+
+    hr {
+    border: 1px solid #bdc3c7;
+    margin: 20px 0;
+    }
+
+    h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #18bc9c;
+    padding-bottom: 5px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-size: 1.3em;
+    font-weight: bold;
+    }
+
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    page-break-inside: auto;
+    }
+
+    table th, table td {
+    border: 1px solid #bdc3c7;
+    padding: 8px;
+    text-align: left;
+    max-width: 150px;
+    word-wrap: break-word;
+    }
+
+    table th {
+    background-color: #2c3e50;
+    color: white;
+    font-weight: bold;
+    }
+
+    table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+    }
+
+    table thead {
+    display: table-header-group;
+    }
+
+    table tfoot {
+    display: table-footer-group;
+    }
+
+    .alert {
+    background-color: #f2dede;
+    color: #a94442;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #d9534f;
+    margin-top: 20px;
+    font-size: 0.9em;
+    }
+
+    .alert strong {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    }
+
+    .footer {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 0.8em;
+    color: #333;
+    border-top: 1px solid #bdc3c7;
+    padding-top: 10px;
+    page-break-inside: avoid;
+    }
+
+    .summary {
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #333;
+    text-align: justify;
+    }
+
+    @page {
+    size: A4;
+    margin: 0;
+    }
+    </style>
+</head>
+<body>
+<div class="header">
+    <!-- Encabezado -->
+    <div class="header-content">
+        <!-- Logo -->
+        <div class="logo">
+            <img src="classpath:/static/images/logo.png" alt="Logo de la Empresa"/>
+        </div>
+        <!-- Información de la Empresa -->
+        <div class="company-info">
+            <h4>Interonda S.A.</h4>
+            <p>CUIT: 30-12345678-9 | Responsable Inscripto</p>
+            <p>Domicilio Fiscal: Av. Corrientes 1234, CABA</p>
+            <p>Tel: +54 11 1234-5678 | Email: contacto@interonda.com</p>
+            <p>Web: <span>www.interonda.com</span></p>
+            <p>IIBB: 98765432 | Jurisdicción: Provincia de Buenos Aires</p>
+        </div>
+    </div>
+</div>
+
+<div>
+    <h2>Detalles del Cliente</h2>
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Ciudad</th>
+                <th>País</th>
+                <th>Contacto</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${venta.cliente.id}"></td>
+                <td th:text="${venta.cliente.nombre}"></td>
+                <td th:text="${venta.cliente.direccion}"></td>
+                <td th:text="${venta.cliente.ciudad}"></td>
+                <td th:text="${venta.cliente.pais}"></td>
+                <td th:text="${venta.cliente.contactoCliente}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <h2>Detalles del Producto(s)</h2>
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Subtotal</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="detalle : ${venta.detallesVenta}">
+                <td th:text="${detalle.id}"></td>
+                <td th:text="${detalle.productoNombre}"></td>
+                <td th:text="${detalle.cantidad}"></td>
+                <td th:text="${detalle.precioUnitarioFormatted}"></td>
+                <td th:text="${detalle.subtotalFormatted}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <h2>Detalles de la Venta</h2>
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Método</th>
+                <th>Estado</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td th:text="${venta.id}"></td>
+                <td th:text="${venta.fecha}"></td>
+                <td th:text="${venta.clienteNombre}"></td>
+                <td th:text="${venta.metodoPago}"></td>
+                <td th:text="${venta.estado}"></td>
+                <td th:text="${venta.totalFormatted}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <h2>Impuestos</h2>
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>Subtotal</th>
+                <th>Impuesto</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Impuestos</td>
+                <td th:text="${venta.subtotalFormatted}"></td>
+                <td th:text="${venta.impuestos}"></td>
+                <td th:text="${venta.totalFormatted}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Notas Adicionales o Condiciones Generales -->
+<div class="alert">
+    <strong>Notas Adicionales:</strong>
+    <ul>
+        <li>Los precios indicados no incluyen gastos de envío.</li>
+        <li>Sujeto a disponibilidad de stock al momento de la aceptación.</li>
+    </ul>
+</div>
+
+<!-- Pie de página con Disclaimer -->
+<div class="footer">
+    <p>Este documento presenta un resumen detallado de la presupuestación empresarial, incluyendo los detalles del
+        cliente, productos, ventas e impuestos. Asegúrese de revisar toda la información antes de proceder con la
+        aceptación formal.</p>
+</div>
+</body>
+</html>

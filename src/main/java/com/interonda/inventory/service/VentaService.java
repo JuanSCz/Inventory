@@ -5,6 +5,7 @@ import com.interonda.inventory.entity.Venta;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public interface VentaService {
@@ -28,4 +29,6 @@ public interface VentaService {
     Page<VentaDTO> searchVentasByClienteNombre(String nombreCliente, Pageable pageable);
 
     long countVentas();
+
+    String formatTotal(BigDecimal total);
 }

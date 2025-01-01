@@ -1,9 +1,6 @@
 package com.interonda.inventory.dto;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
@@ -11,37 +8,36 @@ public class DetalleVentaDTO {
 
     private Long id;
 
+    @NotNull(message = "La cantidad no puede estar vacía")
+    @Positive(message = "La cantidad debe ser un número positivo")
     private Integer cantidad;
+
+    @NotNull(message = "El precio unitario no puede estar vacío")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El precio unitario debe ser mayor que 0")
+    @Digits(integer = 10, fraction = 2, message = "El precio unitario debe tener un máximo de 10 dígitos enteros y 2 decimales")
+    private BigDecimal precioUnitario;
+
+    @NotNull(message = "La venta no puede estar vacía")
+    private Long ventaId;
+
+    @NotNull(message = "El producto no puede estar vacío")
+    private Long productoId;
+
+    @NotBlank(message = "El nombre del producto no puede estar vacío")
+    private String productoNombre;
+
+    @NotBlank(message = "El nombre del proveedor no puede estar vacío")
+    private String proveedorNombre;
+
+    @NotNull(message = "El subtotal no puede estar vacío")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El subtotal debe ser mayor que 0")
+    private BigDecimal subtotal;
 
     private String precioUnitarioFormatted;
 
-    private BigDecimal precioUnitario;
+    private String subtotalFormatted;
 
     private String totalFormatted;
-
-    private Long ventaId;
-
-    private Long productoId;
-
-    private String productoNombre;
-
-    private String proveedorNombre;
-
-    public String getProductoNombre() {
-        return productoNombre;
-    }
-
-    public void setProductoNombre(String productoNombre) {
-        this.productoNombre = productoNombre;
-    }
-
-    public String getProveedorNombre() {
-        return proveedorNombre;
-    }
-
-    public void setProveedorNombre(String proveedorNombre) {
-        this.proveedorNombre = proveedorNombre;
-    }
 
     public DetalleVentaDTO() {
     }
@@ -101,5 +97,37 @@ public class DetalleVentaDTO {
 
     public void setPrecioUnitario(BigDecimal precioUnitario) {
         this.precioUnitario = precioUnitario;
+    }
+
+    public String getProductoNombre() {
+        return productoNombre;
+    }
+
+    public void setProductoNombre(String productoNombre) {
+        this.productoNombre = productoNombre;
+    }
+
+    public String getProveedorNombre() {
+        return proveedorNombre;
+    }
+
+    public void setProveedorNombre(String proveedorNombre) {
+        this.proveedorNombre = proveedorNombre;
+    }
+
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
+    }
+
+    public String getSubtotalFormatted() {
+        return subtotalFormatted;
+    }
+
+    public void setSubtotalFormatted(String subtotalFormatted) {
+        this.subtotalFormatted = subtotalFormatted;
     }
 }

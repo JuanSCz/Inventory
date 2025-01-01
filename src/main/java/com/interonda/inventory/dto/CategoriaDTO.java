@@ -1,15 +1,21 @@
 package com.interonda.inventory.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class CategoriaDTO {
+
     private Long id;
-    @NotBlank(message = "{categoriaDTO.nombre.notBlank}")
-    @Size(max = 50, message = "{categoriaDTO.nombre.size}")
+
+    @NotBlank(message = "El nombre de la categoria no puede estar vacío")
+    @Size(max = 50, message = "El nombre de la categoria no puede tener más de 50 caracteres")
+    @Column(nullable = false, length = 50)
     private String nombre;
 
-    @Size(max = 75, message = "{categoriaDTO.descripcion.size}")
+    @NotBlank(message = "La descripcion de la categoria no puede estar vacía")
+    @Size(max = 75, message = "La descripción de la categoria no puede tener más de 75 caracteres")
+    @Column(length = 75)
     private String descripcion;
 
     public CategoriaDTO() {
