@@ -40,16 +40,18 @@
                                 <select class="form-control form-control-detalle" th:field="*{metodoPago}"
                                         id="metodoPago">
                                     <option value="" selected>Seleccione un método...</option>
-                                    <option value="metodo1">Método 1</option>
-                                    <option value="metodo2">Método 2</option>
+                                    <option value="Débito">Débito</option>
+                                    <option value="Crédito">Crédito</option>
+                                    <option value="Transferencia">Transferencia</option>
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="estado" class="form-label">Estado</label>
                                 <select class="form-control form-control-detalle" th:field="*{estado}" id="estado">
                                     <option value="" selected>Seleccione un estado...</option>
-                                    <option value="estado1">Estado 1</option>
-                                    <option value="estado2">Estado 2</option>
+                                    <option value="Cancelada">Cancelada</option>
+                                    <option value="Aceptada">Aceptada</option>
+                                    <option value="Pendiente">Pendiente</option>
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">

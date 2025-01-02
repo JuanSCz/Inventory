@@ -87,6 +87,9 @@ public class PresupuestarServiceImpl implements PresupuestarService {
             // Formatear el valor del impuesto
             ventaDTO.setImpuestos(formatImpuestos(ventaDTO.getImpuestos()));
 
+            // Formatear el total sin decimales
+            ventaDTO.setTotalFormatted(getTotalFormatted(ventaDTO.getTotal()));
+
             Context context = new Context();
             context.setVariable("venta", ventaDTO);
             logger.info("VentaDTO para PDF: {}", ventaDTO);
@@ -140,8 +143,8 @@ public class PresupuestarServiceImpl implements PresupuestarService {
             detalleVentaDTO.setProductoNombre(detalleVenta.getProducto().getNombre());
 
             // Formatear los valores
-            detalleVentaDTO.setPrecioUnitarioFormatted(formatDecimal(detalleVenta.getPrecioUnitario()));
-            detalleVentaDTO.setSubtotalFormatted(formatDecimal(detalleVentaDTO.getSubtotal()));
+            detalleVentaDTO.setPrecioUnitarioFormatted(formatDecimalWithThreeDecimals(detalleVenta.getPrecioUnitario()));
+            detalleVentaDTO.setSubtotalFormatted(formatDecimalWithThreeDecimals(detalleVentaDTO.getSubtotal()));
 
             return detalleVentaDTO;
         }).collect(Collectors.toList()));
@@ -223,15 +226,20 @@ public class PresupuestarServiceImpl implements PresupuestarService {
     }
 
     public String getTotalFormatted(BigDecimal total) {
-        return formatDecimal(total);
+        return formatDecimalWithoutDecimals(total);
     }
 
     public String getSubtotalFormatted(BigDecimal subtotal) {
-        return formatDecimal(subtotal);
+        return formatDecimalWithoutDecimals(subtotal);
     }
 
-    private String formatDecimal(BigDecimal value) {
+    private String formatDecimalWithThreeDecimals(BigDecimal value) {
         DecimalFormat df = new DecimalFormat("#,##0.000");
+        return df.format(value);
+    }
+
+    private String formatDecimalWithoutDecimals(BigDecimal value) {
+        DecimalFormat df = new DecimalFormat("#,##0");
         return df.format(value);
     }
 }

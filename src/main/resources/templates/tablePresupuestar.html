@@ -66,6 +66,9 @@
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableUsuarios}">Usuarios</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/tablePresupuestar}">Presupuestar</a>
+            </li>
         </ul>
     </aside>
     <main class="contentPersist p-3 text-center">
@@ -101,7 +104,7 @@
                     <td th:data-label="Estado" th:text="${venta.estado}"></td>
                     <td th:data-label="Metodo_de_Pago" th:text="${venta.metodoPago}"></td>
                     <td th:data-label="Impuestos" th:text="${venta.impuestos}"></td>
-                    <td th:data-label="Total" th:text="${venta.total}"></td>
+                    <td th:data-label="Total" th:text="${venta.totalString}"></td>
                     <td th:data-label="Acciones">
                         <div class="btn-group">
                             <button class="btn bg-success bg-success-compra btn-sm navbar-menu me-2"
@@ -136,7 +139,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/indexPresupuestar.js"></script>
+<script src="js/indexVentas.js"></script>
 </body>
 
 </html>
