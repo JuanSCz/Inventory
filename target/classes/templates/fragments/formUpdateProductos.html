@@ -33,34 +33,34 @@
                                        th:field="*{descripcion}">
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="precio" class="form-label">Precio</label>
-                                <input type="text" class="form-control form-control-detalle" id="precio"
-                                       th:field="*{precio}">
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="costo" class="form-label">Costo</label>
+                                <label for="costo" class="form-label">Costo del producto</label>
                                 <input type="text" class="form-control form-control-detalle" id="costo"
                                        th:field="*{costo}">
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="stockActual" class="form-label">Stock Actual</label>
-                                <input type="text" class="form-control form-control-detalle" id="stockActual"
-                                       th:field="*{stockActual}">
+                                <label for="precio" class="form-label">Precio de venta</label>
+                                <input type="text" class="form-control form-control-detalle" id="precio"
+                                       th:field="*{precio}">
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="stockMinimo" class="form-label">Stock Mínimo</label>
-                                <input type="text" class="form-control form-control-detalle" id="stockMinimo"
-                                       th:field="*{stockMinimo}">
-                            </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="categoriaId" class="form-label">Categoría</label>
                                 <select class="form-control form-control-detalle" id="categoriaId"
                                         th:field="*{categoriaId}">
-                                    <option value="">Seleccione una categoría</option>
+                                    <option value="">Seleccione una categoría...</option>
                                     <option th:each="categoria : ${categorias}" th:value="${categoria.id}"
                                             th:text="${categoria.nombre}"
                                             th:selected="${categoria.id} == *{categoriaId}"></option>
                                 </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="stockActual" class="form-label">Stock Inicial</label>
+                                <input type="text" class="form-control form-control-detalle" id="stockActual"
+                                       th:field="*{stockActual}">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="stockMinimo" class="form-label">Stock Mínimo</label>
+                                <input type="text" class="form-control form-control-detalle" id="stockMinimo"
+                                       th:field="*{stockMinimo}">
                             </div>
                             <h4 class="mb-3 text-center title-stock">Stock:</h4>
                             <div id="stockContainerUpdate">
@@ -68,7 +68,7 @@
                                     <label for="depositoId" class="form-label">Depósito</label>
                                     <select class="form-control form-control-detalle" id="depositoId"
                                             th:field="*{stocks[0].depositoId}">
-                                        <option value="">Seleccione un depósito</option>
+                                        <option value="">Seleccione un depósito...</option>
                                         <option th:each="deposito : ${depositos}" th:value="${deposito.id}"
                                                 th:text="${deposito.nombre}"
                                                 th:selected="${deposito.id} == *{stocks[0].depositoId}"></option>

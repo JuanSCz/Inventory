@@ -48,6 +48,8 @@ public class UsuarioController {
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("usuarios", usuarioService.getAllUsuarios(pageable).getContent());
             model.addAttribute("usuarioDTO", usuarioDTO);
+            model.addAttribute("page", usuarioService.getAllUsuarios(pageable));
+            model.addAttribute("roles", rolService.getAllRoles(PageRequest.of(0, Integer.MAX_VALUE)).getContent()); // Asegúrate de que esta línea esté presente
             return "tableUsuarios";
         }
         usuarioService.createUsuario(usuarioDTO);

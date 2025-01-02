@@ -64,8 +64,9 @@
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="total" class="form-label">Total</label>
-                                <input type="text" class="form-control" th:field="*{totalString}" id="total" placeholder="Ingrese el total (formato argentino)...">
+                                <label for="total" class="form-label">Total de la compra</label>
+                                <input type="text" class="form-control form-control-detalle" th:field="*{totalString}"
+                                       id="total" placeholder="Ingrese el total de la compra...">
                             </div>
                             <div id="detalleContainer">
                                 <div class="row detalle-row">
@@ -85,10 +86,10 @@
                                                placeholder="Ingrese la cantidad...">
                                     </div>
                                     <div class="col-md-4 mb-3">
-                                        <label for="precioUnitario" class="form-label">Precio Unitario</label>
+                                        <label for="precioUnitario" class="form-label">Precio unitario del producto</label>
                                         <input type="number" step="0.01" class="form-control form-control-detalle"
                                                th:field="*{detallesCompra[0].precioUnitario}" id="precioUnitario"
-                                               placeholder="Ingrese el precio unitario...">
+                                               placeholder="Ingrese el precio unitario del producto...">
                                     </div>
                                 </div>
                             </div>

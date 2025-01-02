@@ -36,7 +36,7 @@
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="metodoPago" class="form-label">Método de Pago</label>
+                                <label for="metodoPago" class="form-label">Método de pago</label>
                                 <select class="form-control form-control-detalle" th:field="*{metodoPago}"
                                         id="metodoPago">
                                     <option value="" selected>Seleccione un método...</option>
@@ -57,7 +57,7 @@
                             <div class="col-md-4 mb-3">
                                 <label for="impuestos" class="form-label">Impuestos</label>
                                 <select class="form-control form-control-detalle" th:field="*{impuestos}" id="impuestos"
-                                        required>
+                                >
                                     <option value="" selected>Seleccione un impuesto...</option>
                                     <option value="0.10">IVA: 10%</option>
                                     <option value="0.20">IVA: 20%</option>
@@ -65,8 +65,9 @@
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="total" class="form-label">Total</label>
-                                <input type="text" class="form-control" th:field="*{totalString}" id="total" placeholder="Ingrese el total (formato argentino)...">
+                                <label for="total" class="form-label">Total de la venta</label>
+                                <input type="text" class="form-control form-control-detalle" th:field="*{totalString}"
+                                       id="total" placeholder="Ingrese el total de la venta...">
                             </div>
                             <div id="detalleContainer">
                                 <div class="row detalle-row">
@@ -86,7 +87,8 @@
                                                placeholder="Ingrese la cantidad...">
                                     </div>
                                     <div class="col-md-4 mb-3">
-                                        <label for="precioUnitario" class="form-label">Precio Unitario</label>
+                                        <label for="precioUnitario" class="form-label">Precio unitario del
+                                            producto</label>
                                         <input type="number" step="0.01" class="form-control form-control-detalle"
                                                th:field="*{detallesVenta[0].precioUnitario}" id="precioUnitario"
                                                placeholder="Ingrese el precio unitario...">

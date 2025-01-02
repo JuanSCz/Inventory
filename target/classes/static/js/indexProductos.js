@@ -126,13 +126,13 @@ function populateUpdateModal(id) {
                 newRow.innerHTML = `
                     <div class="col-md-6 mb-3">
                         <label for="depositoId${index}" class="form-label">Depósito</label>
-                        <select class="form-control form-control-producto" name="stocks[${index}].depositoId" id="depositoId${index}" required>
+                        <select class="form-control form-control-detalle" name="stocks[${index}].depositoId" id="depositoId${index}" required>
                             ${document.querySelector('select[name="stocks[0].depositoId"]').innerHTML}
                         </select>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="cantidad${index}" class="form-label">Cantidad</label>
-                        <input type="number" class="form-control form-control-producto" name="stocks[${index}].cantidad" id="cantidad${index}" placeholder="Ingrese la cantidad" required>
+                        <input type="number" class="form-control form-control-detalle" name="stocks[${index}].cantidad" id="cantidad${index}" placeholder="Ingrese la cantidad" required>
                     </div>
                 `;
 
@@ -206,7 +206,7 @@ function agregarFilaStock() {
         </div>
         <div class="col-md-6 mb-3">
             <label for="cantidad${currentIndex}" class="form-label">Cantidad</label>
-            <input type="number" class="form-control form-control-producto" name="stocks[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad" required>
+            <input type="number" class="form-control form-control-detalle" name="stocks[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad" required>
         </div>
     `;
 

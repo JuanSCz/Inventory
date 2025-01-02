@@ -74,7 +74,7 @@ function agregarFilaDetalle() {
             <input type="number" class="form-control form-control-detalle" name="detallesCompra[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad..." required>
         </div>
         <div class="col-md-4 mb-3">
-            <label for="precioUnitario${currentIndex}" class="form-label">Precio Unitario</label>
+            <label for="precioUnitario${currentIndex}" class="form-label">Precio unitario del producto</label>
             <input type="number" class="form-control form-control-detalle" name="detallesCompra[${currentIndex}].precioUnitario" id="precioUnitario${currentIndex}" placeholder="Ingrese el precio unitario..." required>
         </div>
     `;
@@ -192,7 +192,7 @@ function populateUpdateModal(id) {
                         <input type="number" class="form-control form-control-detalle" name="detallesCompra[${index}].cantidad" id="cantidad${index}" placeholder="Ingrese la cantidad..." required>
                     </div>
                     <div class="col-md-4 mb-3">
-                        <label for="precioUnitario${index}" class="form-label">Precio Unitario</label>
+                        <label for="precioUnitario${index}" class="form-label">Precio unitario del producto</label>
                         <input type="number" step="0.001" class="form-control form-control-detalle" name="detallesCompra[${index}].precioUnitario" id="precioUnitario${index}" placeholder="Ingrese el precio unitario..." required>
                     </div>
                 `;

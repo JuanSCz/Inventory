@@ -27,10 +27,13 @@
                                        id="fecha">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="total" class="form-label">Total</label>
-                                <input type="number" step="0.001" class="form-control form-control-detalle"
-                                       th:field="*{total}" th:value="${#numbers.formatDecimal(compraDTO.total, 3, 3)}"
-                                       id="total">
+                                <label for="proveedor" class="form-label">Proveedor</label>
+                                <select class="form-control form-control-detalle" th:field="*{proveedorId}"
+                                        id="proveedor">
+                                    <option value="" selected>Seleccione un proveedor...</option>
+                                    <option th:each="proveedor : ${proveedores}" th:value="${proveedor.id}"
+                                            th:text="${proveedor.nombre}"></option>
+                                </select>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="metodoPago" class="form-label">Método de Pago</label>
@@ -59,13 +62,10 @@
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="proveedor" class="form-label">Proveedor</label>
-                                <select class="form-control form-control-detalle" th:field="*{proveedorId}"
-                                        id="proveedor">
-                                    <option value="" selected>Seleccione un proveedor...</option>
-                                    <option th:each="proveedor : ${proveedores}" th:value="${proveedor.id}"
-                                            th:text="${proveedor.nombre}"></option>
-                                </select>
+                                <label for="total" class="form-label">Total de la compra</label>
+                                <input type="number" step="0.001" class="form-control form-control-detalle"
+                                       th:field="*{total}" th:value="${#numbers.formatDecimal(compraDTO.total, 3, 3)}"
+                                       id="total">
                             </div>
                             <div id="detalleContainerUpdate">
                                 <div th:each="detalle, iterStat : ${compraDTO.detallesCompra}" class="row detalle-row">
@@ -86,7 +86,7 @@
                                                id="cantidad" placeholder="Ingrese la cantidad...">
                                     </div>
                                     <div class="col-md-4 mb-3">
-                                        <label for="precioUnitario" class="form-label">Precio Unitario</label>
+                                        <label for="precioUnitario" class="form-label">Precio unitario del producto</label>
                                         <input type="number" step="0.001" class="form-control form-control-detalle"
                                                th:field="*{detallesCompra[__${iterStat.index}__].precioUnitario}"
                                                th:value="${#numbers.formatDecimal(detalle.precioUnitario, 3, 3)}"

@@ -22,7 +22,6 @@ public class UsuarioDTO {
     @NotNull(message = "El ID del rol no puede ser nulo")
     private Long rolId;
 
-    @NotBlank(message = "El nombre del rol no puede estar vacío")
     private String rolNombre;
 
     public UsuarioDTO() {
