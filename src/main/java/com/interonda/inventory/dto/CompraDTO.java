@@ -3,6 +3,8 @@ package com.interonda.inventory.dto;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,6 +128,13 @@ public class CompraDTO {
     }
 
     public String getTotalString() {
+        if (this.total != null) {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            symbols.setGroupingSeparator('.');
+            DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+            return formatter.format(this.total);
+        }
         return this.totalString;
     }
 }

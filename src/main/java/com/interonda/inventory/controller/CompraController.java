@@ -60,9 +60,7 @@ public class CompraController {
         }
 
         if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
             model.addAttribute("compraFormattedTotal", compraService.formatTotal(compraDTO.getTotal()));
@@ -89,9 +87,7 @@ public class CompraController {
         }
 
         if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<CompraDTO> compras = compraService.getAllCompras(pageable);
             model.addAttribute("compras", compras.getContent());
@@ -123,6 +119,9 @@ public class CompraController {
     @GetMapping("/{id}")
     public ResponseEntity<CompraDTO> getCompraById(@PathVariable Long id) {
         CompraDTO compraDTO = compraService.getCompra(id);
+        compraDTO.getDetallesCompra().forEach(detalle -> {
+            detalle.setPrecioUnitarioString(compraService.formatPrecioUnitario(detalle.getPrecioUnitario())); // Formatear el precio unitario
+        });
         return new ResponseEntity<>(compraDTO, HttpStatus.OK);
     }
 

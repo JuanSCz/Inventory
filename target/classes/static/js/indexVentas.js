@@ -18,16 +18,6 @@ function initializeTotalInput() {
     }
 }
 
-function formatNumber(value) {
-    value = value.replace(/[^\d.,]/g, '');
-    value = value.replace(/,/g, '.');
-    const parts = value.split('.');
-    if (parts.length > 2) {
-        value = parts[0] + '.' + parts.slice(1).join('');
-    }
-    return value;
-}
-
 function initializeFormSubmit() {
     const form = document.getElementById('createVentaForm');
     if (form) {
@@ -72,17 +62,17 @@ function agregarFilaDetalle() {
     newRow.innerHTML = `
         <div class="col-md-4 mb-3">
             <label for="producto${currentIndex}" class="form-label">Producto</label>
-            <select class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].productoId" id="producto${currentIndex}" required>
+            <select class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].productoId" id="producto${currentIndex}">
                 ${productoSelectHTML}
             </select>
         </div>
         <div class="col-md-4 mb-3">
             <label for="cantidad${currentIndex}" class="form-label">Cantidad</label>
-            <input type="number" step="1" class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad..." required>
+            <input type="number" step="1" class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad...">
         </div>
         <div class="col-md-4 mb-3">
             <label for="precioUnitario${currentIndex}" class="form-label">Precio unitario del producto</label>
-            <input type="number" step="0.01" class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].precioUnitario" id="precioUnitario${currentIndex}" placeholder="Ingrese el precio unitario..." required>
+            <input type="number" class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].precioUnitario" id="precioUnitario${currentIndex}" placeholder="Ingrese el precio unitario...">
         </div>
     `;
 
@@ -174,7 +164,7 @@ function populateUpdateModal(id) {
             const updateModalElement = document.getElementById('updateVentaModal');
             updateModalElement.querySelector('#id').value = data.id;
             updateModalElement.querySelector('#fecha').value = data.fecha;
-            updateModalElement.querySelector('#total').value = data.totalString; // Usar totalString
+            updateModalElement.querySelector('#total').value = data.totalString;
             updateModalElement.querySelector('#metodoPago').value = data.metodoPago;
             updateModalElement.querySelector('#estado').value = data.estado;
             updateModalElement.querySelector('#impuestos').value = data.impuestos;
@@ -190,17 +180,17 @@ function populateUpdateModal(id) {
                 newRow.innerHTML = `
                     <div class="col-md-4 mb-3">
                         <label for="producto${index}" class="form-label">Producto</label>
-                        <select class="form-control form-control-detalle" name="detallesVenta[${index}].productoId" id="producto${index}" required>
+                        <select class="form-control form-control-detalle" name="detallesVenta[${index}].productoId" id="producto${index}">
                             ${document.querySelector('select[name="detallesVenta[0].productoId"]').innerHTML}
                         </select>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="cantidad${index}" class="form-label">Cantidad</label>
-                        <input type="number" class="form-control form-control-detalle" name="detallesVenta[${index}].cantidad" id="cantidad${index}" placeholder="Ingrese la cantidad..." required>
+                        <input type="number" class="form-control form-control-detalle" name="detallesVenta[${index}].cantidad" id="cantidad${index}" placeholder="Ingrese la cantidad...">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="precioUnitario${index}" class="form-label">Precio unitario del producto</label>
-                        <input type="number" step="0.001" class="form-control form-control-detalle" name="detallesVenta[${index}].precioUnitario" id="precioUnitario${index}" placeholder="Ingrese el precio unitario..." required>
+                        <input type="text" class="form-control form-control-detalle" name="detallesVenta[${index}].precioUnitarioString" id="precioUnitario${index}" placeholder="Ingrese el precio unitario...">
                     </div>
                 `;
 
@@ -209,7 +199,7 @@ function populateUpdateModal(id) {
                 // Set values
                 newRow.querySelector(`#producto${index}`).value = detalle.productoId;
                 newRow.querySelector(`#cantidad${index}`).value = detalle.cantidad;
-                newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitario.toFixed(3);
+                newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitarioString;
             });
         })
         .catch(error => console.error('Error al cargar los datos de la venta:', error));

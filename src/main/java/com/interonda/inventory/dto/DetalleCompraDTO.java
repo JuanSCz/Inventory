@@ -1,11 +1,10 @@
 package com.interonda.inventory.dto;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 public class DetalleCompraDTO {
 
@@ -31,6 +30,9 @@ public class DetalleCompraDTO {
 
     @NotNull(message = "El proveedor no puede estar vacío")
     private String proveedorNombre;
+
+    @Pattern(regexp = "\\d{1,3}(\\.\\d{3})*(,\\d{1,2})?", message = "El total debe tener un formato válido (e.g., 1.000.000,00)")
+    private String precioUnitarioString;
 
     public String getProveedorNombre() {
         return proveedorNombre;
@@ -110,5 +112,23 @@ public class DetalleCompraDTO {
 
     public void setTotalFormatted(String totalFormatted) {
         this.totalFormatted = totalFormatted;
+    }
+
+    public void setPrecioUnitarioString(String precioUnitarioString) {
+        this.precioUnitarioString = precioUnitarioString;
+        if (precioUnitarioString != null && !precioUnitarioString.isEmpty()) {
+            this.precioUnitario = new BigDecimal(precioUnitarioString.replace(".", "").replace(",", "."));
+        }
+    }
+
+    public String getPrecioUnitarioString() {
+        if (this.precioUnitario != null) {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            symbols.setGroupingSeparator('.');
+            DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+            return formatter.format(this.precioUnitario);
+        }
+        return this.precioUnitarioString;
     }
 }

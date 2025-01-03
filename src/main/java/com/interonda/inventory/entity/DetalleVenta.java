@@ -41,6 +41,8 @@ public class DetalleVenta {
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
 
+    private BigDecimal subtotal;
+
     // Constructor vacío requerido por JPA
     public DetalleVenta() {
     }
@@ -85,6 +87,14 @@ public class DetalleVenta {
 
     public void setProducto(Producto producto) {
         this.producto = producto;
+    }
+
+    public BigDecimal getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(BigDecimal subtotal) {
+        this.subtotal = subtotal;
     }
 }
 

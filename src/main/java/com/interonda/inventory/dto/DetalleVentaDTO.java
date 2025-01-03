@@ -3,6 +3,8 @@ package com.interonda.inventory.dto;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 public class DetalleVentaDTO {
 
@@ -33,11 +35,12 @@ public class DetalleVentaDTO {
     @DecimalMin(value = "0.0", inclusive = false, message = "El subtotal debe ser mayor que 0")
     private BigDecimal subtotal;
 
-    private String precioUnitarioFormatted;
-
-    private String subtotalFormatted;
+    @Pattern(regexp = "\\d{1,3}(\\.\\d{3})*(,\\d{1,2})?", message = "El total debe tener un formato válido (e.g., 1.000.000,00)")
+    private String precioUnitarioString;
 
     private String totalFormatted;
+
+    private String subtotalFormatted;
 
     public DetalleVentaDTO() {
     }
@@ -75,22 +78,6 @@ public class DetalleVentaDTO {
         this.productoId = productoId;
     }
 
-    public String getPrecioUnitarioFormatted() {
-        return precioUnitarioFormatted;
-    }
-
-    public void setPrecioUnitarioFormatted(String precioUnitarioFormatted) {
-        this.precioUnitarioFormatted = precioUnitarioFormatted;
-    }
-
-    public String getTotalFormatted() {
-        return totalFormatted;
-    }
-
-    public void setTotalFormatted(String totalFormatted) {
-        this.totalFormatted = totalFormatted;
-    }
-
     public BigDecimal getPrecioUnitario() {
         return precioUnitario;
     }
@@ -123,11 +110,39 @@ public class DetalleVentaDTO {
         this.subtotal = subtotal;
     }
 
-    public String getSubtotalFormatted() {
-        return subtotalFormatted;
+    public void setPrecioUnitarioString(String precioUnitarioString) {
+        this.precioUnitarioString = precioUnitarioString;
+        if (precioUnitarioString != null && !precioUnitarioString.isEmpty()) {
+            this.precioUnitario = new BigDecimal(precioUnitarioString.replace(".", "").replace(",", "."));
+        }
+    }
+
+    public String getPrecioUnitarioString() {
+        if (this.precioUnitario != null) {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            symbols.setGroupingSeparator('.');
+            DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+            return formatter.format(this.precioUnitario);
+        }
+        return this.precioUnitarioString;
     }
 
     public void setSubtotalFormatted(String subtotalFormatted) {
         this.subtotalFormatted = subtotalFormatted;
+        if (subtotalFormatted != null && !subtotalFormatted.isEmpty()) {
+            this.subtotal = new BigDecimal(subtotalFormatted.replace(".", "").replace(",", "."));
+        }
+    }
+
+    public String getSubtotalFormatted() {
+        if (this.subtotal != null) {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            symbols.setGroupingSeparator('.');
+            DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+            return formatter.format(this.subtotal);
+        }
+        return this.subtotalFormatted;
     }
 }

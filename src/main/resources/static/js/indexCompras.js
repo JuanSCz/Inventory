@@ -167,7 +167,7 @@ function populateUpdateModal(id) {
             const updateModalElement = document.getElementById('updateCompraModal');
             updateModalElement.querySelector('#id').value = data.id;
             updateModalElement.querySelector('#fecha').value = data.fecha;
-            updateModalElement.querySelector('#total').value = data.total;
+            updateModalElement.querySelector('#total').value = data.totalString; // Formatear el total
             updateModalElement.querySelector('#metodoPago').value = data.metodoPago;
             updateModalElement.querySelector('#estado').value = data.estado;
             updateModalElement.querySelector('#impuestos').value = data.impuestos;
@@ -193,7 +193,7 @@ function populateUpdateModal(id) {
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="precioUnitario${index}" class="form-label">Precio unitario del producto</label>
-                        <input type="number" step="0.001" class="form-control form-control-detalle" name="detallesCompra[${index}].precioUnitario" id="precioUnitario${index}" placeholder="Ingrese el precio unitario..." required>
+                        <input type="text" class="form-control form-control-detalle" name="detallesCompra[${index}].precioUnitarioString" id="precioUnitario${index}" placeholder="Ingrese el precio unitario..." required>
                     </div>
                 `;
 
@@ -202,7 +202,7 @@ function populateUpdateModal(id) {
                 // Set values
                 newRow.querySelector(`#producto${index}`).value = detalle.productoId;
                 newRow.querySelector(`#cantidad${index}`).value = detalle.cantidad;
-                newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitario;
+                newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitarioString; // Formatear el precio unitario
             });
         })
         .catch(error => console.error('Error al cargar los datos de la compra:', error));

@@ -195,6 +195,16 @@ public class CompraServiceImpl implements CompraService {
         return formatter.format(total);
     }
 
+    public String formatPrecioUnitario(BigDecimal precioUnitario) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator(',');
+        symbols.setGroupingSeparator('.');
+
+        DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+        formatter.setRoundingMode(RoundingMode.DOWN);
+        return formatter.format(precioUnitario);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public CompraDTO getCompra(Long id) {
@@ -202,14 +212,16 @@ public class CompraServiceImpl implements CompraService {
             logger.info("Obteniendo Compra con id: {}", id);
             Compra compra = compraRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Compra no encontrada con el id: " + id));
             CompraDTO compraDTO = compraMapper.toDto(compra);
-            compraDTO.setProveedorId(compra.getProveedor().getId()); // Asegúrate de establecer el proveedorId
+            compraDTO.setProveedorId(compra.getProveedor().getId());
             compraDTO.setProveedorNombre(compra.getProveedor().getNombre());
             compraDTO.setDetallesCompra(compra.getDetallesCompra().stream().map(detalle -> {
                 DetalleCompraDTO detalleDTO = compraMapper.toDetalleDto(detalle);
                 detalleDTO.setProductoId(detalle.getProducto().getId());
                 detalleDTO.setProductoNombre(detalle.getProducto().getNombre());
+                detalleDTO.setPrecioUnitarioString(formatPrecioUnitario(detalle.getPrecioUnitario())); // Formatear el precio unitario
                 return detalleDTO;
             }).collect(Collectors.toList()));
+            compraDTO.setTotalString(formatTotal(compra.getTotal())); // Formatear el total
             return compraDTO;
         } catch (ResourceNotFoundException e) {
             logger.warn("Compra no encontrada: {}", e.getMessage());

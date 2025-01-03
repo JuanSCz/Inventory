@@ -191,6 +191,16 @@ public class VentaServiceImpl implements VentaService {
         return formatter.format(total);
     }
 
+    public String formatPrecioUnitario(BigDecimal precioUnitario) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator(',');
+        symbols.setGroupingSeparator('.');
+
+        DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+        formatter.setRoundingMode(RoundingMode.DOWN);
+        return formatter.format(precioUnitario);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public VentaDTO getVenta(Long id) {
@@ -204,6 +214,8 @@ public class VentaServiceImpl implements VentaService {
                 DetalleVentaDTO detalleDTO = ventaMapper.toDetalleDto(detalle);
                 detalleDTO.setProductoId(detalle.getProducto().getId());
                 detalleDTO.setProductoNombre(detalle.getProducto().getNombre());
+                detalleDTO.setPrecioUnitarioString(formatPrecioUnitario(detalle.getPrecioUnitario())); // Formatear el precio unitario
+                detalleDTO.setSubtotalFormatted(formatSubtotal(detalle.getSubtotal())); // Formatear el subtotal
                 return detalleDTO;
             }).collect(Collectors.toList()));
             ventaDTO.setTotalString(formatTotal(venta.getTotal())); // Formatear el total
@@ -215,6 +227,16 @@ public class VentaServiceImpl implements VentaService {
             logger.error("Error obteniendo Venta", e);
             throw new DataAccessException("Error obteniendo Venta", e);
         }
+    }
+
+    public String formatSubtotal(BigDecimal subtotal) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator(',');
+        symbols.setGroupingSeparator('.');
+
+        DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+        formatter.setRoundingMode(RoundingMode.DOWN);
+        return formatter.format(subtotal);
     }
 
     @Override

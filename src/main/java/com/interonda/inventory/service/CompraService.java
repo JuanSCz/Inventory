@@ -33,4 +33,6 @@ public interface CompraService {
     long countCompras();
 
     String formatTotal(BigDecimal total);
+
+    String formatPrecioUnitario(BigDecimal precioUnitario);
 }

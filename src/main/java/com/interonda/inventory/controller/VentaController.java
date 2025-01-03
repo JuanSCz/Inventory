@@ -103,7 +103,6 @@ public class VentaController {
 
         VentaDTO updatedVentaDTO = ventaService.updateVenta(ventaDTO);
         updatedVentaDTO.setTotalString(ventaService.formatTotal(updatedVentaDTO.getTotal())); // Formatear el total
-
         return "redirect:/tableVentas";
     }
 
@@ -123,6 +122,13 @@ public class VentaController {
     public ResponseEntity<VentaDTO> getVentaById(@PathVariable Long id) {
         VentaDTO ventaDTO = ventaService.getVenta(id);
         ventaDTO.setTotalString(ventaService.formatTotal(ventaDTO.getTotal())); // Formatear el total
+
+        // Formatear los detalles de venta
+        for (DetalleVentaDTO detalle : ventaDTO.getDetallesVenta()) {
+            detalle.setPrecioUnitarioString(ventaService.formatPrecioUnitario(detalle.getPrecioUnitario()));
+            detalle.setSubtotalFormatted(ventaService.formatSubtotal(detalle.getSubtotal())); // Formatear el subtotal
+        }
+
         return new ResponseEntity<>(ventaDTO, HttpStatus.OK);
     }
 
