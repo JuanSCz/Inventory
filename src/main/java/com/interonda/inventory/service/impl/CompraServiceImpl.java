@@ -219,6 +219,7 @@ public class CompraServiceImpl implements CompraService {
                 detalleDTO.setProductoId(detalle.getProducto().getId());
                 detalleDTO.setProductoNombre(detalle.getProducto().getNombre());
                 detalleDTO.setPrecioUnitarioString(formatPrecioUnitario(detalle.getPrecioUnitario())); // Formatear el precio unitario
+                detalleDTO.setTotalFormatted(formatTotal(detalle.getPrecioUnitario().multiply(new BigDecimal(detalle.getCantidad())))); // Formatear el total
                 return detalleDTO;
             }).collect(Collectors.toList()));
             compraDTO.setTotalString(formatTotal(compra.getTotal())); // Formatear el total

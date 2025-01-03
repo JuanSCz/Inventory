@@ -3,6 +3,7 @@ package com.interonda.inventory.dto;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
@@ -38,7 +39,7 @@ public class DetalleVentaDTO {
     @Pattern(regexp = "\\d{1,3}(\\.\\d{3})*(,\\d{1,2})?", message = "El total debe tener un formato válido (e.g., 1.000.000,00)")
     private String precioUnitarioString;
 
-    private String totalFormatted;
+    private String totalDetalleFormatted;
 
     private String subtotalFormatted;
 
@@ -103,6 +104,9 @@ public class DetalleVentaDTO {
     }
 
     public BigDecimal getSubtotal() {
+        if (cantidad != null && precioUnitario != null) {
+            subtotal = precioUnitario.multiply(new BigDecimal(cantidad));
+        }
         return subtotal;
     }
 
@@ -136,13 +140,31 @@ public class DetalleVentaDTO {
     }
 
     public String getSubtotalFormatted() {
-        if (this.subtotal != null) {
+        if (subtotal != null) {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            symbols.setGroupingSeparator('.');
+
+            DecimalFormat formatter = new DecimalFormat("#,###,###", symbols);
+            formatter.setRoundingMode(RoundingMode.DOWN);
+            subtotalFormatted = formatter.format(subtotal);
+        }
+        return subtotalFormatted;
+    }
+
+    public String getTotalDetalleFormatted() {
+        if (cantidad != null && precioUnitario != null) {
+            BigDecimal totalDetalle = precioUnitario.multiply(new BigDecimal(cantidad));
             DecimalFormatSymbols symbols = new DecimalFormatSymbols();
             symbols.setDecimalSeparator(',');
             symbols.setGroupingSeparator('.');
             DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
-            return formatter.format(this.subtotal);
+            return formatter.format(totalDetalle);
         }
-        return this.subtotalFormatted;
+        return totalDetalleFormatted;
+    }
+
+    public void setTotalDetalleFormatted(String totalDetalleFormatted) {
+        this.totalDetalleFormatted = totalDetalleFormatted;
     }
 }

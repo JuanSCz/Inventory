@@ -142,10 +142,6 @@ public class PresupuestarServiceImpl implements PresupuestarService {
             detalleVentaDTO.setProductoId(detalleVenta.getProducto().getId());
             detalleVentaDTO.setProductoNombre(detalleVenta.getProducto().getNombre());
 
-            // Formatear los valores
-           /* detalleVentaDTO.setPrecioUnitarioFormatted(formatDecimalWithThreeDecimals(detalleVenta.getPrecioUnitario()));
-            detalleVentaDTO.setSubtotalFormatted(formatDecimalWithThreeDecimals(detalleVentaDTO.getSubtotal())); */
-
             return detalleVentaDTO;
         }).collect(Collectors.toList()));
 

@@ -60,9 +60,7 @@ public class VentaController {
         }
 
         if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<VentaDTO> ventas = ventaService.getAllVentas(pageable);
             model.addAttribute("ventas", ventas.getContent());
@@ -88,9 +86,7 @@ public class VentaController {
         }
 
         if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<VentaDTO> ventas = ventaService.getAllVentas(pageable);
             model.addAttribute("ventas", ventas.getContent());

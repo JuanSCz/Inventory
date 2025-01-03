@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-01-03T10:02:33-0300",
+    date = "2025-01-03T15:46:48-0300",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
 )
 @Component
@@ -24,7 +24,6 @@ public class DetalleVentaMapperImpl implements DetalleVentaMapper {
         detalleVentaDTO.setId( detalleVenta.getId() );
         detalleVentaDTO.setCantidad( detalleVenta.getCantidad() );
         detalleVentaDTO.setPrecioUnitario( detalleVenta.getPrecioUnitario() );
-        detalleVentaDTO.setSubtotal( detalleVenta.getSubtotal() );
 
         return detalleVentaDTO;
     }
@@ -40,7 +39,6 @@ public class DetalleVentaMapperImpl implements DetalleVentaMapper {
         detalleVenta.setId( DetalleVentaDTO.getId() );
         detalleVenta.setCantidad( DetalleVentaDTO.getCantidad() );
         detalleVenta.setPrecioUnitario( DetalleVentaDTO.getPrecioUnitario() );
-        detalleVenta.setSubtotal( DetalleVentaDTO.getSubtotal() );
 
         return detalleVenta;
     }

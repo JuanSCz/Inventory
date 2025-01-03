@@ -121,6 +121,7 @@ public class CompraController {
         CompraDTO compraDTO = compraService.getCompra(id);
         compraDTO.getDetallesCompra().forEach(detalle -> {
             detalle.setPrecioUnitarioString(compraService.formatPrecioUnitario(detalle.getPrecioUnitario())); // Formatear el precio unitario
+            detalle.setTotalFormatted(compraService.formatTotal(detalle.getPrecioUnitario().multiply(new BigDecimal(detalle.getCantidad())))); // Formatear el total
         });
         return new ResponseEntity<>(compraDTO, HttpStatus.OK);
     }

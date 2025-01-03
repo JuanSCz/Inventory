@@ -6,8 +6,25 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeDeleteModal();
     initializeAddDetalleButton();
     initializeTotalInput();
+    initializeSubtotalInput(); // Nuevo método para inicializar los inputs de subtotal
     initializeFormSubmit();
 });
+
+function initializeFormSubmit() {
+    const form = document.getElementById('createVentaForm');
+    if (form) {
+        form.addEventListener('submit', function (event) {
+            const totalInput = document.getElementById('total');
+            if (totalInput) {
+                totalInput.value = formatNumber(totalInput.value);
+            }
+            const subtotalInputs = document.querySelectorAll('input[name^="detallesVenta"][name$=".subtotalFormatted"]');
+            subtotalInputs.forEach(input => {
+                input.value = formatNumber(input.value);
+            });
+        });
+    }
+}
 
 function initializeTotalInput() {
     const totalInput = document.getElementById('total');
@@ -227,8 +244,8 @@ function showDetalleVentaModal(button) {
                     <td>${detalle.id}</td>
                     <td>${detalle.productoNombre}</td>
                     <td>${detalle.cantidad}</td>
-                    <td>${detalle.precioUnitario.toFixed(3)}</td>
-                    <td>${(detalle.cantidad * detalle.precioUnitario).toFixed(3)}</td>
+                    <td>${detalle.precioUnitarioString}</td>
+                    <td>${detalle.subtotalFormatted}</td>
                 `;
                 modalBody.appendChild(row);
             });

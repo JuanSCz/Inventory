@@ -237,8 +237,8 @@ function showDetalleCompraModal(button) {
                     <td>${detalle.id}</td>
                     <td>${detalle.productoNombre}</td>
                     <td>${detalle.cantidad}</td>
-                    <td>${detalle.precioUnitario.toFixed(3)}</td>
-                    <td>${(detalle.cantidad * detalle.precioUnitario).toFixed(3)}</td>
+                    <td>${detalle.precioUnitarioString}</td>
+                    <td>${detalle.totalFormatted}</td>
                 `;
                 modalBody.appendChild(row);
             });

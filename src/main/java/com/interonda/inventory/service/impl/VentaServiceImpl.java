@@ -64,6 +64,7 @@ public class VentaServiceImpl implements VentaService {
         return ventaMapper.toEntity(ventaDTO);
     }
 
+    // Dentro del método createVenta en VentaServiceImpl.java
     @Override
     @Transactional
     public VentaDTO createVenta(VentaDTO ventaDTO) {
@@ -81,6 +82,8 @@ public class VentaServiceImpl implements VentaService {
                 DetalleVenta detalle = ventaMapper.toDetalleEntity(detalleDTO);
                 detalle.setVenta(venta);
                 detalle.setProducto(productoRepository.findById(detalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId())));
+                // Calcular el subtotal
+                detalleDTO.setSubtotal(detalle.getPrecioUnitario().multiply(new BigDecimal(detalle.getCantidad())));
                 return detalle;
             }).collect(Collectors.toList()));
 
@@ -101,6 +104,7 @@ public class VentaServiceImpl implements VentaService {
         }
     }
 
+    // Dentro del método updateVenta en VentaServiceImpl.java
     @Override
     @Transactional
     public VentaDTO updateVenta(VentaDTO ventaDTO) {
@@ -109,28 +113,19 @@ public class VentaServiceImpl implements VentaService {
             logger.info("Actualizando Venta con id: {}", ventaDTO.getId());
             Venta venta = ventaRepository.findById(ventaDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + ventaDTO.getId()));
 
-            // Actualizar los campos de la venta
-            venta.setFecha(ventaDTO.getFecha());
-            venta.setTotal(ventaDTO.getTotal());
-            venta.setMetodoPago(ventaDTO.getMetodoPago());
-            venta.setEstado(ventaDTO.getEstado());
-            venta.setImpuestos(ventaDTO.getImpuestos());
-
-            // Asignar el cliente a la venta
-            Cliente cliente = clienteRepository.findById(ventaDTO.getClienteId()).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con el id: " + ventaDTO.getClienteId()));
-            venta.setCliente(cliente);
-
-            // Eliminar detalles existentes
-            detalleVentaRepository.deleteAll(venta.getDetallesVenta());
-
-            // Asignar los nuevos detalles de venta
-            List<DetalleVenta> nuevosDetalles = ventaDTO.getDetallesVenta().stream().map(detalleDTO -> {
+            // Actualizar los detalles de venta
+            venta.setDetallesVenta(ventaDTO.getDetallesVenta().stream().map(detalleDTO -> {
                 DetalleVenta detalle = ventaMapper.toDetalleEntity(detalleDTO);
                 detalle.setVenta(venta);
                 detalle.setProducto(productoRepository.findById(detalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId())));
+                // Calcular el subtotal
+                detalleDTO.setSubtotal(detalle.getPrecioUnitario().multiply(new BigDecimal(detalle.getCantidad())));
                 return detalle;
-            }).collect(Collectors.toList());
-            venta.setDetallesVenta(nuevosDetalles);
+            }).collect(Collectors.toList()));
+
+            // Actualizar el total e impuestos
+            venta.setTotal(ventaDTO.getTotal());
+            venta.setImpuestos(ventaDTO.getImpuestos());
 
             Venta updatedVenta = ventaRepository.save(venta);
             logger.info("Venta actualizada exitosamente con id: {}", updatedVenta.getId());
@@ -139,9 +134,6 @@ public class VentaServiceImpl implements VentaService {
             ventaDTO.setTotalString(formatTotal(updatedVenta.getTotal()));
 
             return ventaMapper.toDto(updatedVenta);
-        } catch (ResourceNotFoundException e) {
-            logger.warn("Venta no encontrada: {}", e.getMessage());
-            throw e;
         } catch (Exception e) {
             logger.error("Error actualizando Venta", e);
             throw new DataAccessException("Error actualizando Venta", e);
@@ -215,7 +207,7 @@ public class VentaServiceImpl implements VentaService {
                 detalleDTO.setProductoId(detalle.getProducto().getId());
                 detalleDTO.setProductoNombre(detalle.getProducto().getNombre());
                 detalleDTO.setPrecioUnitarioString(formatPrecioUnitario(detalle.getPrecioUnitario())); // Formatear el precio unitario
-                detalleDTO.setSubtotalFormatted(formatSubtotal(detalle.getSubtotal())); // Formatear el subtotal
+                detalleDTO.setSubtotalFormatted(detalleDTO.getSubtotalFormatted()); // Formatear el subtotal
                 return detalleDTO;
             }).collect(Collectors.toList()));
             ventaDTO.setTotalString(formatTotal(venta.getTotal())); // Formatear el total

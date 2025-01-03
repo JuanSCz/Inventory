@@ -34,14 +34,6 @@ public class DetalleCompraDTO {
     @Pattern(regexp = "\\d{1,3}(\\.\\d{3})*(,\\d{1,2})?", message = "El total debe tener un formato válido (e.g., 1.000.000,00)")
     private String precioUnitarioString;
 
-    public String getProveedorNombre() {
-        return proveedorNombre;
-    }
-
-    public void setProveedorNombre(String proveedorNombre) {
-        this.proveedorNombre = proveedorNombre;
-    }
-
     private String precioUnitarioFormatted;
 
     private String totalFormatted;
@@ -98,6 +90,14 @@ public class DetalleCompraDTO {
         this.productoId = productoId;
     }
 
+    public String getProveedorNombre() {
+        return proveedorNombre;
+    }
+
+    public void setProveedorNombre(String proveedorNombre) {
+        this.proveedorNombre = proveedorNombre;
+    }
+
     public String getPrecioUnitarioFormatted() {
         return precioUnitarioFormatted;
     }
@@ -107,7 +107,15 @@ public class DetalleCompraDTO {
     }
 
     public String getTotalFormatted() {
-        return totalFormatted;
+        if (this.cantidad != null && this.precioUnitario != null) {
+            BigDecimal total = this.precioUnitario.multiply(new BigDecimal(this.cantidad));
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            symbols.setGroupingSeparator('.');
+            DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+            return formatter.format(total);
+        }
+        return this.totalFormatted;
     }
 
     public void setTotalFormatted(String totalFormatted) {
