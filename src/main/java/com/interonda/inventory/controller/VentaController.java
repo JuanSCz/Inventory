@@ -101,7 +101,9 @@ public class VentaController {
             return "tableVentas";
         }
 
-        ventaService.updateVenta(ventaDTO);
+        VentaDTO updatedVentaDTO = ventaService.updateVenta(ventaDTO);
+        updatedVentaDTO.setTotalString(ventaService.formatTotal(updatedVentaDTO.getTotal())); // Formatear el total
+
         return "redirect:/tableVentas";
     }
 
@@ -120,6 +122,7 @@ public class VentaController {
     @GetMapping("/{id}")
     public ResponseEntity<VentaDTO> getVentaById(@PathVariable Long id) {
         VentaDTO ventaDTO = ventaService.getVenta(id);
+        ventaDTO.setTotalString(ventaService.formatTotal(ventaDTO.getTotal())); // Formatear el total
         return new ResponseEntity<>(ventaDTO, HttpStatus.OK);
     }
 

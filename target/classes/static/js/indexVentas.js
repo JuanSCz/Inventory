@@ -174,7 +174,7 @@ function populateUpdateModal(id) {
             const updateModalElement = document.getElementById('updateVentaModal');
             updateModalElement.querySelector('#id').value = data.id;
             updateModalElement.querySelector('#fecha').value = data.fecha;
-            updateModalElement.querySelector('#total').value = data.total.toFixed(3);
+            updateModalElement.querySelector('#total').value = data.totalString; // Usar totalString
             updateModalElement.querySelector('#metodoPago').value = data.metodoPago;
             updateModalElement.querySelector('#estado').value = data.estado;
             updateModalElement.querySelector('#impuestos').value = data.impuestos;

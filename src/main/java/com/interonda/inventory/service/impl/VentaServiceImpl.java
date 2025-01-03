@@ -134,6 +134,10 @@ public class VentaServiceImpl implements VentaService {
 
             Venta updatedVenta = ventaRepository.save(venta);
             logger.info("Venta actualizada exitosamente con id: {}", updatedVenta.getId());
+
+            // Formatear el total
+            ventaDTO.setTotalString(formatTotal(updatedVenta.getTotal()));
+
             return ventaMapper.toDto(updatedVenta);
         } catch (ResourceNotFoundException e) {
             logger.warn("Venta no encontrada: {}", e.getMessage());
@@ -202,6 +206,7 @@ public class VentaServiceImpl implements VentaService {
                 detalleDTO.setProductoNombre(detalle.getProducto().getNombre());
                 return detalleDTO;
             }).collect(Collectors.toList()));
+            ventaDTO.setTotalString(formatTotal(venta.getTotal())); // Formatear el total
             return ventaDTO;
         } catch (ResourceNotFoundException e) {
             logger.warn("Venta no encontrada: {}", e.getMessage());
