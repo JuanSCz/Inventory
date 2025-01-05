@@ -1,6 +1,7 @@
 package com.interonda.inventory.controller;
 
 import com.interonda.inventory.dto.CompraDTO;
+import com.interonda.inventory.dto.DepositoDTO;
 import com.interonda.inventory.dto.DetalleCompraDTO;
 import com.interonda.inventory.dto.ProductoDTO;
 import com.interonda.inventory.service.*;
@@ -39,12 +40,15 @@ public class CompraController {
 
     private final MessageSource messageSource;
 
+    private final DepositoService depositoService;
+
     @Autowired
-    public CompraController(ProductoService productoService, CompraService compraService, ProveedorService proveedorService, MessageSource messageSource) {
+    public CompraController(ProductoService productoService, CompraService compraService, ProveedorService proveedorService, MessageSource messageSource, DepositoService depositoService) {
         this.productoService = productoService;
         this.compraService = compraService;
         this.proveedorService = proveedorService;
         this.messageSource = messageSource;
+        this.depositoService = depositoService;
     }
 
     @PostMapping
@@ -57,16 +61,21 @@ public class CompraController {
             if (detalle.getPrecioUnitario() == null || detalle.getPrecioUnitario().compareTo(BigDecimal.ZERO) <= 0) {
                 bindingResult.rejectValue("detallesCompra[" + i + "].precioUnitario", "error.detalle", "El precio unitario debe ser mayor que 0");
             }
+            if (detalle.getDepositoId() == null) {
+                bindingResult.rejectValue("detallesCompra[" + i + "].depositoId", "error.detalle", "El depósito no puede ser nulo");
+            }
         }
 
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
+            Page<DepositoDTO> depositos = depositoService.getAllDepositos(pageable);
             model.addAttribute("compraFormattedTotal", compraService.formatTotal(compraDTO.getTotal()));
             model.addAttribute("compras", compraService.getAllCompras(pageable).getContent());
             model.addAttribute("compraDTO", compraDTO);
             model.addAttribute("page", productos);
+            model.addAttribute("page", depositos);
             return "tableCompras";
         }
 
@@ -84,19 +93,21 @@ public class CompraController {
             if (detalle.getPrecioUnitario() == null || detalle.getPrecioUnitario().compareTo(BigDecimal.ZERO) <= 0) {
                 bindingResult.rejectValue("detallesCompra[" + i + "].precioUnitario", "error.detalle", "El precio unitario debe ser mayor que 0");
             }
+            if (detalle.getDepositoId() == null) {
+                bindingResult.rejectValue("detallesCompra[" + i + "].depositoId", "error.detalle", "El depósito no puede ser nulo");
+            }
         }
 
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
-            Page<CompraDTO> compras = compraService.getAllCompras(pageable);
-            model.addAttribute("compras", compras.getContent());
+            Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
+            Page<DepositoDTO> depositos = depositoService.getAllDepositos(pageable);
+            model.addAttribute("compraFormattedTotal", compraService.formatTotal(compraDTO.getTotal()));
+            model.addAttribute("compras", compraService.getAllCompras(pageable).getContent());
             model.addAttribute("compraDTO", compraDTO);
-            model.addAttribute("page", compras);
-            Sort sort = Sort.by(Sort.Direction.DESC, "id");
-            Pageable proveedoresPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
-            model.addAttribute("proveedores", proveedorService.getAllProveedores(proveedoresPageable, sort).getContent());
-            model.addAttribute("productos", productoService.obtenerTodosLosProductos());
+            model.addAttribute("productos", productos);
+            model.addAttribute("depositos", depositos.getContent());
             return "tableCompras";
         }
 
@@ -132,7 +143,6 @@ public class CompraController {
         Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize, Sort.by("id").descending());
         Page<CompraDTO> compras;
         if (fecha != null && !fecha.isEmpty()) {
-            logger.info("Solicitud recibida para buscar compras por fecha: {}", fecha);
             compras = compraService.searchComprasByFecha(LocalDate.parse(fecha), newPageable);
         } else {
             compras = compraService.getAllCompras(newPageable);
@@ -144,6 +154,7 @@ public class CompraController {
         Pageable proveedoresPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
         model.addAttribute("proveedores", proveedorService.getAllProveedores(proveedoresPageable, sort).getContent());
         model.addAttribute("productos", productoService.obtenerTodosLosProductos());
+        model.addAttribute("depositos", depositoService.obtenerTodosLosDepositos());
         model.addAttribute("currentPage", "tableCompras");
         return "tableCompras";
     }

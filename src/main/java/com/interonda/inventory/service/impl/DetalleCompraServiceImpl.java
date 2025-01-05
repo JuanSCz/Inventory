@@ -8,6 +8,7 @@ import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.DetalleCompraMapper;
 import com.interonda.inventory.repository.CompraRepository;
+import com.interonda.inventory.repository.DepositoRepository;
 import com.interonda.inventory.repository.DetalleCompraRepository;
 import com.interonda.inventory.repository.ProductoRepository;
 import com.interonda.inventory.service.DetalleCompraService;
@@ -36,14 +37,16 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
     private final ProductoRepository productoRepository;
     private final DetalleCompraMapper detalleCompraMapper;
     private final Validator validator;
+    private final DepositoRepository depositoRepository;
 
     @Autowired
-    public DetalleCompraServiceImpl(DetalleCompraRepository detalleCompraRepository, CompraRepository compraRepository, ProductoRepository productoRepository, DetalleCompraMapper detalleCompraMapper, Validator validator) {
+    public DetalleCompraServiceImpl(DetalleCompraRepository detalleCompraRepository, CompraRepository compraRepository, ProductoRepository productoRepository, DetalleCompraMapper detalleCompraMapper, Validator validator, DepositoRepository depositoRepository) {
         this.detalleCompraRepository = detalleCompraRepository;
         this.compraRepository = compraRepository;
         this.productoRepository = productoRepository;
         this.detalleCompraMapper = detalleCompraMapper;
         this.validator = validator;
+        this.depositoRepository = depositoRepository;
     }
 
     @Override
@@ -68,6 +71,7 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
         DetalleCompra detalleCompra = detalleCompraMapper.toEntity(detalleCompraDTO);
         detalleCompra.setCompra(compra);
         detalleCompra.setProducto(producto);
+        detalleCompra.setDeposito(depositoRepository.findById(detalleCompraDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + detalleCompraDTO.getDepositoId())));
 
         try {
             DetalleCompra savedDetalleCompra = detalleCompraRepository.save(detalleCompra);
@@ -92,6 +96,8 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
 
             Producto producto = productoRepository.findById(detalleCompraDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleCompraDTO.getProductoId()));
             detalleCompra.setProducto(producto);
+
+            detalleCompra.setDeposito(depositoRepository.findById(detalleCompraDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + detalleCompraDTO.getDepositoId())));
 
             DetalleCompra updatedDetalleCompra = detalleCompraRepository.save(detalleCompra);
             logger.info("DetalleCompra actualizado exitosamente con id: {}", updatedDetalleCompra.getId());
@@ -160,13 +166,14 @@ public class DetalleCompraServiceImpl implements DetalleCompraService {
         try {
             logger.info("Obteniendo detalles de compra para la compra con id: {}", compraId);
             List<DetalleCompra> detallesCompra = detalleCompraRepository.findByCompraId(compraId);
-            return detallesCompra.stream()
-                    .map(detalle -> {
-                        DetalleCompraDTO dto = convertToDto(detalle);
-                        dto.setProductoNombre(detalle.getProducto().getNombre());
-                        return dto;
-                    })
-                    .collect(Collectors.toList());
+            return detallesCompra.stream().map(detalle -> {
+                DetalleCompraDTO detalleDTO = detalleCompraMapper.toDto(detalle);
+                detalleDTO.setProductoId(detalle.getProducto().getId());
+                detalleDTO.setProductoNombre(detalle.getProducto().getNombre());
+                detalleDTO.setDepositoNombre(detalle.getDeposito().getNombre());
+                detalleDTO.setDepositoId(detalle.getDeposito().getId()); // Asegurarse de que el valor del depósito se esté estableciendo
+                return detalleDTO;
+            }).collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Error obteniendo detalles de compra para la compra con id: " + compraId, e);
             throw new DataAccessException("Error obteniendo detalles de compra para la compra con id: " + compraId, e);

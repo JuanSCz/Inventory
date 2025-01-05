@@ -5,6 +5,8 @@ import com.interonda.inventory.dto.DepositoDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface DepositoService {
 
     DepositoDTO convertToDto(Deposito deposito);
@@ -24,5 +26,9 @@ public interface DepositoService {
     Page<DepositoDTO> searchDepositosByName(String nombre, Pageable pageable);
 
     long countDepositos();
+
+    Page<DepositoDTO> getAllProductos(Pageable pageable);
+
+    List<Deposito> obtenerTodosLosDepositos();
 }
 

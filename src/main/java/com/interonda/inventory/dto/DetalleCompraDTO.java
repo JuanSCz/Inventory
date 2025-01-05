@@ -38,6 +38,10 @@ public class DetalleCompraDTO {
 
     private String totalFormatted;
 
+    private Long depositoId;
+
+    private String depositoNombre;
+
     public DetalleCompraDTO() {
     }
 
@@ -138,5 +142,21 @@ public class DetalleCompraDTO {
             return formatter.format(this.precioUnitario);
         }
         return this.precioUnitarioString;
+    }
+
+    public Long getDepositoId() {
+        return depositoId;
+    }
+
+    public void setDepositoId(Long depositoId) {
+        this.depositoId = depositoId;
+    }
+
+    public String getDepositoNombre() {
+        return depositoNombre;
+    }
+
+    public void setDepositoNombre(String depositoNombre) {
+        this.depositoNombre = depositoNombre;
     }
 }

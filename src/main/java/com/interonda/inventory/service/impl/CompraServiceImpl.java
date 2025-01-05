@@ -8,10 +8,7 @@ import com.interonda.inventory.entity.*;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.CompraMapper;
-import com.interonda.inventory.repository.CompraRepository;
-import com.interonda.inventory.repository.DetalleCompraRepository;
-import com.interonda.inventory.repository.ProductoRepository;
-import com.interonda.inventory.repository.ProveedorRepository;
+import com.interonda.inventory.repository.*;
 import com.interonda.inventory.service.CompraService;
 import com.interonda.inventory.utils.ValidatorUtils;
 import jakarta.validation.Validator;
@@ -44,15 +41,17 @@ public class CompraServiceImpl implements CompraService {
     private final DetalleCompraRepository detalleCompraRepository;
     private final Validator validator;
     private final CompraMapper compraMapper;
+    private final DepositoRepository depositoRepository;
 
     @Autowired
-    public CompraServiceImpl(CompraRepository compraRepository, ProveedorRepository proveedorRepository, ProductoRepository productoRepository, DetalleCompraRepository detalleCompraRepository, Validator validator, CompraMapper compraMapper) {
+    public CompraServiceImpl(CompraRepository compraRepository, ProveedorRepository proveedorRepository, ProductoRepository productoRepository, DetalleCompraRepository detalleCompraRepository, Validator validator, CompraMapper compraMapper, DepositoRepository depositoRepository) {
         this.compraRepository = compraRepository;
         this.proveedorRepository = proveedorRepository;
         this.productoRepository = productoRepository;
         this.detalleCompraRepository = detalleCompraRepository;
         this.validator = validator;
         this.compraMapper = compraMapper;
+        this.depositoRepository = depositoRepository;
     }
 
     @Override
@@ -82,6 +81,7 @@ public class CompraServiceImpl implements CompraService {
                 DetalleCompra detalle = compraMapper.toDetalleEntity(detalleDTO);
                 detalle.setCompra(compra);
                 detalle.setProducto(productoRepository.findById(detalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId())));
+                detalle.setDeposito(depositoRepository.findById(detalleDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + detalleDTO.getDepositoId())));
                 return detalle;
             }).collect(Collectors.toList()));
 
@@ -131,6 +131,7 @@ public class CompraServiceImpl implements CompraService {
                 detalle.setCantidad(nuevoDetalleDTO.getCantidad());
                 detalle.setPrecioUnitario(nuevoDetalleDTO.getPrecioUnitario());
                 detalle.setProducto(productoRepository.findById(nuevoDetalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + nuevoDetalleDTO.getProductoId())));
+                detalle.setDeposito(depositoRepository.findById(nuevoDetalleDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + nuevoDetalleDTO.getDepositoId())));
                 detalle.setCompra(compra);
 
                 if (detalle.getId() == null) {
@@ -218,6 +219,8 @@ public class CompraServiceImpl implements CompraService {
                 DetalleCompraDTO detalleDTO = compraMapper.toDetalleDto(detalle);
                 detalleDTO.setProductoId(detalle.getProducto().getId());
                 detalleDTO.setProductoNombre(detalle.getProducto().getNombre());
+                detalleDTO.setDepositoId(detalle.getDeposito().getId()); // Asegúrate de que el valor del depósito se esté estableciendo
+                detalleDTO.setDepositoNombre(detalle.getDeposito().getNombre());
                 detalleDTO.setPrecioUnitarioString(formatPrecioUnitario(detalle.getPrecioUnitario())); // Formatear el precio unitario
                 detalleDTO.setTotalFormatted(formatTotal(detalle.getPrecioUnitario().multiply(new BigDecimal(detalle.getCantidad())))); // Formatear el total
                 return detalleDTO;

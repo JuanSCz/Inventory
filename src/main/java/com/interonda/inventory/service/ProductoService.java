@@ -27,6 +27,5 @@ public interface ProductoService {
 
     long countProductos();
 
-
     List<Producto> obtenerTodosLosProductos();
 }

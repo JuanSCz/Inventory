@@ -2,6 +2,7 @@ package com.interonda.inventory.service.impl;
 
 import com.interonda.inventory.entity.Deposito;
 import com.interonda.inventory.dto.DepositoDTO;
+import com.interonda.inventory.entity.Producto;
 import com.interonda.inventory.entity.Stock;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.DepositoMapper;
@@ -174,6 +175,23 @@ public class DepositoServiceImpl implements DepositoService {
         } catch (Exception e) {
             logger.error("Error buscando Depositos por nombre", e);
             throw new DataAccessException("Error buscando Depositos por nombre", e);
+        }
+    }
+
+    @Override
+    public Page<DepositoDTO> getAllProductos(Pageable pageable) {
+        return depositoRepository.findAll(pageable).map(depositoMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Deposito> obtenerTodosLosDepositos() {
+        try {
+            logger.info("Obteniendo todos los productos");
+            return depositoRepository.findAll();
+        } catch (Exception e) {
+            logger.error("Error obteniendo todos los productos", e);
+            throw new DataAccessException("Error obteniendo todos los productos", e);
         }
     }
 }
