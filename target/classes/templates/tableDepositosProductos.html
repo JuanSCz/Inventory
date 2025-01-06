@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +14,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
-
 <body class="body-table" th:data-error-message="${errorMessage}">
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm responsive-navbar">
     <div class="container-fluid">
@@ -77,15 +75,14 @@
         </ul>
     </aside>
     <main class="contentPersist p-3 text-center">
-        <h2 class="mb-4 titlePersist">Productos</h2>
+        <h2 class="mb-4 titlePersist">Productos por Depósito</h2>
 
-        <form th:action="@{/tableProductos/search}" method="get" class="search-form-container">
-            <div class="input-group-buscar">
-                <input type="text" name="name" placeholder="Nombre" class="form-control search-input">
-                <input type="hidden" name="page" value="0">
-                <input type="hidden" name="size" value="15">
-            </div>
-        </form>
+        <div class="col-md-6 mb-3">
+            <label for="depositoId" class="form-label">Depósito</label>
+            <select class="form-control form-control-detalle" id="depositoId" name="depositoId">
+                <option th:each="deposito : ${depositos}" th:value="${deposito.id}" th:text="${deposito.nombre}" th:selected="${deposito.id == selectedDepositoId}"></option>
+            </select>
+        </div>
 
         <div class="table-responsive mt-3">
             <table class="table table-dark table-striped table-bordered custom-table table-sm table-smaller-text">
@@ -95,61 +92,22 @@
                     <th scope="col">Nombre</th>
                     <th scope="col">Descripcion</th>
                     <th scope="col">MAC Address</th>
-                    <th scope="col">Número de Serie</th>
+                    <th scope="col">Numero de Serie</th>
                     <th scope="col">Código de Barras</th>
                     <th scope="col">Categoria</th>
                     <th scope="col">Acciones</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr th:each="producto : ${productos}">
-                    <td th:data-label="ID" th:text="${producto.id}"></td>
-                    <td th:data-label="Nombre" th:text="${producto.nombre}"></td>
-                    <td th:data-label="Descripcion" th:text="${producto.descripcion}"></td>
-                    <td th:data-label="Precio" th:text="${producto.codigoBarras}"></td>
-                    <td th:data-label="Costo" th:text="${producto.numeroDeSerie}"></td>
-                    <td th:data-label="Costo" th:text="${producto.macAddress}"></td>
-                    <td th:data-label="Categoria" th:text="${producto.categoriaNombre}"></td>
-                    <td th:data-label="Acciones">
-                        <div class="btn-group">
-                            <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateProducto"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#updateProductoModal" th:data-id="${producto.id}">
-                                Editar
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
+                <tbody id="productosTableBody" th:replace="fragments/productosTable :: productosTableBody(${productos}, ${page})"></tbody>
             </table>
         </div>
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
-                    <a class="page-link"
-                       th:href="@{/tableProductos(page=${page.number - 1}, size=${page.size}, name=${param.name})}">Anterior</a>
-                </li>
-                <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
-                    th:classappend="${page.number == i} ? 'active'">
-                    <a class="page-link" th:href="@{/tableProductos(page=${i}, size=${page.size}, name=${param.name})}"
-                       th:text="${i + 1}">1</a>
-                </li>
-                <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
-                    <a class="page-link"
-                       th:href="@{/tableProductos(page=${page.number + 1}, size=${page.size}, name=${param.name})}">Siguiente</a>
-                </li>
-            </ul>
-        </nav>
+        <nav th:replace="fragments/productosTable :: pagination(${page})"></nav>
     </main>
 </div>
 
-
-<div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
-<div th:replace="~{fragments/formUpdateProductos :: updateModalProductos}"></div>
-<div th:replace="~{fragments/formCreateProductos :: createModalProductos}"></div>
-<div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
+<div th:replace="fragments/formUpdateProductos :: updateModalProductos"></div>
+<div th:replace="fragments/errors :: errorModal(errorMessage=${errorMessage})"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/indexProductos.js"></script>
+<script src="js/indexDepositosProductos.js"></script>
 </body>
-
 </html>

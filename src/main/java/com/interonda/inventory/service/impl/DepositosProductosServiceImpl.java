@@ -2,7 +2,9 @@ package com.interonda.inventory.service.impl;
 
 import com.interonda.inventory.dto.ProductoDTO;
 import com.interonda.inventory.dto.StockDTO;
-import com.interonda.inventory.entity.*;
+import com.interonda.inventory.entity.Categoria;
+import com.interonda.inventory.entity.Producto;
+import com.interonda.inventory.entity.Stock;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.ProductoMapper;
@@ -10,17 +12,17 @@ import com.interonda.inventory.repository.CategoriaRepository;
 import com.interonda.inventory.repository.DepositoRepository;
 import com.interonda.inventory.repository.ProductoRepository;
 import com.interonda.inventory.repository.StockRepository;
-import com.interonda.inventory.service.ProductoService;
+import com.interonda.inventory.service.DepositosProductosService;
 import com.interonda.inventory.utils.ValidatorUtils;
 import jakarta.validation.Validator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -28,8 +30,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ProductoServiceImpl implements ProductoService {
-
+public class DepositosProductosServiceImpl implements DepositosProductosService {
     private static final Logger logger = LoggerFactory.getLogger(ProductoServiceImpl.class);
 
     private final ProductoRepository productoRepository;
@@ -40,7 +41,7 @@ public class ProductoServiceImpl implements ProductoService {
     private final Validator validator;
 
     @Autowired
-    public ProductoServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper, CategoriaRepository categoriaRepository, DepositoRepository depositoRepository, StockRepository stockRepository, Validator validator) {
+    public DepositosProductosServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper, CategoriaRepository categoriaRepository, DepositoRepository depositoRepository, StockRepository stockRepository, Validator validator) {
         this.productoRepository = productoRepository;
         this.productoMapper = productoMapper;
         this.categoriaRepository = categoriaRepository;
@@ -61,79 +62,28 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional
-    public ProductoDTO createProducto(ProductoDTO productoDTO) {
-        ValidatorUtils.validateEntity(productoDTO, validator);
-        try {
-            logger.info("Creando nuevo Producto");
-            Producto producto = productoMapper.toEntity(productoDTO);
-
-            // Asignar la categoría al producto
-            Categoria categoria = categoriaRepository.findById(productoDTO.getCategoriaId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con el id: " + productoDTO.getCategoriaId()));
-            producto.setCategoria(categoria);
-
-            // Asignar los stocks al producto
-            producto.setStocks(productoDTO.getStocks().stream().map(stockDTO -> {
-                Stock stock = new Stock();
-                stock.setCantidad(stockDTO.getCantidad());
-                stock.setFechaActualizacion(LocalDateTime.now());
-                stock.setOperacion("CREACIÓN");
-                stock.setProducto(producto);
-                stock.setDeposito(depositoRepository.findById(stockDTO.getDepositoId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + stockDTO.getDepositoId())));
-                return stock;
-            }).collect(Collectors.toList()));
-
-            // Establecer los atributos como null
-            producto.setCodigoBarras(null);
-            producto.setNumeroDeSerie(null);
-            producto.setMacAddress(null);
-
-            // Asignar el depósito al producto
-            if (!producto.getStocks().isEmpty()) {
-                producto.setDeposito(producto.getStocks().get(0).getDeposito());
-            }
-
-            Producto savedProducto = productoRepository.save(producto);
-            logger.info("Producto creado exitosamente con id: {}", savedProducto.getId());
-            return productoMapper.toDto(savedProducto);
-        } catch (Exception e) {
-            logger.error("Error guardando Producto", e);
-            throw new DataAccessException("Error guardando Producto", e);
-        }
-    }
-
-    @Override
-    @Transactional
     public ProductoDTO updateProducto(ProductoDTO productoDTO) {
         ValidatorUtils.validateEntity(productoDTO, validator);
         try {
             logger.info("Actualizando Producto con id: {}", productoDTO.getId());
-            Producto producto = productoRepository.findById(productoDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + productoDTO.getId()));
+            Producto producto = productoRepository.findById(productoDTO.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + productoDTO.getId()));
 
-            // Actualizar los campos del producto
             producto.setNombre(productoDTO.getNombre());
             producto.setDescripcion(productoDTO.getDescripcion());
             producto.setPrecio(productoDTO.getPrecio());
             producto.setCosto(productoDTO.getCosto());
-
-            // Establecer los atributos como null
-            producto.setCodigoBarras(null);
-            producto.setNumeroDeSerie(null);
-            producto.setMacAddress(null);
-
             producto.setStockActual(productoDTO.getStockActual());
             producto.setStockMinimo(productoDTO.getStockMinimo());
 
-            // Asignar la categoría al producto
             if (productoDTO.getCategoriaId() != null) {
-                Categoria categoria = categoriaRepository.findById(productoDTO.getCategoriaId()).orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con el id: " + productoDTO.getCategoriaId()));
+                Categoria categoria = categoriaRepository.findById(productoDTO.getCategoriaId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con el id: " + productoDTO.getCategoriaId()));
                 producto.setCategoria(categoria);
             } else {
                 producto.setCategoria(null);
             }
 
-            // Actualizar los stocks del producto
             producto.getStocks().clear();
             producto.getStocks().addAll(productoDTO.getStocks().stream().map(stockDTO -> {
                 Stock stock = new Stock();
@@ -141,7 +91,8 @@ public class ProductoServiceImpl implements ProductoService {
                 stock.setFechaActualizacion(LocalDateTime.now());
                 stock.setOperacion("ACTUALIZACIÓN");
                 stock.setProducto(producto);
-                stock.setDeposito(depositoRepository.findById(stockDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + stockDTO.getDepositoId())));
+                stock.setDeposito(depositoRepository.findById(stockDTO.getDepositoId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + stockDTO.getDepositoId())));
                 return stock;
             }).collect(Collectors.toList()));
 
@@ -154,26 +105,6 @@ public class ProductoServiceImpl implements ProductoService {
         } catch (Exception e) {
             logger.error("Error actualizando Producto", e);
             throw new DataAccessException("Error actualizando Producto", e);
-        }
-    }
-
-    @Override
-    @Transactional
-    public boolean deleteProducto(Long id) {
-        try {
-            logger.info("Eliminando Producto con id: {}", id);
-            if (!productoRepository.existsById(id)) {
-                throw new ResourceNotFoundException("Producto no encontrado con el id: " + id);
-            }
-            productoRepository.deleteById(id);
-            logger.info("Producto eliminado exitosamente con id: {}", id);
-            return true;
-        } catch (ResourceNotFoundException e) {
-            logger.warn("Producto no encontrado: {}", e.getMessage());
-            return false;
-        } catch (Exception e) {
-            logger.error("Error eliminando Producto", e);
-            return false;
         }
     }
 
@@ -194,7 +125,7 @@ public class ProductoServiceImpl implements ProductoService {
             stockDTO.setOperacion(stock.getOperacion());
             stockDTO.setProductoId(stock.getProducto().getId());
             stockDTO.setDepositoId(stock.getDeposito().getId());
-            stockDTO.setDepositoNombre(stock.getDeposito().getNombre()); // Asignar el nombre del depósito
+            stockDTO.setDepositoNombre(stock.getDeposito().getNombre());
             return stockDTO;
         }).collect(Collectors.toList()));
         return productoDTO;
@@ -242,7 +173,7 @@ public class ProductoServiceImpl implements ProductoService {
     public long countProductos() {
         try {
             long total = productoRepository.count();
-            logger.info("Total de productos: {}", total); // Log para verificar el resultado
+            logger.info("Total de productos: {}", total);
             return total;
         } catch (Exception e) {
             logger.error("Error contando todos los Productos", e);
@@ -260,5 +191,41 @@ public class ProductoServiceImpl implements ProductoService {
             logger.error("Error obteniendo todos los productos", e);
             throw new DataAccessException("Error obteniendo todos los productos", e);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ProductoDTO> getProductosByDeposito(Long depositoId, Pageable pageable) {
+        Page<Producto> productos = productoRepository.findByDepositoId(depositoId, pageable);
+        return productos.map(producto -> {
+            ProductoDTO productoDTO = new ProductoDTO();
+            productoDTO.setId(producto.getId());
+            productoDTO.setNombre(producto.getNombre());
+            productoDTO.setDescripcion(producto.getDescripcion());
+            productoDTO.setPrecio(producto.getPrecio());
+            productoDTO.setCosto(producto.getCosto());
+            productoDTO.setCodigoBarras(producto.getCodigoBarras());
+            productoDTO.setNumeroDeSerie(producto.getNumeroDeSerie());
+            productoDTO.setStockActual(producto.getStockActual());
+            productoDTO.setStockMinimo(producto.getStockMinimo());
+            productoDTO.setMacAddress(producto.getMacAddress());
+            productoDTO.setDepositoId(producto.getDeposito().getId());
+            productoDTO.setCategoriaId(producto.getCategoria().getId());
+
+
+            productoDTO.setStocks(producto.getStocks().stream().map(stock -> {
+                StockDTO stockDTO = new StockDTO();
+                stockDTO.setId(stock.getId());
+                stockDTO.setCantidad(stock.getCantidad());
+                stockDTO.setFechaActualizacion(stock.getFechaActualizacion());
+                stockDTO.setOperacion(stock.getOperacion());
+                stockDTO.setProductoId(stock.getProducto().getId());
+                stockDTO.setDepositoId(stock.getDeposito().getId());
+                stockDTO.setDepositoNombre(stock.getDeposito().getNombre());
+                return stockDTO;
+            }).collect(Collectors.toList()));
+
+            return productoDTO;
+        });
     }
 }

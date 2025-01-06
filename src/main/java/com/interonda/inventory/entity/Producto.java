@@ -88,6 +88,11 @@ public class Producto {
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HistorialStock> historialStocks = new ArrayList<>();
 
+    // Relación muchos a uno con la entidad Deposito (un producto pertenece a un depósito)
+    @ManyToOne
+    @JoinColumn(name = "deposito_id")
+    private Deposito deposito;
+
     // Constructor vacío requerido por JPA
     public Producto() {
     }
@@ -220,5 +225,13 @@ public class Producto {
 
     public void setHistorialStocks(List<HistorialStock> historialStocks) {
         this.historialStocks = historialStocks;
+    }
+
+    public Deposito getDeposito() {
+        return deposito;
+    }
+
+    public void setDeposito(Deposito deposito) {
+        this.deposito = deposito;
     }
 }

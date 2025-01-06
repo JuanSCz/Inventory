@@ -48,6 +48,8 @@ public class ProductoDTO {
     @NotNull(message = "La categoría no puede estar vacía")
     private Long categoriaId;
 
+    private long depositoId;
+
     private String categoriaNombre;
 
     private List<StockDTO> stocks;
@@ -162,4 +164,11 @@ public class ProductoDTO {
         this.stocks = stocks;
     }
 
+    public long getDepositoId() {
+        return depositoId;
+    }
+
+    public void setDepositoId(long depositoId) {
+        this.depositoId = depositoId;
+    }
 }
