@@ -211,6 +211,7 @@ public class DepositosProductosServiceImpl implements DepositosProductosService 
             productoDTO.setMacAddress(producto.getMacAddress());
             productoDTO.setDepositoId(producto.getDeposito().getId());
             productoDTO.setCategoriaId(producto.getCategoria().getId());
+            productoDTO.setCategoriaNombre(producto.getCategoria().getNombre());
 
 
             productoDTO.setStocks(producto.getStocks().stream().map(stock -> {

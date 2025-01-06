@@ -93,19 +93,19 @@ function filterTable() {
 
 // Inicializar modal de actualización para productos
 function initializeUpdateModal() {
-    const updateModal = new bootstrap.Modal(document.getElementById('updateProductoModal'));
-    const updateButtons = document.querySelectorAll('.buttonUpdateProducto[data-id]');
+    const updateModal = new bootstrap.Modal(document.getElementById('updateDepositosProductosModal'));
+        const updateButtons = document.querySelectorAll('.buttonUpdateProducto[data-id]');
 
-    updateButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const id = this.getAttribute('data-id');
-            populateUpdateModal(id);
-            updateModal.show();
-        });
-    });
+       updateButtons.forEach(button => {
+           button.addEventListener('click', function () {
+               const id = this.getAttribute('data-id');
+               populateUpdateModal(id);
+               updateModal.show();
+           });
+       });
 
-    const updateModalElement = document.getElementById('updateProductoModal');
-    updateModalElement.addEventListener('hidden.bs.modal', function () {
+    const updateModalElement = document.getElementById('updateDepositosProductosModal');
+        updateModalElement.addEventListener('hidden.bs.modal', function () {
         document.getElementById('id').value = '';
         document.getElementById('nombre').value = '';
         document.getElementById('descripcion').value = '';
@@ -118,13 +118,13 @@ function initializeUpdateModal() {
         document.getElementById('macAddress').value = '';
         document.getElementById('categoriaId').value = '';
 
-        const form = updateModalElement.querySelector('form');
-        if (form) form.reset();
-    });
+       const form = updateModalElement.querySelector('form');
+               if (form) form.reset();
+       });
 }
 
 function populateUpdateModal(id) {
-    fetch(`/tableProductos/${id}`)
+    fetch(`/tableDepositosProductos/${id}`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('id').value = data.id;
@@ -132,8 +132,9 @@ function populateUpdateModal(id) {
             document.getElementById('descripcion').value = data.descripcion;
             document.getElementById('precio').value = data.precio;
             document.getElementById('costo').value = data.costo;
-            document.getElementById('stockActual').value = data.stockActual;
-            document.getElementById('stockMinimo').value = data.stockMinimo;
+            document.getElementById('codigoBarras').value = data.codigoBarras;
+            document.getElementById('numeroDeSerie').value = data.numeroDeSerie;
+            document.getElementById('macAddress').value = data.macAddress;
             document.getElementById('categoriaId').value = data.categoriaId;
 
             const stockContainer = document.getElementById('stockContainerUpdate');

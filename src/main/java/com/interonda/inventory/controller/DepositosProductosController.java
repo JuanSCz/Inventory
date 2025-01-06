@@ -92,6 +92,7 @@ public class DepositosProductosController {
         model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
         model.addAttribute("selectedDepositoId", depositoId);
         model.addAttribute("productoDTO", new ProductoDTO()); // Añadir productoDTO al modelo
+        model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
         return "tableDepositosProductos";
     }
 }

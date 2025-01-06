@@ -80,7 +80,8 @@
         <div class="col-md-6 mb-3">
             <label for="depositoId" class="form-label">Depósito</label>
             <select class="form-control form-control-detalle" id="depositoId" name="depositoId">
-                <option th:each="deposito : ${depositos}" th:value="${deposito.id}" th:text="${deposito.nombre}" th:selected="${deposito.id == selectedDepositoId}"></option>
+                <option th:each="deposito : ${depositos}" th:value="${deposito.id}" th:text="${deposito.nombre}"
+                        th:selected="${deposito.id == selectedDepositoId}"></option>
             </select>
         </div>
 
@@ -98,14 +99,15 @@
                     <th scope="col">Acciones</th>
                 </tr>
                 </thead>
-                <tbody id="productosTableBody" th:replace="fragments/productosTable :: productosTableBody(${productos}, ${page})"></tbody>
+                <tbody id="productosTableBody"
+                       th:replace="fragments/productosTable :: productosTableBody(${productos}, ${page})"></tbody>
             </table>
         </div>
         <nav th:replace="fragments/productosTable :: pagination(${page})"></nav>
     </main>
 </div>
 
-<div th:replace="fragments/formUpdateProductos :: updateModalProductos"></div>
+<div th:replace="fragments/formUpdateDepositosProductos :: updateModalDepositosProductos"></div>
 <div th:replace="fragments/errors :: errorModal(errorMessage=${errorMessage})"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/indexDepositosProductos.js"></script>
