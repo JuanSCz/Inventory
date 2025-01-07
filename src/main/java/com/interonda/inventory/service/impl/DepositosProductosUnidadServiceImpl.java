@@ -12,25 +12,23 @@ import com.interonda.inventory.repository.CategoriaRepository;
 import com.interonda.inventory.repository.DepositoRepository;
 import com.interonda.inventory.repository.ProductoRepository;
 import com.interonda.inventory.repository.StockRepository;
-import com.interonda.inventory.service.DepositosProductosService;
+import com.interonda.inventory.service.DepositosProductosUnidadService;
 import com.interonda.inventory.utils.ValidatorUtils;
 import jakarta.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class DepositosProductosServiceImpl implements DepositosProductosService {
+public class DepositosProductosUnidadServiceImpl implements DepositosProductosUnidadService {
     private static final Logger logger = LoggerFactory.getLogger(ProductoServiceImpl.class);
 
     private final ProductoRepository productoRepository;
@@ -41,7 +39,7 @@ public class DepositosProductosServiceImpl implements DepositosProductosService 
     private final Validator validator;
 
     @Autowired
-    public DepositosProductosServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper, CategoriaRepository categoriaRepository, DepositoRepository depositoRepository, StockRepository stockRepository, Validator validator) {
+    public DepositosProductosUnidadServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper, CategoriaRepository categoriaRepository, DepositoRepository depositoRepository, StockRepository stockRepository, Validator validator) {
         this.productoRepository = productoRepository;
         this.productoMapper = productoMapper;
         this.categoriaRepository = categoriaRepository;
@@ -193,36 +191,36 @@ public class DepositosProductosServiceImpl implements DepositosProductosService 
     @Override
     @Transactional(readOnly = true)
     public Page<ProductoDTO> getProductosByDeposito(Long depositoId, Pageable pageable) {
-        Page<Producto> productos = productoRepository.findByDepositoId(depositoId, pageable);
-        return productos.map(producto -> {
-            ProductoDTO productoDTO = new ProductoDTO();
-            productoDTO.setId(producto.getId());
-            productoDTO.setNombre(producto.getNombre());
-            productoDTO.setDescripcion(producto.getDescripcion());
-            productoDTO.setPrecio(producto.getPrecio());
-            productoDTO.setCosto(producto.getCosto());
-            productoDTO.setCodigoBarras(producto.getCodigoBarras());
-            productoDTO.setNumeroDeSerie(producto.getNumeroDeSerie());
-            productoDTO.setStockActual(producto.getStockActual()); // Asegúrate de incluir el stock actual
-            productoDTO.setStockMinimo(producto.getStockMinimo());
-            productoDTO.setMacAddress(producto.getMacAddress());
-            productoDTO.setDepositoId(producto.getDeposito().getId());
-            productoDTO.setCategoriaId(producto.getCategoria().getId());
-            productoDTO.setCategoriaNombre(producto.getCategoria().getNombre());
+        Page<Producto> productos = productoRepository.findByDepositoId(depositoId, Pageable.unpaged());
+        List<ProductoDTO> productosDesglosados = new ArrayList<>();
 
-            productoDTO.setStocks(producto.getStocks().stream().map(stock -> {
-                StockDTO stockDTO = new StockDTO();
-                stockDTO.setId(stock.getId());
-                stockDTO.setCantidad(stock.getCantidad());
-                stockDTO.setFechaActualizacion(stock.getFechaActualizacion());
-                stockDTO.setOperacion(stock.getOperacion());
-                stockDTO.setProductoId(stock.getProducto().getId());
-                stockDTO.setDepositoId(stock.getDeposito().getId());
-                stockDTO.setDepositoNombre(stock.getDeposito().getNombre());
-                return stockDTO;
-            }).collect(Collectors.toList()));
+        // Desglosar productos por unidad
+        for (Producto producto : productos) {
+            for (int i = 0; i < producto.getStockActual(); i++) {
+                ProductoDTO productoDTO = new ProductoDTO();
+                productoDTO.setId(producto.getId());
+                productoDTO.setNombre(producto.getNombre());
+                productoDTO.setDescripcion(producto.getDescripcion());
+                productoDTO.setPrecio(producto.getPrecio());
+                productoDTO.setCosto(producto.getCosto());
+                productoDTO.setCodigoBarras(producto.getCodigoBarras());
+                productoDTO.setNumeroDeSerie(producto.getNumeroDeSerie());
+                productoDTO.setStockActual(1); // Cada unidad individual
+                productoDTO.setStockMinimo(producto.getStockMinimo());
+                productoDTO.setMacAddress(producto.getMacAddress());
+                productoDTO.setDepositoId(producto.getDeposito().getId());
+                productoDTO.setCategoriaId(producto.getCategoria().getId());
+                productoDTO.setCategoriaNombre(producto.getCategoria().getNombre());
+                productosDesglosados.add(productoDTO);
+            }
+        }
 
-            return productoDTO;
-        });
+        // Aplicar paginación a la lista desglosada
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), productosDesglosados.size());
+        List<ProductoDTO> productosPaginados = productosDesglosados.subList(start, end);
+
+        return new PageImpl<>(productosPaginados, pageable, productosDesglosados.size());
     }
 }
+
