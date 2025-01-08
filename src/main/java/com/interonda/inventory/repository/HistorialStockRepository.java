@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface HistorialStockRepository extends JpaRepository<HistorialStock, Long> {
-
+    
 }
 

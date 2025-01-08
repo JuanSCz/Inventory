@@ -172,7 +172,6 @@ public class CompraController {
             compras = compraService.getAllCompras(newPageable);
         }
 
-
         model.addAttribute("compras", compras.getContent());
         model.addAttribute("compraDTO", new CompraDTO());
         model.addAttribute("page", compras);

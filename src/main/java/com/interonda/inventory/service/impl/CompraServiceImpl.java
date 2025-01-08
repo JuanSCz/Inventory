@@ -2,8 +2,6 @@ package com.interonda.inventory.service.impl;
 
 import com.interonda.inventory.dto.CompraDTO;
 import com.interonda.inventory.dto.DetalleCompraDTO;
-import com.interonda.inventory.dto.DetalleVentaDTO;
-import com.interonda.inventory.dto.VentaDTO;
 import com.interonda.inventory.entity.*;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
@@ -27,6 +25,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,9 +41,11 @@ public class CompraServiceImpl implements CompraService {
     private final Validator validator;
     private final CompraMapper compraMapper;
     private final DepositoRepository depositoRepository;
+    private final StockRepository stockRepository;
+    private final HistorialStockRepository historialStockRepository;
 
     @Autowired
-    public CompraServiceImpl(CompraRepository compraRepository, ProveedorRepository proveedorRepository, ProductoRepository productoRepository, DetalleCompraRepository detalleCompraRepository, Validator validator, CompraMapper compraMapper, DepositoRepository depositoRepository) {
+    public CompraServiceImpl(CompraRepository compraRepository, ProveedorRepository proveedorRepository, ProductoRepository productoRepository, DetalleCompraRepository detalleCompraRepository, Validator validator, CompraMapper compraMapper, DepositoRepository depositoRepository, StockRepository stockRepository, HistorialStockRepository historialStockRepository) {
         this.compraRepository = compraRepository;
         this.proveedorRepository = proveedorRepository;
         this.productoRepository = productoRepository;
@@ -52,6 +53,8 @@ public class CompraServiceImpl implements CompraService {
         this.validator = validator;
         this.compraMapper = compraMapper;
         this.depositoRepository = depositoRepository;
+        this.stockRepository = stockRepository;
+        this.historialStockRepository = historialStockRepository;
     }
 
     @Override
@@ -80,8 +83,20 @@ public class CompraServiceImpl implements CompraService {
             compra.setDetallesCompra(compraDTO.getDetallesCompra().stream().map(detalleDTO -> {
                 DetalleCompra detalle = compraMapper.toDetalleEntity(detalleDTO);
                 detalle.setCompra(compra);
-                detalle.setProducto(productoRepository.findById(detalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId())));
-                detalle.setDeposito(depositoRepository.findById(detalleDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + detalleDTO.getDepositoId())));
+                Producto producto = productoRepository.findById(detalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId()));
+                Deposito deposito = depositoRepository.findById(detalleDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + detalleDTO.getDepositoId()));
+                detalle.setProducto(producto);
+                detalle.setDeposito(deposito);
+
+                // Actualizar el stock del producto en el depósito
+                Stock stock = stockRepository.findByProductoIdAndDepositoId(producto.getId(), deposito.getId()).orElse(new Stock());
+                stock.setCantidad(stock.getCantidad() == null ? detalle.getCantidad() : stock.getCantidad() + detalle.getCantidad());
+                stock.setFechaActualizacion(LocalDateTime.now());
+                stock.setOperacion("COMPRA");
+                stock.setProducto(producto);
+                stock.setDeposito(deposito);
+                stockRepository.save(stock);
+
                 return detalle;
             }).collect(Collectors.toList()));
 
@@ -122,11 +137,35 @@ public class CompraServiceImpl implements CompraService {
             List<DetalleCompraDTO> nuevosDetallesDTO = compraDTO.getDetallesCompra();
 
             // Eliminar detalles que ya no están presentes
-            detallesExistentes.removeIf(detalle -> nuevosDetallesDTO.stream().noneMatch(nuevoDetalle -> nuevoDetalle.getId() != null && nuevoDetalle.getId().equals(detalle.getId())));
+            detallesExistentes.removeIf(detalle -> {
+                boolean exists = nuevosDetallesDTO.stream().anyMatch(nuevoDetalle -> nuevoDetalle.getId() != null && nuevoDetalle.getId().equals(detalle.getId()));
+                if (!exists) {
+                    // Restar el stock del detalle eliminado
+                    List<Stock> stocks = stockRepository.findByProductoIdAndDepositoIdList(detalle.getProducto().getId(), detalle.getDeposito().getId());
+                    for (Stock stock : stocks) {
+                        stock.setCantidad(stock.getCantidad() - detalle.getCantidad());
+                        stock.setFechaActualizacion(LocalDateTime.now());
+                        stock.setOperacion("ACTUALIZACIÓN");
+                        stockRepository.save(stock);
+                    }
+                }
+                return !exists;
+            });
 
             // Actualizar o añadir nuevos detalles
             for (DetalleCompraDTO nuevoDetalleDTO : nuevosDetallesDTO) {
                 DetalleCompra detalle = detallesExistentes.stream().filter(d -> nuevoDetalleDTO.getId() != null && d.getId().equals(nuevoDetalleDTO.getId())).findFirst().orElse(new DetalleCompra());
+
+                if (detalle.getId() != null) {
+                    // Restar el stock anterior
+                    List<Stock> stocks = stockRepository.findByProductoIdAndDepositoIdList(detalle.getProducto().getId(), detalle.getDeposito().getId());
+                    for (Stock stock : stocks) {
+                        stock.setCantidad(stock.getCantidad() - detalle.getCantidad());
+                        stock.setFechaActualizacion(LocalDateTime.now());
+                        stock.setOperacion("ACTUALIZACIÓN");
+                        stockRepository.save(stock);
+                    }
+                }
 
                 detalle.setCantidad(nuevoDetalleDTO.getCantidad());
                 detalle.setPrecioUnitario(nuevoDetalleDTO.getPrecioUnitario());
@@ -136,6 +175,17 @@ public class CompraServiceImpl implements CompraService {
 
                 if (detalle.getId() == null) {
                     detallesExistentes.add(detalle);
+                }
+
+                // Sumar el nuevo stock
+                List<Stock> stocks = stockRepository.findByProductoIdAndDepositoIdList(detalle.getProducto().getId(), detalle.getDeposito().getId());
+                for (Stock stock : stocks) {
+                    stock.setCantidad(stock.getCantidad() == null ? detalle.getCantidad() : stock.getCantidad() + detalle.getCantidad());
+                    stock.setFechaActualizacion(LocalDateTime.now());
+                    stock.setOperacion("ACTUALIZACIÓN");
+                    stock.setProducto(detalle.getProducto());
+                    stock.setDeposito(detalle.getDeposito());
+                    stockRepository.save(stock);
                 }
             }
 
@@ -158,18 +208,29 @@ public class CompraServiceImpl implements CompraService {
     public boolean deleteCompra(Long id) {
         try {
             logger.info("Eliminando Compra con id: {}", id);
-            if (!compraRepository.existsById(id)) {
-                throw new ResourceNotFoundException("Compra no encontrada con el id: " + id);
+            Compra compra = compraRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Compra no encontrada con el id: " + id));
+
+            // Actualizar el stock de los productos
+            for (DetalleCompra detalle : compra.getDetallesCompra()) {
+                List<Stock> stocks = stockRepository.findByProductoIdAndDepositoIdList(detalle.getProducto().getId(), detalle.getDeposito().getId());
+                for (Stock stock : stocks) {
+                    stock.setCantidad(stock.getCantidad() - detalle.getCantidad());
+                    stock.setFechaActualizacion(LocalDateTime.now());
+                    stock.setOperacion("ELIMINACIÓN");
+                    stockRepository.save(stock);
+                }
             }
-            compraRepository.deleteById(id);
+
+            // Eliminar la compra
+            compraRepository.delete(compra);
             logger.info("Compra eliminada exitosamente con id: {}", id);
             return true;
         } catch (ResourceNotFoundException e) {
             logger.warn("Compra no encontrada: {}", e.getMessage());
-            return false;
+            throw e;
         } catch (Exception e) {
             logger.error("Error eliminando Compra", e);
-            return false;
+            throw new DataAccessException("Error eliminando Compra", e);
         }
     }
 

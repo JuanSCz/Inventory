@@ -157,5 +157,21 @@ public class HistorialStock {
     public void setStock(Stock stock) {
         this.stock = stock;
     }
+
+    public void setCantidadAnterior(Integer cantidadAnterior) {
+        this.cantidadAnterior = cantidadAnterior;
+    }
+
+    public void setCantidadNueva(Integer cantidadNueva) {
+        this.cantidadNueva = cantidadNueva;
+    }
+
+    public LocalDateTime getFechaActualizacion() {
+        return fechaActualizacion;
+    }
+
+    public void setFechaActualizacion(LocalDateTime fechaActualizacion) {
+        this.fechaActualizacion = fechaActualizacion;
+    }
 }
 
