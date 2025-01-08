@@ -3,6 +3,8 @@ package com.interonda.inventory.dto;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +55,14 @@ public class ProductoDTO {
     private String categoriaNombre;
 
     private List<StockDTO> stocks;
+
+    @NotBlank(message = "El total no puede estar vacío")
+    @Pattern(regexp = "\\d{1,3}(\\.\\d{3})*(,\\d{1,2})?", message = "El precio debe tener un formato válido (Ej: 1.000.000)")
+    private String precioString;
+
+    @NotBlank(message = "El total no puede estar vacío")
+    @Pattern(regexp = "\\d{1,3}(\\.\\d{3})*(,\\d{1,2})?", message = "El costo debe tener un formato válido (Ej: 1.000.000)")
+    private String costoString;
 
     public ProductoDTO() {
         this.stocks = new ArrayList<>();
@@ -170,5 +180,41 @@ public class ProductoDTO {
 
     public void setDepositoId(long depositoId) {
         this.depositoId = depositoId;
+    }
+
+    public String getPrecioString() {
+        if (this.precio != null) {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            symbols.setGroupingSeparator('.');
+            DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+            return formatter.format(this.precio);
+        }
+        return this.precioString;
+    }
+
+    public void setPrecioString(String precioString) {
+        this.precioString = precioString;
+        if (precioString != null && !precioString.isEmpty()) {
+            this.precio = new BigDecimal(precioString.replace(".", "").replace(",", "."));
+        }
+    }
+
+    public String getCostoString() {
+        if (this.costo != null) {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            symbols.setGroupingSeparator('.');
+            DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+            return formatter.format(this.costo);
+        }
+        return this.costoString;
+    }
+
+    public void setCostoString(String costoString) {
+        this.costoString = costoString;
+        if (costoString != null && !costoString.isEmpty()) {
+            this.costo = new BigDecimal(costoString.replace(".", "").replace(",", "."));
+        }
     }
 }

@@ -5,7 +5,36 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeUpdateModal();
     initializeDeleteModal();
     initializeAddStockButton();
+    initializeCostoInput();
+    initializePrecioInput();
 });
+
+function initializeCostoInput() {
+    const costoInput = document.getElementById('costo');
+    if (costoInput) {
+        costoInput.addEventListener('input', function () {
+            this.value = formatNumber(this.value);
+        });
+    }
+}
+
+function initializePrecioInput() {
+    const precioInput = document.getElementById('precio');
+    if (precioInput) {
+        precioInput.addEventListener('input', function () {
+            this.value = formatNumber(this.value);
+        });
+    }
+}
+
+function formatNumber(value) {
+    value = value.replace(/[^\d,]/g, ''); // Eliminar cualquier carácter que no sea dígito o coma
+    const parts = value.split(',');
+    if (parts.length > 2) {
+        value = parts[0] + ',' + parts.slice(1).join('');
+    }
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Agregar puntos como separadores de miles
+}
 
 // Manejo del modal de error
 function handleErrorModal() {
@@ -110,8 +139,8 @@ function populateUpdateModal(id) {
             document.getElementById('id').value = data.id;
             document.getElementById('nombre').value = data.nombre;
             document.getElementById('descripcion').value = data.descripcion;
-            document.getElementById('precio').value = data.precio;
-            document.getElementById('costo').value = data.costo;
+            document.getElementById('precio').value = data.precioString;
+            document.getElementById('costo').value = data.costoString;
             document.getElementById('stockActual').value = data.stockActual;
             document.getElementById('stockMinimo').value = data.stockMinimo;
             document.getElementById('categoriaId').value = data.categoriaId;

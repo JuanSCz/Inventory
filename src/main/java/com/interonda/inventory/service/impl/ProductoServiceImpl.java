@@ -23,6 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -160,6 +164,27 @@ public class ProductoServiceImpl implements ProductoService {
         }
     }
 
+    public String formatPrecio(BigDecimal precio) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator(',');
+        symbols.setGroupingSeparator('.');
+
+        DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+        formatter.setRoundingMode(RoundingMode.DOWN);
+        return formatter.format(precio);
+    }
+
+    public String formatCosto(BigDecimal costo) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator(',');
+        symbols.setGroupingSeparator('.');
+
+        DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+        formatter.setRoundingMode(RoundingMode.DOWN);
+        return formatter.format(costo);
+    }
+
+
     @Override
     @Transactional(readOnly = true)
     public ProductoDTO getProducto(Long id) {
@@ -199,6 +224,9 @@ public class ProductoServiceImpl implements ProductoService {
                     productoDTO.setCategoriaId(null);
                     productoDTO.setCategoriaNombre(null);
                 }
+                // Formatear precio y costo
+                productoDTO.setPrecioString(productoDTO.getPrecioString());
+                productoDTO.setCostoString(productoDTO.getCostoString());
                 return productoDTO;
             });
         } catch (Exception e) {

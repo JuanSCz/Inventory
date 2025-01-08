@@ -40,7 +40,7 @@ public class CompraDTO {
     private List<DetalleCompraDTO> detallesCompra = new ArrayList<>();
 
     @NotBlank(message = "El total no puede estar vacío")
-    @Pattern(regexp = "\\d{1,3}(\\.\\d{3})*(,\\d{1,2})?", message = "El total debe tener un formato válido (e.g., 1.000.000,00)")
+    @Pattern(regexp = "\\d{1,3}(\\.\\d{3})*(,\\d{1,2})?", message = "El total debe tener un formato válido (Ej: 1.000.000)")
     private String totalString;
 
     public CompraDTO() {

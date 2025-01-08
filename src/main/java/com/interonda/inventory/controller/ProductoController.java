@@ -29,6 +29,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.stream.Collectors;
 
 @Controller
@@ -66,6 +68,21 @@ public class ProductoController {
             return "tableProductos";
         }
 
+        try {
+            productoDTO.setPrecio(new BigDecimal(productoDTO.getPrecioString().replace(".", "").replace(",", ".")));
+            productoDTO.setCosto(new BigDecimal(productoDTO.getCostoString().replace(".", "").replace(",", ".")));
+        } catch (NumberFormatException e) {
+            bindingResult.rejectValue("precioString", "error.productoDTO", "Formato de precio inválido");
+            bindingResult.rejectValue("costoString", "error.productoDTO", "Formato de costo inválido");
+            Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
+            model.addAttribute("productos", productos.getContent());
+            model.addAttribute("productoDTO", productoDTO);
+            model.addAttribute("page", productos);
+            model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+            model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+            return "tableProductos";
+        }
+
         productoService.createProducto(productoDTO);
         return "redirect:/tableProductos";
     }
@@ -77,6 +94,21 @@ public class ProductoController {
                     .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
                     .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
+            Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
+            model.addAttribute("productos", productos.getContent());
+            model.addAttribute("productoDTO", productoDTO);
+            model.addAttribute("page", productos);
+            model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+            model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+            return "tableProductos";
+        }
+
+        try {
+            productoDTO.setPrecio(new BigDecimal(productoDTO.getPrecioString().replace(".", "").replace(",", ".")));
+            productoDTO.setCosto(new BigDecimal(productoDTO.getCostoString().replace(".", "").replace(",", ".")));
+        } catch (NumberFormatException e) {
+            result.rejectValue("precioString", "error.productoDTO", "Formato de precio inválido");
+            result.rejectValue("costoString", "error.productoDTO", "Formato de costo inválido");
             Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
             model.addAttribute("productos", productos.getContent());
             model.addAttribute("productoDTO", productoDTO);
