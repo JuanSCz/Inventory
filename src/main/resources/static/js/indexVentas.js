@@ -2,11 +2,8 @@ document.addEventListener('DOMContentLoaded', function () {
     handleErrorModal();
     initializeSearch();
     initializeCreateModal();
-    initializeUpdateModal();
     initializeDeleteModal();
-    initializeAddDetalleButton();
     initializeTotalInput();
-    initializeSubtotalInput(); // Nuevo método para inicializar los inputs de subtotal
     initializeFormSubmit();
 });
 
@@ -60,42 +57,6 @@ function handleErrorModal() {
     }
 }
 
-function initializeAddDetalleButton() {
-    const addDetalleButton = document.getElementById("addDetalleButton");
-    if (addDetalleButton) {
-        addDetalleButton.addEventListener("click", agregarFilaDetalle);
-    }
-}
-
-function agregarFilaDetalle() {
-    const detalleContainer = document.getElementById("detalleContainer");
-    const newRow = document.createElement("div");
-    newRow.classList.add("row", "detalle-row");
-    const currentIndex = detalleContainer.querySelectorAll('.detalle-row').length;
-
-    // Obtener el HTML del select de productos del primer detalle
-    const productoSelectHTML = document.querySelector('select[name="detallesVenta[0].productoId"]').innerHTML;
-
-    newRow.innerHTML = `
-        <div class="col-md-4 mb-3">
-            <label for="producto${currentIndex}" class="form-label">Producto</label>
-            <select class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].productoId" id="producto${currentIndex}">
-                ${productoSelectHTML}
-            </select>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label for="cantidad${currentIndex}" class="form-label">Cantidad</label>
-            <input type="number" step="1" class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad...">
-        </div>
-        <div class="col-md-4 mb-3">
-            <label for="precioUnitario${currentIndex}" class="form-label">Precio unitario del producto</label>
-            <input type="number" class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].precioUnitario" id="precioUnitario${currentIndex}" placeholder="Ingrese el precio unitario...">
-        </div>
-    `;
-
-    detalleContainer.appendChild(newRow);
-}
-
 // Manejo de la búsqueda en tiempo real
 function initializeSearch() {
     const searchInput = document.querySelector('.search-input');
@@ -145,115 +106,6 @@ function initializeCreateModal() {
             createVentaModal.show();
         });
     }
-}
-
-// Inicializar modal de actualización para ventas
-function initializeUpdateModal() {
-    const updateModal = new bootstrap.Modal(document.getElementById('updateVentaModal'));
-    const updateButtons = document.querySelectorAll('.buttonUpdateVenta[data-id]');
-
-    updateButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            const id = this.getAttribute('data-id');
-            populateUpdateModal(id);
-            updateModal.show();
-        });
-    });
-
-    const updateModalElement = document.getElementById('updateVentaModal');
-    updateModalElement.addEventListener('hidden.bs.modal', function () {
-        document.getElementById('id').value = '';
-        document.getElementById('fecha').value = '';
-        document.getElementById('total').value = '';
-        document.getElementById('metodoPago').value = '';
-        document.getElementById('estado').value = '';
-        document.getElementById('impuestos').value = '';
-        document.getElementById('cliente').value = '';
-        const form = updateModalElement.querySelector('form');
-        if (form) form.reset();
-    });
-}
-
-function populateUpdateModal(id) {
-    fetch(`/tableVentas/${id}`)
-        .then(response => response.json())
-        .then(data => {
-            const updateModalElement = document.getElementById('updateVentaModal');
-            updateModalElement.querySelector('#id').value = data.id;
-            updateModalElement.querySelector('#fecha').value = data.fecha;
-            updateModalElement.querySelector('#total').value = data.totalString;
-            updateModalElement.querySelector('#metodoPago').value = data.metodoPago;
-            updateModalElement.querySelector('#estado').value = data.estado;
-            updateModalElement.querySelector('#impuestos').value = data.impuestos;
-            updateModalElement.querySelector('#cliente').value = data.clienteId;
-
-            const detalleContainer = document.getElementById('detalleContainerUpdate');
-            detalleContainer.innerHTML = ''; // Limpiar detalles existentes
-
-            data.detallesVenta.forEach((detalle, index) => {
-                const newRow = document.createElement('div');
-                newRow.classList.add('row', 'detalle-row');
-
-                newRow.innerHTML = `
-                    <div class="col-md-4 mb-3">
-                        <label for="producto${index}" class="form-label">Producto</label>
-                        <select class="form-control form-control-detalle" name="detallesVenta[${index}].productoId" id="producto${index}">
-                            ${document.querySelector('select[name="detallesVenta[0].productoId"]').innerHTML}
-                        </select>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="cantidad${index}" class="form-label">Cantidad</label>
-                        <input type="number" class="form-control form-control-detalle" name="detallesVenta[${index}].cantidad" id="cantidad${index}" placeholder="Ingrese la cantidad...">
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label for="precioUnitario${index}" class="form-label">Precio unitario del producto</label>
-                        <input type="text" class="form-control form-control-detalle" name="detallesVenta[${index}].precioUnitarioString" id="precioUnitario${index}" placeholder="Ingrese el precio unitario...">
-                    </div>
-                `;
-
-                detalleContainer.appendChild(newRow);
-
-                // Set values
-                newRow.querySelector(`#producto${index}`).value = detalle.productoId;
-                newRow.querySelector(`#cantidad${index}`).value = detalle.cantidad;
-                newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitarioString;
-            });
-        })
-        .catch(error => console.error('Error al cargar los datos de la venta:', error));
-}
-
-function showDetalleVentaModal(button) {
-    const ventaId = button.getAttribute('data-id');
-    fetch(`/detallesVentas/${ventaId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al obtener los detalles de la venta');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (!Array.isArray(data)) {
-                throw new Error('La respuesta no es un array');
-            }
-            const modalBody = document.querySelector('#createDetalleVentasModal .modal-body tbody');
-            modalBody.innerHTML = '';
-
-            data.forEach(detalle => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${detalle.id}</td>
-                    <td>${detalle.productoNombre}</td>
-                    <td>${detalle.cantidad}</td>
-                    <td>${detalle.precioUnitarioString}</td>
-                    <td>${detalle.subtotalFormatted}</td>
-                `;
-                modalBody.appendChild(row);
-            });
-
-            const detalleModal = new bootstrap.Modal(document.getElementById('createDetalleVentasModal'));
-            detalleModal.show();
-        })
-        .catch(error => console.error('Error al cargar los detalles de la venta:', error));
 }
 
 // Inicializar modal de eliminación para ventas

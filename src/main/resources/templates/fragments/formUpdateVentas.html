@@ -68,36 +68,45 @@
                                 <input type="text" class="form-control form-control-detalle" th:field="*{totalString}"
                                        id="total" placeholder="Ingrese el total de la venta...">
                             </div>
-                            <div id="detalleContainerUpdate">
-                                <div th:each="detalle, iterStat : ${ventaDTO.detallesVenta}" class="row detalle-row">
-                                    <div class="col-md-4 mb-3">
+                            <div id="detalleContainer">
+                                <div class="row detalle-row">
+                                    <div class="col-md-3 mb-3">
                                         <label for="producto" class="form-label">Producto</label>
                                         <select class="form-control form-control-detalle"
-                                                th:field="*{detallesVenta[__${iterStat.index}__].productoId}"
-                                                id="producto">
+                                                th:field="*{detallesVenta[0].productoId}" id="producto">
                                             <option value="" selected>Seleccione un producto...</option>
                                             <option th:each="producto : ${productos}" th:value="${producto.id}"
                                                     th:text="${producto.nombre}"></option>
                                         </select>
                                     </div>
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col-md-3 mb-3">
+                                        <label for="depositoId" class="form-label">Depósito</label>
+                                        <select class="form-control form-control-detalle"
+                                                th:field="*{detallesVenta[0].depositoId}" id="depositoId">
+                                            <option value="">Seleccione un depósito...</option>
+                                            <option th:each="deposito : ${depositos}" th:value="${deposito.id}"
+                                                    th:text="${deposito.nombre}"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
                                         <label for="cantidad" class="form-label">Cantidad</label>
                                         <input type="number" class="form-control form-control-detalle"
-                                               th:field="*{detallesVenta[__${iterStat.index}__].cantidad}"
-                                               id="cantidad" placeholder="Ingrese la cantidad...">
+                                               th:field="*{detallesVenta[0].cantidad}" id="cantidad"
+                                               placeholder="Ingrese la cantidad...">
                                     </div>
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col-md-3 mb-3">
                                         <label for="precioUnitario" class="form-label">Precio unitario del
                                             producto</label>
                                         <input type="text" class="form-control form-control-detalle"
-                                               th:field="*{detallesCompra[0].precioUnitarioString}" id="precioUnitario">
+                                               th:field="*{detallesVenta[0].precioUnitarioString}" id="precioUnitario"
+                                               placeholder="Ingrese el precio unitario...">
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer" id="modal-footer-detalle">
-                            <button type="submit" class="btn button-detalle">Actualizar</button>
-                            <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
+                            <div class="modal-footer" id="modal-footer-detalle">
+                                <button type="submit" class="btn button-detalle">Actualizar</button>
+                                <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
+                            </div>
                         </div>
                     </form>
                 </div>

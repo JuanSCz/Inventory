@@ -41,6 +41,11 @@ public class DetalleVenta {
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
 
+    @NotNull(message = "El depósito no puede ser nulo")
+    @ManyToOne
+    @JoinColumn(name = "deposito_id", nullable = false)
+    private Deposito deposito;
+
     // Constructor vacío requerido por JPA
     public DetalleVenta() {
     }
@@ -85,6 +90,14 @@ public class DetalleVenta {
 
     public void setProducto(Producto producto) {
         this.producto = producto;
+    }
+
+    public Deposito getDeposito() {
+        return deposito;
+    }
+
+    public void setDeposito(Deposito deposito) {
+        this.deposito = deposito;
     }
 }
 

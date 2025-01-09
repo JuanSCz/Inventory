@@ -50,13 +50,6 @@ public class DetalleVentaController {
         return new ResponseEntity<>(createdDetalleVenta, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<DetalleVentaDTO> updateDetalleVenta(@PathVariable Long id, @Valid @RequestBody DetalleVentaDTO detalleVentaDTO) {
-        logger.info("Solicitud recibida para actualizar detalle de venta con id: {}", id);
-        DetalleVentaDTO updatedDetalleVenta = detalleVentaService.updateDetalleVenta(id, detalleVentaDTO);
-        return new ResponseEntity<>(updatedDetalleVenta, HttpStatus.OK);
-    }
-
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteDetalleVenta(@PathVariable Long id) {

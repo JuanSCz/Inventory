@@ -43,6 +43,16 @@ public class DetalleVentaDTO {
 
     private String subtotalFormatted;
 
+    private String macAddress;
+
+    private String codigoBarras;
+
+    private String numeroSerie;
+
+    private Long depositoId;
+
+    private String depositoNombre;
+
     public DetalleVentaDTO() {
     }
 
@@ -166,5 +176,45 @@ public class DetalleVentaDTO {
 
     public void setTotalDetalleFormatted(String totalDetalleFormatted) {
         this.totalDetalleFormatted = totalDetalleFormatted;
+    }
+
+    public String getMacAddress() {
+        return macAddress;
+    }
+
+    public void setMacAddress(String macAddress) {
+        this.macAddress = macAddress;
+    }
+
+    public String getCodigoBarras() {
+        return codigoBarras;
+    }
+
+    public void setCodigoBarras(String codigoBarras) {
+        this.codigoBarras = codigoBarras;
+    }
+
+    public String getNumeroSerie() {
+        return numeroSerie;
+    }
+
+    public void setNumeroSerie(String numeroSerie) {
+        this.numeroSerie = numeroSerie;
+    }
+
+    public Long getDepositoId() {
+        return depositoId;
+    }
+
+    public void setDepositoId(Long depositoId) {
+        this.depositoId = depositoId;
+    }
+
+    public String getDepositoNombre() {
+        return depositoNombre;
+    }
+
+    public void setDepositoNombre(String depositoNombre) {
+        this.depositoNombre = depositoNombre;
     }
 }

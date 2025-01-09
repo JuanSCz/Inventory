@@ -16,8 +16,6 @@ public interface VentaService {
 
     VentaDTO createVenta(VentaDTO ventaDTO);
 
-    VentaDTO updateVenta(VentaDTO ventaDTO);
-
     boolean deleteVenta(Long id);
 
     VentaDTO getVenta(Long id);

@@ -31,8 +31,6 @@ public interface DetalleVentaService {
 
     DetalleVentaDTO createDetalleVenta(DetalleVentaDTO detalleVentaDTO);
 
-    DetalleVentaDTO updateDetalleVenta(Long id, DetalleVentaDTO detalleVentaDTO);
-
     void deleteDetalleVenta(Long id);
 
     Page<DetalleVentaDTO> getAllDetalleVenta(Pageable pageable);
