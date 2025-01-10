@@ -33,4 +33,6 @@ public interface VentaService {
     String formatTotal(BigDecimal total);
 
     String formatPrecioUnitario(BigDecimal precioUnitario);
+
+    String formatSubtotal(BigDecimal subtotal);
 }

@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeUpdateModal();
     initializeDeleteModal();
     initializeAddDetalleButton();
+    initializeFormSubmit();
+    initializeTotalInput();
+    initializeFormSubmit();
 });
 
 // Manejo del modal de error
@@ -200,31 +203,32 @@ function agregarFilaDetalle() {
     const detalleContainer = document.getElementById("detalleContainer");
     const newRow = document.createElement("div");
     newRow.classList.add("row", "detalle-row");
+    const currentIndex = detalleContainer.querySelectorAll('.detalle-row').length;
 
-    // Obtener las opciones de productos y depósitos desde los selects originales
-    const productoOptions = document.getElementById("producto").innerHTML;
-    const depositoOptions = document.getElementById("depositoId").innerHTML;
+    // Obtener el HTML del select de productos y depósitos del primer detalle
+    const productoSelectHTML = document.querySelector('select[name="detallesVenta[0].productoId"]').innerHTML;
+    const depositoSelectHTML = document.querySelector('select[name="detallesVenta[0].depositoId"]').innerHTML;
 
     newRow.innerHTML = `
         <div class="col-md-3 mb-3">
-            <label for="producto" class="form-label">Producto</label>
-            <select class="form-control form-control-detalle" name="detallesVenta[].productoId">
-                ${productoOptions}
+            <label for="producto${currentIndex}" class="form-label">Producto</label>
+            <select class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].productoId" id="producto${currentIndex}" required>
+                ${productoSelectHTML}
             </select>
         </div>
         <div class="col-md-3 mb-3">
-            <label for="depositoId" class="form-label">Depósito</label>
-            <select class="form-control form-control-detalle" name="detallesVenta[].depositoId">
-                ${depositoOptions}
+            <label for="deposito${currentIndex}" class="form-label">Depósito</label>
+            <select class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].depositoId" id="deposito${currentIndex}" required>
+                ${depositoSelectHTML}
             </select>
         </div>
         <div class="col-md-3 mb-3">
-            <label for="cantidad" class="form-label">Cantidad</label>
-            <input type="number" class="form-control form-control-detalle" name="detallesVenta[].cantidad" placeholder="Ingrese la cantidad...">
+            <label for="cantidad${currentIndex}" class="form-label">Cantidad</label>
+            <input type="number" class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad..." required>
         </div>
         <div class="col-md-3 mb-3">
-            <label for="precioUnitario" class="form-label">Precio unitario del producto</label>
-            <input type="text" class="form-control form-control-detalle" name="detallesVenta[].precioUnitarioString" placeholder="Ingrese el precio unitario...">
+            <label for="precioUnitario${currentIndex}" class="form-label">Precio unitario del producto</label>
+            <input type="text" class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].precioUnitarioString" id="precioUnitario${currentIndex}" placeholder="Ingrese el precio unitario..." required>
         </div>
     `;
 
@@ -233,7 +237,7 @@ function agregarFilaDetalle() {
 
 function showDetalleVentaModal(button) {
     const ventaId = button.getAttribute('data-id');
-    fetch(`/detallesVentas/${ventaId}`)
+    fetch(`/detallesVenta/${ventaId}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Error al obtener los detalles de la venta');
@@ -262,7 +266,14 @@ function showDetalleVentaModal(button) {
             const detalleModal = new bootstrap.Modal(document.getElementById('createDetalleVentasModal'));
             detalleModal.show();
         })
-        .catch(error => console.error('Error al cargar los detalles de la venta:', error));
+        .catch(error => {
+            console.error('Error al cargar los detalles de la venta:', error);
+            const modalBody = document.getElementById('errorModalBody');
+            modalBody.innerHTML = error.message;
+
+            const errorModal = new bootstrap.Modal(document.getElementById('errorModalGlobal'));
+            errorModal.show();
+        });
 }
 
 // Utilidad: Función de debounce para limitar solicitudes frecuentes
@@ -272,4 +283,64 @@ function debounce(func, delay) {
         clearTimeout(timeout);
         timeout = setTimeout(() => func.apply(this, args), delay);
     };
+}
+
+function initializeFormSubmit() {
+    const form = document.getElementById('createVentaForm');
+    if (form) {
+        form.addEventListener('submit', function (event) {
+            const totalInput = document.getElementById('total');
+            if (totalInput) {
+                totalInput.value = formatNumber(totalInput.value);
+            }
+            const subtotalInputs = document.querySelectorAll('input[name^="detallesVenta"][name$=".subtotalFormatted"]');
+            subtotalInputs.forEach(input => {
+                input.value = formatNumber(input.value);
+            });
+        });
+    }
+}
+
+function initializeTotalInput() {
+    const totalInput = document.getElementById('total');
+    if (totalInput) {
+        totalInput.addEventListener('input', function () {
+            this.value = formatNumber(this.value);
+        });
+    }
+}
+
+function initializeFormSubmit() {
+    const form = document.getElementById('createVentaForm');
+    if (form) {
+        form.addEventListener('submit', function (event) {
+            const totalInput = document.getElementById('total');
+            if (totalInput) {
+                totalInput.value = formatNumber(totalInput.value);
+            }
+        });
+    }
+}
+
+function downloadPdf(ventaId) {
+    fetch(`/tablePresupuestar/generatePdf/${ventaId}`)
+        .then(response => {
+            if (response.ok) {
+                return response.blob();
+            } else {
+                throw new Error('Error al generar el PDF');
+            }
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'presupuesto.pdf';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }

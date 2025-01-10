@@ -19,10 +19,10 @@ public class DashboardController {
     private final DepositoService depositoService;
     private final ProveedorService proveedorService;
     private final UsuarioService usuarioService;
- /*   private final VentaService ventaService; */
+    private final VentaService ventaService;
 
     @Autowired
-    public DashboardController(ProductoService productoService, CategoriaService categoriaService, ClienteService clienteService, CompraService compraService, DepositoService depositoService, ProveedorService proveedorService, UsuarioService usuarioService /* VentaService ventaService */) {
+    public DashboardController(ProductoService productoService, CategoriaService categoriaService, ClienteService clienteService, CompraService compraService, DepositoService depositoService, ProveedorService proveedorService, UsuarioService usuarioService, VentaService ventaService) {
         this.productoService = productoService;
         this.categoriaService = categoriaService;
         this.clienteService = clienteService;
@@ -30,7 +30,7 @@ public class DashboardController {
         this.depositoService = depositoService;
         this.proveedorService = proveedorService;
         this.usuarioService = usuarioService;
-      /*  this.ventaService = ventaService; */
+        this.ventaService = ventaService;
     }
 
     @GetMapping("/dashboard")
@@ -42,7 +42,7 @@ public class DashboardController {
         long totalDepositos = depositoService.countDepositos();
         long totalProveedores = proveedorService.countProveedores();
         long totalUsuarios = usuarioService.countUsuarios();
-     /*  long totalVentas = ventaService.countVentas(); */
+        long totalVentas = ventaService.countVentas();
 
         model.addAttribute("totalProductos", totalProductos);
         model.addAttribute("totalCategorias", totalCategorias);
@@ -51,7 +51,7 @@ public class DashboardController {
         model.addAttribute("totalDepositos", totalDepositos);
         model.addAttribute("totalProveedores", totalProveedores);
         model.addAttribute("totalUsuarios", totalUsuarios);
-      /*  model.addAttribute("totalVentas", totalVentas); */
+        model.addAttribute("totalVentas", totalVentas);
         model.addAttribute("currentPage", "dashboard");
         return "dashboard";
     }

@@ -1,4 +1,4 @@
-/*
+
 package com.interonda.inventory.service.impl;
 
 import com.interonda.inventory.dto.DetalleVentaDTO;
@@ -10,7 +10,9 @@ import com.interonda.inventory.mapper.ClienteMapper;
 import com.interonda.inventory.mapper.DetalleVentaMapper;
 import com.interonda.inventory.mapper.VentaMapper;
 import com.interonda.inventory.repository.ClienteRepository;
+import com.interonda.inventory.repository.DetalleVentaRepository;
 import com.interonda.inventory.repository.ProductoRepository;
+import com.interonda.inventory.repository.VentaRepository;
 import com.interonda.inventory.service.PresupuestarService;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import jakarta.validation.Validator;
@@ -234,4 +236,3 @@ public class PresupuestarServiceImpl implements PresupuestarService {
         return df.format(value);
     }
 }
- */

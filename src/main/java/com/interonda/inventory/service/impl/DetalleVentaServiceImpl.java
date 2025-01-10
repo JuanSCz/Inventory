@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Service
 public class DetalleVentaServiceImpl implements DetalleVentaService {
     private static final Logger logger = LoggerFactory.getLogger(DetalleVentaServiceImpl.class);

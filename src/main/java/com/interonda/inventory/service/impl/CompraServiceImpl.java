@@ -97,6 +97,10 @@ public class CompraServiceImpl implements CompraService {
                 stock.setDeposito(deposito);
                 stockRepository.save(stock);
 
+                // Actualizar el stock_actual del producto
+                producto.setStockActual(producto.getStockActual() + detalle.getCantidad());
+                productoRepository.save(producto);
+
                 return detalle;
             }).collect(Collectors.toList()));
 
@@ -148,6 +152,11 @@ public class CompraServiceImpl implements CompraService {
                         stock.setOperacion("ACTUALIZACIÓN");
                         stockRepository.save(stock);
                     }
+
+                    // Actualizar el stock_actual del producto
+                    Producto producto = detalle.getProducto();
+                    producto.setStockActual(producto.getStockActual() - detalle.getCantidad());
+                    productoRepository.save(producto);
                 }
                 return !exists;
             });
@@ -165,6 +174,11 @@ public class CompraServiceImpl implements CompraService {
                         stock.setOperacion("ACTUALIZACIÓN");
                         stockRepository.save(stock);
                     }
+
+                    // Actualizar el stock_actual del producto
+                    Producto producto = detalle.getProducto();
+                    producto.setStockActual(producto.getStockActual() - detalle.getCantidad());
+                    productoRepository.save(producto);
                 }
 
                 detalle.setCantidad(nuevoDetalleDTO.getCantidad());
@@ -187,6 +201,11 @@ public class CompraServiceImpl implements CompraService {
                     stock.setDeposito(detalle.getDeposito());
                     stockRepository.save(stock);
                 }
+
+                // Actualizar el stock_actual del producto
+                Producto producto = detalle.getProducto();
+                producto.setStockActual(producto.getStockActual() + detalle.getCantidad());
+                productoRepository.save(producto);
             }
 
             compra.setDetallesCompra(detallesExistentes);

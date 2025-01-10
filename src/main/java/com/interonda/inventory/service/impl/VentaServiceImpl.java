@@ -19,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.ArrayList;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -29,6 +28,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Service
 public class VentaServiceImpl implements VentaService {
     private static final Logger logger = LoggerFactory.getLogger(VentaServiceImpl.class);
@@ -96,6 +96,10 @@ public class VentaServiceImpl implements VentaService {
                 stock.setDeposito(deposito);
                 stockRepository.save(stock);
 
+                // Actualizar el stock_actual del producto
+                producto.setStockActual(producto.getStockActual() - detalle.getCantidad());
+                productoRepository.save(producto);
+
                 return detalle;
             }).collect(Collectors.toList()));
 
@@ -118,8 +122,7 @@ public class VentaServiceImpl implements VentaService {
         ValidatorUtils.validateEntity(ventaDTO, validator);
         try {
             logger.info("Actualizando Venta con id: {}", ventaDTO.getId());
-            Venta venta = ventaRepository.findById(ventaDTO.getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + ventaDTO.getId()));
+            Venta venta = ventaRepository.findById(ventaDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + ventaDTO.getId()));
 
             // Actualizar los campos de la venta
             venta.setFecha(ventaDTO.getFecha());
@@ -129,24 +132,50 @@ public class VentaServiceImpl implements VentaService {
             venta.setImpuestos(ventaDTO.getImpuestos());
 
             // Asignar el cliente a la venta
-            Cliente cliente = clienteRepository.findById(ventaDTO.getClienteId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con el id: " + ventaDTO.getClienteId()));
+            Cliente cliente = clienteRepository.findById(ventaDTO.getClienteId()).orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con el id: " + ventaDTO.getClienteId()));
             venta.setCliente(cliente);
+
+            // Actualizar el stock de los productos antes de eliminar los detalles existentes
+            for (DetalleVenta detalle : venta.getDetallesVenta()) {
+                Stock stock = stockRepository.findByProductoIdAndDepositoId(detalle.getProducto().getId(), detalle.getDeposito().getId()).orElseThrow(() -> new ResourceNotFoundException("Stock no encontrado para el producto y depósito especificados"));
+                stock.setCantidad(stock.getCantidad() + detalle.getCantidad());
+                stock.setFechaActualizacion(LocalDateTime.now());
+                stock.setOperacion("ACTUALIZACIÓN");
+                stockRepository.save(stock);
+
+                // Actualizar el stock_actual del producto
+                Producto producto = detalle.getProducto();
+                producto.setStockActual(producto.getStockActual() + detalle.getCantidad());
+                productoRepository.save(producto);
+            }
 
             // Eliminar todos los detalles existentes
             detalleVentaRepository.deleteAll(venta.getDetallesVenta());
             venta.getDetallesVenta().clear();
 
-            // Asignar los nuevos detalles a la venta
+            // Asignar los nuevos detalles a la venta y actualizar el stock
             List<DetalleVenta> nuevosDetalles = ventaDTO.getDetallesVenta().stream().map(detalleDTO -> {
                 DetalleVenta detalle = new DetalleVenta();
                 detalle.setCantidad(detalleDTO.getCantidad());
                 detalle.setPrecioUnitario(detalleDTO.getPrecioUnitario());
-                detalle.setProducto(productoRepository.findById(detalleDTO.getProductoId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId())));
-                detalle.setDeposito(depositoRepository.findById(detalleDTO.getDepositoId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + detalleDTO.getDepositoId())));
+                detalle.setProducto(productoRepository.findById(detalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId())));
+                detalle.setDeposito(depositoRepository.findById(detalleDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + detalleDTO.getDepositoId())));
                 detalle.setVenta(venta);
+
+                // Actualizar el stock del producto en el depósito
+                Stock stock = stockRepository.findByProductoIdAndDepositoId(detalle.getProducto().getId(), detalle.getDeposito().getId()).orElse(new Stock());
+                stock.setCantidad(stock.getCantidad() == null ? -detalle.getCantidad() : stock.getCantidad() - detalle.getCantidad());
+                stock.setFechaActualizacion(LocalDateTime.now());
+                stock.setOperacion("ACTUALIZACION");
+                stock.setProducto(detalle.getProducto());
+                stock.setDeposito(detalle.getDeposito());
+                stockRepository.save(stock);
+
+                // Actualizar el stock_actual del producto
+                Producto producto = detalle.getProducto();
+                producto.setStockActual(producto.getStockActual() - detalle.getCantidad());
+                productoRepository.save(producto);
+
                 return detalle;
             }).collect(Collectors.toList());
 
@@ -225,6 +254,17 @@ public class VentaServiceImpl implements VentaService {
         formatter.setRoundingMode(RoundingMode.DOWN);
         return formatter.format(precioUnitario);
     }
+
+    public String formatSubtotal(BigDecimal subtotal) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator(',');
+        symbols.setGroupingSeparator('.');
+
+        DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
+        formatter.setRoundingMode(RoundingMode.DOWN);
+        return formatter.format(subtotal);
+    }
+
 
     @Override
     @Transactional(readOnly = true)

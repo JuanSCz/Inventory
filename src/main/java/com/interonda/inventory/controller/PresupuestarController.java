@@ -1,10 +1,11 @@
- /*
+
 package com.interonda.inventory.controller;
 
 import com.interonda.inventory.dto.VentaDTO;
 import com.interonda.inventory.service.ClienteService;
 import com.interonda.inventory.service.PresupuestarService;
 import com.interonda.inventory.service.ProductoService;
+import com.interonda.inventory.service.VentaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,4 +102,4 @@ public class PresupuestarController {
         model.addAttribute("clientes", clienteService.getAllClientes(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
         return "tableVentas";
     }
-} */
+}
