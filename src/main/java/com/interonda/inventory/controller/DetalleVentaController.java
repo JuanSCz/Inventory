@@ -1,8 +1,8 @@
 package com.interonda.inventory.controller;
 
-import com.interonda.inventory.dto.DetalleCompraDTO;
 import com.interonda.inventory.dto.DetalleVentaDTO;
 import com.interonda.inventory.service.DetalleVentaService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("/detallesVentas")
+@RequestMapping("/detallesVenta")
 public class DetalleVentaController {
 
     private static final Logger logger = LoggerFactory.getLogger(DetalleVentaController.class);
@@ -48,6 +46,13 @@ public class DetalleVentaController {
         logger.info("Solicitud recibida para crear detalle de venta con detalles: {}", detalleVentaDTO);
         DetalleVentaDTO createdDetalleVenta = detalleVentaService.createDetalleVenta(detalleVentaDTO);
         return new ResponseEntity<>(createdDetalleVenta, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<DetalleVentaDTO> updateDetalleVenta(@PathVariable Long id, @Valid @RequestBody DetalleVentaDTO detalleVentaDTO) {
+        logger.info("Solicitud recibida para actualizar detalle de venta con id: {}", id);
+        DetalleVentaDTO updatedDetalleVenta = detalleVentaService.updateDetalleVenta(id, detalleVentaDTO);
+        return new ResponseEntity<>(updatedDetalleVenta, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

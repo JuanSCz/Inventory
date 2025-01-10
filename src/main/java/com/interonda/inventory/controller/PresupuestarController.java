@@ -1,16 +1,14 @@
+ /*
 package com.interonda.inventory.controller;
 
 import com.interonda.inventory.dto.VentaDTO;
 import com.interonda.inventory.service.ClienteService;
 import com.interonda.inventory.service.PresupuestarService;
 import com.interonda.inventory.service.ProductoService;
-import com.interonda.inventory.service.VentaService;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,11 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/tablePresupuestar")
@@ -105,4 +101,4 @@ public class PresupuestarController {
         model.addAttribute("clientes", clienteService.getAllClientes(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
         return "tableVentas";
     }
-}
+} */

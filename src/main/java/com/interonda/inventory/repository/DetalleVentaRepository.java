@@ -2,7 +2,6 @@ package com.interonda.inventory.repository;
 
 import com.interonda.inventory.entity.DetalleCompra;
 import com.interonda.inventory.entity.DetalleVenta;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

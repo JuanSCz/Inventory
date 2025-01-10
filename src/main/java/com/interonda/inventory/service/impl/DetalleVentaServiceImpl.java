@@ -1,8 +1,9 @@
 package com.interonda.inventory.service.impl;
 
-import com.interonda.inventory.dto.DetalleCompraDTO;
-import com.interonda.inventory.entity.*;
 import com.interonda.inventory.dto.DetalleVentaDTO;
+import com.interonda.inventory.entity.DetalleVenta;
+import com.interonda.inventory.entity.Producto;
+import com.interonda.inventory.entity.Venta;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.DetalleVentaMapper;
@@ -11,7 +12,6 @@ import com.interonda.inventory.repository.DetalleVentaRepository;
 import com.interonda.inventory.repository.ProductoRepository;
 import com.interonda.inventory.repository.VentaRepository;
 import com.interonda.inventory.service.DetalleVentaService;
-
 import com.interonda.inventory.utils.ValidatorUtils;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.Validator;
@@ -25,25 +25,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-
 @Service
 public class DetalleVentaServiceImpl implements DetalleVentaService {
-
     private static final Logger logger = LoggerFactory.getLogger(DetalleVentaServiceImpl.class);
 
     private final DetalleVentaRepository detalleVentaRepository;
-    private final ProductoRepository productoRepository;
     private final VentaRepository ventaRepository;
+    private final ProductoRepository productoRepository;
     private final DetalleVentaMapper detalleVentaMapper;
     private final Validator validator;
     private final DepositoRepository depositoRepository;
 
     @Autowired
-    public DetalleVentaServiceImpl(DetalleVentaRepository detalleVentaRepository, ProductoRepository productoRepository, VentaRepository ventaRepository, DetalleVentaMapper detalleVentaMapper, Validator validator, DepositoRepository depositoRepository) {
+    public DetalleVentaServiceImpl(DetalleVentaRepository detalleVentaRepository, VentaRepository ventaRepository, ProductoRepository productoRepository, DetalleVentaMapper detalleVentaMapper, Validator validator, DepositoRepository depositoRepository) {
         this.detalleVentaRepository = detalleVentaRepository;
-        this.productoRepository = productoRepository;
         this.ventaRepository = ventaRepository;
+        this.productoRepository = productoRepository;
         this.detalleVentaMapper = detalleVentaMapper;
         this.validator = validator;
         this.depositoRepository = depositoRepository;
@@ -78,6 +75,36 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
             return detalleVentaMapper.toDto(savedDetalleVenta);
         } catch (PersistenceException e) {
             throw new DataAccessException("Error creando DetalleVenta", e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public DetalleVentaDTO updateDetalleVenta(Long id, DetalleVentaDTO detalleVentaDTO) {
+        ValidatorUtils.validateEntity(detalleVentaDTO, validator);
+        try {
+            logger.info("Actualizando DetalleVenta con id: {}", id);
+            DetalleVenta detalleVenta = detalleVentaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("DetalleVenta no encontrada con el id: " + id));
+            detalleVenta.setCantidad(detalleVentaDTO.getCantidad());
+            detalleVenta.setPrecioUnitario(detalleVentaDTO.getPrecioUnitario());
+
+            Venta venta = ventaRepository.findById(detalleVentaDTO.getVentaId()).orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + detalleVentaDTO.getVentaId()));
+            detalleVenta.setVenta(venta);
+
+            Producto producto = productoRepository.findById(detalleVentaDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleVentaDTO.getProductoId()));
+            detalleVenta.setProducto(producto);
+
+            detalleVenta.setDeposito(depositoRepository.findById(detalleVentaDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + detalleVentaDTO.getDepositoId())));
+
+            DetalleVenta updatedDetalleVenta = detalleVentaRepository.save(detalleVenta);
+            logger.info("DetalleVenta actualizado exitosamente con id: {}", updatedDetalleVenta.getId());
+            return convertToDto(updatedDetalleVenta);
+        } catch (ResourceNotFoundException e) {
+            logger.warn("DetalleVenta no encontrado: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            logger.error("Error actualizando DetalleVenta por id: " + id, e);
+            throw new DataAccessException("Error actualizando DetalleVenta por id: " + id, e);
         }
     }
 
@@ -140,7 +167,7 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
                 detalleDTO.setProductoId(detalle.getProducto().getId());
                 detalleDTO.setProductoNombre(detalle.getProducto().getNombre());
                 detalleDTO.setDepositoNombre(detalle.getDeposito().getNombre());
-                detalleDTO.setDepositoId(detalle.getDeposito().getId()); // Asegurarse de que el valor del depósito se esté estableciendo
+                detalleDTO.setDepositoId(detalle.getDeposito().getId());
                 return detalleDTO;
             }).collect(Collectors.toList());
         } catch (Exception e) {

@@ -16,6 +16,8 @@ public interface VentaService {
 
     VentaDTO createVenta(VentaDTO ventaDTO);
 
+    VentaDTO updateVenta(VentaDTO ventaDTO);
+
     boolean deleteVenta(Long id);
 
     VentaDTO getVenta(Long id);
@@ -31,6 +33,4 @@ public interface VentaService {
     String formatTotal(BigDecimal total);
 
     String formatPrecioUnitario(BigDecimal precioUnitario);
-
-    String formatSubtotal(BigDecimal subtotal);
 }

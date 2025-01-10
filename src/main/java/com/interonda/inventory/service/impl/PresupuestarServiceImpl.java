@@ -1,9 +1,8 @@
+/*
 package com.interonda.inventory.service.impl;
 
 import com.interonda.inventory.dto.DetalleVentaDTO;
 import com.interonda.inventory.dto.VentaDTO;
-import com.interonda.inventory.entity.Cliente;
-import com.interonda.inventory.entity.DetalleVenta;
 import com.interonda.inventory.entity.Venta;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
@@ -11,11 +10,8 @@ import com.interonda.inventory.mapper.ClienteMapper;
 import com.interonda.inventory.mapper.DetalleVentaMapper;
 import com.interonda.inventory.mapper.VentaMapper;
 import com.interonda.inventory.repository.ClienteRepository;
-import com.interonda.inventory.repository.DetalleVentaRepository;
 import com.interonda.inventory.repository.ProductoRepository;
-import com.interonda.inventory.repository.VentaRepository;
 import com.interonda.inventory.service.PresupuestarService;
-import com.interonda.inventory.utils.ValidatorUtils;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import jakarta.validation.Validator;
 import org.slf4j.Logger;
@@ -36,7 +32,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -239,4 +234,4 @@ public class PresupuestarServiceImpl implements PresupuestarService {
         return df.format(value);
     }
 }
-
+ */

@@ -1,8 +1,7 @@
 package com.interonda.inventory.service.impl;
 
-import com.interonda.inventory.dto.DetalleCompraDTO;
-import com.interonda.inventory.dto.DetalleVentaDTO;
 import com.interonda.inventory.dto.VentaDTO;
+import com.interonda.inventory.dto.DetalleVentaDTO;
 import com.interonda.inventory.entity.*;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
@@ -20,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -28,9 +28,7 @@ import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-
 @Service
 public class VentaServiceImpl implements VentaService {
     private static final Logger logger = LoggerFactory.getLogger(VentaServiceImpl.class);
@@ -43,9 +41,10 @@ public class VentaServiceImpl implements VentaService {
     private final VentaMapper ventaMapper;
     private final DepositoRepository depositoRepository;
     private final StockRepository stockRepository;
+    private final HistorialStockRepository historialStockRepository;
 
     @Autowired
-    public VentaServiceImpl(VentaRepository ventaRepository, ClienteRepository clienteRepository, ProductoRepository productoRepository, DetalleVentaRepository detalleVentaRepository, Validator validator, VentaMapper ventaMapper, DepositoRepository depositoRepository, StockRepository stockRepository) {
+    public VentaServiceImpl(VentaRepository ventaRepository, ClienteRepository clienteRepository, ProductoRepository productoRepository, DetalleVentaRepository detalleVentaRepository, Validator validator, VentaMapper ventaMapper, DepositoRepository depositoRepository, StockRepository stockRepository, HistorialStockRepository historialStockRepository) {
         this.ventaRepository = ventaRepository;
         this.clienteRepository = clienteRepository;
         this.productoRepository = productoRepository;
@@ -54,6 +53,7 @@ public class VentaServiceImpl implements VentaService {
         this.ventaMapper = ventaMapper;
         this.depositoRepository = depositoRepository;
         this.stockRepository = stockRepository;
+        this.historialStockRepository = historialStockRepository;
     }
 
     @Override
@@ -82,16 +82,14 @@ public class VentaServiceImpl implements VentaService {
             venta.setDetallesVenta(ventaDTO.getDetallesVenta().stream().map(detalleDTO -> {
                 DetalleVenta detalle = ventaMapper.toDetalleEntity(detalleDTO);
                 detalle.setVenta(venta);
-                detalle.setProducto(productoRepository.findById(detalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId())));
-                // Calcular el subtotal
-                detalleDTO.setSubtotal(detalle.getPrecioUnitario().multiply(new BigDecimal(detalle.getCantidad())));
                 Producto producto = productoRepository.findById(detalleDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId()));
                 Deposito deposito = depositoRepository.findById(detalleDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + detalleDTO.getDepositoId()));
+                detalle.setProducto(producto);
                 detalle.setDeposito(deposito);
 
                 // Actualizar el stock del producto en el depósito
                 Stock stock = stockRepository.findByProductoIdAndDepositoId(producto.getId(), deposito.getId()).orElse(new Stock());
-                stock.setCantidad(stock.getCantidad() == null ? detalle.getCantidad() : stock.getCantidad() - detalle.getCantidad());
+                stock.setCantidad(stock.getCantidad() == null ? -detalle.getCantidad() : stock.getCantidad() - detalle.getCantidad());
                 stock.setFechaActualizacion(LocalDateTime.now());
                 stock.setOperacion("VENTA");
                 stock.setProducto(producto);
@@ -107,10 +105,6 @@ public class VentaServiceImpl implements VentaService {
 
             Venta savedVenta = ventaRepository.save(venta);
             logger.info("Venta creada exitosamente con id: {}", savedVenta.getId());
-
-            // Formatear el total
-            ventaDTO.setTotalString(formatTotal(savedVenta.getTotal()));
-
             return ventaMapper.toDto(savedVenta);
         } catch (Exception e) {
             logger.error("Error guardando Venta", e);
@@ -120,21 +114,82 @@ public class VentaServiceImpl implements VentaService {
 
     @Override
     @Transactional
+    public VentaDTO updateVenta(VentaDTO ventaDTO) {
+        ValidatorUtils.validateEntity(ventaDTO, validator);
+        try {
+            logger.info("Actualizando Venta con id: {}", ventaDTO.getId());
+            Venta venta = ventaRepository.findById(ventaDTO.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + ventaDTO.getId()));
+
+            // Actualizar los campos de la venta
+            venta.setFecha(ventaDTO.getFecha());
+            venta.setTotal(ventaDTO.getTotal());
+            venta.setMetodoPago(ventaDTO.getMetodoPago());
+            venta.setEstado(ventaDTO.getEstado());
+            venta.setImpuestos(ventaDTO.getImpuestos());
+
+            // Asignar el cliente a la venta
+            Cliente cliente = clienteRepository.findById(ventaDTO.getClienteId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Cliente no encontrado con el id: " + ventaDTO.getClienteId()));
+            venta.setCliente(cliente);
+
+            // Eliminar todos los detalles existentes
+            detalleVentaRepository.deleteAll(venta.getDetallesVenta());
+            venta.getDetallesVenta().clear();
+
+            // Asignar los nuevos detalles a la venta
+            List<DetalleVenta> nuevosDetalles = ventaDTO.getDetallesVenta().stream().map(detalleDTO -> {
+                DetalleVenta detalle = new DetalleVenta();
+                detalle.setCantidad(detalleDTO.getCantidad());
+                detalle.setPrecioUnitario(detalleDTO.getPrecioUnitario());
+                detalle.setProducto(productoRepository.findById(detalleDTO.getProductoId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + detalleDTO.getProductoId())));
+                detalle.setDeposito(depositoRepository.findById(detalleDTO.getDepositoId())
+                        .orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + detalleDTO.getDepositoId())));
+                detalle.setVenta(venta);
+                return detalle;
+            }).collect(Collectors.toList());
+
+            venta.setDetallesVenta(nuevosDetalles);
+
+            Venta updatedVenta = ventaRepository.save(venta);
+            logger.info("Venta actualizada exitosamente con id: {}", updatedVenta.getId());
+            return ventaMapper.toDto(updatedVenta);
+        } catch (ResourceNotFoundException e) {
+            logger.warn("Venta no encontrada: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            logger.error("Error actualizando Venta", e);
+            throw new DataAccessException("Error actualizando Venta", e);
+        }
+    }
+
+    @Override
+    @Transactional
     public boolean deleteVenta(Long id) {
         try {
             logger.info("Eliminando Venta con id: {}", id);
-            if (!ventaRepository.existsById(id)) {
-                throw new ResourceNotFoundException("Venta no encontrada con el id: " + id);
+            Venta venta = ventaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con el id: " + id));
+
+            // Actualizar el stock de los productos
+            for (DetalleVenta detalle : venta.getDetallesVenta()) {
+                Stock stock = stockRepository.findByProductoIdAndDepositoId(detalle.getProducto().getId(), detalle.getDeposito().getId()).orElseThrow(() -> new ResourceNotFoundException("Stock no encontrado para el producto y depósito especificados"));
+                stock.setCantidad(stock.getCantidad() + detalle.getCantidad());
+                stock.setFechaActualizacion(LocalDateTime.now());
+                stock.setOperacion("ELIMINACIÓN");
+                stockRepository.save(stock);
             }
-            ventaRepository.deleteById(id);
+
+            // Eliminar la venta
+            ventaRepository.delete(venta);
             logger.info("Venta eliminada exitosamente con id: {}", id);
             return true;
         } catch (ResourceNotFoundException e) {
             logger.warn("Venta no encontrada: {}", e.getMessage());
-            return false;
+            throw e;
         } catch (Exception e) {
             logger.error("Error eliminando Venta", e);
-            return false;
+            throw new DataAccessException("Error eliminando Venta", e);
         }
     }
 
@@ -186,11 +241,11 @@ public class VentaServiceImpl implements VentaService {
                 detalleDTO.setProductoNombre(detalle.getProducto().getNombre());
                 detalleDTO.setDepositoId(detalle.getDeposito().getId());
                 detalleDTO.setDepositoNombre(detalle.getDeposito().getNombre());
-                detalleDTO.setPrecioUnitarioString(formatPrecioUnitario(detalle.getPrecioUnitario())); // Formatear el precio unitario
-                detalleDTO.setSubtotalFormatted(detalleDTO.getSubtotalFormatted()); // Formatear el subtotal
+                detalleDTO.setPrecioUnitarioString(formatPrecioUnitario(detalle.getPrecioUnitario()));
+                detalleDTO.setTotalDetalleFormatted(formatTotal(detalle.getPrecioUnitario().multiply(new BigDecimal(detalle.getCantidad()))));
                 return detalleDTO;
             }).collect(Collectors.toList()));
-            ventaDTO.setTotalString(formatTotal(venta.getTotal())); // Formatear el total
+            ventaDTO.setTotalString(formatTotal(venta.getTotal()));
             return ventaDTO;
         } catch (ResourceNotFoundException e) {
             logger.warn("Venta no encontrada: {}", e.getMessage());
@@ -199,16 +254,6 @@ public class VentaServiceImpl implements VentaService {
             logger.error("Error obteniendo Venta", e);
             throw new DataAccessException("Error obteniendo Venta", e);
         }
-    }
-
-    public String formatSubtotal(BigDecimal subtotal) {
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator(',');
-        symbols.setGroupingSeparator('.');
-
-        DecimalFormat formatter = new DecimalFormat("#,###,###.##", symbols);
-        formatter.setRoundingMode(RoundingMode.DOWN);
-        return formatter.format(subtotal);
     }
 
     @Override
@@ -221,9 +266,9 @@ public class VentaServiceImpl implements VentaService {
             return ventas.map(venta -> {
                 VentaDTO dto = ventaMapper.toDto(venta);
                 dto.setClienteNombre(venta.getCliente().getNombre());
-                dto.setImpuestos(formatImpuestos(venta.getImpuestos())); // Formatear impuestos
-                dto.setTotal(venta.getTotal()); // Establecer el total como BigDecimal
-                dto.setTotalString(formatTotal(venta.getTotal())); // Formatear total como String para visualización
+                dto.setImpuestos(formatImpuestos(venta.getImpuestos()));
+                dto.setTotal(venta.getTotal());
+                dto.setTotalString(formatTotal(venta.getTotal()));
                 return dto;
             });
         } catch (Exception e) {
@@ -240,8 +285,8 @@ public class VentaServiceImpl implements VentaService {
             logger.info("Total de ventas: {}", total);
             return total;
         } catch (Exception e) {
-            logger.error("Error contando todas los Ventas", e);
-            throw new DataAccessException("Error contando todos los Ventas", e);
+            logger.error("Error contando todas las Ventas", e);
+            throw new DataAccessException("Error contando todas las Ventas", e);
         }
     }
 

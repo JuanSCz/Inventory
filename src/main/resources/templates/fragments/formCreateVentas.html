@@ -36,7 +36,7 @@
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="metodoPago" class="form-label">Método de pago</label>
+                                <label for="metodoPago" class="form-label">Método de Pago</label>
                                 <select class="form-control form-control-detalle" th:field="*{metodoPago}"
                                         id="metodoPago">
                                     <option value="" selected>Seleccione un método...</option>
@@ -56,8 +56,8 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="impuestos" class="form-label">Impuestos</label>
-                                <select class="form-control form-control-detalle" th:field="*{impuestos}" id="impuestos"
-                                >
+                                <select class="form-control form-control-detalle" th:field="*{impuestos}"
+                                        id="impuestos">
                                     <option value="" selected>Seleccione un impuesto...</option>
                                     <option value="0.10">IVA: 10%</option>
                                     <option value="0.20">IVA: 20%</option>
@@ -106,9 +106,7 @@
                                 </div>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <button type="button" class="btn btn-primary btn-success-detalle" id="addDetalleButton">
-                                    Sumar Detalle
-                                </button>
+                                <button type="button" class="btn btn-primary btn-success-detalle" id="addDetalleButton">Sumar Detalle</button>
                             </div>
                         </div>
                         <div class="modal-footer" id="modal-footer-detalle">
@@ -121,7 +119,7 @@
         </div>
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/indexVentas.js"></script>
 </body>
 </html>

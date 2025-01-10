@@ -1,10 +1,14 @@
 package com.interonda.inventory.controller;
 
-import com.interonda.inventory.dto.*;
-import com.interonda.inventory.service.ClienteService;
+import com.interonda.inventory.dto.VentaDTO;
+import com.interonda.inventory.dto.DepositoDTO;
+import com.interonda.inventory.dto.DetalleVentaDTO;
+import com.interonda.inventory.dto.ProductoDTO;
+import com.interonda.inventory.service.VentaService;
 import com.interonda.inventory.service.DepositoService;
 import com.interonda.inventory.service.ProductoService;
-import com.interonda.inventory.service.VentaService;
+import com.interonda.inventory.service.ClienteService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +25,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
@@ -30,7 +32,6 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/tableVentas")
 public class VentaController {
-
     private static final Logger logger = LoggerFactory.getLogger(VentaController.class);
 
     private final ProductoService productoService;
@@ -68,10 +69,11 @@ public class VentaController {
             model.addAttribute("errorMessage", errorMessage);
             Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
             Page<DepositoDTO> depositos = depositoService.getAllDepositos(pageable);
+            model.addAttribute("ventaFormattedTotal", ventaService.formatTotal(ventaDTO.getTotal()));
             model.addAttribute("ventas", ventaService.getAllVentas(pageable).getContent());
             model.addAttribute("ventaDTO", ventaDTO);
-            model.addAttribute("page", productos);
-            model.addAttribute("page", depositos);
+            model.addAttribute("productos", productos);
+            model.addAttribute("depositos", depositos.getContent());
             return "tableVentas";
         }
 
@@ -79,6 +81,37 @@ public class VentaController {
         return "redirect:/tableVentas";
     }
 
+    @PostMapping("/update")
+    public String updateVenta(@Valid VentaDTO ventaDTO, BindingResult bindingResult, Model model, Pageable pageable) {
+        for (int i = 0; i < ventaDTO.getDetallesVenta().size(); i++) {
+            DetalleVentaDTO detalle = ventaDTO.getDetallesVenta().get(i);
+            if (detalle.getCantidad() == null || detalle.getCantidad() <= 0) {
+                bindingResult.rejectValue("detallesVenta[" + i + "].cantidad", "error.detalle", "La cantidad debe ser un número positivo");
+            }
+            if (detalle.getPrecioUnitario() == null || detalle.getPrecioUnitario().compareTo(BigDecimal.ZERO) <= 0) {
+                bindingResult.rejectValue("detallesVenta[" + i + "].precioUnitario", "error.detalle", "El precio unitario debe ser mayor que 0");
+            }
+            if (detalle.getDepositoId() == null) {
+                bindingResult.rejectValue("detallesVenta[" + i + "].depositoId", "error.detalle", "El depósito no puede ser nulo");
+            }
+        }
+
+        if (bindingResult.hasErrors()) {
+            String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
+            model.addAttribute("errorMessage", errorMessage);
+            Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
+            Page<DepositoDTO> depositos = depositoService.getAllDepositos(pageable);
+            model.addAttribute("ventaFormattedTotal", ventaService.formatTotal(ventaDTO.getTotal()));
+            model.addAttribute("ventas", ventaService.getAllVentas(pageable).getContent());
+            model.addAttribute("ventaDTO", ventaDTO);
+            model.addAttribute("productos", productos);
+            model.addAttribute("depositos", depositos.getContent());
+            return "tableVentas";
+        }
+
+        ventaService.updateVenta(ventaDTO);
+        return "redirect:/tableVentas";
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVenta(@PathVariable Long id) {
@@ -95,13 +128,10 @@ public class VentaController {
     @GetMapping("/{id}")
     public ResponseEntity<VentaDTO> getVentaById(@PathVariable Long id) {
         VentaDTO ventaDTO = ventaService.getVenta(id);
-        ventaDTO.setTotalString(ventaService.formatTotal(ventaDTO.getTotal()));
-
-        for (DetalleVentaDTO detalle : ventaDTO.getDetallesVenta()) {
-            detalle.setPrecioUnitarioString(ventaService.formatPrecioUnitario(detalle.getPrecioUnitario()));
-            detalle.setSubtotalFormatted(ventaService.formatSubtotal(detalle.getSubtotal()));
-        }
-
+        ventaDTO.getDetallesVenta().forEach(detalle -> {
+            detalle.setPrecioUnitarioString(ventaService.formatPrecioUnitario(detalle.getPrecioUnitario())); // Formatear el precio unitario
+            detalle.setTotalDetalleFormatted(ventaService.formatTotal(detalle.getPrecioUnitario().multiply(new BigDecimal(detalle.getCantidad())))); // Formatear el total
+        });
         return new ResponseEntity<>(ventaDTO, HttpStatus.OK);
     }
 
@@ -111,7 +141,6 @@ public class VentaController {
         Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize, Sort.by("id").descending());
         Page<VentaDTO> ventas;
         if (fecha != null && !fecha.isEmpty()) {
-            logger.info("Solicitud recibida para buscar ventas por fecha: {}", fecha);
             ventas = ventaService.searchVentasByFecha(LocalDate.parse(fecha), newPageable);
         } else {
             ventas = ventaService.getAllVentas(newPageable);
@@ -119,7 +148,9 @@ public class VentaController {
         model.addAttribute("ventas", ventas.getContent());
         model.addAttribute("ventaDTO", new VentaDTO());
         model.addAttribute("page", ventas);
-        model.addAttribute("clientes", clienteService.getAllClientes(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable clientesPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
+        model.addAttribute("clientes", clienteService.getAllClientes(clientesPageable).getContent());
         model.addAttribute("productos", productoService.obtenerTodosLosProductos());
         model.addAttribute("depositos", depositoService.obtenerTodosLosDepositos());
         model.addAttribute("currentPage", "tableVentas");
@@ -142,7 +173,9 @@ public class VentaController {
         model.addAttribute("ventas", ventas.getContent());
         model.addAttribute("ventaDTO", new VentaDTO());
         model.addAttribute("page", ventas);
-        model.addAttribute("clientes", clienteService.getAllClientes(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable clientesPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
+        model.addAttribute("clientes", clienteService.getAllClientes(clientesPageable).getContent());
         return "tableVentas";
     }
 }
