@@ -38,11 +38,6 @@ public class HistorialStock {
     @Column(name = "tipo_movimiento", length = 50, nullable = false)
     private String tipoMovimiento;
 
-    @NotBlank(message = "La observacion no puede estar vacío")
-    @Size(max = 200, message = "La observación debe tener un máximo de 200 caracteres")
-    @Column(length = 200)
-    private String observacion;
-
     // Relaciones
 
     // Relación muchos-a-uno con Producto (un producto puede tener varios historiales de stock)
@@ -116,14 +111,6 @@ public class HistorialStock {
 
     public void setTipoMovimiento(String tipoMovimiento) {
         this.tipoMovimiento = tipoMovimiento;
-    }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
     }
 
     public Producto getProducto() {

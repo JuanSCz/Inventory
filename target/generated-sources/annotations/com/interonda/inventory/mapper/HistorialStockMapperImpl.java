@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-01-10T16:26:17-0300",
+    date = "2025-01-11T12:20:36-0300",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 17.0.12 (Oracle Corporation)"
 )
 @Component
@@ -27,7 +27,6 @@ public class HistorialStockMapperImpl implements HistorialStockMapper {
         historialStockDTO.setFechaActualizacion( historialStock.getFechaActualizacion() );
         historialStockDTO.setMotivo( historialStock.getMotivo() );
         historialStockDTO.setTipoMovimiento( historialStock.getTipoMovimiento() );
-        historialStockDTO.setObservacion( historialStock.getObservacion() );
 
         return historialStockDTO;
     }
@@ -45,7 +44,6 @@ public class HistorialStockMapperImpl implements HistorialStockMapper {
         historialStock.setCantidadNueva( historialStockDTO.getCantidadNueva() );
         historialStock.setMotivo( historialStockDTO.getMotivo() );
         historialStock.setTipoMovimiento( historialStockDTO.getTipoMovimiento() );
-        historialStock.setObservacion( historialStockDTO.getObservacion() );
         historialStock.setFechaActualizacion( historialStockDTO.getFechaActualizacion() );
 
         return historialStock;

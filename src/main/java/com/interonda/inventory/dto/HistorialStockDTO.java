@@ -28,9 +28,6 @@ public class HistorialStockDTO {
     @Size(min = 3, max = 50, message = "El tipo de movimiento debe tener entre 3 y 50 caracteres")
     private String tipoMovimiento;
 
-    @Size(max = 200, message = "La observación debe tener un máximo de 200 caracteres")
-    private String observacion;
-
     @NotNull(message = "El producto no puede estar vacío")
     private Long productoId;
 
@@ -93,14 +90,6 @@ public class HistorialStockDTO {
 
     public void setTipoMovimiento(String tipoMovimiento) {
         this.tipoMovimiento = tipoMovimiento;
-    }
-
-    public String getObservacion() {
-        return observacion;
-    }
-
-    public void setObservacion(String observacion) {
-        this.observacion = observacion;
     }
 
     public Long getProductoId() {

@@ -79,7 +79,6 @@ public class HistorialStockServiceImpl implements HistorialStockService {
             existingHistorialStock.setFecha(historialStockDTO.getFechaActualizacion());
             existingHistorialStock.setMotivo(historialStockDTO.getMotivo());
             existingHistorialStock.setTipoMovimiento(historialStockDTO.getTipoMovimiento());
-            existingHistorialStock.setObservacion(historialStockDTO.getObservacion());
 
             // Manejar relaciones
             existingHistorialStock.setProducto(productoRepository.findById(historialStockDTO.getProductoId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + historialStockDTO.getProductoId())));
@@ -126,7 +125,6 @@ public class HistorialStockServiceImpl implements HistorialStockService {
             throw new DataAccessException("Error obteniendo HistorialStock", e);
         }
     }
-
 
     @Override
     @Transactional(readOnly = true)
