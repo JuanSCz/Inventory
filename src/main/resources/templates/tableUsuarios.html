@@ -47,7 +47,8 @@
                 <a class="nav-link text-white" th:href="@{/dashboard}">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableProveedores}">Proveedores</a>
+                <a class="nav-link text-white" th:href="@{/tableProveedores}"
+                   th:classappend="${currentPage == 'tableProveedores'} ? 'active' : ''">Proveedores</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableClientes}">Clientes</a>
@@ -58,109 +59,126 @@
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableCategorias}">Categorias</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableDepositos}">Depósitos</a>
+            <li class="nav-item dropend">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="depositosDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                    Depósitos
+                </a>
+                <ul class="nav-item dropdown-menu dropdown-menu-end dropdown-menu-right" id="dropdownMenu"
+                    aria-labelledby="depositosDropdown">
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositos">Persistencia</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositosProductos">Stock</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositosProductosUnidad">Unidades</a>
+                    </li>
+                </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableCompras}">Compras</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableVentas}">Ventas</a>
+            <li class="nav-item dropend">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="ventasDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                    Ventas
+                </a>
+                <ul class="nav-item dropdown-menu dropdown-menu-end dropdown-menu-right" id="dropdownMenuVentas"
+                    aria-labelledby="ventasDropdown">
+                    <li><a class="nav-link dropdown-item text-white" href="/tableVentas">Ventas</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tablePresupuestar">Presupuestar</a></li>
+                </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableUsuarios}"
-                   th:classappend="${currentPage == 'tableUsuarios'} ? 'active' : ''">Usuarios</a>
+                <a class="nav-link text-white" th:href="@{/tableUsuarios}">Usuarios</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tablePresupuestar}">Presupuestar</a>
+                <a class="nav-link text-white" th:href="@{/tableHistorialStock}">Historial Stock</a>
             </li>
         </ul>
     </aside>
     <main class="contentPersist p-3 text-center">
-        <h2 class="mb-4 titlePersist">Usuarios</h2>
+        <h2 class="mb-3 titlePersist">Persistencia Usuarios</h2>
 
         <div>
-            <button class="btn buttonPersist navbar-menu buttonPersistUsuario" data-bs-toggle="modal"
+            <button class="btn buttonPersist" data-bs-toggle="modal"
                     data-bs-target="#createUsuarioModal">
                 Crear Usuario
             </button>
         </div>
 
-        <form th:action="@{/tableUsuarios/search}" method="get" class="search-form-container">
-            <div class="input-group-buscar">
-                <input type="text" name="name" placeholder="Nombre" class="form-control search-input">
-                <input type="hidden" name="page" value="0">
-                <input type="hidden" name="size" value="15">
-            </div>
-        </form>
+        <!--      <form th:action="@{/tableUsuarios/search}" method="get" class="search-form-container">
+                 <div class="input-group-buscar">
+                     <input type="text" name="name" placeholder="Nombre" class="form-control search-input">
+                     <input type="hidden" name="page" value="0">
+                     <input type="hidden" name="size" value="15">
+                 </div>
+             </form> -->
 
-        <div class="table-responsive mt-3">
-            <table class="table table-dark table-striped table-bordered custom-table table-sm table-smaller-text">
-                <thead class="table-light">
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Contraseña</th>
-                    <th scope="col">Contacto</th>
-                    <th scope="col">Rol</th>
-                    <th scope="col">Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="usuario : ${usuarios}">
-                    <td th:data-label="ID" th:text="${usuario.id}"></td>
-                    <td th:data-label="Nombre" th:text="${usuario.nombre}"></td>
-                    <td th:data-label="Contraseña" th:text="${usuario.contrasenia}"></td>
-                    <td th:data-label="Contacto" th:text="${usuario.contacto}"></td>
-                    <td th:data-label="Rol" th:text="${usuario.rolNombre}"></td>
-                    <td th:data-label="Acciones">
-                        <div class="btn-group">
-                            <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateUsuario"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#updateUsuarioModal" th:data-id="${usuario.id}">
-                                Editar
-                            </button>
-                            <form th:action="@{/tableUsuarios/{id}(id=${usuario.id})}" method="post"
-                                  onsubmit="return confirmDelete(this);">
-                                <input type="hidden" name="_method" value="delete"/>
-                                <button type="submit" class="btn btn-danger btn-sm delete-button"
-                                        th:data-id="${usuario.id}">Borrar
-                                </button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
-                    <a class="page-link"
-                       th:href="@{/tableUsuarios(page=${page.number - 1}, size=${page.size}, name=${param.name})}">Anterior</a>
-                </li>
-                <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
-                    th:classappend="${page.number == i} ? 'active'">
-                    <a class="page-link" th:href="@{/tableUsuarios(page=${i}, size=${page.size}, name=${param.name})}"
-                       th:text="${i + 1}">1</a>
-                </li>
-                <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
-                    <a class="page-link"
-                       th:href="@{/tableUsuarios(page=${page.number + 1}, size=${page.size}, name=${param.name})}">Siguiente</a>
-                </li>
-            </ul>
-        </nav>
-    </main>
-</div>
+             <div class="table-responsive mt-3">
+                 <table class="table table-dark table-striped table-bordered custom-table table-sm table-smaller-text">
+                     <thead class="table-light">
+                     <tr>
+                         <th scope="col">ID</th>
+                         <th scope="col">Nombre</th>
+                         <th scope="col">Contraseña</th>
+                         <th scope="col">Contacto</th>
+                         <th scope="col">Rol</th>
+                         <th scope="col">Acciones</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     <tr th:each="usuario : ${usuarios}">
+                         <td th:data-label="ID" th:text="${usuario.id}"></td>
+                         <td th:data-label="Nombre" th:text="${usuario.nombre}"></td>
+                         <td th:data-label="Contraseña" th:text="${usuario.contrasenia}"></td>
+                         <td th:data-label="Contacto" th:text="${usuario.contacto}"></td>
+                         <td th:data-label="Rol" th:text="${usuario.rolNombre}"></td>
+                         <td th:data-label="Acciones">
+                             <div class="btn-group">
+                                 <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateUsuario"
+                                         data-bs-toggle="modal"
+                                         data-bs-target="#updateUsuarioModal" th:data-id="${usuario.id}">
+                                     Editar
+                                 </button>
+                                 <form th:action="@{/tableUsuarios/{id}(id=${usuario.id})}" method="post"
+                                       onsubmit="return confirmDelete(this);">
+                                     <input type="hidden" name="_method" value="delete"/>
+                                     <button type="submit" class="btn btn-danger btn-sm delete-button"
+                                             th:data-id="${usuario.id}">Borrar
+                                     </button>
+                                 </form>
+                             </div>
+                         </td>
+                     </tr>
+                     </tbody>
+                 </table>
+             </div>
+             <nav aria-label="Page navigation">
+                 <ul class="pagination justify-content-center">
+                     <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
+                         <a class="page-link"
+                            th:href="@{/tableUsuarios(page=${page.number - 1}, size=${page.size}, name=${param.name})}">Anterior</a>
+                     </li>
+                     <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                         th:classappend="${page.number == i} ? 'active'">
+                         <a class="page-link" th:href="@{/tableUsuarios(page=${i}, size=${page.size}, name=${param.name})}"
+                            th:text="${i + 1}">1</a>
+                     </li>
+                     <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
+                         <a class="page-link"
+                            th:href="@{/tableUsuarios(page=${page.number + 1}, size=${page.size}, name=${param.name})}">Siguiente</a>
+                     </li>
+                 </ul>
+             </nav>
+         </main>
+     </div>
 
-<div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
-<div th:replace="~{fragments/formUpdateUsuarios :: updateModalUsuarios}"></div>
-<div th:replace="~{fragments/formCreateUsuarios :: createModalUsuarios}"></div>
-<div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/indexUsuarios.js"></script>
+     <div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
+     <div th:replace="~{fragments/formUpdateUsuarios :: updateModalUsuarios}"></div>
+     <div th:replace="~{fragments/formCreateUsuarios :: createModalUsuarios}"></div>
+     <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+     <script src="js/indexUsuarios.js"></script>
 
-</body>
-</html>
+     </body>
+     </html>
 
 

@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     handleErrorModal();
-    initializeSearch();
+  /*  initializeSearch(); */
     initializeCreateModal();
     initializeUpdateModal();
     initializeDeleteModal();
@@ -18,15 +18,16 @@ function handleErrorModal() {
         errorModal.show();
     }
 }
-
+/*
 // Manejo de la búsqueda en tiempo real
 function initializeSearch() {
     const searchInput = document.querySelector('.search-input');
     if (searchInput) {
         searchInput.addEventListener('input', debounce(filterTable, 300)); // Agregamos debounce para evitar múltiples solicitudes
     }
-}
+} */
 
+/*
 function filterTable() {
     const input = document.querySelector('.search-input');
     const filter = input.value.toLowerCase();
@@ -55,7 +56,7 @@ function filterTable() {
             tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">Error al cargar los datos</td></tr>';
         });
 }
-
+*/
 // Manejo del modal "Crear Categoria"
 function initializeCreateModal() {
     const createCategoriaModal = new bootstrap.Modal(document.getElementById('createCategoriaModal'), {

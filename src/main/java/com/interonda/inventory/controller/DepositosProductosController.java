@@ -1,5 +1,6 @@
 package com.interonda.inventory.controller;
 
+import com.interonda.inventory.dto.DepositoDTO;
 import com.interonda.inventory.dto.ProductoDTO;
 import com.interonda.inventory.service.CategoriaService;
 import com.interonda.inventory.service.DepositoService;
@@ -14,7 +15,6 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/tableDepositosProductos")
 public class DepositosProductosController {
-    private static final Logger logger = LoggerFactory.getLogger(ProductoController.class);
+    private static final Logger logger = LoggerFactory.getLogger(DepositosProductosController.class);
 
     private final ProductoService productoService;
     private final CategoriaService categoriaService;
@@ -83,8 +83,15 @@ public class DepositosProductosController {
     @GetMapping
     public String getProductosPorDeposito(@RequestParam(required = false) Long depositoId, Model model, Pageable pageable) {
         if (depositoId == null) {
-            // Si no se proporciona un depósito, selecciona el primer depósito disponible
-            depositoId = depositoService.getAllDepositos(PageRequest.of(0, 1)).getContent().get(0).getId();
+            // Verifica si hay depósitos disponibles
+            Page<DepositoDTO> depositosPage = depositoService.getAllDepositos(PageRequest.of(0, 1));
+            if (depositosPage.isEmpty()) {
+                // Maneja el caso en que no hay depósitos disponibles
+                model.addAttribute("errorMessage", "No hay depósitos disponibles.");
+                return "errorPage"; // Asegúrate de tener una página de error adecuada
+            }
+            // Selecciona el primer depósito disponible
+            depositoId = depositosPage.getContent().get(0).getId();
         }
         Page<ProductoDTO> productos = depositosProductosService.getProductosByDeposito(depositoId, pageable);
         model.addAttribute("productos", productos.getContent());

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +59,12 @@ public class Producto {
     @Size(max = 17, message = "La dirección MAC debe tener un máximo de 17 caracteres")
     @Column(name = "mac_address", length = 17, unique = true)
     private String macAddress;
+
+    @Column(nullable = false)
+    private boolean activo;
+
+    @Column(name = "fecha_baja")
+    private LocalDateTime fechaBaja;
 
     // Relaciones
 
@@ -233,5 +240,21 @@ public class Producto {
 
     public void setDeposito(Deposito deposito) {
         this.deposito = deposito;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public LocalDateTime getFechaBaja() {
+        return fechaBaja;
+    }
+
+    public void setFechaBaja(LocalDateTime fechaBaja) {
+        this.fechaBaja = fechaBaja;
     }
 }

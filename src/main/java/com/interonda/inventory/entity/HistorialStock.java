@@ -23,8 +23,7 @@ public class HistorialStock {
     @Column(name = "cantidad_actual", nullable = false)
     private Integer cantidadNueva;
 
-    @NotNull(message = "La fecha de actualización no puede estar vacía")
-    @FutureOrPresent(message = "La fecha de actualización debe ser en el presente o futuro")
+    @NotNull(message = "La fecha de actualización no puede ser nula")
     @Column(name = "actualizacion", nullable = false)
     private LocalDateTime fechaActualizacion;
 
@@ -52,7 +51,7 @@ public class HistorialStock {
 
     // Relación muchos-a-uno con Usuario (un usuario puede tener varios historiales de stock)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id", nullable = false)
+    @JoinColumn(name = "usuario_id", nullable = true)
     private Usuario usuario;
 
     // Relación muchos-a-uno con Stock (un stock puede tener varios historiales de stock)

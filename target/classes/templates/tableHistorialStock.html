@@ -45,7 +45,8 @@
                 <a class="nav-link text-white" th:href="@{/dashboard}">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableProveedores}">Proveedores</a>
+                <a class="nav-link text-white" th:href="@{/tableProveedores}"
+                   th:classappend="${currentPage == 'tableProveedores'} ? 'active' : ''">Proveedores</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableClientes}">Clientes</a>
@@ -56,21 +57,38 @@
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableCategorias}">Categorias</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableDepositos}">Depósitos</a>
+            <li class="nav-item dropend">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="depositosDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                    Depósitos
+                </a>
+                <ul class="nav-item dropdown-menu dropdown-menu-end dropdown-menu-right" id="dropdownMenu"
+                    aria-labelledby="depositosDropdown">
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositos">Persistencia</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositosProductos">Stock</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositosProductosUnidad">Unidades</a>
+                    </li>
+                </ul>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableCompras}"
-                   th:classappend="${currentPage == 'tableCompras'} ? 'active' : ''">Compras</a>
+                <a class="nav-link text-white" th:href="@{/tableCompras}">Compras</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableVentas}">Ventas</a>
+            <li class="nav-item dropend">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="ventasDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                    Ventas
+                </a>
+                <ul class="nav-item dropdown-menu dropdown-menu-end dropdown-menu-right" id="dropdownMenuVentas"
+                    aria-labelledby="ventasDropdown">
+                    <li><a class="nav-link dropdown-item text-white" href="/tableVentas">Ventas</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tablePresupuestar">Presupuestar</a></li>
+                </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableUsuarios}">Usuarios</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tablePresupuestar}">Presupuestar</a>
+                <a class="nav-link text-white" th:href="@{/tableHistorialStock}">Historial Stock</a>
             </li>
         </ul>
     </aside>
@@ -95,13 +113,13 @@
                 <tbody>
                 <tr th:each="historial : ${historiales}">
                     <td th:data-label="ID" th:text="${historial.id}"></td>
-                    <td th:data-label="Cantidad Anterior" th:text="${historial.cantidadAnterior}"></td>
-                    <td th:data-label="Cantidad Nueva" th:text="${historial.cantidadNueva}"></td>
-                    <td th:data-label="Fecha de Actualización" th:text="${historial.fechaActualizacion}"></td>
+                    <td th:data-label="Cantidad_Anterior" th:text="${historial.cantidadAnterior}"></td>
+                    <td th:data-label="Cantidad_Nueva" th:text="${historial.cantidadNueva}"></td>
+                    <td th:data-label="Fecha_de_Actualización" th:text="${historial.fechaActualizacion}"></td>
                     <td th:data-label="Motivo" th:text="${historial.motivo}"></td>
-                    <td th:data-label="Tipo de Movimiento" th:text="${historial.tipoMovimiento}"></td>
-                    <td th:data-label="Producto" th:text="${historial.productoId}"></td>
-                    <td th:data-label="Depósito" th:text="${historial.depositoId}"></td>
+                    <td th:data-label="Tipo_de_Movimiento" th:text="${historial.tipoMovimiento}"></td>
+                    <td th:data-label="Producto" th:text="${historial.productoNombre}"></td>
+                    <td th:data-label="Depósito" th:text="${historial.depositoNombre}"></td>
                     <td th:data-label="Usuario" th:text="${historial.usuarioId}"></td>
                 </tr>
                 </tbody>

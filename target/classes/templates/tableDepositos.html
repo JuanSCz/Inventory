@@ -47,7 +47,8 @@
                 <a class="nav-link text-white" th:href="@{/dashboard}">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableProveedores}">Proveedores</a>
+                <a class="nav-link text-white" th:href="@{/tableProveedores}"
+                   th:classappend="${currentPage == 'tableProveedores'} ? 'active' : ''">Proveedores</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableClientes}">Clientes</a>
@@ -58,41 +59,58 @@
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableCategorias}">Categorias</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableDepositos}"
-                   th:classappend="${currentPage == 'tableDepositos'} ? 'active' : ''">Depósitos</a>
+            <li class="nav-item dropend">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="depositosDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                    Depósitos
+                </a>
+                <ul class="nav-item dropdown-menu dropdown-menu-end dropdown-menu-right" id="dropdownMenu"
+                    aria-labelledby="depositosDropdown">
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositos">Persistencia</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositosProductos">Stock</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositosProductosUnidad">Unidades</a>
+                    </li>
+                </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableCompras}">Compras</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableVentas}">Ventas</a>
+            <li class="nav-item dropend">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="ventasDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                    Ventas
+                </a>
+                <ul class="nav-item dropdown-menu dropdown-menu-end dropdown-menu-right" id="dropdownMenuVentas"
+                    aria-labelledby="ventasDropdown">
+                    <li><a class="nav-link dropdown-item text-white" href="/tableVentas">Ventas</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tablePresupuestar">Presupuestar</a></li>
+                </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableUsuarios}">Usuarios</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tablePresupuestar}">Presupuestar</a>
+                <a class="nav-link text-white" th:href="@{/tableHistorialStock}">Historial Stock</a>
             </li>
         </ul>
     </aside>
     <main class="contentPersist p-3 text-center">
-        <h2 class="mb-4 titlePersist">Depósitos</h2>
+        <h2 class="mb-3 titlePersist">Persistencia Depósitos</h2>
 
         <div>
-            <button class="btn buttonPersist navbar-menu buttonPersistDeposito" data-bs-toggle="modal"
+            <button class="btn buttonPersist" data-bs-toggle="modal"
                     data-bs-target="#createDepositoModal">
                 Crear Depósito
             </button>
         </div>
 
-        <form th:action="@{/tableDepositos/search}" method="get" class="search-form-container">
-            <div class="input-group-buscar">
-                <input type="text" name="name" placeholder="Nombre" class="form-control search-input">
-                <input type="hidden" name="page" value="0">
-                <input type="hidden" name="size" value="15">
-            </div>
-        </form>
+        <!--     <form th:action="@{/tableDepositos/search}" method="get" class="search-form-container">
+                <div class="input-group-buscar">
+                    <input type="text" name="name" placeholder="Nombre" class="form-control search-input">
+                    <input type="hidden" name="page" value="0">
+                    <input type="hidden" name="size" value="15">
+                </div>
+            </form> -->
 
         <div class="table-responsive mt-3">
             <table class="table table-dark table-striped table-bordered custom-table table-sm table-smaller-text">

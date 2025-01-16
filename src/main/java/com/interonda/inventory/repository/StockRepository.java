@@ -13,10 +13,12 @@ import java.util.Optional;
 @Repository
 public interface StockRepository extends JpaRepository<Stock, Long> {
 
-    void deleteByProductoId(Long productoId);
+    @Query("SELECT s FROM Stock s WHERE s.producto.id = :productoId AND s.deposito.id = :depositoId AND s.producto.activo = true")
+    Optional<Stock> findByProductoIdAndDepositoId(@Param("productoId") Long productoId, @Param("depositoId") Long depositoId);
 
-    Optional<Stock> findByProductoIdAndDepositoId(Long productoId, Long depositoId);
-
-    @Query("SELECT s FROM Stock s WHERE s.producto.id = :productoId AND s.deposito.id = :depositoId")
+    @Query("SELECT s FROM Stock s WHERE s.producto.id = :productoId AND s.deposito.id = :depositoId AND s.producto.activo = true")
     List<Stock> findByProductoIdAndDepositoIdList(@Param("productoId") Long productoId, @Param("depositoId") Long depositoId);
+
+    @Query("SELECT s FROM Stock s WHERE s.producto.id = :productoId AND s.producto.activo = true")
+    List<Stock> findByProductoId(@Param("productoId") Long productoId);
 }

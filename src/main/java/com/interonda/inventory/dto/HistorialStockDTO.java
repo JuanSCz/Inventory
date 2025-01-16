@@ -40,6 +40,10 @@ public class HistorialStockDTO {
     @NotNull(message = "El stock no puede estar vacío")
     private Long stockId;
 
+    private String productoNombre;
+
+    private String depositoNombre;
+
     public HistorialStockDTO() {
     }
 
@@ -122,5 +126,21 @@ public class HistorialStockDTO {
 
     public void setStockId(Long stockId) {
         this.stockId = stockId;
+    }
+
+    public String getProductoNombre() {
+        return productoNombre;
+    }
+
+    public void setProductoNombre(String productoNombre) {
+        this.productoNombre = productoNombre;
+    }
+
+    public String getDepositoNombre() {
+        return depositoNombre;
+    }
+
+    public void setDepositoNombre(String depositoNombre) {
+        this.depositoNombre = depositoNombre;
     }
 }

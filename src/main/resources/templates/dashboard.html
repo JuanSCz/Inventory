@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interonda IO</title>
-    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <link rel="stylesheet" href="css/tableProveedores.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="icon" th:href="@{/images/wifi.png}" type="image/x-icon">
+    <link rel="icon" href="images/wifi.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="body-table" th:data-error-message="${errorMessage}">
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm responsive-navbar">
     <div class="container-fluid">
         <img th:src="@{/images/logo.png}" alt="Interonda Logo"
@@ -44,11 +44,11 @@
     <aside class="sidebar bg-secondary text-white p-3 fixed-sidebar responsive-sidebar">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/dashboard}"
-                   th:classappend="${currentPage == 'dashboard'} ? 'active' : ''">Dashboard</a>
+                <a class="nav-link text-white" th:href="@{/dashboard}">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableProveedores}">Proveedores</a>
+                <a class="nav-link text-white" th:href="@{/tableProveedores}"
+                   th:classappend="${currentPage == 'tableProveedores'} ? 'active' : ''">Proveedores</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableClientes}">Clientes</a>
@@ -59,107 +59,142 @@
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableCategorias}">Categorias</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableDepositos}">Depósitos</a>
+            <li class="nav-item dropend">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="depositosDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                    Depósitos
+                </a>
+                <ul class="nav-item dropdown-menu dropdown-menu-end dropdown-menu-right" id="dropdownMenu" aria-labelledby="depositosDropdown">
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositos">Persistencia</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositosProductos">Stock</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositosProductosUnidad">Unidades</a></li>
+                </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableCompras}">Compras</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableVentas}">Ventas</a>
+            <li class="nav-item dropend">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="ventasDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                    Ventas
+                </a>
+                <ul class="nav-item dropdown-menu dropdown-menu-end dropdown-menu-right" id="dropdownMenuVentas"
+                    aria-labelledby="ventasDropdown">
+                    <li><a class="nav-link dropdown-item text-white" href="/tableVentas">Ventas</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tablePresupuestar">Presupuestar</a></li>
+                </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableUsuarios}">Usuarios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/tableHistorialStock}">Historial Stock</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tablePresupuestar}">Presupuestar</a>
             </li>
         </ul>
     </aside>
-    <main class="content-dashboard text-center flex-grow-1 contentPersist" aria-label="Main Content">
-        <h2 class="mb-5 titleDashboard">Sistema de Gestion de Inventarios</h2>
-        <div class="row-dashboard">
-            <div class="card-container">
+    <main class="contentPersistDashboard p-3 text-center">
+        <h2 class="mb-4 titlePersist">Sistema de Gestion de Inventarios</h2>
+        <div class="row justify-content-center flex-wrap row-dashboard">
+            <div class="col-md-2">
                 <a th:href="@{/chartProveedores}" class="etiqueta-chart">
-                    <div class="card mb-3 shadow-sm elegant-card">
-                        <div class="card-body body-dashboard">
-                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalProveedores}"></h2>
-                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Proveedores</h5>
-                        </div>
+                <div class="card mb-2 shadow-sm elegant-card custom-card-width">
+                    <div class="card-body body-dashboard">
+                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalProveedores}" id="card-title-dashboard"></h2>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Proveedores Creados</h5>
                     </div>
+                </div>
                 </a>
             </div>
-            <div class="card-container">
-                <a th:href="@{/chartProductos}" class="etiqueta-chart">
-                    <div class="card mb-3 shadow-sm elegant-card">
-                        <div class="card-body body-dashboard">
-                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalProductos}"></h2>
-                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Productos</h5>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="card-container">
+            <div class="col-md-2">
                 <a th:href="@{/chartClientes}" class="etiqueta-chart">
-                    <div class="card mb-3 shadow-sm elegant-card">
+                <div class="card mb-2 shadow-sm elegant-card custom-card-width">
+                    <div class="card-body body-dashboard">
+                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalClientes}"></h2>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Clientes Creados</h5>
+                    </div>
+                </div>
+                </a>
+            </div>
+            <div class="col-md-2">
+                <a th:href="@{/chartUsuarios}" class="etiqueta-chart">
+                    <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                         <div class="card-body body-dashboard">
-                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalClientes}"></h2>
-                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Clientes</h5>
+                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalUsuarios}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Usuarios Creados</h5>
                         </div>
                     </div>
                 </a>
             </div>
-            <div class="card-container">
-                <a th:href="@{/chartCompras}" class="etiqueta-chart">
-                    <div class="card mb-3 shadow-sm elegant-card">
+            <div class="col-md-2">
+                <a th:href="@{/chartDepositos}" class="etiqueta-chart">
+                    <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                         <div class="card-body body-dashboard">
-                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalCompras}"></h2>
-                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Compras</h5>
+                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalDepositos}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Depositos Creados</h5>
                         </div>
                     </div>
                 </a>
             </div>
-            <div class="card-container">
-                <a th:href="@{/chartVentas}" class="etiqueta-chart">
-                    <div class="card mb-3 shadow-sm elegant-card">
+            <div class="col-md-2">
+                <a th:href="@{/chartCategorias}" class="etiqueta-chart">
+                    <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                         <div class="card-body body-dashboard">
-                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalVentas}"></h2>
-                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Ventas</h5>
+                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalCategorias}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Categorias Creadas</h5>
                         </div>
                     </div>
                 </a>
             </div>
         </div>
-        <div class="row-dashboard">
-            <div class="card-container">
-                <a th:href="@{/chartUsuarios}" class="etiqueta-chart">
-                    <div class="card mb-3 shadow-sm elegant-card">
+        <div class="row justify-content-center flex-wrap row-dashboard">
+            <div class="col-md-2">
+                <a th:href="@{/chartProductos}" class="etiqueta-chart">
+                    <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                         <div class="card-body body-dashboard">
-                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalUsuarios}"></h2>
-                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Usuarios</h5>
+                            <h2 class="card-number-dashboard elegant-text-dashboard"  th:text="${totalProductos}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Productos Creados</h5>
                         </div>
                     </div>
                 </a>
             </div>
-            <div class="card-container">
-                <a th:href="@{/chartDepositos}" class="etiqueta-chart">
-                    <div class="card mb-3 shadow-sm elegant-card">
+            <div class="col-md-2">
+                <a th:href="@{/chartCompras}" class="etiqueta-chart">
+                    <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                         <div class="card-body body-dashboard">
-                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalDepositos}"></h2>
-                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Depositos</h5>
+                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalCompras}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Compras Realizadas</h5>
                         </div>
                     </div>
                 </a>
             </div>
-            <div class="card-container">
-                <a th:href="@{/chartCategorias}" class="etiqueta-chart">
-                    <div class="card mb-3 shadow-sm elegant-card">
+            <div class="col-md-2">
+                <a th:href="@{/chartVentas}" class="etiqueta-chart">
+                    <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                         <div class="card-body body-dashboard">
-                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalCategorias}"></h2>
-                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Categorias</h5>
+                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalVentas}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Ventas Realizadas</h5>
                         </div>
                     </div>
                 </a>
+            </div>
+            <div class="col-md-2">
+                <div class="card mb-2 shadow-sm elegant-card custom-card-width">
+                    <div class="card-body body-dashboard">
+                        <h2 class="card-number-dashboard elegant-text-dashboard">368</h2>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Mas<br>Vendidos</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card mb-2 shadow-sm elegant-card custom-card-width">
+                    <div class="card-body body-dashboard">
+                        <h2 class="card-number-dashboard elegant-text-dashboard">368</h2>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Menos Vendidos</h5>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -168,5 +203,3 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="js/index.js"></script>
 </body>
-
-</html>

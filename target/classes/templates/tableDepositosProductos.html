@@ -45,32 +45,50 @@
                 <a class="nav-link text-white" th:href="@{/dashboard}">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableProveedores}">Proveedores</a>
+                <a class="nav-link text-white" th:href="@{/tableProveedores}"
+                   th:classappend="${currentPage == 'tableProveedores'} ? 'active' : ''">Proveedores</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableClientes}">Clientes</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableProductos}"
-                   th:classappend="${currentPage == 'tableProductos'} ? 'active' : ''">Productos</a>
+                <a class="nav-link text-white" th:href="@{/tableProductos}">Productos</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableCategorias}">Categorias</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableDepositos}">Depósitos</a>
+            <li class="nav-item dropend">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="depositosDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                    Depósitos
+                </a>
+                <ul class="nav-item dropdown-menu dropdown-menu-end dropdown-menu-right" id="dropdownMenu"
+                    aria-labelledby="depositosDropdown">
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositos">Persistencia</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositosProductos">Stock</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositosProductosUnidad">Unidades</a>
+                    </li>
+                </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableCompras}">Compras</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tableVentas}">Ventas</a>
+            <li class="nav-item dropend">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="ventasDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                    Ventas
+                </a>
+                <ul class="nav-item dropdown-menu dropdown-menu-end dropdown-menu-right" id="dropdownMenuVentas"
+                    aria-labelledby="ventasDropdown">
+                    <li><a class="nav-link dropdown-item text-white" href="/tableVentas">Ventas</a></li>
+                    <li><a class="nav-link dropdown-item text-white" href="/tablePresupuestar">Presupuestar</a></li>
+                </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableUsuarios}">Usuarios</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tablePresupuestar}">Presupuestar</a>
+                <a class="nav-link text-white" th:href="@{/tableHistorialStock}">Historial Stock</a>
             </li>
         </ul>
     </aside>
@@ -79,7 +97,7 @@
 
         <div class="col-md-6 mb-3">
             <label for="depositoId" class="form-label">Depósito</label>
-            <select class="form-control form-control-detalle" id="depositoId" name="depositoId">
+            <select class="form-control form-control-sm form-control-chico" id="depositoId" name="depositoId">
                 <option th:each="deposito : ${depositos}" th:value="${deposito.id}" th:text="${deposito.nombre}"
                         th:selected="${deposito.id == selectedDepositoId}"></option>
             </select>

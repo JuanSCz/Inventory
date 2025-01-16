@@ -6,18 +6,17 @@ import com.interonda.inventory.entity.*;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.ProductoMapper;
-import com.interonda.inventory.repository.CategoriaRepository;
-import com.interonda.inventory.repository.DepositoRepository;
-import com.interonda.inventory.repository.ProductoRepository;
-import com.interonda.inventory.repository.StockRepository;
+import com.interonda.inventory.repository.*;
 import com.interonda.inventory.service.ProductoService;
 import com.interonda.inventory.utils.ValidatorUtils;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +28,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,15 +41,17 @@ public class ProductoServiceImpl implements ProductoService {
     private final CategoriaRepository categoriaRepository;
     private final DepositoRepository depositoRepository;
     private final StockRepository stockRepository;
+    private final HistorialStockRepository historialStockRepository;
     private final Validator validator;
 
     @Autowired
-    public ProductoServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper, CategoriaRepository categoriaRepository, DepositoRepository depositoRepository, StockRepository stockRepository, Validator validator) {
+    public ProductoServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper, CategoriaRepository categoriaRepository, DepositoRepository depositoRepository, StockRepository stockRepository, HistorialStockRepository historialStockRepository, Validator validator) {
         this.productoRepository = productoRepository;
         this.productoMapper = productoMapper;
         this.categoriaRepository = categoriaRepository;
         this.depositoRepository = depositoRepository;
         this.stockRepository = stockRepository;
+        this.historialStockRepository = historialStockRepository;
         this.validator = validator;
     }
 
@@ -75,21 +77,35 @@ public class ProductoServiceImpl implements ProductoService {
             Categoria categoria = categoriaRepository.findById(productoDTO.getCategoriaId()).orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con el id: " + productoDTO.getCategoriaId()));
             producto.setCategoria(categoria);
 
-            // Asignar los stocks al producto
+            // Asignar los stocks al producto y crear historial de stock
             producto.setStocks(productoDTO.getStocks().stream().map(stockDTO -> {
                 Stock stock = stockRepository.findByProductoIdAndDepositoId(producto.getId(), stockDTO.getDepositoId()).orElse(new Stock());
                 stock.setCantidad(stock.getCantidad() == null ? stockDTO.getCantidad() : stock.getCantidad() + stockDTO.getCantidad());
                 stock.setFechaActualizacion(LocalDateTime.now());
                 stock.setOperacion("CREACIÓN");
                 stock.setProducto(producto);
-                stock.setDeposito(depositoRepository.findById(stockDTO.getDepositoId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + stockDTO.getDepositoId())));
+                stock.setDeposito(depositoRepository.findById(stockDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + stockDTO.getDepositoId())));
+
+                // Crear historial de stock
+                HistorialStock historialStock = new HistorialStock();
+                historialStock.setCantidadAnterior(0); // Asumiendo que es un nuevo stock
+                historialStock.setCantidadNueva(stock.getCantidad());
+                historialStock.setFechaActualizacion(stock.getFechaActualizacion());
+                historialStock.setMotivo("Creación de producto");
+                historialStock.setTipoMovimiento("CREACIÓN");
+                historialStock.setProducto(producto);
+                historialStock.setDeposito(stock.getDeposito());
+                historialStock.setStock(stock);
+
+                stock.getHistorialStocks().add(historialStock);
+
                 return stock;
             }).collect(Collectors.toList()));
 
             // Asignar el depósito al producto
             if (!producto.getStocks().isEmpty()) {
                 producto.setDeposito(producto.getStocks().get(0).getDeposito());
+                producto.setActivo(true);
             }
 
             Producto savedProducto = productoRepository.save(producto);
@@ -114,7 +130,6 @@ public class ProductoServiceImpl implements ProductoService {
             producto.setDescripcion(productoDTO.getDescripcion());
             producto.setPrecio(productoDTO.getPrecio());
             producto.setCosto(productoDTO.getCosto());
-
             producto.setStockActual(productoDTO.getStockActual());
             producto.setStockMinimo(productoDTO.getStockMinimo());
 
@@ -126,15 +141,30 @@ public class ProductoServiceImpl implements ProductoService {
                 producto.setCategoria(null);
             }
 
-            // Actualizar los stocks del producto
+            // Actualizar los stocks del producto y crear historial de stock
             producto.getStocks().clear();
             producto.getStocks().addAll(productoDTO.getStocks().stream().map(stockDTO -> {
                 Stock stock = stockRepository.findByProductoIdAndDepositoId(producto.getId(), stockDTO.getDepositoId()).orElse(new Stock());
-                stock.setCantidad(stock.getCantidad() == null ? stockDTO.getCantidad() : stock.getCantidad() + stockDTO.getCantidad());
+                Integer cantidadAnterior = stock.getCantidad() == null ? 0 : stock.getCantidad();
+                stock.setCantidad(stockDTO.getCantidad());
                 stock.setFechaActualizacion(LocalDateTime.now());
                 stock.setOperacion("ACTUALIZACIÓN");
                 stock.setProducto(producto);
                 stock.setDeposito(depositoRepository.findById(stockDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + stockDTO.getDepositoId())));
+
+                // Crear historial de stock
+                HistorialStock historialStock = new HistorialStock();
+                historialStock.setCantidadAnterior(cantidadAnterior);
+                historialStock.setCantidadNueva(stock.getCantidad());
+                historialStock.setFechaActualizacion(stock.getFechaActualizacion());
+                historialStock.setMotivo("Actualización de producto");
+                historialStock.setTipoMovimiento("ACTUALIZACIÓN");
+                historialStock.setProducto(producto);
+                historialStock.setDeposito(stock.getDeposito());
+                historialStock.setStock(stock);
+
+                stock.getHistorialStocks().add(historialStock);
+
                 return stock;
             }).collect(Collectors.toList()));
 
@@ -159,19 +189,56 @@ public class ProductoServiceImpl implements ProductoService {
     @Transactional
     public boolean deleteProducto(Long id) {
         try {
-            logger.info("Eliminando Producto con id: {}", id);
-            if (!productoRepository.existsById(id)) {
-                throw new ResourceNotFoundException("Producto no encontrado con el id: " + id);
+            logger.info("Desactivando Producto con id: {}", id);
+            Producto producto = productoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + id));
+
+            // Desactivar el producto y establecer la fecha de baja en el DTO
+            producto.setActivo(false);
+            producto.setFechaBaja(LocalDateTime.now());
+            producto.setStockActual(0);
+
+            // Desactivar los stocks relacionados
+            for (Stock stock : producto.getStocks()) {
+                stock.setCantidad(0); // O cualquier otra lógica de desactivación que necesites
+                stock.setFechaActualizacion(LocalDateTime.now());
+                stock.setOperacion("ELIMINACIÓN");
+                stockRepository.save(stock);
+
+                // Crear historial de stock para la desactivación
+                HistorialStock historialStock = new HistorialStock();
+                historialStock.setCantidadAnterior(stock.getCantidad());
+                historialStock.setCantidadNueva(0);
+                historialStock.setFechaActualizacion(stock.getFechaActualizacion());
+                historialStock.setMotivo("Eliminación de producto");
+                historialStock.setTipoMovimiento("ELIMINACIÓN");
+                historialStock.setProducto(producto);
+                historialStock.setDeposito(stock.getDeposito());
+                historialStock.setStock(stock);
+                historialStockRepository.save(historialStock);
             }
-            productoRepository.deleteById(id);
-            logger.info("Producto eliminado exitosamente con id: {}", id);
+
+            productoRepository.save(producto);
+            logger.info("Producto desactivado exitosamente con id: {}", id);
             return true;
         } catch (ResourceNotFoundException e) {
             logger.warn("Producto no encontrado: {}", e.getMessage());
             return false;
         } catch (Exception e) {
-            logger.error("Error eliminando Producto", e);
+            logger.error("Error desactivando Producto", e);
             return false;
+        }
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?") // Ejecutar todos los días a medianoche
+    @Transactional
+    public void eliminarProductosDadosDeBaja() {
+        LocalDateTime haceDosMeses = LocalDateTime.now().minusMonths(2);
+        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE); // Ajusta el tamaño de la página según sea necesario
+        Page<Producto> productosParaEliminar = productoRepository.findByActivoFalseAndFechaBajaBefore(haceDosMeses, pageable);
+
+        for (Producto producto : productosParaEliminar) {
+            productoRepository.delete(producto);
+            logger.info("Producto eliminado permanentemente con id: {}", producto.getId());
         }
     }
 
@@ -194,7 +261,6 @@ public class ProductoServiceImpl implements ProductoService {
         formatter.setRoundingMode(RoundingMode.DOWN);
         return formatter.format(costo);
     }
-
 
     @Override
     @Transactional(readOnly = true)
@@ -223,9 +289,9 @@ public class ProductoServiceImpl implements ProductoService {
     @Transactional(readOnly = true)
     public Page<ProductoDTO> getAllProductos(Pageable pageable) {
         try {
-            logger.info("Obteniendo todos los Productos con paginación");
+            logger.info("Obteniendo todos los Productos activos con paginación");
             Pageable sortedByIdDesc = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("id").descending());
-            Page<Producto> productos = productoRepository.findAll(sortedByIdDesc);
+            Page<Producto> productos = productoRepository.findByActivoTrue(sortedByIdDesc);
             return productos.map(producto -> {
                 ProductoDTO productoDTO = productoMapper.toDto(producto);
                 if (producto.getCategoria() != null) {
@@ -241,8 +307,8 @@ public class ProductoServiceImpl implements ProductoService {
                 return productoDTO;
             });
         } catch (Exception e) {
-            logger.error("Error obteniendo todos los Productos con paginación", e);
-            throw new DataAccessException("Error obteniendo todos los Productos con paginación", e);
+            logger.error("Error obteniendo todos los Productos activos con paginación", e);
+            throw new DataAccessException("Error obteniendo todos los Productos activos con paginación", e);
         }
     }
 
@@ -250,12 +316,12 @@ public class ProductoServiceImpl implements ProductoService {
     @Transactional(readOnly = true)
     public Page<ProductoDTO> searchProductosByName(String nombre, Pageable pageable) {
         try {
-            logger.info("Buscando Productos por nombre: {}", nombre);
-            Page<Producto> productos = productoRepository.findByNombreContainingIgnoreCase(nombre, pageable);
+            logger.info("Buscando Productos activos por nombre: {}", nombre);
+            Page<Producto> productos = productoRepository.findByNombreContainingIgnoreCaseAndActivoTrue(nombre, pageable);
             return productos.map(productoMapper::toDto);
         } catch (Exception e) {
-            logger.error("Error buscando Productos por nombre", e);
-            throw new DataAccessException("Error buscando Productos por nombre", e);
+            logger.error("Error buscando Productos activos por nombre", e);
+            throw new DataAccessException("Error buscando Productos activos por nombre", e);
         }
     }
 

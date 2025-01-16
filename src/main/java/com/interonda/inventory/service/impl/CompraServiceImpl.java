@@ -90,12 +90,25 @@ public class CompraServiceImpl implements CompraService {
 
                 // Actualizar el stock del producto en el depósito
                 Stock stock = stockRepository.findByProductoIdAndDepositoId(producto.getId(), deposito.getId()).orElse(new Stock());
+                Integer cantidadAnterior = stock.getCantidad() == null ? 0 : stock.getCantidad();
                 stock.setCantidad(stock.getCantidad() == null ? detalle.getCantidad() : stock.getCantidad() + detalle.getCantidad());
                 stock.setFechaActualizacion(LocalDateTime.now());
                 stock.setOperacion("COMPRA");
                 stock.setProducto(producto);
                 stock.setDeposito(deposito);
                 stockRepository.save(stock);
+
+                // Crear historial de stock
+                HistorialStock historialStock = new HistorialStock();
+                historialStock.setCantidadAnterior(cantidadAnterior);
+                historialStock.setCantidadNueva(stock.getCantidad());
+                historialStock.setFechaActualizacion(stock.getFechaActualizacion());
+                historialStock.setMotivo("Compra de producto");
+                historialStock.setTipoMovimiento("COMPRA");
+                historialStock.setProducto(producto);
+                historialStock.setDeposito(deposito);
+                historialStock.setStock(stock);
+                historialStockRepository.save(historialStock);
 
                 // Actualizar el stock_actual del producto
                 producto.setStockActual(producto.getStockActual() + detalle.getCantidad());
@@ -167,13 +180,24 @@ public class CompraServiceImpl implements CompraService {
 
                 if (detalle.getId() != null) {
                     // Restar el stock anterior
-                    List<Stock> stocks = stockRepository.findByProductoIdAndDepositoIdList(detalle.getProducto().getId(), detalle.getDeposito().getId());
-                    for (Stock stock : stocks) {
-                        stock.setCantidad(stock.getCantidad() - detalle.getCantidad());
-                        stock.setFechaActualizacion(LocalDateTime.now());
-                        stock.setOperacion("ACTUALIZACIÓN");
-                        stockRepository.save(stock);
-                    }
+                    Stock stock = stockRepository.findByProductoIdAndDepositoId(detalle.getProducto().getId(), detalle.getDeposito().getId()).orElseThrow(() -> new ResourceNotFoundException("Stock no encontrado"));
+                    Integer cantidadAnterior = stock.getCantidad();
+                    stock.setCantidad(stock.getCantidad() - detalle.getCantidad());
+                    stock.setFechaActualizacion(LocalDateTime.now());
+                    stock.setOperacion("ACTUALIZACIÓN");
+                    stockRepository.save(stock);
+
+                    // Crear historial de stock
+                    HistorialStock historialStock = new HistorialStock();
+                    historialStock.setCantidadAnterior(cantidadAnterior);
+                    historialStock.setCantidadNueva(stock.getCantidad());
+                    historialStock.setFechaActualizacion(stock.getFechaActualizacion());
+                    historialStock.setMotivo("Actualización de detalle de compra");
+                    historialStock.setTipoMovimiento("ACTUALIZACIÓN");
+                    historialStock.setProducto(detalle.getProducto());
+                    historialStock.setDeposito(detalle.getDeposito());
+                    historialStock.setStock(stock);
+                    historialStockRepository.save(historialStock);
 
                     // Actualizar el stock_actual del producto
                     Producto producto = detalle.getProducto();
@@ -192,15 +216,26 @@ public class CompraServiceImpl implements CompraService {
                 }
 
                 // Sumar el nuevo stock
-                List<Stock> stocks = stockRepository.findByProductoIdAndDepositoIdList(detalle.getProducto().getId(), detalle.getDeposito().getId());
-                for (Stock stock : stocks) {
-                    stock.setCantidad(stock.getCantidad() == null ? detalle.getCantidad() : stock.getCantidad() + detalle.getCantidad());
-                    stock.setFechaActualizacion(LocalDateTime.now());
-                    stock.setOperacion("ACTUALIZACIÓN");
-                    stock.setProducto(detalle.getProducto());
-                    stock.setDeposito(detalle.getDeposito());
-                    stockRepository.save(stock);
-                }
+                Stock stock = stockRepository.findByProductoIdAndDepositoId(detalle.getProducto().getId(), detalle.getDeposito().getId()).orElse(new Stock());
+                Integer cantidadAnterior = stock.getCantidad() == null ? 0 : stock.getCantidad();
+                stock.setCantidad(stock.getCantidad() == null ? detalle.getCantidad() : stock.getCantidad() + detalle.getCantidad());
+                stock.setFechaActualizacion(LocalDateTime.now());
+                stock.setOperacion("ACTUALIZACIÓN");
+                stock.setProducto(detalle.getProducto());
+                stock.setDeposito(detalle.getDeposito());
+                stockRepository.save(stock);
+
+                // Crear historial de stock
+                HistorialStock historialStock = new HistorialStock();
+                historialStock.setCantidadAnterior(cantidadAnterior);
+                historialStock.setCantidadNueva(stock.getCantidad());
+                historialStock.setFechaActualizacion(stock.getFechaActualizacion());
+                historialStock.setMotivo("Actualización de detalle de compra");
+                historialStock.setTipoMovimiento("ACTUALIZACIÓN");
+                historialStock.setProducto(detalle.getProducto());
+                historialStock.setDeposito(detalle.getDeposito());
+                historialStock.setStock(stock);
+                historialStockRepository.save(historialStock);
 
                 // Actualizar el stock_actual del producto
                 Producto producto = detalle.getProducto();
@@ -229,15 +264,31 @@ public class CompraServiceImpl implements CompraService {
             logger.info("Eliminando Compra con id: {}", id);
             Compra compra = compraRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Compra no encontrada con el id: " + id));
 
-            // Actualizar el stock de los productos
+            // Revertir el stock de los productos
             for (DetalleCompra detalle : compra.getDetallesCompra()) {
-                List<Stock> stocks = stockRepository.findByProductoIdAndDepositoIdList(detalle.getProducto().getId(), detalle.getDeposito().getId());
-                for (Stock stock : stocks) {
-                    stock.setCantidad(stock.getCantidad() - detalle.getCantidad());
-                    stock.setFechaActualizacion(LocalDateTime.now());
-                    stock.setOperacion("ELIMINACIÓN");
-                    stockRepository.save(stock);
-                }
+                Stock stock = stockRepository.findByProductoIdAndDepositoId(detalle.getProducto().getId(), detalle.getDeposito().getId()).orElseThrow(() -> new ResourceNotFoundException("Stock no encontrado para el producto y depósito especificados"));
+                Integer cantidadAnterior = stock.getCantidad();
+                stock.setCantidad(stock.getCantidad() - detalle.getCantidad());
+                stock.setFechaActualizacion(LocalDateTime.now());
+                stock.setOperacion("Eliminación de compra");
+                stockRepository.save(stock);
+
+                // Crear historial de stock
+                HistorialStock historialStock = new HistorialStock();
+                historialStock.setCantidadAnterior(cantidadAnterior);
+                historialStock.setCantidadNueva(stock.getCantidad());
+                historialStock.setFechaActualizacion(stock.getFechaActualizacion());
+                historialStock.setMotivo("Eliminación de compra");
+                historialStock.setTipoMovimiento("ELIMINACIÓN");
+                historialStock.setProducto(detalle.getProducto());
+                historialStock.setDeposito(detalle.getDeposito());
+                historialStock.setStock(stock);
+                historialStockRepository.save(historialStock);
+
+                // Actualizar el stock_actual del producto
+                Producto producto = detalle.getProducto();
+                producto.setStockActual(producto.getStockActual() - detalle.getCantidad());
+                productoRepository.save(producto);
             }
 
             // Eliminar la compra

@@ -1,5 +1,6 @@
 package com.interonda.inventory.controller;
 
+import com.interonda.inventory.dto.DepositoDTO;
 import com.interonda.inventory.dto.ProductoDTO;
 import com.interonda.inventory.service.*;
 import jakarta.validation.Valid;
@@ -80,11 +81,18 @@ public class DepositosProductosUnidadController {
     @GetMapping
     public String getProductosPorDeposito(@RequestParam(required = false) Long depositoId, Model model, Pageable pageable) {
         if (depositoId == null) {
-            depositoId = depositoService.getAllDepositos(PageRequest.of(0, 1)).getContent().get(0).getId();
+            // Verifica si hay depósitos disponibles
+            Page<DepositoDTO> depositosPage = depositoService.getAllDepositos(PageRequest.of(0, 1));
+            if (depositosPage.isEmpty()) {
+                // Maneja el caso en que no hay depósitos disponibles
+                model.addAttribute("errorMessage", "No hay depósitos disponibles.");
+                return "errorPage"; // Asegúrate de tener una página de error adecuada
+            }
+            // Selecciona el primer depósito disponible
+            depositoId = depositosPage.getContent().get(0).getId();
         }
 
         Page<ProductoDTO> productos = depositosProductosUnidadService.getProductosByDeposito(depositoId, pageable);
-
         model.addAttribute("productos", productos.getContent());
         model.addAttribute("page", productos);
         model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
