@@ -59,29 +59,33 @@
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableCategorias}">Categorias</a>
             </li>
-            <li class="nav-item dropend">
+            <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-white" href="#" id="depositosDropdown" role="button"
-                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                   data-bs-toggle="dropdown" aria-expanded="false">
                     Depósitos
                 </a>
-                <ul class="nav-item dropdown-menu dropdown-menu-end dropdown-menu-right" id="dropdownMenu" aria-labelledby="depositosDropdown">
-                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositos">Persistencia</a></li>
-                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositosProductos">Stock</a></li>
-                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositosProductosUnidad">Unidades</a></li>
+                <ul class="dropdown-menu dropdownMenu" aria-labelledby="depositosDropdown" id="dropdownMenu">
+                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableDepositos">Persistencia</a>
+                    </li>
+                    <li><a class="nav-link dropdown-item text-white text-right"
+                           href="/tableDepositosProductos">Stock</a></li>
+                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableDepositosProductosUnidad">Unidades</a>
+                    </li>
                 </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableCompras}">Compras</a>
             </li>
-            <li class="nav-item dropend">
+            <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-white" href="#" id="ventasDropdown" role="button"
-                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                   data-bs-toggle="dropdown" aria-expanded="false">
                     Ventas
                 </a>
-                <ul class="nav-item dropdown-menu dropdown-menu-end dropdown-menu-right" id="dropdownMenuVentas"
-                    aria-labelledby="ventasDropdown">
-                    <li><a class="nav-link dropdown-item text-white" href="/tableVentas">Ventas</a></li>
-                    <li><a class="nav-link dropdown-item text-white" href="/tablePresupuestar">Presupuestar</a></li>
+                <ul class="dropdown-menu dropdownMenu"
+                    aria-labelledby="ventasDropdown" id="dropdownMenuVentas">
+                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableVentas">Ventas</a></li>
+                    <li><a class="nav-link dropdown-item text-white text-right"
+                           href="/tablePresupuestar">Presupuestar</a></li>
                 </ul>
             </li>
             <li class="nav-item">
@@ -90,9 +94,6 @@
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableHistorialStock}">Historial Stock</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" th:href="@{/tablePresupuestar}">Presupuestar</a>
-            </li>
         </ul>
     </aside>
     <main class="contentPersistDashboard p-3 text-center">
@@ -100,12 +101,14 @@
         <div class="row justify-content-center flex-wrap row-dashboard">
             <div class="col-md-2">
                 <a th:href="@{/chartProveedores}" class="etiqueta-chart">
-                <div class="card mb-2 shadow-sm elegant-card custom-card-width">
-                    <div class="card-body body-dashboard">
-                        <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalProveedores}" id="card-title-dashboard"></h2>
-                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Proveedores Creados</h5>
+                    <div class="card mb-2 shadow-sm elegant-card custom-card-width">
+                        <div class="card-body body-dashboard">
+                            <h2 class="card-number-dashboard" th:text="${totalProveedores}"
+                                id="card-title-dashboard"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard text-white">Proveedores
+                                Creados</h5>
+                        </div>
                     </div>
-                </div>
                 </a>
             </div>
             <div class="col-md-2">
@@ -113,7 +116,7 @@
                 <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                     <div class="card-body body-dashboard">
                         <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalClientes}"></h2>
-                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Clientes Creados</h5>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard text-white">Clientes Creados</h5>
                     </div>
                 </div>
                 </a>
@@ -123,7 +126,8 @@
                     <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                         <div class="card-body body-dashboard">
                             <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalUsuarios}"></h2>
-                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Usuarios Creados</h5>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard text-white">Usuarios
+                                Creados</h5>
                         </div>
                     </div>
                 </a>
@@ -133,7 +137,8 @@
                     <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                         <div class="card-body body-dashboard">
                             <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalDepositos}"></h2>
-                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Depositos Creados</h5>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard text-white">Depositos
+                                Creados</h5>
                         </div>
                     </div>
                 </a>
@@ -143,7 +148,8 @@
                     <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                         <div class="card-body body-dashboard">
                             <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalCategorias}"></h2>
-                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Categorias Creadas</h5>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard text-white">Categorias
+                                Creadas</h5>
                         </div>
                     </div>
                 </a>
@@ -154,8 +160,9 @@
                 <a th:href="@{/chartProductos}" class="etiqueta-chart">
                     <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                         <div class="card-body body-dashboard">
-                            <h2 class="card-number-dashboard elegant-text-dashboard"  th:text="${totalProductos}"></h2>
-                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Productos Creados</h5>
+                            <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalProductos}"></h2>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard text-white">Productos
+                                Creados</h5>
                         </div>
                     </div>
                 </a>
@@ -165,7 +172,8 @@
                     <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                         <div class="card-body body-dashboard">
                             <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalCompras}"></h2>
-                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Compras Realizadas</h5>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard text-white">Compras
+                                Realizadas</h5>
                         </div>
                     </div>
                 </a>
@@ -175,7 +183,8 @@
                     <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                         <div class="card-body body-dashboard">
                             <h2 class="card-number-dashboard elegant-text-dashboard" th:text="${totalVentas}"></h2>
-                            <h5 class="card-title card-title-dashboard elegant-text-dashboard">Ventas Realizadas</h5>
+                            <h5 class="card-title card-title-dashboard elegant-text-dashboard text-white">Ventas
+                                Realizadas</h5>
                         </div>
                     </div>
                 </a>
@@ -184,7 +193,8 @@
                 <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                     <div class="card-body body-dashboard">
                         <h2 class="card-number-dashboard elegant-text-dashboard">368</h2>
-                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Mas<br>Vendidos</h5>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard text-white">Mas<br>Vendidos
+                        </h5>
                     </div>
                 </div>
             </div>
@@ -192,7 +202,8 @@
                 <div class="card mb-2 shadow-sm elegant-card custom-card-width">
                     <div class="card-body body-dashboard">
                         <h2 class="card-number-dashboard elegant-text-dashboard">368</h2>
-                        <h5 class="card-title card-title-dashboard elegant-text-dashboard">Menos Vendidos</h5>
+                        <h5 class="card-title card-title-dashboard elegant-text-dashboard text-white">Menos
+                            Vendidos</h5>
                     </div>
                 </div>
             </div>

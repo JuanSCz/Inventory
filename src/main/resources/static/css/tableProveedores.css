@@ -29,113 +29,6 @@
     --secondary-color: #ffcc00;
 }
 
-main > .main-login {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    position: relative;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-.contenedor-main {
-    height: 100vh !important;
-    width: 100% !important;
-    padding: 0 !important;
-}
-
-#formLogin {
-    background: var(--gradient-bg) !important;
-    border-radius: 15px;
-    border: 2px solid;
-    border-color: var(--main-color);
-    background-origin: border-box;
-    width: 100%;
-    padding: 1.5rem 1rem; /* Ajusta el padding */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    color: var(--text-color);
-    max-width: 300px !important; /* Ajusta el ancho máximo */
-    overflow: hidden !important;
-}
-
-.buttonPersistLogin {
-    font-weight: 500 !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    background-color: var(--main-color) !important;
-    color: var(--text-color) !important;
-    border: none;
-    padding: 1.5vh 2.5vh !important; /* Ajusta el padding */
-    border-radius: 1.5vh !important; /* Ajusta el borde redondeado */
-    height: 6.5vh !important; /* Ajusta la altura */
-    margin-bottom: 0vh !important; /* Ajusta el margen inferior */
-    font-size: 2.5vh !important; /* Ajusta el tamaño de la fuente */
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-}
-
-.buttonPersistLogin:hover {
-    background: linear-gradient(45deg, var(--main-color), var(--hover-color));
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    color: var(--text-color);
-}
-
-#page-name-login {
-    padding: 0.5rem;
-    border-bottom: 3px solid var(--main-color);
-    margin-bottom: 1rem;
-    background: var(--gradient-bg) !important;
-    color: var(--text-color);
-    z-index: 1;
-    width: 100%;
-    max-width: 400px; /* Ajusta el ancho máximo */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    text-align: center;
-}
-
-#page-name-login .navbar-brand {
-    color: var(--text-color);
-    font-size: 2rem; /* Ajusta el tamaño de la fuente */
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: color 0.3s ease;
-    margin: 0;
-    text-shadow: 2px 2px 4px var(--bg-color) !important;
-    font-style: italic;
-    background: linear-gradient(45deg, #80d4ff, #0096ff); /* Gradiente ajustado a celeste claro */
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.video-background {
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    z-index: -1;
-}
-
-.custom-input-login {
-    font-size: 0.9rem; /* Ajusta el tamaño de la fuente */
-    color: var(--text-color);
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-}
-
-.custom-input-login::placeholder {
-    font-size: 0.9rem; /* Ajusta el tamaño de la fuente */
-    color: white !important;
-}
-
-.custom-input-login {
-    color: white !important;
-    background: var(--second-bg-color) !important;
-}
-
 body {
     font-weight: 400 !important;
     font-family: 'Poppins', sans-serif;
@@ -285,32 +178,29 @@ body {
     overflow-y: auto;
 }
 
-.sidebar,
-.fixed-sidebar {
-    overflow: visible !important; /* Permitir que los elementos hijos no se recorten */
-}
-
-.nav-item .dropdown-menu {
-    position: absolute !important;
-    will-change: transform;
-    z-index: 1050; /* Asegura que esté por encima de otros elementos */
-}
-
 #dropdownMenu {
     border: none !important;
     border-radius: 0 !important;
-    padding: 0 !important;
 }
 
 #dropdownMenu .dropdown-item {
     border-radius: 0 !important;
-    padding: 0.5rem 1rem !important; /* Ajusta el padding según tus necesidades */
+    padding: 0.2rem 1.7rem !important; /* Ajusta el padding según tus necesidades */
+}
+
+#dropdownMenuVentas {
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+#dropdownMenuVentas .dropdown-item {
+    border-radius: 0 !important;
+    padding: 0.2rem 1.7rem !important; /* Ajusta el padding según tus necesidades */
 }
 
 .sidebar .nav-link {
     color: var(--second-color);
     padding: 1vh 2vh; /* Ajusta el padding de los enlaces */
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
     font-size: 2vh; /* Ajusta el tamaño de la fuente */
 }
@@ -359,6 +249,22 @@ body {
     display: inline-block;
 }
 
+.titlePersistAdmin {
+    font-family: 'Lora', serif;
+    font-size: 5vh; /* Ajusta el tamaño de la fuente */
+    font-weight: 700;
+    color: #ffffff;
+    -webkit-text-stroke: 0.3px var(--main-color);
+    text-shadow: none;
+    margin-bottom: 2vh; /* Ajusta el margen inferior */
+    padding-bottom: 1vh; /* Ajusta el padding inferior */
+    border-bottom: 0.5vh solid;
+    border-image: linear-gradient(to right, #004080, #00aaff);
+    border-image-slice: 1;
+    display: inline-block;
+    margin-top: 1rem;
+}
+
 .buttonPersist {
     font-weight: 500 !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
@@ -397,12 +303,12 @@ body {
 
 .elegant-card {
     background-color: var(--bg-color) !important;
-    color: var(--text-color) !important;
+    color: var(--text-color) !important; /* Corregido */
     border: none;
     border-radius: 0.625rem;
     overflow: hidden;
     margin-bottom: 2rem; /* Ajusta el margen inferior */
-    height: 10rem; /* Ajusta la altura */
+    height: 8rem; /* Ajusta la altura */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -420,6 +326,7 @@ body {
 .elegant-card:hover .card-number-dashboard,
 .elegant-card:hover .card-title-dashboard {
     color: var(--secondary-color);
+    transform: scale(1.2); /* Añadido para agrandar el texto */
 }
 
 .body-dashboard {
@@ -433,21 +340,18 @@ body {
 }
 
 .card-number-dashboard {
-    font-size: 2rem; /* Ajusta el tamaño de la fuente */
+    font-size: 1.8rem; /* Ajusta el tamaño de la fuente */
     font-weight: bold;
     margin-bottom: 0.5rem;
     color: var(--second-color);
+    transition: transform 0.3s ease; /* Añadido para la transición */
 }
 
 .card-title-dashboard {
-    font-size: 1rem; /* Ajusta el tamaño de la fuente */
+    font-size: 0.8rem; /* Ajusta el tamaño de la fuente */
     font-weight: 500;
     margin-top: 0.5rem;
-    color: var(--second-color);
-}
-
-#card-title-dashboard{
-margin-button: 0rem !important;
+    color: var(--text-color) !important;
 }
 
 .row-dashboard {
@@ -473,16 +377,66 @@ margin-button: 0rem !important;
 }
 
 .elegant-text-dashboard {
-    color: #ffcc00;
+    color: #ffcc00 !important;
     text-shadow: 0.125rem 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
 }
 
 .custom-card-width {
-    width: 10rem; /* Ajusta el ancho */
+    width: 8rem; /* Ajusta el ancho */
 }
-/* MAIN  */
+
+/* ...ADMIN... */
+
+.icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  padding: 7rem; /* Add padding to increase spacing */
+  margin: 3rem; /* Add margin to separate icons */
+}
+
+.admin-icon {
+  width: 100px !important; /* Adjust the size as needed */
+  height: 100px !important; /* Adjust the size as needed */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin: 0 4rem;
+}
+
+.icon-container:hover .admin-icon {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(0, 150, 255, 0.8); /* Blue glowing effect */
+}
+
+.titlePersistAdmin {
+    font-family: 'Lora', serif;
+    font-size: 5vh; /* Ajusta el tamaño de la fuente */
+    font-weight: 700;
+    color: #ffffff;
+    -webkit-text-stroke: 0.3px var(--main-color);
+    text-shadow: none;
+    margin-bottom: 2vh; /* Ajusta el margen inferior */
+    padding-bottom: 1vh; /* Ajusta el padding inferior */
+    border-bottom: 0.5vh solid;
+    border-image: linear-gradient(to right, #004080, #00aaff);
+    border-image-slice: 1;
+    display: inline-block;
+
+}
+.etiquetaP{
+    margin-top: 1rem !important;
+    font-family: 'Lora', serif;
+    font-size: 3vh; /* Ajusta el tamaño de la fuente */
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: none;
+}
+
+/* ...ADMIN... */
 
 /* MAIN  */
+
 /* TABLE */
 .table-responsive {
     width: 100%;
@@ -576,7 +530,7 @@ margin-button: 0rem !important;
 
 .custom-table thead th {
     vertical-align: bottom !important;
-    border-bottom: 2px solid var(--second-bg-color) !important;
+    border-bottom: 2px solid var (--second-bg-color) !important;
     text-shadow: none !important;
     font-size: 2.2vh !important; /* Ajusta el tamaño de la fuente */
 }
@@ -640,7 +594,7 @@ margin-button: 0rem !important;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(45deg, var(--main-color), var(--hover-color));
+    background: linear-gradient(45deg, var (--main-color), var(--hover-color));
 }
 .btn-danger {
     background-color: #e60000 !important;
@@ -832,7 +786,7 @@ margin-button: 0rem !important;
      display: flex !important;
         justify-content: center;
         align-items: center;
-        border-bottom: 2px solid var(--main-color) !important;
+        border-bottom: 2px solid var (--main-color) !important;
         position: relative;
         padding-right: 1rem;
 }
@@ -962,7 +916,7 @@ margin-button: 0rem !important;
 .modal-body-detalle {
     color: #ffffff !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
-    border-button: 2px solid var(--main-color) !important;
+    border-bottom: 2px solid var(--main-color) !important;
     padding-bottom: 0 !important;
 }
 
@@ -1075,7 +1029,7 @@ margin-button: 0rem !important;
 .btn-success-producto:hover {
     background-color: #1e7e34 !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
-    color: var(--text-color) !important;
+    color: var (--text-color) !important;
 }
 
 .title-stock {
@@ -1179,5 +1133,51 @@ margin-button: 0rem !important;
 .etiqueta-chart {
     text-decoration: none !important;
     color: inherit !important;
-        display: block !important;
+}
+
+.icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  padding: 7rem; /* Add padding to increase spacing */
+  margin: 3rem; /* Add margin to separate icons */
+}
+
+.admin-icon {
+  width: 100px !important; /* Adjust the size as needed */
+  height: 100px !important; /* Adjust the size as needed */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin: 0 4rem;
+}
+
+.icon-container:hover .admin-icon {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(0, 150, 255, 0.8); /* Blue glowing effect */
+}
+
+.titlePersistAdmin {
+    font-family: 'Lora', serif;
+    font-size: 5vh; /* Ajusta el tamaño de la fuente */
+    font-weight: 700;
+    color: #ffffff;
+    -webkit-text-stroke: 0.3px var(--main-color);
+    text-shadow: none;
+    margin-bottom: 2vh; /* Ajusta el margen inferior */
+    padding-bottom: 1vh; /* Ajusta el padding inferior */
+    border-bottom: 0.5vh solid;
+    border-image: linear-gradient(to right, #004080, #00aaff);
+    border-image-slice: 1;
+    display: inline-block;
+
+}
+
+.etiquetaP{
+    margin-top: 1rem !important;
+    font-family: 'Lora', serif;
+    font-size: 3vh; /* Ajusta el tamaño de la fuente */
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: none;
 }

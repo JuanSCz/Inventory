@@ -59,31 +59,28 @@
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableCategorias}">Categorias</a>
             </li>
-            <li class="nav-item dropend">
-                <a class="nav-link dropdown-toggle text-white" href="#" id="depositosDropdown" role="button"
-                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="depositosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Depósitos
                 </a>
-                <ul class="nav-item dropdown-menu dropdown-menu-end dropdown-menu-right" id="dropdownMenu"
-                    aria-labelledby="depositosDropdown">
-                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositos">Persistencia</a></li>
-                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositosProductos">Stock</a></li>
-                    <li><a class="nav-link dropdown-item text-white" href="/tableDepositosProductosUnidad">Unidades</a>
-                    </li>
+                <ul class="dropdown-menu dropdownMenu" aria-labelledby="depositosDropdown" id="dropdownMenu">
+                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableDepositos">Persistencia</a></li>
+                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableDepositosProductos">Stock</a></li>
+                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableDepositosProductosUnidad">Unidades</a></li>
                 </ul>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" th:href="@{/tableCompras}">Compras</a>
             </li>
-            <li class="nav-item dropend">
+            <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-white" href="#" id="ventasDropdown" role="button"
-                   data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
+                   data-bs-toggle="dropdown" aria-expanded="false">
                     Ventas
                 </a>
-                <ul class="nav-item dropdown-menu dropdown-menu-end dropdown-menu-right" id="dropdownMenuVentas"
-                    aria-labelledby="ventasDropdown">
-                    <li><a class="nav-link dropdown-item text-white" href="/tableVentas">Ventas</a></li>
-                    <li><a class="nav-link dropdown-item text-white" href="/tablePresupuestar">Presupuestar</a></li>
+                <ul class="dropdown-menu dropdownMenu"
+                    aria-labelledby="ventasDropdown" id="dropdownMenuVentas">
+                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableVentas">Ventas</a></li>
+                    <li><a class="nav-link dropdown-item text-white text-right" href="/tablePresupuestar">Presupuestar</a></li>
                 </ul>
             </li>
             <li class="nav-item">

@@ -56,8 +56,12 @@ public class HistorialStockServiceImpl implements HistorialStockService {
     public HistorialStockDTO getHistorialStock(Long id) {
         try {
             logger.info("Obteniendo HistorialStock con id: {}", id);
-            HistorialStock historialStock = historialStockRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("HistorialStock no encontrado"));
-            return convertToDto(historialStock);
+            HistorialStock historialStock = historialStockRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("HistorialStock no encontrado"));
+            HistorialStockDTO historialStockDTO = convertToDto(historialStock);
+            historialStockDTO.setProductoNombre(historialStock.getProducto().getNombre());
+            historialStockDTO.setDepositoNombre(historialStock.getDeposito().getNombre());
+            return historialStockDTO;
         } catch (ResourceNotFoundException e) {
             logger.warn("HistorialStock no encontrado: {}", e.getMessage());
             throw e;
@@ -73,7 +77,12 @@ public class HistorialStockServiceImpl implements HistorialStockService {
         try {
             logger.info("Obteniendo todos los HistorialStock con paginación");
             Page<HistorialStock> historialStockPage = historialStockRepository.findAll(pageable);
-            return historialStockPage.map(historialStockMapper::toDto);
+            return historialStockPage.map(historialStock -> {
+                HistorialStockDTO historialStockDTO = historialStockMapper.toDto(historialStock);
+                historialStockDTO.setProductoNombre(historialStock.getProducto().getNombre());
+                historialStockDTO.setDepositoNombre(historialStock.getDeposito().getNombre());
+                return historialStockDTO;
+            });
         } catch (Exception e) {
             logger.error("Error obteniendo todos los HistorialStock con paginación", e);
             throw new DataAccessException("Error obteniendo todos los HistorialStock con paginación", e);
