@@ -21,43 +21,43 @@
                     <form th:action="@{/tableClientes}" method="post" th:object="${clienteDTO}" autocomplete="off">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="name" class="form-label">Nombre</label>
-                                <input type="text" class="form-control form-control-detalle" id="name"
+                                <label for="name" class="form-label form-labelForms">Nombre</label>
+                                <input type="text" class="form-control form-control-sm form-control-detalle" id="name"
                                        th:field="*{nombre}" placeholder="Ingrese el nombre...">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="email" class="form-label">Correo Electrónico</label>
-                                <input type="email" class="form-control form-control-detalle" id="email"
+                                <label for="email" class="form-label form-labelForms">Correo Electrónico</label>
+                                <input type="email" class="form-control form-control-sm form-control-detalle" id="email"
                                        th:field="*{eMailCliente}" placeholder="Ingrese el correo electrónico...">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="contacto" class="form-label">Número Telefónico</label>
-                                <input type="text" class="form-control form-control-detalle" id="contacto"
+                                <label for="contacto" class="form-label form-labelForms">Número Telefónico</label>
+                                <input type="text" class="form-control form-control-sm form-control-detalle" id="contacto"
                                        th:field="*{contactoCliente}" placeholder="Ingrese el número telefónico...">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="pais" class="form-label">País</label>
+                                <label for="pais" class="form-label form-labelForms">País</label>
                                 <input type="text" class="form-control form-control-detalle" id="pais"
                                        th:field="*{pais}" placeholder="Ingrese el país...">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="dirección" class="form-label">Dirección</label>
-                                <input type="text" class="form-control form-control-detalle" id="dirección"
+                                <label for="dirección" class="form-label form-labelForms">Dirección</label>
+                                <input type="text" class="form-control form-control-sm form-control-detalle" id="dirección"
                                        th:field="*{direccion}" placeholder="Ingrese la dirección...">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="ciudad" class="form-label">Ciudad</label>
-                                <input type="text" class="form-control form-control-detalle" id="ciudad"
+                                <label for="ciudad" class="form-label form-labelForms">Ciudad</label>
+                                <input type="text" class="form-control form-control-sm form-control-detalle" id="ciudad"
                                        th:field="*{ciudad}" placeholder="Ingrese la ciudad...">
                             </div>
                         </div>
                         <div class="modal-footer" id="modal-footer-detalle">
-                            <button type="submit" class="btn button-detalle">Crear</button>
-                            <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
+                            <button type="submit" class="btn btn-sm button-detalle">Crear</button>
+                            <button type="button" class="btn btn-sm btn-salir" data-bs-dismiss="modal">Salir</button>
                         </div>
                     </form>
                 </div>

@@ -22,13 +22,13 @@
                         <div class="row">
                             <!-- Campos de Compra -->
                             <div class="col-md-4 mb-3">
-                                <label for="fecha" class="form-label">Fecha</label>
-                                <input type="date" class="form-control form-control-detalle" th:field="*{fecha}"
+                                <label for="fecha" class="form-label form-labelForms">Fecha</label>
+                                <input type="date" class="form-control form-control-sm form-control-detalle" th:field="*{fecha}"
                                        id="fecha">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="proveedor" class="form-label">Proveedor</label>
-                                <select class="form-control form-control-detalle" th:field="*{proveedorId}"
+                                <label for="proveedor" class="form-label form-labelForms">Proveedor</label>
+                                <select class="form-control form-control-sm form-control-detalle" th:field="*{proveedorId}"
                                         id="proveedor">
                                     <option value="" selected>Seleccione un proveedor...</option>
                                     <option th:each="proveedor : ${proveedores}" th:value="${proveedor.id}"
@@ -36,8 +36,8 @@
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="metodoPago" class="form-label">Método de Pago</label>
-                                <select class="form-control form-control-detalle" th:field="*{metodoPago}"
+                                <label for="metodoPago" class="form-label form-labelForms">Método de Pago</label>
+                                <select class="form-control form-control-sm form-control-detalle" th:field="*{metodoPago}"
                                         id="metodoPago">
                                     <option value="" selected>Seleccione un método...</option>
                                     <option value="Débito">Débito</option>
@@ -46,8 +46,8 @@
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="estado" class="form-label">Estado</label>
-                                <select class="form-control form-control-detalle" th:field="*{estado}" id="estado">
+                                <label for="estado" class="form-label form-labelForms">Estado</label>
+                                <select class="form-control form-control-sm form-control-detalle" th:field="*{estado}" id="estado">
                                     <option value="" selected>Seleccione un estado...</option>
                                     <option value="Cancelada">Cancelada</option>
                                     <option value="Aceptada">Aceptada</option>
@@ -55,8 +55,8 @@
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="impuestos" class="form-label">Impuestos</label>
-                                <select class="form-control form-control-detalle" th:field="*{impuestos}"
+                                <label for="impuestos" class="form-label form-labelForms">Impuestos</label>
+                                <select class="form-control form-control-sm form-control-detalle" th:field="*{impuestos}"
                                         id="impuestos">
                                     <option value="" selected>Seleccione un impuesto...</option>
                                     <option value="0.10">IVA: 10%</option>
@@ -65,16 +65,16 @@
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="total" class="form-label">Total de la compra</label>
-                                <input type="text" class="form-control form-control-detalle" th:field="*{totalString}"
+                                <label for="total" class="form-label form-labelForms">Total de la compra</label>
+                                <input type="text" class="form-control form-control-sm form-control-detalle" th:field="*{totalString}"
                                        id="total" placeholder="Ingrese el total de la compra...">
                             </div>
                             <div id="detalleContainer">
                                 <div class="row detalle-row">
                                     <h4 class="mb-3 text-center title-stock">Stock:</h4>
                                     <div class="col-md-3 mb-3">
-                                        <label for="producto" class="form-label">Producto</label>
-                                        <select class="form-control form-control-detalle"
+                                        <label for="producto" class="form-label form-labelForms">Producto</label>
+                                        <select class="form-control form-control-sm form-control-detalle"
                                                 th:field="*{detallesCompra[0].productoId}" id="producto">
                                             <option value="" selected>Seleccione un producto...</option>
                                             <option th:each="producto : ${productos}" th:value="${producto.id}"
@@ -82,8 +82,8 @@
                                         </select>
                                     </div>
                                     <div class="col-md-3 mb-3">
-                                        <label for="depositoId" class="form-label">Depósito</label>
-                                        <select class="form-control form-control-detalle" id="depositoId"
+                                        <label for="depositoId" class="form-label form-labelForms">Depósito</label>
+                                        <select class="form-control form-control-sm form-control-detalle" id="depositoId"
                                                 th:field="*{detallesCompra[0].depositoId}">
                                             <option value="">Seleccione un depósito...</option>
                                             <option th:each="deposito : ${depositos}" th:value="${deposito.id}"
@@ -91,15 +91,15 @@
                                         </select>
                                     </div>
                                     <div class="col-md-3 mb-3">
-                                        <label for="cantidad" class="form-label">Cantidad</label>
-                                        <input type="number" class="form-control form-control-detalle"
+                                        <label for="cantidad" class="form-label form-labelForms">Cantidad</label>
+                                        <input type="number" class="form-control form-control-sm form-control-detalle"
                                                th:field="*{detallesCompra[0].cantidad}" id="cantidad"
                                                placeholder="Ingrese la cantidad...">
                                     </div>
                                     <div class="col-md-3 mb-3">
-                                        <label for="precioUnitario" class="form-label">Precio unitario del
+                                        <label for="precioUnitario" class="form-label form-labelForms">Precio unitario del
                                             producto</label>
-                                        <input type="text" class="form-control form-control-detalle"
+                                        <input type="text" class="form-control form-control-sm form-control-detalle"
                                                th:field="*{detallesCompra[0].precioUnitarioString}" id="precioUnitario"
                                                placeholder="Ingrese el precio unitario...">
                                     </div>
@@ -112,8 +112,8 @@
                             </div>
                         </div>
                         <div class="modal-footer" id="modal-footer-detalle">
-                            <button type="submit" class="btn button-detalle">Crear</button>
-                            <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
+                            <button type="submit" class="btn btn-sm button-detalle">Crear</button>
+                            <button type="button" class="btn btn-sm btn-salir" data-bs-dismiss="modal">Salir</button>
                         </div>
                     </form>
                 </div>

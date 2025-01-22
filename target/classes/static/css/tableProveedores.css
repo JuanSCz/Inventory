@@ -1,3 +1,4 @@
+/* CUERPO */
 * {
     padding: 0;
     margin: 0;
@@ -25,7 +26,7 @@
     --gradient-bg: linear-gradient(135deg, #1a1a1a, #4f4f4f);
     --shadow-color: rgba(0, 0, 0, 0.5);
     --button-hover-color: #0056b3;
-    --light-hover-color: #3399ff;
+    --light-hover-color: #3399ff
     --secondary-color: #ffcc00;
 }
 
@@ -39,28 +40,38 @@ body {
     color: var(--text-color);
 }
 
+/* CUERPO */
+
 /* ESCROLLBAR */
 ::-webkit-scrollbar {
-    width: 8px; /* Ajusta el ancho del scrollbar */
+    width: 8px;
+    /* Ajusta el ancho del scrollbar */
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Color de fondo del track */
-    border-radius: 10px; /* Bordes redondeados */
+    background: #f1f1f1;
+    /* Color de fondo del track */
+    border-radius: 10px;
+    /* Bordes redondeados */
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #888; /* Color del thumb */
-    border-radius: 10px; /* Bordes redondeados */
-    border: 2px solid #f1f1f1; /* Espacio entre el thumb y el track */
+    background: #888;
+    /* Color del thumb */
+    border-radius: 10px;
+    /* Bordes redondeados */
+    border: 2px solid #f1f1f1;
+    /* Espacio entre el thumb y el track */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #555; /* Color del thumb al pasar el mouse */
+    background: #555;
+    /* Color del thumb al pasar el mouse */
 }
+
 /* ESCROLLBAR */
 
- /* NAVBAR */
+/* NAVBAR */
 .interonda {
     margin-left: 6vh !important;
     margin-bottom: 0vh !important;
@@ -82,7 +93,8 @@ body {
     top: 0;
     width: 100%;
     z-index: 1000;
-    height: 8vh; /* Ajusta la altura del navbar */
+    height: 8vh;
+    /* Ajusta la altura del navbar */
 }
 
 .dropdown-menu {
@@ -91,21 +103,27 @@ body {
 
 .navbar-brand {
     color: var(--text-color);
-    font-size: 3vh; /* Ajusta el tamaño de la fuente */
+    font-size: 3vh;
+    /* Ajusta el tamaño de la fuente */
 }
 
 .navbar-brand img {
-    margin-right: 3vh; /* Ajusta el margen de la imagen */
-    width: 4vh; /* Ajusta el tamaño de la imagen */
-    height: 4vh; /* Ajusta el tamaño de la imagen */
+    margin-right: 3vh;
+    /* Ajusta el margen de la imagen */
+    width: 4vh;
+    /* Ajusta el tamaño de la imagen */
+    height: 4vh;
+    /* Ajusta el tamaño de la imagen */
 }
 
 .navbar-toggler {
     border: none;
     background-color: var(--main-color);
     color: var(--text-color);
-    padding: 1vh 2vh; /* Ajusta el padding del botón */
-    font-size: 2vh; /* Ajusta el tamaño de la fuente del botón */
+    padding: 1vh 2vh;
+    /* Ajusta el padding del botón */
+    font-size: 2vh !important;
+    /* Ajusta el tamaño de la fuente del botón */
 }
 
 .navbar-toggler:hover {
@@ -115,15 +133,18 @@ body {
 
 .navbar-menu {
     display: flex;
-    gap: 2vh; /* Ajusta el espacio entre los elementos del menú */
+    gap: 2vh;
+    /* Ajusta el espacio entre los elementos del menú */
 }
 
 .navbar-menu a {
     color: var(--text-color);
-    padding: 1vh 2vh; /* Ajusta el padding de los enlaces */
+    padding: 0.7vh 3vh;
+    /* Ajusta el padding de los enlaces */
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
     border-radius: 1vh;
-    font-size: 2vh; /* Ajusta el tamaño de la fuente de los enlaces */
+    font-size: 2vh;
+    /* Ajusta el tamaño de la fuente de los enlaces */
 }
 
 .navbar-menu a:hover {
@@ -144,15 +165,21 @@ body {
 }
 
 .navbar.sticky-top.scrolled {
-    padding: 1vh 2vh; /* Ajusta el padding cuando el navbar está scrolleado */
+    padding: 1vh 2vh;
+    /* Ajusta el padding cuando el navbar está scrolleado */
     transition: padding 0.3s ease-in-out;
     background-color: var(--main-color);
 }
- /* NAVBAR */
 
- /* SIDEBAR */
+.navbar-collapse {
+    background: var(--gradient-bg);
+}
+/* NAVBAR */
+
+/* SIDEBAR */
 .d-flex {
-    min-height: calc(100vh - 7vh); /* Ajusta la altura según el navbar */
+    min-height: calc(100vh - 7vh);
+    /* Ajusta la altura según el navbar */
     display: flex;
 }
 
@@ -164,7 +191,8 @@ body {
     position: -webkit-sticky;
     position: sticky;
     top: 0;
-    width: 25vh; /* Ajusta el ancho de la sidebar */
+    width: 25vh;
+    /* Ajusta el ancho de la sidebar */
     padding-top: 1vh;
     padding-bottom: 1vh;
     padding-left: 0;
@@ -173,7 +201,8 @@ body {
 
 .fixed-sidebar {
     position: fixed;
-    top: 7vh; /* Ajusta la posición según el navbar */
+    top: 7vh;
+    /* Ajusta la posición según el navbar */
     bottom: 0;
     overflow-y: auto;
 }
@@ -185,7 +214,8 @@ body {
 
 #dropdownMenu .dropdown-item {
     border-radius: 0 !important;
-    padding: 0.2rem 1.7rem !important; /* Ajusta el padding según tus necesidades */
+    padding: 0.2rem 1.7rem !important;
+    /* Ajusta el padding según tus necesidades */
 }
 
 #dropdownMenuVentas {
@@ -195,20 +225,23 @@ body {
 
 #dropdownMenuVentas .dropdown-item {
     border-radius: 0 !important;
-    padding: 0.2rem 1.7rem !important; /* Ajusta el padding según tus necesidades */
+    padding: 0.2rem 1.7rem !important;
+    /* Ajusta el padding según tus necesidades */
 }
 
 .sidebar .nav-link {
     color: var(--second-color);
-    padding: 1vh 2vh; /* Ajusta el padding de los enlaces */
+    padding: 1vh 2vh;
+    /* Ajusta el padding de los enlaces */
     text-shadow: 1px 1px 2px var(--bg-color) !important;
-    font-size: 2vh; /* Ajusta el tamaño de la fuente */
+    font-size: 2vh;
+    /* Ajusta el tamaño de la fuente */
 }
 
 .sidebar .nav-link:hover {
     background-color: var(--main-color);
     color: var(--text-color);
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
+    text-shadow: 1px 1px 2px var (--bg-color) !important;
 }
 
 .sidebar .nav-link.active {
@@ -230,19 +263,24 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: calc(100% - 25vh); /* Ajusta el ancho según la sidebar */
-    margin-left: 25vh; /* Ajusta el margen según la sidebar */
+    width: calc(100% - 25vh);
+    /* Ajusta el ancho según la sidebar */
+    margin-left: 25vh;
+    /* Ajusta el margen según la sidebar */
 }
 
 .titlePersist {
     font-family: 'Lora', serif;
-    font-size: 4vh; /* Ajusta el tamaño de la fuente */
+    font-size: 4vh;
+    /* Ajusta el tamaño de la fuente */
     font-weight: 700;
     color: #ffffff;
     -webkit-text-stroke: 0.3px var(--main-color);
     text-shadow: none;
-    margin-bottom: 2vh; /* Ajusta el margen inferior */
-    padding-bottom: 1vh; /* Ajusta el padding inferior */
+    margin-bottom: 2vh;
+    /* Ajusta el margen inferior */
+    padding-bottom: 1vh;
+    /* Ajusta el padding inferior */
     border-bottom: 0.5vh solid;
     border-image: linear-gradient(to right, #004080, #00aaff);
     border-image-slice: 1;
@@ -251,13 +289,16 @@ body {
 
 .titlePersistAdmin {
     font-family: 'Lora', serif;
-    font-size: 5vh; /* Ajusta el tamaño de la fuente */
+    font-size: 5vh;
+    /* Ajusta el tamaño de la fuente */
     font-weight: 700;
     color: #ffffff;
     -webkit-text-stroke: 0.3px var(--main-color);
     text-shadow: none;
-    margin-bottom: 2vh; /* Ajusta el margen inferior */
-    padding-bottom: 1vh; /* Ajusta el padding inferior */
+    margin-bottom: 2vh;
+    /* Ajusta el margen inferior */
+    padding-bottom: 1vh;
+    /* Ajusta el padding inferior */
     border-bottom: 0.5vh solid;
     border-image: linear-gradient(to right, #004080, #00aaff);
     border-image-slice: 1;
@@ -271,11 +312,16 @@ body {
     background-color: var(--main-color) !important;
     color: var(--text-color) !important;
     border: none;
-    padding: 1vh 2vh !important; /* Ajusta el padding */
-    border-radius: 1vh !important; /* Ajusta el borde redondeado */
-    height: 5vh !important;/* Ajusta la altura */
-    margin-bottom: 0vh !important; /* Ajusta el margen inferior */
-    font-size: 2vh !important; /* Ajusta el tamaño de la fuente */
+    padding: 1vh 2vh !important;
+    /* Ajusta el padding */
+    border-radius: 1vh !important;
+    /* Ajusta el borde redondeado */
+    height: 5vh !important;
+    /* Ajusta la altura */
+    margin-bottom: 0vh !important;
+    /* Ajusta el margen inferior */
+    font-size: 2vh !important;
+    /* Ajusta el tamaño de la fuente */
 }
 
 .buttonPersist:hover {
@@ -283,7 +329,6 @@ body {
     text-shadow: 1px 1px 2px var(--bg-color) !important;
     color: var(--text-color);
 }
-
 /* MAIN  */
 
 /* Cards */
@@ -297,18 +342,23 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: calc(100% - 20vh); /* Adjusted width to allow more space */
-    margin-left: 20vh; /* Adjusted margin to match the new width */
+    width: calc(100% - 20vh);
+    /* Adjusted width to allow more space */
+    margin-left: 20vh;
+    /* Adjusted margin to match the new width */
 }
 
 .elegant-card {
     background-color: var(--bg-color) !important;
-    color: var(--text-color) !important; /* Corregido */
+    color: var(--text-color) !important;
+    /* Corregido */
     border: none;
     border-radius: 0.625rem;
     overflow: hidden;
-    margin-bottom: 2rem; /* Ajusta el margen inferior */
-    height: 8rem; /* Ajusta la altura */
+    margin-bottom: 2rem;
+    /* Ajusta el margen inferior */
+    height: 8rem;
+    /* Ajusta la altura */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -326,7 +376,8 @@ body {
 .elegant-card:hover .card-number-dashboard,
 .elegant-card:hover .card-title-dashboard {
     color: var(--secondary-color);
-    transform: scale(1.2); /* Añadido para agrandar el texto */
+    transform: scale(1.2);
+    /* Añadido para agrandar el texto */
 }
 
 .body-dashboard {
@@ -336,19 +387,23 @@ body {
     align-items: center;
     height: 100%;
     text-align: center;
-    padding: 0.5rem; /* Ajusta el padding */
+    padding: 0.5rem;
+    /* Ajusta el padding */
 }
 
 .card-number-dashboard {
-    font-size: 1.8rem; /* Ajusta el tamaño de la fuente */
+    font-size: 1.8rem;
+    /* Ajusta el tamaño de la fuente */
     font-weight: bold;
     margin-bottom: 0.5rem;
     color: var(--second-color);
-    transition: transform 0.3s ease; /* Añadido para la transición */
+    transition: transform 0.3s ease;
+    /* Añadido para la transición */
 }
 
 .card-title-dashboard {
-    font-size: 0.8rem; /* Ajusta el tamaño de la fuente */
+    font-size: 0.8rem;
+    /* Ajusta el tamaño de la fuente */
     font-weight: 500;
     margin-top: 0.5rem;
     color: var(--text-color) !important;
@@ -382,60 +437,71 @@ body {
 }
 
 .custom-card-width {
-    width: 8rem; /* Ajusta el ancho */
+    width: 8rem;
+    /* Ajusta el ancho */
 }
 
 /* ...ADMIN... */
+.icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    padding: 7rem;
+    /* Add padding to increase spacing */
+    margin: 3rem;
+    /* Add margin to separate icons */
+}
 
 .icon-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
-  padding: 7rem; /* Add padding to increase spacing */
-  margin: 3rem; /* Add margin to separate icons */
+    text-decoration: none !important;
+    color: inherit !important;
 }
 
 .admin-icon {
-  width: 100px !important; /* Adjust the size as needed */
-  height: 100px !important; /* Adjust the size as needed */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  margin: 0 4rem;
+    width: 100px !important;
+    /* Adjust the size as needed */
+    height: 100px !important;
+    /* Adjust the size as needed */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 0 4rem;
 }
 
 .icon-container:hover .admin-icon {
-  transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(0, 150, 255, 0.8); /* Blue glowing effect */
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(0, 150, 255, 0.8);
+    /* Blue glowing effect */
 }
 
 .titlePersistAdmin {
     font-family: 'Lora', serif;
-    font-size: 5vh; /* Ajusta el tamaño de la fuente */
+    font-size: 5vh;
+    /* Ajusta el tamaño de la fuente */
     font-weight: 700;
     color: #ffffff;
     -webkit-text-stroke: 0.3px var(--main-color);
     text-shadow: none;
-    margin-bottom: 2vh; /* Ajusta el margen inferior */
-    padding-bottom: 1vh; /* Ajusta el padding inferior */
+    margin-bottom: 2vh;
+    /* Ajusta el margen inferior */
+    padding-bottom: 1vh;
+    /* Ajusta el padding inferior */
     border-bottom: 0.5vh solid;
     border-image: linear-gradient(to right, #004080, #00aaff);
     border-image-slice: 1;
     display: inline-block;
-
 }
-.etiquetaP{
+
+.etiquetaP {
     margin-top: 1rem !important;
     font-family: 'Lora', serif;
-    font-size: 3vh; /* Ajusta el tamaño de la fuente */
+    font-size: 3vh;
+    /* Ajusta el tamaño de la fuente */
     font-weight: 700;
     color: #ffffff;
     text-shadow: none;
 }
-
 /* ...ADMIN... */
-
-/* MAIN  */
 
 /* TABLE */
 .table-responsive {
@@ -444,149 +510,113 @@ body {
     margin-top: 0px;
 }
 
-.table {
+.tableTodas {
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
-    margin-bottom: 2vh; /* Ajusta el margen inferior */
+    margin-bottom: 2vh;
+    /* Ajusta el margen inferior */
     color: var(--text-color);
 }
 
-.table th,
-.table td {
-    padding: 1vh 2vh; /* Ajusta el padding */
-    vertical-align: middle; /* Centra verticalmente el contenido */
+.tableTodas th,
+.tableTodas td {
+    padding: 1vh 2vh;
+    /* Ajusta el padding */
+    vertical-align: middle;
+    /* Centra verticalmente el contenido */
     border-top: 1px solid var(--second-bg-color);
     font-weight: 500;
-    font-size: 2vh; /* Ajusta el tamaño de la fuente */
+    font-size: 2vh;
+    /* Ajusta el tamaño de la fuente */
 }
 
-.table thead th {
+.tableTodas thead th {
     vertical-align: bottom;
     border-bottom: 2px solid var(--second-bg-color);
     text-shadow: none !important;
-    font-size: 2.2vh; /* Ajusta el tamaño de la fuente */
+    font-size: 2.2vh;
+    /* Ajusta el tamaño de la fuente */
 }
 
-.table tbody+tbody {
+.tableTodas tbody+tbody {
     border-top: 2px solid var(--second-bg-color);
 }
 
-.table-hover tbody tr:hover {
-    color: var(--text-color);
-    background-color: var(--hover-color);
-}
-
-.table-bordered {
+.tableTodas {
     border: 1px solid var(--second-bg-color);
 }
 
-.table-bordered th,
-.table-bordered td {
+.tableTodas th,
+.tableTodas td {
     border: 1px solid var(--second-bg-color);
 }
 
-.table-bordered thead th,
-.table-bordered thead td {
+.tableTodas thead th,
+.tableTodas thead td {
     border-bottom-width: 2px;
 }
 
-.table-dark {
+.tableTodas {
     background-color: var(--second-bg-color);
 }
 
-.table-dark th,
-.table-dark td,
-.table-dark thead th {
+.tableTodas th,
+.tableTodas td,
+.tableTodas thead th {
     border-color: var(--bg-color);
     background-color: #1a1a1a;
     color: var(--second-color);
 }
 
-.table-dark.table-hover tbody tr:hover {
-    background-color: var(--hover-color);
-}
-
-.table td.text-end {
-    text-align: right !important;
-}
-
-.custom-table {
+.tableTodas {
     border-collapse: separate !important;
     border-spacing: 0 !important;
     width: 100% !important;
-    margin-bottom: 2vh !important; /* Ajusta el margen inferior */
+    margin-bottom: 2vh !important;
+    /* Ajusta el margen inferior */
     color: var(--text-color) !important;
 }
 
-.custom-table th,
-.custom-table td {
-    padding: 1vh 2vh !important; /* Ajusta el padding */
-    vertical-align: middle !important; /* Centra verticalmente el contenido */
+.tableTodas th,
+.tableTodas td {
+    padding: 1vh 2vh !important;
+    /* Ajusta el padding */
+    vertical-align: middle !important;
+    /* Centra verticalmente el contenido */
     border-top: 1px solid var(--second-bg-color) !important;
     font-weight: 500 !important;
-    font-size: 2vh !important; /* Ajusta el tamaño de la fuente */
+    font-size: 2vh !important;
+    /* Ajusta el tamaño de la fuente */
 }
 
-.custom-table thead th {
+.tableTodas thead th {
     vertical-align: bottom !important;
     border-bottom: 2px solid var (--second-bg-color) !important;
     text-shadow: none !important;
-    font-size: 2.2vh !important; /* Ajusta el tamaño de la fuente */
+    font-size: 2.2vh !important;
+    /* Ajusta el tamaño de la fuente */
 }
 
-.custom-table tbody+tbody {
+.tableTodas tbody+tbody {
     border-top: 2px solid var(--second-bg-color) !important;
-}
-
-.custom-table-hover tbody tr:hover {
-    color: var(--text-color) !important;
-    background-color: var(--hover-color) !important;
-}
-
-.custom-table-bordered {
-    border: 1px solid var(--second-bg-color) !important;
-}
-
-.custom-table-bordered th,
-.custom-table-bordered td {
-    border: 1px solid var(--second-bg-color) !important;
-}
-
-.custom-table-bordered thead th,
-.custom-table-bordered thead td {
-    border-bottom-width: 2px !important;
-}
-
-.custom-table-dark {
-    background-color: var(--second-bg-color) !important;
-}
-
-.custom-table-dark th,
-.custom-table-dark td,
-.custom-table-dark thead th {
-    border-color: var(--bg-color) !important;
-    background-color: #1a1a1a !important;
-    color: var(--second-color) !important;
-}
-
-.custom-table-dark.custom-table-hover tbody tr:hover {
-    background-color: var(--hover-color) !important;
 }
 
 .btn-group {
     display: flex;
     justify-content: center;
-    gap: 1rem !important;
+    gap: 0.7rem !important;
 }
 
-.btn-primary, .btn-danger, .bg-success-compra {
+.btn-primary,
+.btn-danger,
+.bg-success-compra {
     text-shadow: 1px 1px 2px var(--bg-color) !important;
     color: var(--text-color) !important;
     border-radius: 0.25rem !important;
     margin: 0px !important;
     font-size: 0.7rem !important;
-    border: none;
+    border: none !important;
 }
 
 .btn-primary {
@@ -596,6 +626,7 @@ body {
 .btn-primary:hover {
     background: linear-gradient(45deg, var (--main-color), var(--hover-color));
 }
+
 .btn-danger {
     background-color: #e60000 !important;
     border-color: #cc0000 !important;
@@ -615,26 +646,43 @@ body {
     background-color: #218838 !important;
     border-color: #1e7e34 !important;
 }
+
+.table-smaller-text {
+    font-size: 2.3vh;
+    /* Ajusta el tamaño del t /* Ajusta el tamaño del texto según tus necesidades */
+}
+
+.input-group {
+    display: flex;
+    width: 100%;
+    max-width: 250px;
+}
 /* TABLE */
 
 /* SEARCH */
 .search-form-container {
     display: flex;
-    justify-content: flex-start; /* Posiciona el formulario de búsqueda a la izquierda */
+    justify-content: flex-start;
+    /* Posiciona el formulario de búsqueda a la izquierda */
     width: 100%;
-    margin-bottom: 0px; /* Ajusta el margen inferior */
+    margin-bottom: 0px;
+    /* Ajusta el margen inferior */
 }
 
 .contentPersist .search-input {
     background-color: #1a1a1a;
     color: var(--text-color) !important;
     border: 1px solid var(--main-color);
-    padding: 1vh 2vh; /* Ajusta el padding */
-    border-radius: 1vh; /* Ajusta el borde redondeado */
+    padding: 1vh 2vh;
+    /* Ajusta el padding */
+    border-radius: 1vh;
+    /* Ajusta el borde redondeado */
     font-family: 'Poppins', sans-serif;
     outline: none;
-    height: 4vh; /* Ajusta la altura */
-    font-size: 2vh; /* Ajusta el tamaño de la fuente */
+    height: 4vh;
+    /* Ajusta la altura */
+    font-size: 2vh;
+    /* Ajusta el tamaño de la fuente */
 }
 
 .contentPersist .search-input::placeholder {
@@ -647,6 +695,37 @@ body {
     color: var(--text-color) !important;
     border-color: var(--main-color);
     box-shadow: none;
+}
+
+.form-control-chico {
+    width: 10rem !important;
+    /* Ajusta el ancho según tus necesidades */
+    font-size: 0.875rem !important;
+    /* Ajusta el tamaño de la fuente */
+    padding: 0.25rem 0.5rem !important;
+    /* Ajusta el padding */
+    background-color: var(--second-bg-color) !important;
+    margin: 0 auto;
+    /* Centra horizontalmente el select */
+}
+
+.form-control-chico::placeholder {
+    color: var(--text-color) !important;
+    opacity: 1 !important;
+    text-shadow: 1px 1px 2px var(--bg-color) !important;
+}
+
+.form-control-chico:focus::placeholder {
+    opacity: 0 !important;
+}
+
+.form-control-chico {
+    background-color: var(--second-bg-color) !important;
+}
+
+.form-control-chico{
+    font-size: 0.875rem !important;
+    color: #ffffff !important;
 }
 /* SEARCH */
 
@@ -663,9 +742,12 @@ body {
     border: 1px solid var(--main-color) !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.3s ease-in-out !important;
-    border-radius: 1vh !important; /* Ajusta el borde redondeado */
-    padding: 0.5vh 1vh !important; /* Ajusta el padding */
-    font-size: 2vh !important; /* Ajusta el tamaño de la fuente */
+    border-radius: 1vh !important;
+    /* Ajusta el borde redondeado */
+    padding: 0.5vh 1vh !important;
+    /* Ajusta el padding */
+    font-size: 2vh !important;
+    /* Ajusta el tamaño de la fuente */
 }
 
 .page-link:hover {
@@ -689,158 +771,7 @@ body {
 }
 /* PAGINATION */
 
-.modal-content-createProveedor {
-    background: var(--gradient-bg) !important;
-    color: var(--text-color) !important;
-    border: 2px solid var(--main-color) !important;
-    border-radius: 15px !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
-    background-origin: border-box !important;
-    padding: 0rem !important;
-    margin: 0rem !important;
-}
-
-.modal-header-createProveedor {
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 2px solid var(--main-color) !important;
-    position: relative;
-    padding-right: 1rem;
-}
-
-.modal-header .btn-close-createProveedor {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: var(--main-color) !important;
-}
-
-.modal-header .btn-close-createProveedor:hover {
-    background-color: var(--hover-color) !important;
-}
-
-.modal-title-createProveedor {
-    font-size: var(--h3-font) !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 2px !important;
-    transition: color 0.3s ease !important;
-    margin: 0 !important;
-    text-shadow: 2px 2px 4px var(--bg-color) !important;
-}
-
-.btn-primary-createProveedor {
-    font-weight: 500;
-    background: linear-gradient(45deg, var(--main-color), var(--hover-color));
-    color: var(--text-color) !important;
-    border: none;
-    border-radius: 5px;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    cursor: pointer;
-    width: 100%;
-    font-size: 1rem !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    margin-top: 10px;
-}
-
-.btn-primary-createProveedor:hover {
-    background: linear-gradient(45deg, var(--hover-color), var(--main-color));
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: var(--text-color);
-}
-
-.form-control-createProveedor {
-    color: white !important;
-    background: var(--second-bg-color) !important;
-    padding: 0.5rem 0.75rem !important;
-    font-size: 1rem !important;
-}
-
-.form-control-createProveedor::placeholder {
-    color: white !important;
-}
-
-.form-control-createProveedor:focus::placeholder {
-    color: transparent !important;
-}
-
-.input-group {
-    display: flex;
-    width: 100%;
-    max-width: 250px;
-}
-
-.modal-content-updateProveedor {
-   background: var(--gradient-bg) !important;
-       color: var(--text-color) !important;
-       border: 2px solid var(--main-color) !important;
-       border-radius: 15px !important;
-       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
-       background-origin: border-box !important;
-}
-
-.modal-header-updateProveedor {
-     display: flex !important;
-        justify-content: center;
-        align-items: center;
-        border-bottom: 2px solid var (--main-color) !important;
-        position: relative;
-        padding-right: 1rem;
-}
-
-.modal-header .btn-close-updateProveedor {
-    position: absolute;
-    right: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: var(--main-color) !important;
-}
-
-.modal-header .btn-close-updateProveedor:hover {
-    background-color: var(--hover-color) !important;
-}
-
-.modal-title-updateProveedor {
-    font-size: var(--h3-font) !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 2px !important;
-    transition: color 0.3s ease !important;
-    margin: 0 !important;
-    text-shadow: 2px 2px 4px var(--bg-color) !important;
-}
-
-.btn-primary-updateProveedor {
-    font-weight: 500;
-    background: linear-gradient(45deg, var(--main-color), var(--hover-color));
-    color: var(--text-color) !important;
-    border: none;
-    border-radius: 5px;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    cursor: pointer;
-    width: 100%;
-    font-size: 1rem !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    margin-top: 10px;
-}
-
-.btn-primary-updateProveedor:hover {
-    background: linear-gradient(45deg, var(--hover-color), var(--main-color));
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    color: var(--text-color);
-}
-
-.form-control-updateProveedor {
-    color: white !important;
-    background: var(--second-bg-color) !important;
-    padding: 0.5rem 0.75rem !important;
-    font-size: 1rem !important;
-}
-
+/* ERRORS.HTML */
 .modalContentErrors {
     background: var(--gradient-bg) !important;
     color: var(--text-color) !important;
@@ -895,6 +826,30 @@ body {
     margin-bottom: 0 !important;
 }
 
+.btn-secondaryDos{
+    background-color: #e60000 !important;
+        border-color: #cc0000 !important;
+}
+
+.btn-secondaryDos:hover{
+      background-color: #b30000 !important;
+        border-color: #990000 !important;
+}
+/* ERRORS.HTML */
+
+/* MODAL DETALLES */
+.modal-title-detalle {
+    font-size: 3.5vh;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    transition: color 0.3s ease !important;
+    margin: 0 !important;
+    text-shadow: 2px 2px 4px var(--bg-color) !important;
+    text-align: center !important;
+    width: 100% !important;
+}
+
 .modal-content-detalle {
     background: var(--gradient-bg) !important;
     color: var(--highlight-color) !important;
@@ -916,7 +871,6 @@ body {
 .modal-body-detalle {
     color: #ffffff !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
-    border-bottom: 2px solid var(--main-color) !important;
     padding-bottom: 0 !important;
 }
 
@@ -947,42 +901,93 @@ body {
     margin: auto !important;
 }
 
-.form-control-chico {
-    width: 200px !important; /* Ajusta el ancho según tus necesidades */
-    font-size: 0.875rem !important; /* Ajusta el tamaño de la fuente */
-    padding: 0.25rem 0.5rem !important; /* Ajusta el padding */
-    background-color: var(--second-bg-color) !important;
-    margin: 0 auto; /* Centra horizontalmente el select */
+.tableDetalles th,
+.tableDetalles td,
+.tableDetalles thead th {
+    border-color: var(--bg-color);
+    background-color: #1a1a1a;
+    color: var(--second-color);
+}
+/* MODAL DETALLES */
+
+/* MODAL UPDATE PEQUEÑO */
+.modal-content-updateProveedor {
+   background: var(--gradient-bg) !important;
+       color: var(--text-color) !important;
+       border: 2px solid var(--main-color) !important;
+       border-radius: 15px !important;
+       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+       background-origin: border-box !important;
 }
 
-.form-control-chico::placeholder {
+.modal-header-updateProveedor {
+     display: flex !important;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 2px solid var(--main-color) !important;
+        position: relative;
+        padding-right: 1rem;
+}
+
+.modal-header .btn-close-updateProveedor {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: var(--main-color) !important;
+}
+
+.modal-header .btn-close-updateProveedor:hover {
+    background-color: var(--hover-color) !important;
+}
+
+.modal-title-updateProveedor {
+    font-size: 3.5vh;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    transition: color 0.3s ease !important;
+    margin: 0 !important;
+    text-shadow: 2px 2px 4px var(--bg-color) !important;
+}
+
+.btn-primary-updateProveedor {
+    font-weight: 500;
+    background: linear-gradient(45deg, var(--main-color), var(--hover-color));
     color: var(--text-color) !important;
-    opacity: 1 !important;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
+    margin-top: 10px;
 }
 
-.form-control-chico:focus::placeholder {
-    opacity: 0 !important;
+.btn-primary-updateProveedor:hover {
+    background: linear-gradient(45deg, var(--hover-color), var(--main-color));
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: var(--text-color);
 }
 
-.form-control-chico {
-    background-color: var(--second-bg-color) !important;
-}
-
-.form-control-chico,
-.form-control-chico option {
-    font-size: 0.875rem !important;
+.form-control-updateProveedor {
     color: #ffffff !important;
+    background: var(--second-bg-color) !important;
+    font-size: 0.7rem !important;
 }
+/* MODAL UPDATE PEQUEÑO */
 
+/* FORM-CONTROL-TODOS */
 .form-control-detalle::placeholder {
     color: var(--text-color) !important;
     opacity: 1 !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
 }
 
-.form-control-detalle:focus::placeholder {
-    opacity: 0 !important;
+.form-labelForms{
+    font-size: 0.8rem;
 }
 
 .form-control-detalle {
@@ -991,59 +996,31 @@ body {
 
 .form-control-detalle,
 .form-control-detalle option {
-    font-size: 0.875rem !important;
+    font-size: 0.7rem !important;
     color: #ffffff !important;
 }
+/* FORM-CONTROL-TODOS */
 
-.form-control-producto::placeholder {
-    color: #ffffff !important;
-    opacity: 1 !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-}
-
-.form-control-producto:focus::placeholder {
-    opacity: 0 !important;
-}
-
-.form-control-producto {
-    background-color: var(--second-bg-color) !important;
-}
-
-.form-control-producto,
-.form-control-producto option {
-    font-size: 2vh !important;
-    color: #ffffff !important;
-}
-
-.btn-success-producto {
-    background-color: #28a745 !important;
-    font-weight: 500 !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    color: var(--text-color) !important;
-    border: none !important;
-    border-radius: 5px !important;
-    padding: 0.25rem 0.5rem !important; /* Ajusta el padding para hacer el botón más pequeño */
-    /* Ajusta el tamaño de la fuente */
-}
-
-.btn-success-producto:hover {
-    background-color: #1e7e34 !important;
-    text-shadow: 1px 1px 2px var(--bg-color) !important;
-    color: var (--text-color) !important;
-}
-
+/* TITULO MODAL COMPRA/VENTA */
 .title-stock {
-        font-size: var(--h4-font) !important;
-        font-weight: 700 !important;
-        text-transform: uppercase !important;
-        letter-spacing: 2px !important;
-        transition: color 0.3s ease !important;
-        margin: 0 !important;
-        text-shadow: 2px 2px 4px var(--bg-color) !important;
-        text-align: center !important;
-        width: 100% !important;
+    font-size: var(--h4-font) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    transition: color 0.3s ease !important;
+    margin: 0 !important;
+    text-shadow: 2px 2px 4px var(--bg-color) !important;
+    text-align: center !important;
+    width: 100% !important;
 }
 
+#text-stock {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+/* TITULO MODAL COMPRA/VENTA */
+
+/* BOTONES VARIOS (TABLAS) */
 .button-detalle {
     font-weight: 500 !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
@@ -1080,12 +1057,13 @@ body {
 }
 
 .btn-salir:hover {
-    background-color: #4d4d4d !important; /* Un tono más oscuro de gris para el hover */
+    background-color: #4d4d4d !important;
+    /* Un tono más oscuro de gris para el hover */
     color: var(--text-color) !important;
 }
 
-.btn-success-detalle{
-    background-color: #28a745!important;
+.btn-success-detalle {
+    background-color: #28a745 !important;
     font-weight: 500 !important;
     text-shadow: 1px 1px 2px var(--bg-color) !important;
     color: var(--text-color) !important;
@@ -1098,86 +1076,134 @@ body {
     text-shadow: 1px 1px 2px var(--bg-color) !important;
     color: var(--text-color) !important;
 }
+/* BOTONES VARIOS (TABLAS) */
 
-.modal-title-detalle {
-    font-size: var(--h3-font) !important;
-    font-weight: 700 !important;
-    text-transform: uppercase !important;
-    letter-spacing: 2px !important;
-    transition: color 0.3s ease !important;
-    margin: 0 !important;
-    text-shadow: 2px 2px 4px var(--bg-color) !important;
-    text-align: center !important;
-    width: 100% !important;
-}
-
+/* GRAFICOS */
 .chart-container {
     width: 100%;
-    height: 73vh; /* Ajusta la altura al 80% de la altura de la ventana */
+    height: 73vh;
+    /* Ajusta la altura al 80% de la altura de la ventana */
     margin: 0 auto;
 }
 
 .chart-container-uno {
- margin-bottom: 20px;
-}
-
-.table-smaller-text {
-    font-size: 2.3vh; /* Ajusta el tamaño del t /* Ajusta el tamaño del texto según tus necesidades */
-}
-
-#text-stock {
-  margin: 0 !important;
-  padding: 0 !important;
+    margin-bottom: 20px;
 }
 
 .etiqueta-chart {
     text-decoration: none !important;
     color: inherit !important;
 }
+/* GRAFICOS */
 
-.icon-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
-  padding: 7rem; /* Add padding to increase spacing */
-  margin: 3rem; /* Add margin to separate icons */
+@media (max-width: 713px) {
+    .responsive-sidebar {
+        width: 100%;
+        position: relative;
+        top: 0;
+        height: auto;
+        padding: 0;
+    }
+
+    .containerItemsAside {
+        flex-direction: column;
+    }
+
+    .contentPersist {
+        width: 100%;
+        margin-left: 0;
+        padding: 1rem;
+    }
+
+    .table-responsive {
+        margin-top: 1rem;
+        width: 100%;
+        text-align: left;
+    }
+
+    .table-responsive {
+        margin-top: 1rem;
+    }
+
+    .tableTodas th,
+    .tableTodas td {
+        font-size: 0.875rem;
+        padding: 0.5rem;
+    }
+
+    .tableTodas thead th {
+        font-size: 1rem;
+    }
+
+    .tableTodas thead {
+        display: none;
+    }
+
+    .tableTodas tbody,
+    .tableTodas tr,
+    .tableTodas td {
+        display: block;
+        width: 100%;
+    }
+
+    .tableTodas td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    .buttonPersist {
+        width: 100% !important;
+        margin-bottom: 1rem !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    .tableTodas td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 50%;
+        padding-left: 15px;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .container-fluid.d-flex.p-0 {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        order: 1;
+    }
+
+    .contentPersist {
+        order: 2;
+    }
+
+    .search-form-container {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .input-group-buscar {
+        flex-direction: row !important;
+        width: 100%;
+    }
+
+    .btn-group {
+        gap: 0rem !important;
+    }
 }
 
-.admin-icon {
-  width: 100px !important; /* Adjust the size as needed */
-  height: 100px !important; /* Adjust the size as needed */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  margin: 0 4rem;
-}
+/* Estilos para tabletas */
+@media only screen and (min-width: 714px) and (max-width: 1024px) {}
 
-.icon-container:hover .admin-icon {
-  transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(0, 150, 255, 0.8); /* Blue glowing effect */
-}
-
-.titlePersistAdmin {
-    font-family: 'Lora', serif;
-    font-size: 5vh; /* Ajusta el tamaño de la fuente */
-    font-weight: 700;
-    color: #ffffff;
-    -webkit-text-stroke: 0.3px var(--main-color);
-    text-shadow: none;
-    margin-bottom: 2vh; /* Ajusta el margen inferior */
-    padding-bottom: 1vh; /* Ajusta el padding inferior */
-    border-bottom: 0.5vh solid;
-    border-image: linear-gradient(to right, #004080, #00aaff);
-    border-image-slice: 1;
-    display: inline-block;
-
-}
-
-.etiquetaP{
-    margin-top: 1rem !important;
-    font-family: 'Lora', serif;
-    font-size: 3vh; /* Ajusta el tamaño de la fuente */
-    font-weight: 700;
-    color: #ffffff;
-    text-shadow: none;
+/* Estilos para monitores de escritorio */
+@media only screen and (min-width: 1025px) {
+    .titleDetalles {
+        font-size: 2rem;
+    }
 }

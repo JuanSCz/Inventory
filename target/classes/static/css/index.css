@@ -192,11 +192,11 @@ main > .main-login {
 
 .modalContentErrors {
     background: var(--gradient-bg) !important;
-        color: var(--highlight-color) !important;
-        border: 2px solid var(--main-color) !important;
-        border-radius: 15px !important;
-        padding: 1rem !important;
-        box-shadow: 0 4px 8px var(--shadow-color) !important;
+    color: var(--text-color) !important;
+    border: 2px solid var(--main-color) !important;
+    border-radius: 15px !important;
+    padding: 1rem !important;
+    box-shadow: 0 4px 8px var(--shadow-color) !important;
 }
 
 .modalHeaderErrors{

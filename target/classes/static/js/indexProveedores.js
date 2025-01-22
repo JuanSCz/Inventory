@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     handleErrorModal();
-  /*  initializeSearch(); */
+    initializeSearch();
     initializeCreateModal();
     initializeUpdateModal();
     initializeDeleteModal();

@@ -28,7 +28,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto navbar-menu">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/dashboard}">Inicio</a>
+                    <a class="nav-link" aria-current="page" th:href="@{/dashboard}">Inicio</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Admin</a>
@@ -101,89 +101,89 @@
             </button>
         </div>
 
-     <!--   <form th:action="@{/tableVentas/search}" method="get" class="search-form-container">
-            <div class="input-group-buscar">
-                <input type="text" name="nombreCliente" placeholder="Cliente" class="form-control search-input">
-                <input type="hidden" name="page" value="0">
-                <input type="hidden" name="size" value="15">
-            </div>
-        </form> -->
+           <form th:action="@{/tableVentas/search}" method="get" class="search-form-container">
+                <div class="input-group-buscar">
+                    <input type="text" name="nombreCliente" placeholder="Cliente" class="form-control search-input">
+                    <input type="hidden" name="page" value="0">
+                    <input type="hidden" name="size" value="15">
+                </div>
+            </form>
 
-        <div class="table-responsive mt-3">
-            <table class="table table-dark table-striped table-bordered custom-table table-sm table-smaller-text">
-                <thead class="table-light">
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Cliente</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Método de Pago</th>
-                    <th scope="col">Impuestos</th>
-                    <th scope="col">Total</th>
-                    <th scope="col">Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="venta : ${ventas}">
-                    <td th:data-label="ID" th:text="${venta.id}"></td>
-                    <td th:data-label="Cliente" th:text="${venta.clienteNombre}"></td>
-                    <td th:data-label="Fecha" th:text="${venta.fecha}"></td>
-                    <td th:data-label="Estado" th:text="${venta.estado}"></td>
-                    <td th:data-label="Metodo_de_Pago" th:text="${venta.metodoPago}"></td>
-                    <td th:data-label="Impuestos" th:text="${venta.impuestos}"></td>
-                    <td th:data-label="Total" th:text="${venta.totalString}"></td>
-                    <td th:data-label="Acciones">
-                        <div class="btn-group">
-                            <button class="btn bg-success bg-success-compra btn-sm navbar-menu me-2"
-                                    onclick="showDetalleVentaModal(this)" th:data-id="${venta.id}">
-                                Detalle
-                            </button>
-                            <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateVenta"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#updateVentaModal" th:data-id="${venta.id}">
-                                Editar
-                            </button>
-                            <form th:action="@{/tableVentas/{id}(id=${venta.id})}" method="post"
-                                  onsubmit="return confirmDelete(this);">
-                                <input type="hidden" name="_method" value="delete"/>
-                                <button type="submit" class="btn btn-danger btn-sm delete-button"
-                                        th:data-id="${venta.id}">Borrar
+            <div class="table-responsive mt-3">
+                <table class="table tableTodas table-dark table-striped table-bordered custom-table table-sm table-smaller-text">
+                    <thead  class="table-light">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Método de Pago</th>
+                        <th scope="col">Impuestos</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="venta : ${ventas}">
+                        <td th:data-label="ID" th:text="${venta.id}"></td>
+                        <td th:data-label="Cliente" th:text="${venta.clienteNombre}"></td>
+                        <td th:data-label="Fecha" th:text="${venta.fecha}"></td>
+                        <td th:data-label="Estado" th:text="${venta.estado}"></td>
+                        <td th:data-label="Metodo_de_Pago" th:text="${venta.metodoPago}"></td>
+                        <td th:data-label="Impuestos" th:text="${venta.impuestos}"></td>
+                        <td th:data-label="Total" th:text="${venta.totalString}"></td>
+                        <td th:data-label="Acciones">
+                            <div class="btn-group">
+                                <button class="btn bg-success bg-success-compra btn-sm navbar-menu me-2"
+                                        onclick="showDetalleVentaModal(this)" th:data-id="${venta.id}">
+                                    Detalle
                                 </button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
-                    <a class="page-link"
-                       th:href="@{/tableVentas(page=${page.number - 1}, size=${page.size}, fecha=${param.fecha})}">Anterior</a>
-                </li>
-                <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
-                    th:classappend="${page.number == i} ? 'active'">
-                    <a class="page-link" th:href="@{/tableVentas(page=${i}, size=${page.size}, fecha=${param.fecha})}"
-                       th:text="${i + 1}">1</a>
-                </li>
-                <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
-                    <a class="page-link"
-                       th:href="@{/tableVentas(page=${page.number + 1}, size=${page.size}, fecha=${param.fecha})}">Siguiente</a>
-                </li>
-            </ul>
-        </nav>
-    </main>
-</div>
+                                <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateVenta"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#updateVentaModal" th:data-id="${venta.id}">
+                                    Editar
+                                </button>
+                                <form th:action="@{/tableVentas/{id}(id=${venta.id})}" method="post"
+                                      onsubmit="return confirmDelete(this);">
+                                    <input type="hidden" name="_method" value="delete"/>
+                                    <button type="submit" class="btn btn-danger btn-sm delete-button"
+                                            th:data-id="${venta.id}">Borrar
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/tableVentas(page=${page.number - 1}, size=${page.size}, fecha=${param.fecha})}">Anterior</a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                        th:classappend="${page.number == i} ? 'active'">
+                        <a class="page-link" th:href="@{/tableVentas(page=${i}, size=${page.size}, fecha=${param.fecha})}"
+                           th:text="${i + 1}">1</a>
+                    </li>
+                    <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/tableVentas(page=${page.number + 1}, size=${page.size}, fecha=${param.fecha})}">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </main>
+    </div>
 
-<div th:replace="~{fragments/tableDetalleVentas :: createModalTableVentas}"></div>
-<div th:replace="~{fragments/formUpdateVentas :: updateModalVentas}"></div>
-<div th:replace="~{fragments/formCreateVentas :: createModalVentas}"></div>
-<div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
-<div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/indexVentas.js"></script>
+    <div th:replace="~{fragments/tableDetalleVentas :: createModalTableVentas}"></div>
+    <div th:replace="~{fragments/formUpdateVentas :: updateModalVentas}"></div>
+    <div th:replace="~{fragments/formCreateVentas :: createModalVentas}"></div>
+    <div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
+    <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/indexVentas.js"></script>
 
-</body>
+    </body>
 
-</html>
+    </html>

@@ -20,28 +20,28 @@
                 <div class="modal-body">
                     <form th:action="@{/tableDepositos}" method="post" th:object="${depositoDTO}" autocomplete="off">
                         <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="nombre"
+                            <div class="col-md-6 mb-3">
+                                <label for="nombre" class="form-label form-labelForms">Nombre</label>
+                                <input type="text" class="form-control form-control-sm form-control-updateProveedor" id="nombre"
                                        th:field="*{nombre}" placeholder="Ingrese el nombre...">
                             </div>
-                            <div class="col-md-12 mb-3">
-                                <label for="provincia" class="form-label">Provincia</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="provincia"
+                            <div class="col-md-6 mb-3">
+                                <label for="provincia" class="form-label form-labelForms">Provincia</label>
+                                <input type="text" class="form-control form-control-sm form-control-updateProveedor" id="provincia"
                                        th:field="*{provincia}" placeholder="Ingrese la provincia...">
                             </div>
-                            <div class="col-md-12 mb-3">
-                                <label for="direccion" class="form-label">Dirección</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="direccion"
+                            <div class="col-md-6 mb-3">
+                                <label for="direccion" class="form-label form-labelForms">Dirección</label>
+                                <input type="text" class="form-control form-control-sm form-control-updateProveedor" id="direccion"
                                        th:field="*{direccion}" placeholder="Ingrese la dirección...">
                             </div>
-                            <div class="col-md-12 mb-3">
-                                <label for="contacto" class="form-label">Número Telefónico</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="contacto"
+                            <div class="col-md-6 mb-3">
+                                <label for="contacto" class="form-label form-labelForms">Número Telefónico</label>
+                                <input type="text" class="form-control form-control-sm form-control-updateProveedor" id="contacto"
                                        th:field="*{contactoDeposito}" placeholder="Ingrese el numero telefónico...">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-primary-createProveedor w-100">Crear</button>
+                        <button type="submit" class="btn btn-sm btn-primary btn-primary-updateProveedor w-100">Crear</button>
                     </form>
                 </div>
             </div>

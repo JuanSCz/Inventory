@@ -154,14 +154,14 @@ function populateUpdateModal(id) {
 
                 newRow.innerHTML = `
                     <div class="col-md-6 mb-3">
-                        <label for="depositoId${index}" class="form-label">Depósito</label>
-                        <select class="form-control form-control-detalle" name="stocks[${index}].depositoId" id="depositoId${index}" required>
+                        <label for="depositoId${index}" class="form-label form-labelForms">Depósito</label>
+                        <select class="form-control form-control-sm form-control-sm form-control-detalle" name="stocks[${index}].depositoId" id="depositoId${index}" required>
                             ${document.querySelector('select[name="stocks[0].depositoId"]').innerHTML}
                         </select>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="cantidad${index}" class="form-label">Cantidad</label>
-                        <input type="number" class="form-control form-control-detalle" name="stocks[${index}].cantidad" id="cantidad${index}" placeholder="Ingrese la cantidad" required>
+                        <label for="cantidad${index}" class="form-label form-labelForms">Cantidad</label>
+                        <input type="number" class="form-control form-control-sm form-control-sm form-control-detalle" name="stocks[${index}].cantidad" id="cantidad${index}" placeholder="Ingrese la cantidad" required>
                     </div>
                 `;
 
@@ -228,14 +228,14 @@ function agregarFilaStock() {
 
     newRow.innerHTML = `
         <div class="col-md-6 mb-3">
-            <label for="depositoId${currentIndex}" class="form-label">Depósito</label>
-            <select class="form-control form-control-detalle" name="stocks[${currentIndex}].depositoId" id="depositoId${currentIndex}" required>
+            <label for="depositoId${currentIndex}" class="form-label form-labelForms">Depósito</label>
+            <select class="form-control form-control-sm form-control-detalle" name="stocks[${currentIndex}].depositoId" id="depositoId${currentIndex}" required>
                 ${depositoSelectHTML}
             </select>
         </div>
         <div class="col-md-6 mb-3">
-            <label for="cantidad${currentIndex}" class="form-label">Cantidad</label>
-            <input type="number" class="form-control form-control-detalle" name="stocks[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad" required>
+            <label for="cantidad${currentIndex}" class="form-label form-labelForms">Cantidad</label>
+            <input type="number" class="form-control form-control-sm form-control-detalle" name="stocks[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad" required>
         </div>
     `;
 

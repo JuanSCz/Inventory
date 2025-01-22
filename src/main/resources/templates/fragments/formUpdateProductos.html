@@ -23,28 +23,28 @@
                         <input type="hidden" id="id" th:field="*{id}">
                         <div class="row">
                             <div class="col-md-3 mb-3">
-                                <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control form-control-detalle" id="nombre"
+                                <label for="nombre" class="form-label form-labelForms">Nombre</label>
+                                <input type="text" class="form-control form-control-sm form-control-detalle" id="nombre"
                                        th:field="*{nombre}">
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="descripcion" class="form-label">Descripción</label>
-                                <input type="text" class="form-control form-control-detalle" id="descripcion"
+                                <label for="descripcion" class="form-label form-labelForms">Descripción</label>
+                                <input type="text" class="form-control form-control-sm form-control-detalle" id="descripcion"
                                        th:field="*{descripcion}">
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="costo" class="form-label">Costo del producto</label>
-                                <input type="text" class="form-control form-control-detalle" id="costo"
+                                <label for="costo" class="form-label form-labelForms">Costo del producto</label>
+                                <input type="text" class="form-control form-control-sm form-control-detalle" id="costo"
                                        th:field="*{costoString}">
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="precio" class="form-label">Precio de venta</label>
-                                <input type="text" class="form-control form-control-detalle" id="precio"
+                                <label for="precio" class="form-label form-labelForms">Precio de venta</label>
+                                <input type="text" class="form-control form-control-sm form-control-detalle" id="precio"
                                        th:field="*{precioString}">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="categoriaId" class="form-label">Categoría</label>
-                                <select class="form-control form-control-detalle" id="categoriaId"
+                                <label for="categoriaId" class="form-label form-labelForms">Categoría</label>
+                                <select class="form-control form-control-sm form-control-detalle" id="categoriaId"
                                         th:field="*{categoriaId}">
                                     <option value="">Seleccione una categoría...</option>
                                     <option th:each="categoria : ${categorias}" th:value="${categoria.id}"
@@ -53,20 +53,20 @@
                                 </select>
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="stockActual" class="form-label">Stock Inicial</label>
-                                <input type="text" class="form-control form-control-detalle" id="stockActual"
+                                <label for="stockActual" class="form-label form-labelForms">Stock Inicial</label>
+                                <input type="text" class="form-control form-control-sm form-control-detalle" id="stockActual"
                                        th:field="*{stockActual}">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="stockMinimo" class="form-label">Stock Mínimo</label>
-                                <input type="text" class="form-control form-control-detalle" id="stockMinimo"
+                                <label for="stockMinimo" class="form-label form-labelForms">Stock Mínimo</label>
+                                <input type="text" class="form-control form-control-sm form-control-detalle" id="stockMinimo"
                                        th:field="*{stockMinimo}">
                             </div>
                             <h4 class="mb-3 text-center title-stock">Stock:</h4>
                             <div id="stockContainerUpdate">
                                 <div class="col-md-6 mb-3">
-                                    <label for="depositoId" class="form-label">Depósito</label>
-                                    <select class="form-control form-control-detalle" id="depositoId"
+                                    <label for="depositoId" class="form-label form-labelForms">Depósito</label>
+                                    <select class="form-control form-control-sm form-control-detalle" id="depositoId"
                                             th:field="*{stocks[0].depositoId}">
                                         <option value="">Seleccione un depósito...</option>
                                         <option th:each="deposito : ${depositos}" th:value="${deposito.id}"
@@ -75,15 +75,15 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="cantidad" class="form-label">Cantidad</label>
-                                    <input type="number" class="form-control form-control-detalle" id="cantidad"
+                                    <label for="cantidad" class="form-label form-labelForms">Cantidad</label>
+                                    <input type="number" class="form-control form-control-sm form-control-detalle" id="cantidad"
                                            th:field="*{stocks[0].cantidad}" placeholder="Ingrese la cantidad">
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer" id="modal-footer-detalle">
-                            <button type="submit" class="btn button-detalle">Actualizar</button>
-                            <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
+                            <button type="submit" class="btn btn-sm button-detalle">Actualizar</button>
+                            <button type="button" class="btn btn-sm btn-salir" data-bs-dismiss="modal">Salir</button>
                         </div>
                     </form>
                 </div>

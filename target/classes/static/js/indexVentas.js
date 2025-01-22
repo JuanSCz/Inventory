@@ -124,24 +124,24 @@ function populateUpdateModal(id) {
 
                 newRow.innerHTML = `
                     <div class="col-md-3 mb-3">
-                        <label for="producto${index}" class="form-label">Producto</label>
-                        <select class="form-control form-control-detalle" name="detallesVenta[${index}].productoId" id="producto${index}" required>
+                        <label for="producto${index}" class="form-label form-labelForms">Producto</label>
+                        <select class="form-control form-control-sm form-control-detalle" name="detallesVenta[${index}].productoId" id="producto${index}" required>
                             ${document.querySelector('select[name="detallesVenta[0].productoId"]').innerHTML}
                         </select>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <label for="deposito${index}" class="form-label">Depósito</label>
-                        <select class="form-control form-control-detalle" name="detallesVenta[${index}].depositoId" id="deposito${index}" required>
+                        <label for="deposito${index}" class="form-label form-labelForms">Depósito</label>
+                        <select class="form-control form-control-sm form-control-detalle" name="detallesVenta[${index}].depositoId" id="deposito${index}" required>
                             ${document.querySelector('select[name="detallesVenta[0].depositoId"]').innerHTML}
                         </select>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <label for="cantidad${index}" class="form-label">Cantidad</label>
-                        <input type="number" class="form-control form-control-detalle" name="detallesVenta[${index}].cantidad" id="cantidad${index}" placeholder="Ingrese la cantidad..." required>
+                        <label for="cantidad${index}" class="form-label form-labelForms">Cantidad</label>
+                        <input type="number" class="form-control form-control-sm form-control-detalle" name="detallesVenta[${index}].cantidad" id="cantidad${index}" placeholder="Ingrese la cantidad..." required>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <label for="precioUnitario${index}" class="form-label">Precio unitario del producto</label>
-                        <input type="text" class="form-control form-control-detalle" name="detallesVenta[${index}].precioUnitarioString" id="precioUnitario${index}" placeholder="Ingrese el precio unitario..." required>
+                        <label for="precioUnitario${index}" class="form-label form-labelForms">Precio unitario del producto</label>
+                        <input type="text" class="form-control form-control-sm form-control-detalle" name="detallesVenta[${index}].precioUnitarioString" id="precioUnitario${index}" placeholder="Ingrese el precio unitario..." required>
                     </div>
                 `;
 
@@ -211,24 +211,24 @@ function agregarFilaDetalle() {
 
     newRow.innerHTML = `
         <div class="col-md-3 mb-3">
-            <label for="producto${currentIndex}" class="form-label">Producto</label>
-            <select class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].productoId" id="producto${currentIndex}" required>
+            <label for="producto${currentIndex}" class="form-label form-labelForms">Producto</label>
+            <select class="form-control form-control-sm form-control-detalle" name="detallesVenta[${currentIndex}].productoId" id="producto${currentIndex}" required>
                 ${productoSelectHTML}
             </select>
         </div>
         <div class="col-md-3 mb-3">
-            <label for="deposito${currentIndex}" class="form-label">Depósito</label>
-            <select class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].depositoId" id="deposito${currentIndex}" required>
+            <label for="deposito${currentIndex}" class="form-label form-labelForms">Depósito</label>
+            <select class="form-control form-control-sm form-control-detalle" name="detallesVenta[${currentIndex}].depositoId" id="deposito${currentIndex}" required>
                 ${depositoSelectHTML}
             </select>
         </div>
         <div class="col-md-3 mb-3">
-            <label for="cantidad${currentIndex}" class="form-label">Cantidad</label>
-            <input type="number" class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad..." required>
+            <label for="cantidad${currentIndex}" class="form-label form-labelForms">Cantidad</label>
+            <input type="number" class="form-control form-control-sm form-control-detalle" name="detallesVenta[${currentIndex}].cantidad" id="cantidad${currentIndex}" placeholder="Ingrese la cantidad..." required>
         </div>
         <div class="col-md-3 mb-3">
-            <label for="precioUnitario${currentIndex}" class="form-label">Precio unitario del producto</label>
-            <input type="text" class="form-control form-control-detalle" name="detallesVenta[${currentIndex}].precioUnitarioString" id="precioUnitario${currentIndex}" placeholder="Ingrese el precio unitario..." required>
+            <label for="precioUnitario${currentIndex}" class="form-label form-labelForms">Precio unitario del producto</label>
+            <input type="text" class="form-control form-control-sm form-control-detalle" name="detallesVenta[${currentIndex}].precioUnitarioString" id="precioUnitario${currentIndex}" placeholder="Ingrese el precio unitario..." required>
         </div>
     `;
 

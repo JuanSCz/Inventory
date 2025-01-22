@@ -23,31 +23,31 @@
                         <input type="hidden" id="id" th:field="*{id}">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="nombre" class="form-label">Nombre</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="nombre"
+                                <label for="nombre" class="form-label form-labelForms">Nombre</label>
+                                <input type="text" class="form-control form-control-sm form-control-updateProveedor" id="nombre"
                                        th:field="*{nombre}">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="contrasenia" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control form-control-createProveedor"
+                                <label for="contrasenia" class="form-label form-labelForms">Contraseña</label>
+                                <input type="password" class="form-control form-control-sm form-control-updateProveedor"
                                        id="contrasenia"
                                        th:field="*{contrasenia}">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="contacto" class="form-label">Contacto</label>
-                                <input type="text" class="form-control form-control-createProveedor" id="contacto"
+                                <label for="contacto" class="form-label form-labelForms">Contacto</label>
+                                <input type="text" class="form-control form-control-sm form-control-updateProveedor" id="contacto"
                                        th:field="*{contacto}">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="rol" class="form-label">Rol</label>
-                                <select class="form-control form-control-createProveedor" id="rol" th:field="*{rolId}">
+                                <label for="rol" class="form-label form-labelForms">Rol</label>
+                                <select class="form-control form-control-sm form-control-updateProveedor" id="rol" th:field="*{rolId}">
                                     <option value="">Seleccione un rol</option>
                                     <option th:each="rol : ${roles}" th:value="${rol.id}" th:text="${rol.nombre}"
                                             th:selected="${rol.id} == *{rolId}"></option>
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-primary-createProveedor w-100">Crear</button>
+                        <button type="submit" class="btn btn-sm btn-primary btn-primary-updateProveedor w-100">Actualizar</button>
                     </form>
                 </div>
             </div>

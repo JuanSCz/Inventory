@@ -23,25 +23,25 @@
                         <input type="hidden" id="id" th:field="*{id}">
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <label for="macAddress" class="form-label">MAC Address</label>
-                                <input type="text" class="form-control form-control-detalle" id="macAddress"
+                                <label for="macAddress" class="form-label form-labelForms">MAC Address</label>
+                                <input type="text" class="form-control form-control-sm form-control-detalle" id="macAddress"
                                        th:field="*{macAddress}">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="numeroDeSerie" class="form-label">Numero de Serie</label>
-                                <input type="text" class="form-control form-control-detalle" id="numeroDeSerie"
+                                <label for="numeroDeSerie" class="form-label form-labelForms">Numero de Serie</label>
+                                <input type="text" class="form-control form-control-sm form-control-detalle" id="numeroDeSerie"
                                        th:field="*{numeroDeSerie}">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <label for="codigoBarras" class="form-label">Código de Barras</label>
-                                <input type="text" class="form-control form-control-detalle" id="codigoBarras"
+                                <label for="codigoBarras" class="form-label form-labelForms">Código de Barras</label>
+                                <input type="text" class="form-control form-control-sm form-control-detalle" id="codigoBarras"
                                        th:field="*{codigoBarras}">
                             </div>
                             <h4 class="mb-3 text-center title-stock">Stock:</h4>
                             <div id="stockContainerUpdate" class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="depositoId" class="form-label">Depósito</label>
-                                    <select class="form-control form-control-detalle" id="depositoId"
+                                    <label for="depositoId" class="form-label form-labelForms">Depósito</label>
+                                    <select class="form-control form-control-sm form-control-detalle" id="depositoId"
                                             th:field="*{stocks[0].depositoId}">
                                         <option value="">Seleccione un depósito...</option>
                                         <option th:each="deposito : ${depositos}" th:value="${deposito.id}"
@@ -50,15 +50,15 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="cantidad" class="form-label">Cantidad</label>
-                                    <input type="number" class="form-control form-control-detalle" id="cantidad"
+                                    <label for="cantidad" class="form-label form-labelForms">Cantidad</label>
+                                    <input type="number" class="form-control form-control-sm form-control-detalle" id="cantidad"
                                            th:field="*{stocks[0].cantidad}" placeholder="Ingrese la cantidad">
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer" id="modal-footer-detalle">
-                            <button type="submit" class="btn button-detalle">Actualizar</button>
-                            <button type="button" class="btn btn-salir" data-bs-dismiss="modal">Salir</button>
+                            <button type="submit" class="btn btn-sm button-detalle">Actualizar</button>
+                            <button type="button" class="btn btn-sm btn-salir" data-bs-dismiss="modal">Salir</button>
                         </div>
                     </form>
                 </div>

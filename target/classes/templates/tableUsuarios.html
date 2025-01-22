@@ -28,7 +28,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto navbar-menu">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/dashboard}">Inicio</a>
+                    <a class="nav-link" aria-current="page" th:href="@{/dashboard}">Inicio</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Admin</a>
@@ -101,16 +101,8 @@
             </button>
         </div>
 
-        <!--      <form th:action="@{/tableUsuarios/search}" method="get" class="search-form-container">
-                 <div class="input-group-buscar">
-                     <input type="text" name="name" placeholder="Nombre" class="form-control search-input">
-                     <input type="hidden" name="page" value="0">
-                     <input type="hidden" name="size" value="15">
-                 </div>
-             </form> -->
-
              <div class="table-responsive mt-3">
-                 <table class="table table-dark table-striped table-bordered custom-table table-sm table-smaller-text">
+                 <table class="table tableTodas table-dark table-striped table-bordered custom-table table-sm table-smaller-text">
                      <thead class="table-light">
                      <tr>
                          <th scope="col">ID</th>

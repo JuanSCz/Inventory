@@ -1,5 +1,6 @@
 package com.interonda.inventory.dto;
 
+import com.interonda.inventory.entity.Usuario;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,6 +26,15 @@ public class UsuarioDTO {
     private String rolNombre;
 
     public UsuarioDTO() {
+    }
+
+    public UsuarioDTO(Usuario usuario) {
+        this.id = usuario.getId();
+        this.nombre = usuario.getNombre();
+        this.contrasenia = usuario.getContrasenia();
+        this.contacto = usuario.getContacto();
+        this.rolId = usuario.getRol().getId();
+        this.rolNombre = usuario.getRol().getNombre();
     }
 
     // Getters y Setters

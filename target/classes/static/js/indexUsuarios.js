@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
     handleErrorModal();
-    initializeSearch();
     initializeCreateModal();
     initializeUpdateModal();
     initializeDeleteModal();
@@ -17,43 +16,6 @@ function handleErrorModal() {
         const errorModal = new bootstrap.Modal(document.getElementById('errorModalGlobal'));
         errorModal.show();
     }
-}
-
-// Manejo de la búsqueda en tiempo real
-function initializeSearch() {
-    const searchInput = document.querySelector('.search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', debounce(filterTable, 300)); // Agregamos debounce para evitar múltiples solicitudes
-    }
-}
-
-function filterTable() {
-    const input = document.querySelector('.search-input');
-    const filter = input.value.toLowerCase();
-    const tableBody = document.querySelector('.custom-table tbody');
-
-    tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Cargando...</td></tr>';
-
-    fetch(`/tableUsuarios/search?name=${filter}&page=0&size=15`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al buscar usuarios');
-            }
-            return response.text();
-        })
-        .then(html => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            const newTableBody = doc.querySelector('.custom-table tbody');
-            const pagination = doc.querySelector('.pagination');
-            tableBody.innerHTML = newTableBody ? newTableBody.innerHTML : '<tr><td colspan="7" class="text-center">No se encontraron resultados</td></tr>';
-            document.querySelector('.pagination').innerHTML = pagination ? pagination.innerHTML : '';
-            initializeUpdateModal(); // Re-inicializar los eventos de los botones de edición
-        })
-        .catch(error => {
-            console.error('Error al realizar la búsqueda:', error);
-            tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">Error al cargar los datos</td></tr>';
-        });
 }
 
 // Manejo del modal "Crear Usuario"
