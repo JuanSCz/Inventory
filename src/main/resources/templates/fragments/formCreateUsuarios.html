@@ -22,7 +22,8 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="name" class="form-label form-labelForms">Nombre</label>
-                                <input type="text" class="form-control form-control-sm form-control-updateProveedor" id="name"
+                                <input type="text" class="form-control form-control-sm form-control-updateProveedor"
+                                       id="name"
                                        th:field="*{nombre}" placeholder="Ingrese el nombre...">
                             </div>
                             <div class="col-md-6 mb-3">
@@ -33,19 +34,22 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="contacto" class="form-label form-labelForms">Número Telefónico:</label>
-                                <input type="text" class="form-control form-control-sm form-control-updateProveedor" id="contacto"
+                                <input type="text" class="form-control form-control-sm form-control-updateProveedor"
+                                       id="contacto"
                                        th:field="*{contacto}" placeholder="Ingrese el número telefónico...">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="rol" class="form-label form-labelForms">Rol</label>
-                                <select class="form-control form-control-sm form-control-updateProveedor" id="rol" th:field="*{rolId}">
+                                <select class="form-control form-control-sm form-control-updateProveedor" id="rol"
+                                        th:field="*{rolId}">
                                     <option value="">Seleccionar rol...</option>
                                     <option th:each="rol : ${roles}" th:value="${rol.id}"
                                             th:text="${rol.nombre}"></option>
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary btn-primary-updateProveedor w-100">Crear</button>
+                        <button type="submit" class="btn btn-sm btn-primary btn-primary-updateProveedor w-100">Crear
+                        </button>
                     </form>
                 </div>
             </div>

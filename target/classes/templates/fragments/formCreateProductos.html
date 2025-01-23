@@ -27,17 +27,20 @@
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="descripcion" class="form-label form-labelForms">Descripción</label>
-                                <input type="text" class="form-control form-control-sm form-control-detalle" id="descripcion"
+                                <input type="text" class="form-control form-control-sm form-control-detalle"
+                                       id="descripcion"
                                        th:field="*{descripcion}" placeholder="Ingrese la descripción...">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="costo" class="form-label form-labelForms">Costo del producto</label>
-                                <input type="text" step="0.01" class="form-control form-control-sm form-control-detalle" id="costo"
+                                <input type="text" step="0.01" class="form-control form-control-sm form-control-detalle"
+                                       id="costo"
                                        th:field="*{costoString}" placeholder="Ingrese el costo del producto...">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="precio" class="form-label form-labelForms">Precio de venta</label>
-                                <input type="text" step="0.01" class="form-control form-control-sm form-control-detalle" id="precio"
+                                <input type="text" step="0.01" class="form-control form-control-sm form-control-detalle"
+                                       id="precio"
                                        th:field="*{precioString}" placeholder="Ingrese el precio de venta...">
                             </div>
                             <div class="col-md-4 mb-3">
@@ -51,12 +54,14 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="stockActual" class="form-label form-labelForms">Stock Inicial</label>
-                                <input type="number" class="form-control form-control-sm form-control-detalle" id="stockActual"
+                                <input type="number" class="form-control form-control-sm form-control-detalle"
+                                       id="stockActual"
                                        th:field="*{stockActual}" placeholder="Ingrese el stock inicial...">
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="stockMinimo" class="form-label form-labelForms">Stock Mínimo</label>
-                                <input type="number" class="form-control form-control-sm form-control-detalle" id="stockMinimo"
+                                <input type="number" class="form-control form-control-sm form-control-detalle"
+                                       id="stockMinimo"
                                        th:field="*{stockMinimo}" placeholder="Ingrese el stock mínimo...">
                             </div>
                             <div id="stockContainer">
@@ -64,7 +69,8 @@
                                     <h4 class="mb-3 text-center title-stock">Stock:</h4>
                                     <div class="col-md-6 mb-3">
                                         <label for="depositoId" class="form-label form-labelForms">Depósito</label>
-                                        <select class="form-control form-control-sm form-control-detalle" id="depositoId"
+                                        <select class="form-control form-control-sm form-control-detalle"
+                                                id="depositoId"
                                                 th:field="*{stocks[0].depositoId}">
                                             <option value="">Seleccione un depósito...</option>
                                             <option th:each="deposito : ${depositos}" th:value="${deposito.id}"
@@ -73,7 +79,8 @@
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="cantidad" class="form-label form-labelForms">Cantidad</label>
-                                        <input type="number" class="form-control form-control-sm form-control-detalle" id="cantidad"
+                                        <input type="number" class="form-control form-control-sm form-control-detalle"
+                                               id="cantidad"
                                                th:field="*{stocks[0].cantidad}" placeholder="Ingrese la cantidad...">
                                     </div>
                                 </div>

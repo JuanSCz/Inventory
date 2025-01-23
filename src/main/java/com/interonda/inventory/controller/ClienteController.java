@@ -42,9 +42,7 @@ public class ClienteController {
     @PostMapping
     public String createCliente(@Valid ClienteDTO clienteDTO, BindingResult bindingResult, Model model, Pageable pageable) {
         if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<ClienteDTO> clientes = clienteService.getAllClientes(pageable);
             model.addAttribute("clientes", clientes.getContent());
@@ -59,9 +57,7 @@ public class ClienteController {
     @PostMapping("/update")
     public String updateCliente(@Valid ClienteDTO clienteDTO, BindingResult bindingResult, Model model, Pageable pageable) {
         if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             Page<ClienteDTO> clientes = clienteService.getAllClientes(pageable);
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("clienteDTO", clienteDTO);

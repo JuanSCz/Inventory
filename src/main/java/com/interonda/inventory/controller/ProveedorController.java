@@ -40,9 +40,7 @@ public class ProveedorController {
     @PostMapping
     public String createProveedor(@Valid ProveedorDTO proveedorDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Sort sort = Sort.by(Sort.Direction.DESC, "id");
             Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
@@ -59,9 +57,7 @@ public class ProveedorController {
     @PostMapping("/update")
     public String updateProveedor(@Valid ProveedorDTO proveedorDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             model.addAttribute("proveedorDTO", proveedorDTO);
             Sort sort = Sort.by(Sort.Direction.DESC, "id");

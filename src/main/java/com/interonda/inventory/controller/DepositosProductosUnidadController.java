@@ -32,7 +32,6 @@ public class DepositosProductosUnidadController {
     private final MessageSource messageSource;
     private final DepositosProductosUnidadService depositosProductosUnidadService;
 
-
     @Autowired
     public DepositosProductosUnidadController(ProductoService productoService, CategoriaService categoriaService, DepositoService depositoService, MessageSource messageSource, DepositosProductosUnidadService depositosProductosUnidadService) {
         this.productoService = productoService;

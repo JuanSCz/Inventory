@@ -1,4 +1,3 @@
-
 package com.interonda.inventory.controller;
 
 import com.interonda.inventory.dto.VentaDTO;

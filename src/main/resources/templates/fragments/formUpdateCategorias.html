@@ -18,24 +18,28 @@
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form th:action="@{/tableCategorias/update}" method="post" th:object="${categoriaDTO}" autocomplete="off">
+                    <form th:action="@{/tableCategorias/update}" method="post" th:object="${categoriaDTO}"
+                          autocomplete="off">
                         <input type="hidden" id="id" th:field="*{id}">
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <label for="nombre" class="form-label form-labelForms">Nombre</label>
-                                <input type="text" class="form-control form-control-sm form-control-updateProveedor" id="nombre"
+                                <input type="text" class="form-control form-control-sm form-control-updateProveedor"
+                                       id="nombre"
                                        th:field="*{nombre}" placeholder="Ingrese el nombre">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <label for="descripcion" class="form-label form-labelForms">Descripción</label>
-                                <textarea class="form-control form-control-sm form-control-updateProveedor" id="descripcion"
+                                <textarea class="form-control form-control-sm form-control-updateProveedor"
+                                          id="descripcion"
                                           th:field="*{descripcion}" placeholder="Ingrese la descripción"
                                           rows="4"></textarea>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-sm btn-primary btn-primary-updateProveedor w-100">Actualizar
+                        <button type="submit" class="btn btn-sm btn-primary btn-primary-updateProveedor w-100">
+                            Actualizar
                         </button>
                     </form>
                 </div>

@@ -33,9 +33,7 @@ public class IndexController {
     @PostMapping("/login")
     public String login(@Valid UsuarioDTO usuarioDTO, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             return "index";
         }

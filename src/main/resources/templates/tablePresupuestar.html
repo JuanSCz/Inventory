@@ -60,13 +60,17 @@
                 <a class="nav-link text-white" th:href="@{/tableCategorias}">Categorias</a>
             </li>
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-white" href="#" id="depositosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="depositosDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
                     Depósitos
                 </a>
                 <ul class="dropdown-menu dropdownMenu" aria-labelledby="depositosDropdown" id="dropdownMenu">
-                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableDepositos">Persistencia</a></li>
-                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableDepositosProductos">Stock</a></li>
-                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableDepositosProductosUnidad">Unidades</a></li>
+                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableDepositos">Persistencia</a>
+                    </li>
+                    <li><a class="nav-link dropdown-item text-white text-right"
+                           href="/tableDepositosProductos">Stock</a></li>
+                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableDepositosProductosUnidad">Unidades</a>
+                    </li>
                 </ul>
             </li>
             <li class="nav-item">
@@ -80,7 +84,8 @@
                 <ul class="dropdown-menu dropdownMenu"
                     aria-labelledby="ventasDropdown" id="dropdownMenuVentas">
                     <li><a class="nav-link dropdown-item text-white text-right" href="/tableVentas">Ventas</a></li>
-                    <li><a class="nav-link dropdown-item text-white text-right" href="/tablePresupuestar">Presupuestar</a></li>
+                    <li><a class="nav-link dropdown-item text-white text-right"
+                           href="/tablePresupuestar">Presupuestar</a></li>
                 </ul>
             </li>
             <li class="nav-item">
@@ -94,13 +99,13 @@
     <main class="contentPersist p-3 text-center">
         <h2 class="mb-3 titlePersist">Presupuestar Ventas</h2>
 
-            <form th:action="@{/tablePresupuestar/search}" method="get" class="search-form-container">
-                <div class="input-group-buscar">
-                    <input type="text" name="nombreCliente" placeholder="Cliente" class="form-control search-input">
-                    <input type="hidden" name="page" value="0">
-                    <input type="hidden" name="size" value="15">
-                </div>
-            </form>
+        <form th:action="@{/tablePresupuestar/search}" method="get" class="search-form-container">
+            <div class="input-group-buscar">
+                <input type="text" name="nombreCliente" placeholder="Cliente" class="form-control search-input">
+                <input type="hidden" name="page" value="0">
+                <input type="hidden" name="size" value="15">
+            </div>
+        </form>
 
         <div class="table-responsive mt-3">
             <table class="table tableTodas table-dark table-striped table-bordered custom-table table-sm table-smaller-text">

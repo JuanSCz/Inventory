@@ -39,9 +39,7 @@ public class DepositoController {
     @PostMapping
     public String createDeposito(@Valid DepositoDTO depositoDTO, BindingResult bindingResult, Model model, Pageable pageable) {
         if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<DepositoDTO> depositos = depositoService.getAllDepositos(pageable);
             model.addAttribute("depositos", depositoService.getAllDepositos(pageable).getContent());
@@ -56,9 +54,7 @@ public class DepositoController {
     @PostMapping("/update")
     public String updateDeposito(@Valid DepositoDTO depositoDTO, BindingResult bindingResult, Model model, Pageable pageable) {
         if (bindingResult.hasErrors()) {
-            String errorMessage = bindingResult.getFieldErrors().stream()
-                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
-                    .collect(Collectors.joining("<br>"));
+            String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<DepositoDTO> depositos = depositoService.getAllDepositos(pageable);
             model.addAttribute("depositoDTO", depositoDTO);
