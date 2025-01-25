@@ -3,22 +3,6 @@
 <body>
 <div th:fragment="actionButtons(table, row)">
     <div th:switch="${table}">
-        <div th:case="'Clientes'">
-            <div class="btn-group">
-                <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateCliente"
-                        data-bs-toggle="modal"
-                        data-bs-target="#updateClienteModal" th:data-id="${row['id']}">
-                    Editar
-                </button>
-                <form th:action="@{/tableClientes/{id}(id=${row['id']})}" method="post"
-                      onsubmit="return confirmDelete(this);">
-                    <input type="hidden" name="_method" value="delete"/>
-                    <button type="submit" class="btn btn-danger btn-sm delete-button"
-                            th:data-id="${row['id']}">Borrar
-                    </button>
-                </form>
-            </div>
-        </div>
         <div th:case="'Categorias'">
             <div class="btn-group">
                 <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateCategoria"

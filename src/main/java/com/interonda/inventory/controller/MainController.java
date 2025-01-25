@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,6 +62,10 @@ public class MainController {
         model.addAttribute("rows", tablePage.getContent());
         model.addAttribute("pageDetails", pageDetails);
         model.addAttribute("table", tableName); // Pasar el nombre de la tabla sin el prefijo
+
+        if ("Categorias".equals(tableName)) {
+            model.addAttribute("categoriaDTO", new CategoriaDTO());
+        }
 
         return "layout";
     }

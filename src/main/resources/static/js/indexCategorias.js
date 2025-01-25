@@ -162,7 +162,7 @@ function confirmDelete(form) {
     modal.show();
 
     confirmDeleteButton.addEventListener('click', function () {
-        fetch(`/delete/${deleteId}`, {
+        fetch(`/tableCategorias/${deleteId}`, {
             method: 'DELETE'
         }).then(response => {
             if (response.ok) {
