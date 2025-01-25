@@ -1,8 +1,8 @@
-// CategoriaServiceImpl.java
 package com.interonda.inventory.service.impl;
 
 import com.interonda.inventory.dto.CategoriaDTO;
 import com.interonda.inventory.entity.Categoria;
+import com.interonda.inventory.entity.Compra;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.CategoriaMapper;
 import com.interonda.inventory.repository.CategoriaRepository;
@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 @Service
 public class CategoriaServiceImpl implements CategoriaService {
@@ -146,5 +148,11 @@ public class CategoriaServiceImpl implements CategoriaService {
             logger.error("Error buscando Categorias por nombre", e);
             throw new DataAccessException("Error buscando Categorias por nombre", e);
         }
+    }
+
+    @Override
+    public Page<Map<String, Object>> getAllCategoriaAsMap(Pageable pageable) {
+        Page<Categoria> categorias = categoriaRepository.findAll(pageable);
+        return categorias.map(categoria -> Map.of("id", categoria.getId(), "nombre", categoria.getNombre(), "descripcion", categoria.getDescripcion()));
     }
 }

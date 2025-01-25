@@ -28,6 +28,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -348,5 +349,11 @@ public class ProductoServiceImpl implements ProductoService {
             logger.error("Error obteniendo todos los productos", e);
             throw new DataAccessException("Error obteniendo todos los productos", e);
         }
+    }
+
+    @Override
+    public Page<Map<String, Object>> getAllProductosAsMap(Pageable pageable) {
+        Page<Producto> productos = productoRepository.findAll(pageable);
+        return productos.map(producto -> Map.of("id", producto.getId(), "nombre", producto.getNombre(), "descripción", producto.getDescripcion(), "precio", producto.getPrecio(), "costo", producto.getCosto(), "categoría", producto.getCategoria()));
     }
 }

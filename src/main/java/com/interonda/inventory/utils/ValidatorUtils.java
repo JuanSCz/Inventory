@@ -15,9 +15,7 @@ public class ValidatorUtils {
         }
         Set<ConstraintViolation<T>> violations = validator.validate(entity);
         if (!violations.isEmpty()) {
-            String errorMessage = violations.stream()
-                    .map(ConstraintViolation::getMessage)
-                    .collect(Collectors.joining(", "));
+            String errorMessage = violations.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(", "));
             throw new ValidationException(errorMessage);
         }
     }

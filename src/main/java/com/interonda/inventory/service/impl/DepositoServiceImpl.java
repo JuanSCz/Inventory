@@ -3,6 +3,7 @@ package com.interonda.inventory.service.impl;
 import com.interonda.inventory.entity.Deposito;
 import com.interonda.inventory.dto.DepositoDTO;
 import com.interonda.inventory.entity.Producto;
+import com.interonda.inventory.entity.Proveedor;
 import com.interonda.inventory.entity.Stock;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.DepositoMapper;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DepositoServiceImpl implements DepositoService {
@@ -79,8 +81,7 @@ public class DepositoServiceImpl implements DepositoService {
         ValidatorUtils.validateEntity(depositoDTO, validator);
         try {
             logger.info("Actualizando Deposito con id: {}", depositoDTO.getId());
-            Deposito deposito = depositoRepository.findById(depositoDTO.getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Deposito no encontrado con el id: " + depositoDTO.getId()));
+            Deposito deposito = depositoRepository.findById(depositoDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Deposito no encontrado con el id: " + depositoDTO.getId()));
 
             // Preserve the existing stocks collection
             List<Stock> existingStocks = deposito.getStocks();
@@ -193,5 +194,18 @@ public class DepositoServiceImpl implements DepositoService {
             logger.error("Error obteniendo todos los productos", e);
             throw new DataAccessException("Error obteniendo todos los productos", e);
         }
+    }
+
+    @Override
+    public Page<Map<String, Object>> getAllDepositosAsMap(Pageable pageable) {
+        Page<Deposito> depositos = depositoRepository.findAll(pageable);
+
+        return depositos.map(proveedor -> {
+            return Map.of("id", proveedor.getId(),
+                    "nombre", proveedor.getNombre(),
+                    "provincia", proveedor.getProvincia(),
+                    "dirección", proveedor.getDireccion(),
+                    "contacto", proveedor.getContactoDeposito());
+        });
     }
 }

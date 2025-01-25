@@ -20,6 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 public class ProveedorServiceImpl implements ProveedorService {
 
@@ -157,5 +160,12 @@ public class ProveedorServiceImpl implements ProveedorService {
         }
     }
 
+    @Override
+    public Page<Map<String, Object>> getAllProveedoresAsMap(Pageable pageable) {
+        Page<Proveedor> proveedores = proveedorRepository.findAll(pageable);
+        return proveedores.map(proveedor -> {
+            return Map.of("id", proveedor.getId(), "nombre", proveedor.getNombre(), "contacto", proveedor.getContactoProveedor(), "dirección", proveedor.getDireccion(), "pais", proveedor.getPais(), "email", proveedor.getEmailProveedor());
+        });
+    }
 }
 

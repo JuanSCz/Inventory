@@ -3,6 +3,7 @@ package com.interonda.inventory.service.impl;
 import com.interonda.inventory.dto.UsuarioDTO;
 import com.interonda.inventory.entity.Rol;
 import com.interonda.inventory.entity.Usuario;
+import com.interonda.inventory.entity.Venta;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.UsuarioMapper;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -183,5 +186,12 @@ public class UsuarioServiceImpl implements UsuarioService {
             logger.error("Error buscando Usuarios por nombre", e);
             throw new DataAccessException("Error buscando Usuarios por nombre", e);
         }
+    }
+
+    @Override
+    public Page<Map<String, Object>> getAllUsuariosAsMap(Pageable pageable) {
+        Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
+        return usuarios.map(usuario -> Map.of("id", usuario.getId(), "nombre", usuario.getNombre(), "contraseña", usuario.getContrasenia(), "contacto", usuario.getContacto(), "rol", usuario.getRol().getNombre()
+        ));
     }
 }

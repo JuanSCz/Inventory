@@ -14,5 +14,4 @@ import java.util.List;
 @Repository
 public interface HistorialStockRepository extends JpaRepository<HistorialStock, Long> {
 
-    List<HistorialStock> findByProductoId(Long productoId);
 }

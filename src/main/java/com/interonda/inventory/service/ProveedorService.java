@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.util.Map;
+
 public interface ProveedorService {
 
     ProveedorDTO convertToDto(Proveedor proveedor);
@@ -25,4 +27,6 @@ public interface ProveedorService {
     boolean deleteProveedor(Long id);
 
     long countProveedores();
+
+    Page<Map<String, Object>> getAllProveedoresAsMap(Pageable pageable);
 }

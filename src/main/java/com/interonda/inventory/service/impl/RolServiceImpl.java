@@ -69,8 +69,7 @@ public class RolServiceImpl implements RolService {
         ValidatorUtils.validateEntity(rolDTO, validator);
         try {
             logger.info("Actualizando Rol con id: {}", id);
-            Rol rol = rolRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con el id: " + id));
+            Rol rol = rolRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con el id: " + id));
             rol.setNombre(rolDTO.getNombre());
             Rol updatedRol = rolRepository.save(rol);
             logger.info("Rol actualizado exitosamente con id: {}", updatedRol.getId());
@@ -109,8 +108,7 @@ public class RolServiceImpl implements RolService {
     public RolDTO getRol(Long id) {
         try {
             logger.info("Obteniendo Rol con id: {}", id);
-            Rol rol = rolRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con el id: " + id));
+            Rol rol = rolRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Rol no encontrado con el id: " + id));
             return rolMapper.toDto(rol);
         } catch (ResourceNotFoundException e) {
             logger.warn("Rol no encontrado: {}", e.getMessage());

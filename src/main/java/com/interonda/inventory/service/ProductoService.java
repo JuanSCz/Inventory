@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductoService {
 
@@ -28,4 +29,6 @@ public interface ProductoService {
     long countProductos();
 
     List<Producto> obtenerTodosLosProductos();
+
+    Page<Map<String, Object>> getAllProductosAsMap(Pageable pageable);
 }

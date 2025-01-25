@@ -5,6 +5,8 @@ import com.interonda.inventory.entity.Usuario;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Map;
+
 public interface UsuarioService {
 
     UsuarioDTO convertToDto(Usuario usuario);
@@ -24,4 +26,6 @@ public interface UsuarioService {
     Page<UsuarioDTO> searchUsuariosByName(String nombre, Pageable pageable);
 
     long countUsuarios();
+
+    Page<Map<String, Object>> getAllUsuariosAsMap(Pageable pageable);
 }

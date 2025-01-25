@@ -3,6 +3,7 @@ package com.interonda.inventory.service.impl;
 import com.interonda.inventory.dto.ProveedorDTO;
 import com.interonda.inventory.entity.Cliente;
 import com.interonda.inventory.dto.ClienteDTO;
+import com.interonda.inventory.entity.Compra;
 import com.interonda.inventory.entity.Proveedor;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.ClienteMapper;
@@ -22,6 +23,8 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
@@ -159,5 +162,11 @@ public class ClienteServiceImpl implements ClienteService {
             logger.error("Error buscando Clientes por nombre", e);
             throw new DataAccessException("Error buscando Clientes por nombre", e);
         }
+    }
+
+    @Override
+    public Page<Map<String, Object>> getAllClientesAsMap(Pageable pageable) {
+        Page<Cliente> clientes = clienteRepository.findAll(pageable);
+        return clientes.map(cliente -> Map.of("id", cliente.getId(), "nombre", cliente.getNombre(), "contacto", cliente.getContactoCliente(), "dirección", cliente.getDireccion(), "país", cliente.getPais(), "ciudad", cliente.getCiudad(), "email", cliente.geteMailCliente()));
     }
 }

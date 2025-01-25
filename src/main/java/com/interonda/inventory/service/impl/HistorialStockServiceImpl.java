@@ -56,8 +56,7 @@ public class HistorialStockServiceImpl implements HistorialStockService {
     public HistorialStockDTO getHistorialStock(Long id) {
         try {
             logger.info("Obteniendo HistorialStock con id: {}", id);
-            HistorialStock historialStock = historialStockRepository.findById(id)
-                    .orElseThrow(() -> new ResourceNotFoundException("HistorialStock no encontrado"));
+            HistorialStock historialStock = historialStockRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("HistorialStock no encontrado"));
             HistorialStockDTO historialStockDTO = convertToDto(historialStock);
             historialStockDTO.setProductoNombre(historialStock.getProducto().getNombre());
             historialStockDTO.setDepositoNombre(historialStock.getDeposito().getNombre());

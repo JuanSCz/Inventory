@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DepositoService {
 
@@ -30,5 +31,7 @@ public interface DepositoService {
     Page<DepositoDTO> getAllProductos(Pageable pageable);
 
     List<Deposito> obtenerTodosLosDepositos();
+
+    Page<Map<String, Object>> getAllDepositosAsMap(Pageable pageable);
 }
 

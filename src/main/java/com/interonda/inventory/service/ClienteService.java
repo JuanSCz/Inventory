@@ -1,11 +1,11 @@
 package com.interonda.inventory.service;
 
-import com.interonda.inventory.dto.ProveedorDTO;
 import com.interonda.inventory.entity.Cliente;
 import com.interonda.inventory.dto.ClienteDTO;
-import com.interonda.inventory.entity.Proveedor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Map;
 
 public interface ClienteService {
 
@@ -26,4 +26,6 @@ public interface ClienteService {
     Page<ClienteDTO> searchClientesByName(String nombre, Pageable pageable);
 
     long countClientes();
+
+    Page<Map<String, Object>> getAllClientesAsMap(Pageable pageable);
 }

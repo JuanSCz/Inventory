@@ -1,8 +1,8 @@
-
 package com.interonda.inventory.service.impl;
 
 import com.interonda.inventory.dto.DetalleVentaDTO;
 import com.interonda.inventory.dto.VentaDTO;
+import com.interonda.inventory.entity.Producto;
 import com.interonda.inventory.entity.Venta;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
@@ -34,6 +34,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -125,8 +126,7 @@ public class PresupuestarServiceImpl implements PresupuestarService {
     @Override
     @Transactional(readOnly = true)
     public VentaDTO getVenta(Long id) {
-        Venta venta = ventaRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con id: " + id));
+        Venta venta = ventaRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Venta no encontrada con id: " + id));
         VentaDTO ventaDTO = ventaMapper.toDto(venta);
         ventaDTO.setCliente(clienteMapper.toDto(venta.getCliente()));
         ventaDTO.setClienteNombre(venta.getCliente().getNombre());
@@ -234,5 +234,12 @@ public class PresupuestarServiceImpl implements PresupuestarService {
     private String formatDecimalWithoutDecimals(BigDecimal value) {
         DecimalFormat df = new DecimalFormat("#,##0");
         return df.format(value);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Map<String, Object>> getAllPresupuestarAsMap(Pageable pageable) {
+        Page<Venta> ventas = ventaRepository.findAll(pageable);
+        return ventas.map(venta -> Map.of("id", venta.getId(), "cliente", venta.getCliente().getNombre(), "fecha", venta.getFecha(), "estado", venta.getEstado(), "método de pago", venta.getMetodoPago(), "impuestos", venta.getImpuestos(), "total", venta.getTotal()));
     }
 }

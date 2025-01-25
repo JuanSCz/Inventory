@@ -81,9 +81,7 @@ public class GlobalExceptionHandler {
     public String handleConstraintViolationException(ConstraintViolationException ex, Model model, HttpServletRequest request) {
         logger.warn("Constraint Violation: {}", ex.getMessage());
         Locale locale = LocaleContextHolder.getLocale();
-        String errorMessage = ex.getConstraintViolations().stream()
-                .map(violation -> messageSource.getMessage(violation.getMessage(), null, locale))
-                .collect(Collectors.joining("<br>"));
+        String errorMessage = ex.getConstraintViolations().stream().map(violation -> messageSource.getMessage(violation.getMessage(), null, locale)).collect(Collectors.joining("<br>"));
         model.addAttribute("errorMessage", errorMessage);
         return "redirect:" + request.getHeader("Referer");
     }
@@ -91,9 +89,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public String handleValidationExceptions(MethodArgumentNotValidException ex, Model model, HttpServletRequest request) {
         Locale locale = LocaleContextHolder.getLocale();
-        String errorMessage = ex.getBindingResult().getFieldErrors().stream()
-                .map(fieldError -> messageSource.getMessage(fieldError, locale))
-                .collect(Collectors.joining("<br>"));
+        String errorMessage = ex.getBindingResult().getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, locale)).collect(Collectors.joining("<br>"));
         model.addAttribute("errorMessage", errorMessage);
         return "redirect:" + request.getHeader("Referer");
     }

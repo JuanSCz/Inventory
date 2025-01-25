@@ -5,8 +5,10 @@ import com.interonda.inventory.dto.CategoriaDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Map;
+
 public interface CategoriaService {
-    
+
     CategoriaDTO getCategoria(Long id);
 
     CategoriaDTO createCategoria(CategoriaDTO categoriaDTO);
@@ -20,4 +22,6 @@ public interface CategoriaService {
     Page<CategoriaDTO> searchCategoriasByName(String nombre, Pageable pageable);
 
     long countCategorias();
+
+    Page<Map<String, Object>> getAllCategoriaAsMap(Pageable pageable);
 }

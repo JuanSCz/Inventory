@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Map;
 
 public interface VentaService {
 
@@ -35,4 +36,6 @@ public interface VentaService {
     String formatPrecioUnitario(BigDecimal precioUnitario);
 
     String formatSubtotal(BigDecimal subtotal);
+
+    Page<Map<String, Object>> getAllVentasAsMap(Pageable pageable);
 }

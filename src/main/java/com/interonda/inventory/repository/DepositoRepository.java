@@ -13,5 +13,4 @@ public interface DepositoRepository extends JpaRepository<Deposito, Long> {
 
     @Query("SELECT d FROM Deposito d WHERE LOWER(d.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
     Page<Deposito> findByNombreContainingIgnoreCase(@Param("nombre") String nombre, Pageable pageable);
-
 }

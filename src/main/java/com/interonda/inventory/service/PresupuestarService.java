@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 public interface PresupuestarService {
     VentaDTO convertToDto(Venta venta);
@@ -23,4 +24,6 @@ public interface PresupuestarService {
     long countVentas();
 
     byte[] generatePdf(Long id);
+
+    Page<Map<String, Object>> getAllPresupuestarAsMap(Pageable pageable);
 }

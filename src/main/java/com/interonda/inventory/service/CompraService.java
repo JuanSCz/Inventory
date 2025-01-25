@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface CompraService {
 
@@ -35,4 +36,6 @@ public interface CompraService {
     String formatTotal(BigDecimal total);
 
     String formatPrecioUnitario(BigDecimal precioUnitario);
+
+    Page<Map<String, Object>> getAllComprasAsMap(Pageable pageable);
 }

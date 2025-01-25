@@ -14,5 +14,4 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Long> {
 
     @Query("SELECT p FROM Proveedor p WHERE LOWER(p.nombre) LIKE LOWER(CONCAT('%', :nombre, '%'))")
     Page<Proveedor> findByNombreContainingIgnoreCase(@Param("nombre") String nombre, Pageable pageable);
-    
 }

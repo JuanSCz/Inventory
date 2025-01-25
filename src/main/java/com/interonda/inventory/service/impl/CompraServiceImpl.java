@@ -27,6 +27,7 @@ import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -429,5 +430,11 @@ public class CompraServiceImpl implements CompraService {
             logger.error("Error buscando Compras por nombre de proveedor", e);
             throw new DataAccessException("Error buscando Compras por nombre de proveedor", e);
         }
+    }
+
+    @Override
+    public Page<Map<String, Object>> getAllComprasAsMap(Pageable pageable) {
+        Page<Compra> compras = compraRepository.findAll(pageable);
+        return compras.map(compra -> Map.of("id", compra.getId(), "proveedor", compra.getProveedor().getNombre(), "fecha", compra.getFecha(), "estado", compra.getEstado(),"método de pago", compra.getMetodoPago(), "impuestos", compra.getImpuestos(), "total", compra.getTotal()));
     }
 }

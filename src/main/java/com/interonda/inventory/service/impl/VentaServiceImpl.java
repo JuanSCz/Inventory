@@ -27,6 +27,7 @@ import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -402,5 +403,12 @@ public class VentaServiceImpl implements VentaService {
             logger.error("Error buscando Ventas por nombre de cliente", e);
             throw new DataAccessException("Error buscando Ventas por nombre de cliente", e);
         }
+    }
+
+    @Override
+    public Page<Map<String, Object>> getAllVentasAsMap(Pageable pageable) {
+        Page<Venta> ventas = ventaRepository.findAll(pageable);
+        return ventas.map(venta -> Map.of("id", venta.getId(), "cliente", venta.getCliente().getNombre(), "fecha", venta.getFecha(), "estado", venta.getEstado(), "método de pago", venta.getMetodoPago(), "impuestos", venta.getImpuestos(), "total", venta.getTotal()
+        ));
     }
 }
