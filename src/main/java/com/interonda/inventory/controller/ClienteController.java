@@ -1,10 +1,7 @@
 package com.interonda.inventory.controller;
 
-import com.interonda.inventory.dto.CategoriaDTO;
 import com.interonda.inventory.dto.ClienteDTO;
-import com.interonda.inventory.dto.ProveedorDTO;
 import com.interonda.inventory.service.ClienteService;
-import com.interonda.inventory.service.ProveedorService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,10 +45,10 @@ public class ClienteController {
             model.addAttribute("clientes", clientes.getContent());
             model.addAttribute("clienteDTO", clienteDTO);
             model.addAttribute("page", clientes);
-            return "tableClientes";
+            return "main?table=tableClientes";
         }
         clienteService.createCliente(clienteDTO);
-        return "redirect:/tableClientes";
+        return "redirect:/main?table=tableClientes";
     }
 
     @PostMapping("/update")
@@ -63,10 +60,10 @@ public class ClienteController {
             model.addAttribute("clienteDTO", clienteDTO);
             model.addAttribute("clientes", clienteService.getAllClientes(pageable).getContent());
             model.addAttribute("page", clientes);
-            return "tableClientes"; // Asegúrate de renderizar con datos correctos
+            return "main?table=tableClientes"; // Asegúrate de renderizar con datos correctos
         }
         clienteService.updateCliente(clienteDTO);
-        return "redirect:/tableClientes";
+        return "redirect:/main?table=tableClientes";
     }
 
     @DeleteMapping("/{id}")
@@ -102,7 +99,7 @@ public class ClienteController {
         model.addAttribute("clienteDTO", new ClienteDTO());
         model.addAttribute("page", clientes);
         model.addAttribute("currentPage", "tableClientes");
-        return "tableClientes";
+        return "main?table=tableClientes";
     }
 
     @GetMapping("/search")
@@ -114,6 +111,6 @@ public class ClienteController {
         model.addAttribute("clientes", clientes.getContent());
         model.addAttribute("clienteDTO", new ClienteDTO());
         model.addAttribute("page", clientes);
-        return "tableClientes";
+        return "main?table=tableClientes";
     }
 }

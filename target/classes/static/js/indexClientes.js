@@ -94,8 +94,8 @@ function initializeUpdateModal() {
         document.getElementById('nombre').value = '';
         document.getElementById('email').value = '';
         document.getElementById('contacto').value = '';
-        document.getElementById('pais').value = '';
-        document.getElementById('direccion').value = '';
+        document.getElementById('país').value = '';
+        document.getElementById('dirección').value = '';
         document.getElementById('ciudad').value = '';
 
         // Opcional: limpiar clases de validación, si usas alguna

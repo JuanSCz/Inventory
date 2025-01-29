@@ -45,10 +45,10 @@ public class CategoriaController {
             model.addAttribute("categorias", categorias.getContent());
             model.addAttribute("categoriaDTO", categoriaDTO);
             model.addAttribute("page", categorias);
-            return "tableCategorias";
+            return "main?table=tableCategorias";
         }
         categoriaService.createCategoria(categoriaDTO);
-        return "redirect:/tableCategorias";
+        return "redirect:/main?table=tableCategorias";
     }
 
     @PostMapping("/update")
@@ -60,10 +60,10 @@ public class CategoriaController {
             model.addAttribute("categorias", categorias.getContent());
             model.addAttribute("categoriaDTO", categoriaDTO);
             model.addAttribute("page", categorias);
-            return "tableCategorias";
+            return "main?table=tableCategorias";
         }
         categoriaService.updateCategoria(categoriaDTO);
-        return "redirect:/tableCategorias";
+        return "redirect:/main?table=tableCategorias";
     }
 
     @DeleteMapping("/{id}")
@@ -98,8 +98,8 @@ public class CategoriaController {
         model.addAttribute("categorias", categorias.getContent());
         model.addAttribute("categoriaDTO", new CategoriaDTO());
         model.addAttribute("page", categorias);
-        model.addAttribute("currentPage", "tableCategorias");
-        return "tableCategorias";
+        model.addAttribute("currentPage", "/main?table=tableCategorias");
+        return "/main?table=tableCategorias";
     }
 
     @GetMapping("/search")
@@ -111,6 +111,6 @@ public class CategoriaController {
         model.addAttribute("categorias", categorias.getContent());
         model.addAttribute("categoriaDTO", new CategoriaDTO());
         model.addAttribute("page", categorias);
-        return "tableCategorias";
+        return "/main?table=tableCategorias";
     }
 }

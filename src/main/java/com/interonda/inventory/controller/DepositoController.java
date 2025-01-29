@@ -1,6 +1,5 @@
 package com.interonda.inventory.controller;
 
-import com.interonda.inventory.dto.CategoriaDTO;
 import com.interonda.inventory.dto.DepositoDTO;
 import com.interonda.inventory.service.DepositoService;
 import jakarta.validation.Valid;
@@ -45,10 +44,10 @@ public class DepositoController {
             model.addAttribute("depositos", depositoService.getAllDepositos(pageable).getContent());
             model.addAttribute("depositoDTO", depositoDTO);
             model.addAttribute("page", depositos);
-            return "tableDepositos";
+            return "main?table=tableDepositos";
         }
         depositoService.createDeposito(depositoDTO);
-        return "redirect:/tableDepositos";
+        return "redirect:/main?table=tableDepositos";
     }
 
     @PostMapping("/update")
@@ -60,10 +59,10 @@ public class DepositoController {
             model.addAttribute("depositoDTO", depositoDTO);
             model.addAttribute("depositos", depositoService.getAllDepositos(pageable).getContent());
             model.addAttribute("page", depositos);
-            return "tableDepositos";
+            return "main?table=tableDepositos";
         }
         depositoService.updateDeposito(depositoDTO);
-        return "redirect:/tableDepositos";
+        return "redirect:/main?table=tableDepositos";
     }
 
     @DeleteMapping("/{id}")
@@ -99,7 +98,7 @@ public class DepositoController {
         model.addAttribute("depositoDTO", new DepositoDTO());
         model.addAttribute("page", depositos);
         model.addAttribute("currentPage", "tableDepositos");
-        return "tableDepositos";
+        return "main?table=tableDepositos";
     }
 
     @GetMapping("/search")
@@ -111,6 +110,6 @@ public class DepositoController {
         model.addAttribute("depositos", depositos.getContent());
         model.addAttribute("depositoDTO", new DepositoDTO());
         model.addAttribute("page", depositos);
-        return "tableDepositos";
+        return "main?table=tableDepositos";
     }
 }

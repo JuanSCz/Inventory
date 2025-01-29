@@ -47,7 +47,9 @@ public class DepositosProductosController {
     @PostMapping("/update")
     public String updateProducto(@Valid ProductoDTO productoDTO, BindingResult result, Model model, Pageable pageable) {
         if (result.hasErrors()) {
-            String errorMessage = result.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
+            String errorMessage = result.getFieldErrors().stream()
+                    .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
+                    .collect(Collectors.joining("<br>"));
             model.addAttribute("errorMessage", errorMessage);
             Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
             model.addAttribute("productos", productos.getContent());
@@ -55,11 +57,11 @@ public class DepositosProductosController {
             model.addAttribute("page", productos);
             model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
             model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
-            return "tableDepositosProductos";
+            return "redirect:/main?table=tableDepositosProductos";
         }
 
         productoService.updateProducto(productoDTO);
-        return "redirect:/tableDepositosProductos";
+        return "redirect:/main?table=tableDepositosProductos";
     }
 
     @GetMapping("/{id}")
@@ -93,6 +95,7 @@ public class DepositosProductosController {
             // Selecciona el primer depósito disponible
             depositoId = depositosPage.getContent().get(0).getId();
         }
+
         Page<ProductoDTO> productos = depositosProductosService.getProductosByDeposito(depositoId, pageable);
         model.addAttribute("productos", productos.getContent());
         model.addAttribute("page", productos);
@@ -100,6 +103,6 @@ public class DepositosProductosController {
         model.addAttribute("selectedDepositoId", depositoId);
         model.addAttribute("productoDTO", new ProductoDTO()); // Añadir productoDTO al modelo
         model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
-        return "tableDepositosProductos";
+        return "redirect:/main?table=tableDepositosProductos";
     }
 }

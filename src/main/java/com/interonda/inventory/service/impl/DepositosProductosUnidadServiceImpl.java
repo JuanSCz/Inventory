@@ -4,14 +4,12 @@ import com.interonda.inventory.dto.ProductoDTO;
 import com.interonda.inventory.dto.StockDTO;
 import com.interonda.inventory.entity.Categoria;
 import com.interonda.inventory.entity.Producto;
+import com.interonda.inventory.entity.Proveedor;
 import com.interonda.inventory.entity.Stock;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
 import com.interonda.inventory.mapper.ProductoMapper;
-import com.interonda.inventory.repository.CategoriaRepository;
-import com.interonda.inventory.repository.DepositoRepository;
-import com.interonda.inventory.repository.ProductoRepository;
-import com.interonda.inventory.repository.StockRepository;
+import com.interonda.inventory.repository.*;
 import com.interonda.inventory.service.DepositosProductosUnidadService;
 import com.interonda.inventory.utils.ValidatorUtils;
 import jakarta.validation.Validator;
@@ -25,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,15 +35,17 @@ public class DepositosProductosUnidadServiceImpl implements DepositosProductosUn
     private final CategoriaRepository categoriaRepository;
     private final DepositoRepository depositoRepository;
     private final StockRepository stockRepository;
+    private final ProveedorRepository proveedorRepository;
     private final Validator validator;
 
     @Autowired
-    public DepositosProductosUnidadServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper, CategoriaRepository categoriaRepository, DepositoRepository depositoRepository, StockRepository stockRepository, Validator validator) {
+    public DepositosProductosUnidadServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper, CategoriaRepository categoriaRepository, DepositoRepository depositoRepository, StockRepository stockRepository, ProveedorRepository proveedorRepository, Validator validator) {
         this.productoRepository = productoRepository;
         this.productoMapper = productoMapper;
         this.categoriaRepository = categoriaRepository;
         this.depositoRepository = depositoRepository;
         this.stockRepository = stockRepository;
+        this.proveedorRepository = proveedorRepository;
         this.validator = validator;
     }
 

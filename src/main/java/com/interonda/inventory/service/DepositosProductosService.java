@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DepositosProductosService {
     ProductoDTO convertToDto(Producto producto);
@@ -25,4 +26,6 @@ public interface DepositosProductosService {
     List<Producto> obtenerTodosLosProductos();
 
     Page<ProductoDTO> getProductosByDeposito(Long depositoId, Pageable pageable);
+
+    Page<Map<String, Object>> getProductosByDepositoAsMap(Long depositoId, Pageable pageable);
 }

@@ -134,6 +134,8 @@ function populateUpdateModal(id) {
             document.getElementById('costo').value = data.costo;
             document.getElementById('codigoBarras').value = data.codigoBarras;
             document.getElementById('numeroDeSerie').value = data.numeroDeSerie;
+            document.getElementById('stockActual').value = data.stockActual;
+            document.getElementById('stockMinimo').value = data.stockMinimo;
             document.getElementById('macAddress').value = data.macAddress;
             document.getElementById('categoriaId').value = data.categoriaId;
 

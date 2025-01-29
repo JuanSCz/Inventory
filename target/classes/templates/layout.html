@@ -31,6 +31,39 @@
         <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
         <script src="js/indexCategorias.js"></script>
     </div>
+    <div th:case="'Clientes'">
+        <div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
+        <div th:replace="~{fragments/formUpdateClientes :: updateModalClientes}"></div>
+        <div th:replace="~{fragments/formCreateClientes :: createModalClientes}"></div>
+        <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
+        <script src="js/indexClientes.js"></script>
+    </div>
+    <div th:case="'Proveedores'">
+        <div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
+        <div th:replace="~{fragments/formUpdateProveedores :: updateModal}"></div>
+        <div th:replace="~{fragments/formCreateProveedores :: createModal}"></div>
+        <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
+        <script src="js/indexProveedores.js"></script>
+    </div>
+    <div th:case="'Depositos'">
+        <div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
+        <div th:replace="~{fragments/formUpdateDepositos :: updateModalDepositos}"></div>
+        <div th:replace="~{fragments/formCreateDepositos :: createModalDepositos}"></div>
+        <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
+        <script src="js/indexDepositos.js"></script>
+    </div>
+    <div th:case="'Productos'">
+        <div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
+        <div th:replace="~{fragments/formUpdateProductos :: updateModalProductos}"></div>
+        <div th:replace="~{fragments/formCreateProductos :: createModalProductos}"></div>
+        <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
+        <script src="js/indexProductos.js"></script>
+    </div>
+    <div th:case="'DepositosProductos'">
+        <div th:replace="~{fragments/formUpdateDepositosProductos :: updateModalDepositosProductos}"></div>
+        <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
+        <script src="js/indexDepositosProductos.js"></script>
+    </div>
     <div th:case="*">
         <p th:text="'No se encontró el caso para la tabla: ' + ${table}"></p>
     </div>

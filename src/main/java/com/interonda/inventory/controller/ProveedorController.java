@@ -48,10 +48,10 @@ public class ProveedorController {
             model.addAttribute("proveedores", proveedores.getContent());
             model.addAttribute("proveedorDTO", proveedorDTO);
             model.addAttribute("page", proveedores);
-            return "tableProveedores";
+            return "main?table=tableProveedores";
         }
         proveedorService.createProveedor(proveedorDTO);
-        return "redirect:/tableProveedores";
+        return "redirect:/main?table=tableProveedores";
     }
 
     @PostMapping("/update")
@@ -65,10 +65,10 @@ public class ProveedorController {
             Page<ProveedorDTO> proveedores = proveedorService.getAllProveedores(newPageable, sort);
             model.addAttribute("proveedores", proveedores.getContent());
             model.addAttribute("page", proveedores);
-            return "tableProveedores";
+            return "main?table=tableProveedores";
         }
         proveedorService.updateProveedor(proveedorDTO);
-        return "redirect:/tableProveedores";
+        return "redirect:/main?table=tableProveedores";
     }
 
     @DeleteMapping("/{id}")
@@ -105,7 +105,7 @@ public class ProveedorController {
         model.addAttribute("proveedorDTO", new ProveedorDTO());
         model.addAttribute("page", proveedores);
         model.addAttribute("currentPage", "tableProveedores");
-        return "tableProveedores";
+        return "main?table=tableProveedores";
     }
 
     @GetMapping("/search")
@@ -117,7 +117,6 @@ public class ProveedorController {
         model.addAttribute("proveedores", proveedores.getContent());
         model.addAttribute("proveedorDTO", new ProveedorDTO());
         model.addAttribute("page", proveedores);
-        return "tableProveedores";
+        return "main?table=tableProveedores";
     }
-
 }

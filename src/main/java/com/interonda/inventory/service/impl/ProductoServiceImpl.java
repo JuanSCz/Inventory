@@ -9,7 +9,6 @@ import com.interonda.inventory.mapper.ProductoMapper;
 import com.interonda.inventory.repository.*;
 import com.interonda.inventory.service.ProductoService;
 import com.interonda.inventory.utils.ValidatorUtils;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,7 +28,6 @@ import java.text.DecimalFormatSymbols;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -353,7 +351,7 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     public Page<Map<String, Object>> getAllProductosAsMap(Pageable pageable) {
-        Page<Producto> productos = productoRepository.findAll(pageable);
-        return productos.map(producto -> Map.of("id", producto.getId(), "nombre", producto.getNombre(), "descripción", producto.getDescripcion(), "precio", producto.getPrecio(), "costo", producto.getCosto(), "categoría", producto.getCategoria()));
+        Page<Producto> productos = productoRepository.findByActivoTrue(pageable);
+        return productos.map(producto -> Map.of("id", producto.getId(), "nombre", producto.getNombre(), "descripción", producto.getDescripcion(), "precio", producto.getPrecio(), "costo", producto.getCosto(), "categoría", producto.getCategoria().getNombre()));
     }
 }

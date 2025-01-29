@@ -19,9 +19,82 @@
                 </form>
             </div>
         </div>
-        <!-- Agrega más casos para otras tablas según sea necesario -->
+        <div th:case="'Clientes'">
+            <div class="btn-group">
+                <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateCliente"
+                        data-bs-toggle="modal"
+                        data-bs-target="#updateClienteModal" th:data-id="${row['id']}">
+                    Editar
+                </button>
+                <form th:action="@{/tableClientes/{id}(id=${row['id']})}" method="post"
+                      onsubmit="return confirmDelete(this);">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn btn-danger btn-sm delete-button"
+                            th:data-id="${row['id']}">Borrar
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div th:case="'Proveedores'">
+            <div class="btn-group">
+                <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateProveedor"
+                        data-bs-toggle="modal"
+                        data-bs-target="#updateProveedorModal" th:data-id="${row['id']}">
+                    Editar
+                </button>
+
+                <form th:action="@{/tableProveedores/{id}(id=${row['id']})}" method="post"
+                      onsubmit="return confirmDelete(this);">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn btn-danger btn-sm delete-button"
+                            th:data-id="${row['id']}">Borrar
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div th:case="'Depositos'">
+            <div class="btn-group">
+                <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateDeposito"
+                        data-bs-toggle="modal"
+                        data-bs-target="#updateDepositoModal" th:data-id="${row['id']}">
+                    Editar
+                </button>
+                <form th:action="@{/tableDepositos/{id}(id=${row['id']})}" method="post"
+                      onsubmit="return confirmDelete(this);">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn btn-danger btn-sm delete-button"
+                            th:data-id="${row['id']}">Borrar
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div th:case="'Productos'">
+            <div class="btn-group">
+                <button class="btn btn-primary btn-sm buttonUpdateProducto"
+                        data-bs-toggle="modal"
+                        data-bs-target="#updateProductoModal" th:data-id="${row['id']}">
+                    Editar
+                </button>
+                <form th:action="@{/tableProductos/{id}(id=${row['id']})}" method="post"
+                      onsubmit="return confirmDelete(this);">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="button" class="btn btn-danger btn-sm delete-button"
+                            th:data-id="${row['id']}">Borrar
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div th:case="'DepositosProductos'">
+            <div class="btn-group">
+                <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateProducto"
+                        data-bs-toggle="modal"
+                        data-bs-target="#updateDepositosProductosModal" th:data-id="${row['id']}">
+                    Editar
+                </button>
+            </div>
+        </div>
         <div th:case="*">
-            <p th:text="'No se encontró el caso para la tabla: ' + ${table}"></p>
+            <p th:text="'No se encontró el boton para la tabla: ' + ${table}"></p>
         </div>
     </div>
 </div>

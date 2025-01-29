@@ -7,11 +7,53 @@
 <body>
 <main class="contentPersist p-3 text-center" th:fragment="mainFragment">
     <h2 class="mb-3 titlePersist" th:text="'Persistencia ' + ${table}">Persistencia Productos</h2>
-    <div>
-        <button class="btn buttonPersist" data-bs-toggle="modal"
-                th:data-bs-target="'#create' + ${table} + 'Modal'">
-            Crear <span th:text="${table}">Producto</span>
-        </button>
+
+    <!-- Botón de creación dinámico -->
+    <div th:switch="${table}">
+        <div th:case="'Categorias'">
+            <button class="btn buttonPersist" data-bs-toggle="modal" data-bs-target="#createCategoriaModal">
+                Crear Categoria
+            </button>
+        </div>
+        <div th:case="'Clientes'">
+            <button class="btn buttonPersist" data-bs-toggle="modal"
+                    data-bs-target="#createClienteModal">
+                Crear Cliente
+            </button>
+        </div>
+        <div th:case="'Proveedores'">
+            <button class="btn buttonPersist" data-bs-toggle="modal"
+                    data-bs-target="#createProveedorModal">
+                Crear Proveedor
+            </button>
+        </div>
+        <div th:case="'Depositos'">
+            <button class="btn buttonPersist" data-bs-toggle="modal"
+                    data-bs-target="#createDepositoModal">
+                Crear Depósito
+            </button>
+        </div>
+        <div th:case="'Productos'">
+            <button class="btn buttonPersist" data-bs-toggle="modal"
+                    data-bs-target="#createProductoModal">
+                Crear Producto
+            </button>
+        </div>
+        <div th:case="'DepositosProductos'">
+            <div class="col-md-6 mb-3">
+                <form th:action="@{/main}" method="get">
+                    <input type="hidden" name="table" value="tableDepositosProductos"/>
+                    <select class="form-control form-control-sm form-control-chico" id="depositoId" name="depositoId" onchange="this.form.submit()">
+                        <option th:each="deposito : ${depositos}" th:value="${deposito.id}" th:text="${deposito.nombre}"
+                                th:selected="${deposito.id == selectedDepositoId}"></option>
+                    </select>
+                </form>
+            </div>
+        </div>
+        <!-- Agrega más casos para otras tablas según sea necesario -->
+        <div th:case="*">
+            <p th:text="'No se encontró el caso para la tabla: ' + ${table}"></p>
+        </div>
     </div>
 
     <form th:action="@{/${table}/search}" method="get" class="search-form-container">

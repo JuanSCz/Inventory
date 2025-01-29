@@ -26,7 +26,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -223,6 +225,23 @@ public class DepositosProductosServiceImpl implements DepositosProductosService 
             }).collect(Collectors.toList()));
 
             return productoDTO;
+        });
+    }
+
+    @Override
+    public Page<Map<String, Object>> getProductosByDepositoAsMap(Long depositoId, Pageable pageable) {
+        Page<Producto> productos = productoRepository.findByDepositoId(depositoId, pageable);
+        return productos.map(producto -> {
+            Map<String, Object> productoMap = new HashMap<>();
+            productoMap.put("id", producto.getId());
+            productoMap.put("nombre", producto.getNombre());
+            productoMap.put("descripcion", producto.getDescripcion());
+            productoMap.put("stock", producto.getStockActual());
+            productoMap.put("macAddress", producto.getMacAddress());
+            productoMap.put("numeroDeSerie", producto.getNumeroDeSerie());
+            productoMap.put("codigoBarras", producto.getCodigoBarras());
+            productoMap.put("categoria", producto.getCategoria() != null ? producto.getCategoria().getNombre() : "Sin categoría");
+            return productoMap;
         });
     }
 }

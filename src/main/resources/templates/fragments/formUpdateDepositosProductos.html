@@ -18,7 +18,7 @@
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body modal-body-detalle">
-                    <form th:action="@{/tableProductos/update}" method="post" th:object="${productoDTO}"
+                    <form th:action="@{/tableDepositosProductos/update}" method="post" th:object="${productoDTO}"
                           autocomplete="off">
                         <input type="hidden" id="id" th:field="*{id}">
                         <div class="row">
