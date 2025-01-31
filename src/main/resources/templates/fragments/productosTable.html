@@ -1,49 +1,49 @@
-<!--&lt;!&ndash; src/main/resources/templates/fragments/productosTable.html &ndash;&gt;-->
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Productos Table</title>-->
-<!--</head>-->
-<!--<body>-->
-<!--<tbody id="productosTableBody table-smaller-text" th:fragment="productosTableBody(productos, page)">-->
-<!--<tr th:each="producto : ${productos}">-->
-<!--    <td th:text="${producto.id}"></td>-->
-<!--    <td th:text="${producto.nombre}"></td>-->
-<!--    <td th:text="${producto.descripcion}"></td>-->
-<!--    <td th:text="${producto.stockActual}"></td> &lt;!&ndash; Nueva columna para el stock &ndash;&gt;-->
-<!--    <td th:text="${producto.macAddress}"></td>-->
-<!--    <td th:text="${producto.numeroDeSerie}"></td>-->
-<!--    <td th:text="${producto.codigoBarras}"></td>-->
-<!--    <td th:text="${producto.categoriaNombre}"></td>-->
-<!--    <td>-->
-<!--        <div class="btn-group">-->
-<!--            <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateProducto"-->
-<!--                    data-bs-toggle="modal"-->
-<!--                    data-bs-target="#updateDepositosProductosModal" th:data-id="${producto.id}">-->
-<!--                Editar-->
-<!--            </button>-->
-<!--        </div>-->
-<!--    </td>-->
-<!--</tr>-->
-<!--</tbody>-->
-<!--<nav aria-label="Page navigation" id="pagination" th:fragment="pagination(page)">-->
-<!--    <ul class="pagination justify-content-center">-->
-<!--        <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">-->
-<!--            <a class="page-link"-->
-<!--               th:href="@{/tableDepositosProductos(page=${page.number - 1}, size=${page.size}, name=${param.name}, depositoId=${selectedDepositoId})}">Anterior</a>-->
-<!--        </li>-->
-<!--        <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"-->
-<!--            th:classappend="${page.number == i} ? 'active'">-->
-<!--            <a class="page-link"-->
-<!--               th:href="@{/tableDepositosProductos(page=${i}, size=${page.size}, name=${param.name}, depositoId=${selectedDepositoId})}"-->
-<!--               th:text="${i + 1}">1</a>-->
-<!--        </li>-->
-<!--        <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">-->
-<!--            <a class="page-link"-->
-<!--               th:href="@{/tableDepositosProductos(page=${page.number + 1}, size=${page.size}, name=${param.name}, depositoId=${selectedDepositoId})}">Siguiente</a>-->
-<!--        </li>-->
-<!--    </ul>-->
-<!--</nav>-->
-<!--</body>-->
-<!--</html>-->
+<!-- src/main/resources/templates/fragments/productosTable.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Productos Table</title>
+</head>
+<body>
+<tbody id="productosTableBody table-smaller-text" th:fragment="productosTableBody(productos, page)">
+<tr th:each="producto : ${productos}">
+    <td th:text="${producto.id}"></td>
+    <td th:text="${producto.nombre}"></td>
+    <td th:text="${producto.descripcion}"></td>
+    <td th:text="${producto.stockActual}"></td> <!-- Nueva columna para el stock -->
+    <td th:text="${producto.macAddress}"></td>
+    <td th:text="${producto.numeroDeSerie}"></td>
+    <td th:text="${producto.codigoBarras}"></td>
+    <td th:text="${producto.categoriaNombre}"></td>
+    <td>
+        <div class="btn-group">
+            <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateProducto"
+                    data-bs-toggle="modal"
+                    data-bs-target="#updateDepositosProductosModal" th:data-id="${producto.id}">
+                Editar
+            </button>
+        </div>
+    </td>
+</tr>
+</tbody>
+<nav aria-label="Page navigation" id="pagination" th:fragment="pagination(page)">
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${page.hasPrevious()} ? '' : 'disabled'">
+            <a class="page-link"
+               th:href="@{/tableDepositosProductos(page=${page.number - 1}, size=${page.size}, name=${param.name}, depositoId=${selectedDepositoId})}">Anterior</a>
+        </li>
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+            th:classappend="${page.number == i} ? 'active'">
+            <a class="page-link"
+               th:href="@{/tableDepositosProductos(page=${i}, size=${page.size}, name=${param.name}, depositoId=${selectedDepositoId})}"
+               th:text="${i + 1}">1</a>
+        </li>
+        <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
+            <a class="page-link"
+               th:href="@{/tableDepositosProductos(page=${page.number + 1}, size=${page.size}, name=${param.name}, depositoId=${selectedDepositoId})}">Siguiente</a>
+        </li>
+    </ul>
+</nav>
+</body>
+</html>

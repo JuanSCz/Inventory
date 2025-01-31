@@ -115,7 +115,7 @@ function populateUpdateModal(id) {
             updateModalElement.querySelector('#impuestos').value = data.impuestos;
             updateModalElement.querySelector('#cliente').value = data.clienteId;
 
-            const detalleContainer = document.getElementById('detalleContainerUpdate');
+            const detalleContainer = document.getElementById('detalleContainer');
             detalleContainer.innerHTML = ''; // Limpiar el contenedor de detalles
 
             data.detallesVenta.forEach((detalle, index) => {
@@ -141,7 +141,7 @@ function populateUpdateModal(id) {
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="precioUnitario${index}" class="form-label form-labelForms">Precio unitario del producto</label>
-                        <input type="text" class="form-control form-control-sm form-control-detalle" name="detallesVenta[${index}].precioUnitarioString" id="precioUnitario${index}" placeholder="Ingrese el precio unitario..." required>
+                        <input type="number" class="form-control form-control-sm form-control-detalle" name="detallesVenta[${index}].precioUnitario" id="precioUnitario${index}" placeholder="Ingrese el precio unitario..." required>
                     </div>
                 `;
 
@@ -150,7 +150,7 @@ function populateUpdateModal(id) {
                 newRow.querySelector(`#producto${index}`).value = detalle.productoId;
                 newRow.querySelector(`#deposito${index}`).value = detalle.depositoId;
                 newRow.querySelector(`#cantidad${index}`).value = detalle.cantidad;
-                newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitarioString;
+                newRow.querySelector(`#precioUnitario${index}`).value = detalle.precioUnitario;
             });
         })
         .catch(error => console.error('Error al cargar los datos de la venta:', error));

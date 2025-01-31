@@ -28,7 +28,6 @@ public interface DepositoService {
 
     long countDepositos();
 
-    Page<DepositoDTO> getAllProductos(Pageable pageable);
 
     List<Deposito> obtenerTodosLosDepositos();
 

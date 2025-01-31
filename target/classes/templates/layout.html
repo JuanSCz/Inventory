@@ -64,6 +64,14 @@
         <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
         <script src="js/indexDepositosProductos.js"></script>
     </div>
+    <div th:case="'Ventas'">
+        <div th:replace="~{fragments/tableDetalleVentas :: createModalTableVentas}"></div>
+        <div th:replace="~{fragments/formUpdateVentas :: updateModalVentas}"></div>
+        <div th:replace="~{fragments/formCreateVentas :: createModalVentas}"></div>
+        <div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
+        <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
+        <script src="js/indexVentas.js"></script>
+    </div>
     <div th:case="*">
         <p th:text="'No se encontró el caso para la tabla: ' + ${table}"></p>
     </div>

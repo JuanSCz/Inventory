@@ -45,7 +45,9 @@ public class DepositosProductosController {
     }
 
     @PostMapping("/update")
-    public String updateProducto(@Valid ProductoDTO productoDTO, BindingResult result, Model model, Pageable pageable) {
+    public String updateProducto(@Valid ProductoDTO productoDTO, BindingResult result, Model model, @RequestParam Long depositoId, Pageable pageable) {
+        logger.debug("Entrando al método updateProducto con depositoId: {}", depositoId);
+        logger.debug("Datos del producto recibidos: {}", productoDTO);
         if (result.hasErrors()) {
             String errorMessage = result.getFieldErrors().stream()
                     .map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale()))
@@ -57,43 +59,48 @@ public class DepositosProductosController {
             model.addAttribute("page", productos);
             model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
             model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
-            return "redirect:/main?table=tableDepositosProductos";
+            logger.debug("Errores de validación encontrados: {}", errorMessage);
+            return "redirect:/main?table=tableDepositosProductos&depositoId=" + depositoId;
         }
 
         productoService.updateProducto(productoDTO);
-        return "redirect:/main?table=tableDepositosProductos";
+        logger.debug("Producto actualizado exitosamente con depositoId: {}", depositoId);
+        return "redirect:/main?table=tableDepositosProductos&depositoId=" + depositoId;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductoDTO> getProductoById(@PathVariable Long id) {
+        logger.debug("Entrando al método getProductoById con id: {}", id);
         ProductoDTO productoDTO = productoService.getProducto(id);
+        logger.debug("Producto encontrado: {}", productoDTO);
         return new ResponseEntity<>(productoDTO, HttpStatus.OK);
     }
 
     @GetMapping("/search")
     public String searchProductosByName(@RequestParam String name, Model model, Pageable pageable) {
+        logger.debug("Entrando al método searchProductosByName con name: {}", name);
         int pageSize = 15;
         Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
-        logger.info("Solicitud recibida para buscar productos por nombre: {}", name);
         Page<ProductoDTO> productos = productoService.searchProductosByName(name, newPageable);
         model.addAttribute("productos", productos.getContent());
         model.addAttribute("productoDTO", new ProductoDTO());
         model.addAttribute("page", productos);
-        return "fragments/productosTable :: productosTableBody";
+        logger.debug("Productos encontrados: {}", productos.getContent());
+        return "redirect:/main?table=tableDepositosProductos";
     }
 
     @GetMapping
     public String getProductosPorDeposito(@RequestParam(required = false) Long depositoId, Model model, Pageable pageable) {
+        logger.debug("Entrando al método getProductosPorDeposito con depositoId: {}", depositoId);
         if (depositoId == null) {
-            // Verifica si hay depósitos disponibles
             Page<DepositoDTO> depositosPage = depositoService.getAllDepositos(PageRequest.of(0, 1));
             if (depositosPage.isEmpty()) {
-                // Maneja el caso en que no hay depósitos disponibles
                 model.addAttribute("errorMessage", "No hay depósitos disponibles.");
-                return "errorPage"; // Asegúrate de tener una página de error adecuada
+                logger.warn("No hay depósitos disponibles.");
+                return "errorPage";
             }
-            // Selecciona el primer depósito disponible
             depositoId = depositosPage.getContent().get(0).getId();
+            logger.debug("Depósito seleccionado automáticamente: {}", depositoId);
         }
 
         Page<ProductoDTO> productos = depositosProductosService.getProductosByDeposito(depositoId, pageable);
@@ -101,8 +108,9 @@ public class DepositosProductosController {
         model.addAttribute("page", productos);
         model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
         model.addAttribute("selectedDepositoId", depositoId);
-        model.addAttribute("productoDTO", new ProductoDTO()); // Añadir productoDTO al modelo
+        model.addAttribute("productoDTO", new ProductoDTO());
         model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+        logger.debug("Productos por depósito encontrados: {}", productos.getContent());
         return "redirect:/main?table=tableDepositosProductos";
     }
 }

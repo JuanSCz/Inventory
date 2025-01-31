@@ -18,29 +18,33 @@
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form th:action="@{/tableDepositosProductos/update}" method="post" th:object="${productoDTO}"
+                    <form th:action="@{/tableDepositos/update}" method="post" th:object="${depositoDTO}"
                           autocomplete="off">
                         <input type="hidden" id="id" th:field="*{id}">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="nombre" class="form-label form-labelForms">Nombre</label>
                                 <input type="text" class="form-control form-control-sm form-control-updateProveedor"
-                                       id="nombre" th:field="*{nombre}">
+                                       id="nombre"
+                                       th:field="*{nombre}">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="provincia" class="form-label form-labelForms">Provincia</label>
                                 <input type="text" class="form-control form-control-sm form-control-updateProveedor"
-                                       id="provincia" th:field="*{provincia}">
+                                       id="provincia"
+                                       th:field="*{provincia}">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="direccion" class="form-label form-labelForms">Dirección</label>
                                 <input type="text" class="form-control form-control-sm form-control-updateProveedor"
-                                       id="direccion" th:field="*{direccion}">
+                                       id="direccion"
+                                       th:field="*{direccion}">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="contacto" class="form-label form-labelForms">Número Telefónico</label>
                                 <input type="text" class="form-control form-control-sm form-control-updateProveedor"
-                                       id="contacto" th:field="*{contactoDeposito}">
+                                       id="contacto"
+                                       th:field="*{contactoDeposito}">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-sm btn-primary btn-primary-updateProveedor w-100">

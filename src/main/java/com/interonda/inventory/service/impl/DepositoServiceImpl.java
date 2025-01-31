@@ -180,11 +180,6 @@ public class DepositoServiceImpl implements DepositoService {
     }
 
     @Override
-    public Page<DepositoDTO> getAllProductos(Pageable pageable) {
-        return depositoRepository.findAll(pageable).map(depositoMapper::toDto);
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public List<Deposito> obtenerTodosLosDepositos() {
         try {
@@ -200,12 +195,8 @@ public class DepositoServiceImpl implements DepositoService {
     public Page<Map<String, Object>> getAllDepositosAsMap(Pageable pageable) {
         Page<Deposito> depositos = depositoRepository.findAll(pageable);
 
-        return depositos.map(proveedor -> {
-            return Map.of("id", proveedor.getId(),
-                    "nombre", proveedor.getNombre(),
-                    "provincia", proveedor.getProvincia(),
-                    "dirección", proveedor.getDireccion(),
-                    "contacto", proveedor.getContactoDeposito());
+        return depositos.map(deposito -> {
+            return Map.of("id", deposito.getId(), "nombre", deposito.getNombre(), "provincia", deposito.getProvincia(), "dirección", deposito.getDireccion(), "contacto", deposito.getContactoDeposito());
         });
     }
 }

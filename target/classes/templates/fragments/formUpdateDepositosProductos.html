@@ -20,7 +20,8 @@
                 <div class="modal-body modal-body-detalle">
                     <form th:action="@{/tableDepositosProductos/update}" method="post" th:object="${productoDTO}"
                           autocomplete="off">
-                        <input type="hidden" id="id" th:field="*{id}">
+                        <input type="hidden" name="depositoId" th:value="${selectedDepositoId}">
+                        <input type="hidden" name="id" th:field="*{id}">
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="macAddress" class="form-label form-labelForms">MAC Address</label>

@@ -26,6 +26,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -310,7 +311,6 @@ public class VentaServiceImpl implements VentaService {
         return formatter.format(subtotal);
     }
 
-
     @Override
     @Transactional(readOnly = true)
     public VentaDTO getVenta(Long id) {
@@ -411,4 +411,5 @@ public class VentaServiceImpl implements VentaService {
         return ventas.map(venta -> Map.of("id", venta.getId(), "cliente", venta.getCliente().getNombre(), "fecha", venta.getFecha(), "estado", venta.getEstado(), "método de pago", venta.getMetodoPago(), "impuestos", venta.getImpuestos(), "total", venta.getTotal()
         ));
     }
+
 }

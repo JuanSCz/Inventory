@@ -8,7 +8,6 @@
 <main class="contentPersist p-3 text-center" th:fragment="mainFragment">
     <h2 class="mb-3 titlePersist" th:text="'Persistencia ' + ${table}">Persistencia Productos</h2>
 
-    <!-- Botón de creación dinámico -->
     <div th:switch="${table}">
         <div th:case="'Categorias'">
             <button class="btn buttonPersist" data-bs-toggle="modal" data-bs-target="#createCategoriaModal">
@@ -43,14 +42,20 @@
             <div class="col-md-6 mb-3">
                 <form th:action="@{/main}" method="get">
                     <input type="hidden" name="table" value="tableDepositosProductos"/>
-                    <select class="form-control form-control-sm form-control-chico" id="depositoId" name="depositoId" onchange="this.form.submit()">
+                    <select class="form-control form-control-sm form-control-chico" id="depositoId" name="depositoId"
+                            onchange="this.form.submit()">
                         <option th:each="deposito : ${depositos}" th:value="${deposito.id}" th:text="${deposito.nombre}"
-                                th:selected="${deposito.id == selectedDepositoId}"></option>
+                                th:selected="${deposito.id} == ${selectedDepositoId}"></option>
                     </select>
                 </form>
             </div>
         </div>
-        <!-- Agrega más casos para otras tablas según sea necesario -->
+        <div th:case="'Ventas'">
+            <button class="btn buttonPersist" data-bs-toggle="modal"
+                    data-bs-target="#createVentaModal">
+                Crear Venta
+            </button>
+        </div>
         <div th:case="*">
             <p th:text="'No se encontró el caso para la tabla: ' + ${table}"></p>
         </div>
@@ -87,14 +92,14 @@
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${pageDetails.hasPrevious} ? '' : 'disabled'">
-                <a class="page-link" th:href="${pageDetails.previousPageUrl}">Anterior</a>
+                <a class="page-link" th:href="@{/main(table='table' + ${table}, page=${pageDetails.number - 1})}">Anterior</a>
             </li>
             <li class="page-item" th:each="i : ${#numbers.sequence(0, pageDetails.totalPages - 1)}"
                 th:classappend="${pageDetails.number == i} ? 'active'">
-                <a class="page-link" th:href="${pageDetails.pageUrl.apply(i)}" th:text="${i + 1}">1</a>
+                <a class="page-link" th:href="@{/main(table='table' + ${table}, page=${i})}" th:text="${i + 1}">1</a>
             </li>
             <li class="page-item" th:classappend="${pageDetails.hasNext} ? '' : 'disabled'">
-                <a class="page-link" th:href="${pageDetails.nextPageUrl}">Siguiente</a>
+                <a class="page-link" th:href="@{/main(table='table' + ${table}, page=${pageDetails.number + 1})}">Siguiente</a>
             </li>
         </ul>
     </nav>

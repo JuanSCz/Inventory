@@ -182,7 +182,6 @@ function agregarFilaStock() {
     newRow.classList.add("row", "stocks-row");
     const currentIndex = stockContainer.querySelectorAll('.stocks-row').length;
 
-    // Obtener el HTML del select de depósitos del primer stock
     const depositoSelectHTML = document.querySelector('select[name="stocks[0].depositoId"]').innerHTML;
 
     newRow.innerHTML = `

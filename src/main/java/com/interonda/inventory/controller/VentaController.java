@@ -51,8 +51,12 @@ public class VentaController {
 
     @PostMapping
     public String createVenta(@Valid VentaDTO ventaDTO, BindingResult bindingResult, Model model, Pageable pageable) {
+        logger.debug("Datos del formulario recibidos: {}", ventaDTO);
+
         for (int i = 0; i < ventaDTO.getDetallesVenta().size(); i++) {
             DetalleVentaDTO detalle = ventaDTO.getDetallesVenta().get(i);
+            logger.debug("Detalle de venta [{}]: {}", i, detalle);
+
             if (detalle.getCantidad() == null || detalle.getCantidad() <= 0) {
                 bindingResult.rejectValue("detallesVenta[" + i + "].cantidad", "error.detalle", "La cantidad debe ser un número positivo");
             }
@@ -66,6 +70,7 @@ public class VentaController {
 
         if (bindingResult.hasErrors()) {
             String errorMessage = bindingResult.getFieldErrors().stream().map(fieldError -> messageSource.getMessage(fieldError, LocaleContextHolder.getLocale())).collect(Collectors.joining("<br>"));
+            logger.error("Errores en el formulario: {}", errorMessage);
             model.addAttribute("errorMessage", errorMessage);
             Page<ProductoDTO> productos = productoService.getAllProductos(pageable);
             Page<DepositoDTO> depositos = depositoService.getAllDepositos(pageable);
@@ -74,11 +79,13 @@ public class VentaController {
             model.addAttribute("ventaDTO", ventaDTO);
             model.addAttribute("productos", productos);
             model.addAttribute("depositos", depositos.getContent());
-            return "tableVentas";
+            return "main?table=tableVentas";
         }
 
+        logger.info("Formulario válido, creando venta...");
         ventaService.createVenta(ventaDTO);
-        return "redirect:/tableVentas";
+        logger.info("Venta creada exitosamente");
+        return "redirect:/main?table=tableVentas";
     }
 
     @PostMapping("/update")
@@ -106,11 +113,11 @@ public class VentaController {
             model.addAttribute("ventaDTO", ventaDTO);
             model.addAttribute("productos", productos);
             model.addAttribute("depositos", depositos.getContent());
-            return "tableVentas";
+            return "main?table=tableVentas";
         }
 
         ventaService.updateVenta(ventaDTO);
-        return "redirect:/tableVentas";
+        return "redirect:/main?table=tableVentas";
     }
 
     @DeleteMapping("/{id}")
@@ -154,7 +161,7 @@ public class VentaController {
         model.addAttribute("productos", productoService.obtenerTodosLosProductos());
         model.addAttribute("depositos", depositoService.obtenerTodosLosDepositos());
         model.addAttribute("currentPage", "tableVentas");
-        return "tableVentas";
+        return "main?table=tableVentas";
     }
 
     @GetMapping("/search")
@@ -176,6 +183,6 @@ public class VentaController {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable clientesPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
         model.addAttribute("clientes", clienteService.getAllClientes(clientesPageable).getContent());
-        return "tableVentas";
+        return "main?table=tableVentas";
     }
 }

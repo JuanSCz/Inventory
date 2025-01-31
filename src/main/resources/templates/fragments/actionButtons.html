@@ -86,11 +86,31 @@
         </div>
         <div th:case="'DepositosProductos'">
             <div class="btn-group">
-                <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateProducto"
+                <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateDepositosProductos"
                         data-bs-toggle="modal"
                         data-bs-target="#updateDepositosProductosModal" th:data-id="${row['id']}">
                     Editar
                 </button>
+            </div>
+        </div>
+        <div th:case="'Ventas'">
+            <div class="btn-group">
+                <button class="btn bg-success bg-success-compra btn-sm navbar-menu me-2"
+                        onclick="showDetalleVentaModal(this)" th:data-id="${row['id']}">
+                    Detalle
+                </button>
+                <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateVenta"
+                        data-bs-toggle="modal"
+                        data-bs-target="#updateVentaModal" th:data-id="${row['id']}">
+                    Editar
+                </button>
+                <form th:action="@{/tableVentas/{id}(id=${row['id']})}" method="post"
+                      onsubmit="return confirmDelete(this);">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn btn-danger btn-sm delete-button"
+                            th:data-id="${row['id']}">Borrar
+                    </button>
+                </form>
             </div>
         </div>
         <div th:case="*">

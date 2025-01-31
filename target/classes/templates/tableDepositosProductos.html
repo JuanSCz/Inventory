@@ -1,135 +1,135 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Interonda IO</title>-->
-<!--    <link rel="stylesheet" th:href="@{/css/tableProveedores.css}">-->
-<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"-->
-<!--          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">-->
-<!--    <link rel="icon" th:href="@{/images/wifi.png}" type="image/x-icon">-->
-<!--    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">-->
-<!--    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">-->
-<!--    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">-->
-<!--    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">-->
-<!--    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">-->
-<!--</head>-->
-<!--<body class="body-table" th:data-error-message="${errorMessage}">-->
-<!--<nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm responsive-navbar">-->
-<!--    <div class="container-fluid">-->
-<!--        <img th:src="@{/images/logo.png}" alt="Interonda Logo"-->
-<!--             class="d-inline-block align-text-top me-2 interonda navbar-logo">-->
-<!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"-->
-<!--                aria-expanded="false">-->
-<!--            <span class="navbar-toggler-icon"></span>-->
-<!--        </button>-->
-<!--        <div class="collapse navbar-collapse" id="navbarNav">-->
-<!--            <ul class="navbar-nav ms-auto navbar-menu">-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" aria-current="page" th:href="@{/dashboard}">Inicio</a>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" href="#">Admin</a>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" th:href="@{/login}">Salir</a>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</nav>-->
-<!--<div class="container-fluid d-flex p-0">-->
-<!--    <aside class="sidebar bg-secondary text-white p-3 fixed-sidebar responsive-sidebar">-->
-<!--        <ul class="nav flex-column">-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link text-white" th:href="@{/dashboard}">Dashboard</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link text-white" th:href="@{/tableProveedores}"-->
-<!--                   th:classappend="${currentPage == 'tableProveedores'} ? 'active' : ''">Proveedores</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link text-white" th:href="@{/tableClientes}">Clientes</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link text-white" th:href="@{/tableProductos}">Productos</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link text-white" th:href="@{/tableCategorias}">Categorias</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item dropdown">-->
-<!--                <a class="nav-link dropdown-toggle text-white" href="#" id="depositosDropdown" role="button"-->
-<!--                   data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--                    Depósitos-->
-<!--                </a>-->
-<!--                <ul class="dropdown-menu dropdownMenu" aria-labelledby="depositosDropdown" id="dropdownMenu">-->
-<!--                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableDepositos">Persistencia</a>-->
-<!--                    </li>-->
-<!--                    <li><a class="nav-link dropdown-item text-white text-right"-->
-<!--                           href="/tableDepositosProductos">Stock</a></li>-->
-<!--                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableDepositosProductosUnidad">Unidades</a>-->
-<!--                    </li>-->
-<!--                </ul>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link text-white" th:href="@{/tableCompras}">Compras</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item dropdown">-->
-<!--                <a class="nav-link dropdown-toggle text-white" href="#" id="ventasDropdown" role="button"-->
-<!--                   data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--                    Ventas-->
-<!--                </a>-->
-<!--                <ul class="dropdown-menu dropdownMenu"-->
-<!--                    aria-labelledby="ventasDropdown" id="dropdownMenuVentas">-->
-<!--                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableVentas">Ventas</a></li>-->
-<!--                    <li><a class="nav-link dropdown-item text-white text-right"-->
-<!--                           href="/tablePresupuestar">Presupuestar</a></li>-->
-<!--                </ul>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link text-white" th:href="@{/tableUsuarios}">Usuarios</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link text-white" th:href="@{/tableHistorialStock}">Historial Stock</a>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </aside>-->
-<!--    <main class="contentPersist p-3 text-center">-->
-<!--        <h2 class="mb-4 titlePersist">Stock por Depósito</h2>-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interonda IO</title>
+    <link rel="stylesheet" th:href="@{/css/tableProveedores.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="icon" th:href="@{/images/wifi.png}" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="body-table" th:data-error-message="${errorMessage}">
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm responsive-navbar">
+    <div class="container-fluid">
+        <img th:src="@{/images/logo.png}" alt="Interonda Logo"
+             class="d-inline-block align-text-top me-2 interonda navbar-logo">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-expanded="false">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto navbar-menu">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" th:href="@{/dashboard}">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Admin</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/login}">Salir</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid d-flex p-0">
+    <aside class="sidebar bg-secondary text-white p-3 fixed-sidebar responsive-sidebar">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/dashboard}">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/tableProveedores}"
+                   th:classappend="${currentPage == 'tableProveedores'} ? 'active' : ''">Proveedores</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/tableClientes}">Clientes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/tableProductos}">Productos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/tableCategorias}">Categorias</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="depositosDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    Depósitos
+                </a>
+                <ul class="dropdown-menu dropdownMenu" aria-labelledby="depositosDropdown" id="dropdownMenu">
+                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableDepositos">Persistencia</a>
+                    </li>
+                    <li><a class="nav-link dropdown-item text-white text-right"
+                           href="/tableDepositosProductos">Stock</a></li>
+                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableDepositosProductosUnidad">Unidades</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/tableCompras}">Compras</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="ventasDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    Ventas
+                </a>
+                <ul class="dropdown-menu dropdownMenu"
+                    aria-labelledby="ventasDropdown" id="dropdownMenuVentas">
+                    <li><a class="nav-link dropdown-item text-white text-right" href="/tableVentas">Ventas</a></li>
+                    <li><a class="nav-link dropdown-item text-white text-right"
+                           href="/tablePresupuestar">Presupuestar</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/tableUsuarios}">Usuarios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/tableHistorialStock}">Historial Stock</a>
+            </li>
+        </ul>
+    </aside>
+    <main class="contentPersist p-3 text-center">
+        <h2 class="mb-4 titlePersist">Stock por Depósito</h2>
 
-<!--        <div class="col-md-6 mb-3">-->
-<!--            <select class="form-control form-control-sm form-control-chico" id="depositoId" name="depositoId">-->
-<!--                <option th:each="deposito : ${depositos}" th:value="${deposito.id}" th:text="${deposito.nombre}"-->
-<!--                        th:selected="${deposito.id == selectedDepositoId}"></option>-->
-<!--            </select>-->
-<!--        </div>-->
+        <div class="col-md-6 mb-3">
+            <select class="form-control form-control-sm form-control-chico" id="depositoId" name="depositoId">
+                <option th:each="deposito : ${depositos}" th:value="${deposito.id}" th:text="${deposito.nombre}"
+                        th:selected="${deposito.id == selectedDepositoId}"></option>
+            </select>
+        </div>
 
-<!--        <div class="table-responsive mt-3">-->
-<!--            <table class="table tableTodas table-dark table-striped table-bordered custom-table table-sm table-smaller-text">-->
-<!--                <thead class="table-light">-->
-<!--                <tr>-->
-<!--                    <th scope="col">ID</th>-->
-<!--                    <th scope="col">Nombre</th>-->
-<!--                    <th scope="col">Descripcion</th>-->
-<!--                    <th scope="col">Stock</th>-->
-<!--                    <th scope="col">MAC Address</th>-->
-<!--                    <th scope="col">Numero de Serie</th>-->
-<!--                    <th scope="col">Código de Barras</th>-->
-<!--                    <th scope="col">Categoria</th>-->
-<!--                    <th scope="col">Acciones</th>-->
-<!--                </tr>-->
-<!--                </thead>-->
-<!--                <tbody id="productosTableBody"-->
-<!--                       th:replace="fragments/productosTable :: productosTableBody(${productos}, ${page})"></tbody>-->
-<!--            </table>-->
-<!--        </div>-->
-<!--        <nav th:replace="fragments/productosTable :: pagination(${page})"></nav>-->
-<!--    </main>-->
-<!--</div>-->
+        <div class="table-responsive mt-3">
+            <table class="table tableTodas table-dark table-striped table-bordered custom-table table-sm table-smaller-text">
+                <thead class="table-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripcion</th>
+                    <th scope="col">Stock</th>
+                    <th scope="col">MAC Address</th>
+                    <th scope="col">Numero de Serie</th>
+                    <th scope="col">Código de Barras</th>
+                    <th scope="col">Categoria</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody id="productosTableBody"
+                       th:replace="fragments/productosTable :: productosTableBody(${productos}, ${page})"></tbody>
+            </table>
+        </div>
+        <nav th:replace="fragments/productosTable :: pagination(${page})"></nav>
+    </main>
+</div>
 
-<!--<div th:replace="fragments/formUpdateDepositosProductos :: updateModalDepositosProductos"></div>-->
-<!--<div th:replace="fragments/errors :: errorModal(errorMessage=${errorMessage})"></div>-->
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>-->
-<!--<script src="js/indexDepositosProductos.js"></script>-->
-<!--</body>-->
-<!--</html>-->
+<div th:replace="fragments/formUpdateDepositosProductos :: updateModalDepositosProductos"></div>
+<div th:replace="fragments/errors :: errorModal(errorMessage=${errorMessage})"></div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/indexDepositosProductos.js"></script>
+</body>
+</html>

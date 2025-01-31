@@ -76,6 +76,9 @@ public class DepositosProductosServiceImpl implements DepositosProductosService 
             producto.setCosto(productoDTO.getCosto());
             producto.setStockActual(productoDTO.getStockActual());
             producto.setStockMinimo(productoDTO.getStockMinimo());
+            producto.setMacAddress(productoDTO.getMacAddress());
+            producto.setNumeroDeSerie(productoDTO.getNumeroDeSerie());
+            producto.setCodigoBarras(productoDTO.getCodigoBarras());
 
             if (productoDTO.getCategoriaId() != null) {
                 Categoria categoria = categoriaRepository.findById(productoDTO.getCategoriaId()).orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con el id: " + productoDTO.getCategoriaId()));
@@ -229,18 +232,21 @@ public class DepositosProductosServiceImpl implements DepositosProductosService 
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<Map<String, Object>> getProductosByDepositoAsMap(Long depositoId, Pageable pageable) {
-        Page<Producto> productos = productoRepository.findByDepositoId(depositoId, pageable);
-        return productos.map(producto -> {
+        Page<ProductoDTO> productos = getProductosByDeposito(depositoId, pageable);
+
+        return productos.map(productoDTO -> {
             Map<String, Object> productoMap = new HashMap<>();
-            productoMap.put("id", producto.getId());
-            productoMap.put("nombre", producto.getNombre());
-            productoMap.put("descripcion", producto.getDescripcion());
-            productoMap.put("stock", producto.getStockActual());
-            productoMap.put("macAddress", producto.getMacAddress());
-            productoMap.put("numeroDeSerie", producto.getNumeroDeSerie());
-            productoMap.put("codigoBarras", producto.getCodigoBarras());
-            productoMap.put("categoria", producto.getCategoria() != null ? producto.getCategoria().getNombre() : "Sin categoría");
+            productoMap.put("id", productoDTO.getId());
+            productoMap.put("nombre", productoDTO.getNombre());
+            productoMap.put("descripcion", productoDTO.getDescripcion());
+            productoMap.put("stock", productoDTO.getStockActual());
+            productoMap.put("macAddress", productoDTO.getMacAddress());
+            productoMap.put("numeroDeSerie", productoDTO.getNumeroDeSerie());
+            productoMap.put("codigoBarras", productoDTO.getCodigoBarras());
+            productoMap.put("categoria", productoDTO.getCategoriaNombre());
+            productoMap.put("depositoId", productoDTO.getDepositoId());
             return productoMap;
         });
     }
