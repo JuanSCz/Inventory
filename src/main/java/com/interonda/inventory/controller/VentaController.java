@@ -141,48 +141,4 @@ public class VentaController {
         });
         return new ResponseEntity<>(ventaDTO, HttpStatus.OK);
     }
-
-    @GetMapping
-    public String showVentas(@RequestParam(required = false) String fecha, Model model, Pageable pageable) {
-        int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize, Sort.by("id").descending());
-        Page<VentaDTO> ventas;
-        if (fecha != null && !fecha.isEmpty()) {
-            ventas = ventaService.searchVentasByFecha(LocalDate.parse(fecha), newPageable);
-        } else {
-            ventas = ventaService.getAllVentas(newPageable);
-        }
-        model.addAttribute("ventas", ventas.getContent());
-        model.addAttribute("ventaDTO", new VentaDTO());
-        model.addAttribute("page", ventas);
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        Pageable clientesPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
-        model.addAttribute("clientes", clienteService.getAllClientes(clientesPageable).getContent());
-        model.addAttribute("productos", productoService.obtenerTodosLosProductos());
-        model.addAttribute("depositos", depositoService.obtenerTodosLosDepositos());
-        model.addAttribute("currentPage", "tableVentas");
-        return "main?table=tableVentas";
-    }
-
-    @GetMapping("/search")
-    public String searchVentas(@RequestParam(required = false) String nombreCliente, Model model, Pageable pageable) {
-        int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
-        Page<VentaDTO> ventas;
-
-        if (nombreCliente != null && !nombreCliente.isEmpty()) {
-            logger.info("Solicitud recibida para buscar ventas por nombre de cliente: {}", nombreCliente);
-            ventas = ventaService.searchVentasByClienteNombre(nombreCliente, newPageable);
-        } else {
-            ventas = ventaService.getAllVentas(newPageable);
-        }
-
-        model.addAttribute("ventas", ventas.getContent());
-        model.addAttribute("ventaDTO", new VentaDTO());
-        model.addAttribute("page", ventas);
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        Pageable clientesPageable = PageRequest.of(0, Integer.MAX_VALUE, sort);
-        model.addAttribute("clientes", clienteService.getAllClientes(clientesPageable).getContent());
-        return "main?table=tableVentas";
-    }
 }

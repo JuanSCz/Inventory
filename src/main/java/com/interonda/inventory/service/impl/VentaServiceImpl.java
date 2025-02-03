@@ -411,5 +411,4 @@ public class VentaServiceImpl implements VentaService {
         return ventas.map(venta -> Map.of("id", venta.getId(), "cliente", venta.getCliente().getNombre(), "fecha", venta.getFecha(), "estado", venta.getEstado(), "método de pago", venta.getMetodoPago(), "impuestos", venta.getImpuestos(), "total", venta.getTotal()
         ));
     }
-
 }

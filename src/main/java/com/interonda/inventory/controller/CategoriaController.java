@@ -83,34 +83,4 @@ public class CategoriaController {
         CategoriaDTO categoriaDTO = categoriaService.getCategoria(id);
         return new ResponseEntity<>(categoriaDTO, HttpStatus.OK);
     }
-
-    @GetMapping
-    public String showCategorias(@RequestParam(required = false) String name, Model model, Pageable pageable) {
-        int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize, Sort.by("id").descending());
-        Page<CategoriaDTO> categorias;
-        if (name != null && !name.isEmpty()) {
-            logger.info("Solicitud recibida para buscar categorias por nombre: {}", name);
-            categorias = categoriaService.searchCategoriasByName(name, newPageable);
-        } else {
-            categorias = categoriaService.getAllCategorias(newPageable);
-        }
-        model.addAttribute("categorias", categorias.getContent());
-        model.addAttribute("categoriaDTO", new CategoriaDTO());
-        model.addAttribute("page", categorias);
-        model.addAttribute("currentPage", "/main?table=tableCategorias");
-        return "/main?table=tableCategorias";
-    }
-
-    @GetMapping("/search")
-    public String searchCategoriasByName(@RequestParam String name, Model model, Pageable pageable) {
-        int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
-        logger.info("Solicitud recibida para buscar categorías por nombre: {}", name);
-        Page<CategoriaDTO> categorias = categoriaService.searchCategoriasByName(name, newPageable);
-        model.addAttribute("categorias", categorias.getContent());
-        model.addAttribute("categoriaDTO", new CategoriaDTO());
-        model.addAttribute("page", categorias);
-        return "/main?table=tableCategorias";
-    }
 }

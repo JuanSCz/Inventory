@@ -82,34 +82,4 @@ public class DepositoController {
         DepositoDTO depositoDTO = depositoService.getDeposito(id);
         return new ResponseEntity<>(depositoDTO, HttpStatus.OK);
     }
-
-    @GetMapping
-    public String showDepositos(@RequestParam(required = false) String name, Model model, Pageable pageable) {
-        int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize, Sort.by("id").descending());
-        Page<DepositoDTO> depositos;
-        if (name != null && !name.isEmpty()) {
-            logger.info("Solicitud recibida para buscar depositos por nombre: {}", name);
-            depositos = depositoService.searchDepositosByName(name, newPageable);
-        } else {
-            depositos = depositoService.getAllDepositos(newPageable);
-        }
-        model.addAttribute("depositos", depositos.getContent());
-        model.addAttribute("depositoDTO", new DepositoDTO());
-        model.addAttribute("page", depositos);
-        model.addAttribute("currentPage", "tableDepositos");
-        return "main?table=tableDepositos";
-    }
-
-    @GetMapping("/search")
-    public String searchDepositosByName(@RequestParam String name, Model model, Pageable pageable) {
-        int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
-        logger.info("Solicitud recibida para buscar depositos por nombre: {}", name);
-        Page<DepositoDTO> depositos = depositoService.searchDepositosByName(name, newPageable);
-        model.addAttribute("depositos", depositos.getContent());
-        model.addAttribute("depositoDTO", new DepositoDTO());
-        model.addAttribute("page", depositos);
-        return "main?table=tableDepositos";
-    }
 }

@@ -19,25 +19,27 @@ function handleErrorModal() {
     }
 }
 
-// Manejo de la búsqueda en tiempo real
+// Manejo de la búsqueda en tiempo real para Depósitos
 function initializeSearch() {
-    const searchInput = document.querySelector('.search-input');
-    if (searchInput) {
+    const searchInputs = document.querySelectorAll('.search-input');
+    searchInputs.forEach(searchInput => {
         searchInput.addEventListener('input', debounce(filterTable, 300)); // Agregamos debounce para evitar múltiples solicitudes
-    }
+    });
 }
 
-function filterTable() {
-    const input = document.querySelector('.search-input');
+function filterTable(event) {
+    const input = event.target;
     const filter = input.value.toLowerCase();
+    const table = input.closest('form').querySelector('input[name="table"]').value;
     const tableBody = document.querySelector('.custom-table tbody');
 
+    // Mostrar mensaje de carga
     tableBody.innerHTML = '<tr><td colspan="7" class="text-center">Cargando...</td></tr>';
 
-    fetch(`/tableDepositos/search?name=${filter}&page=0&size=15`)
+    fetch(`/main/search?table=${table}&name=${filter}&page=0`)
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al buscar depósitos');
+                throw new Error('Error al buscar en la tabla');
             }
             return response.text();
         })
@@ -46,8 +48,21 @@ function filterTable() {
             const doc = parser.parseFromString(html, 'text/html');
             const newTableBody = doc.querySelector('.custom-table tbody');
             const pagination = doc.querySelector('.pagination');
-            tableBody.innerHTML = newTableBody ? newTableBody.innerHTML : '<tr><td colspan="7" class="text-center">No se encontraron resultados</td></tr>';
-            document.querySelector('.pagination').innerHTML = pagination ? pagination.innerHTML : '';
+
+            // Actualizar el contenido de la tabla
+            if (newTableBody) {
+                tableBody.innerHTML = newTableBody.innerHTML;
+            } else {
+                tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No se encontraron resultados</td></tr>';
+            }
+
+            // Actualizar la paginación
+            if (pagination) {
+                document.querySelector('.pagination').innerHTML = pagination.innerHTML;
+            } else {
+                document.querySelector('.pagination').innerHTML = '';
+            }
+
             initializeUpdateModal(); // Re-inicializar los eventos de los botones de edición
         })
         .catch(error => {

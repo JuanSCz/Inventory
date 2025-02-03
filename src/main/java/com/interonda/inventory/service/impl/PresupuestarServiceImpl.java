@@ -2,7 +2,6 @@ package com.interonda.inventory.service.impl;
 
 import com.interonda.inventory.dto.DetalleVentaDTO;
 import com.interonda.inventory.dto.VentaDTO;
-import com.interonda.inventory.entity.Producto;
 import com.interonda.inventory.entity.Venta;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
@@ -201,23 +200,6 @@ public class PresupuestarServiceImpl implements PresupuestarService {
         }
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Page<VentaDTO> searchVentasByClienteNombre(String nombreCliente, Pageable pageable) {
-        try {
-            logger.info("Buscando Ventas por nombre de cliente: {}", nombreCliente);
-            Page<Venta> ventas = ventaRepository.findByClienteNombre(nombreCliente, pageable);
-            return ventas.map(venta -> {
-                VentaDTO dto = ventaMapper.toDto(venta);
-                dto.setClienteNombre(venta.getCliente().getNombre());
-                return dto;
-            });
-        } catch (Exception e) {
-            logger.error("Error buscando Ventas por nombre de cliente", e);
-            throw new DataAccessException("Error buscando Ventas por nombre de cliente", e);
-        }
-    }
-
     public String getTotalFormatted(BigDecimal total) {
         return formatDecimalWithoutDecimals(total);
     }
@@ -234,6 +216,23 @@ public class PresupuestarServiceImpl implements PresupuestarService {
     private String formatDecimalWithoutDecimals(BigDecimal value) {
         DecimalFormat df = new DecimalFormat("#,##0");
         return df.format(value);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<VentaDTO> searchVentasByClienteNombre(String nombreCliente, Pageable pageable) {
+        try {
+            logger.info("Buscando Ventas por nombre de cliente: {}", nombreCliente);
+            Page<Venta> ventas = ventaRepository.findByClienteNombre(nombreCliente, pageable);
+            return ventas.map(venta -> {
+                VentaDTO dto = ventaMapper.toDto(venta);
+                dto.setClienteNombre(venta.getCliente().getNombre());
+                return dto;
+            });
+        } catch (Exception e) {
+            logger.error("Error buscando Ventas por nombre de cliente", e);
+            throw new DataAccessException("Error buscando Ventas por nombre de cliente", e);
+        }
     }
 
     @Override

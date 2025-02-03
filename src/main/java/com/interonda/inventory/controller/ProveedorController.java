@@ -88,35 +88,4 @@ public class ProveedorController {
         ProveedorDTO proveedorDTO = proveedorService.getProveedor(id);
         return new ResponseEntity<>(proveedorDTO, HttpStatus.OK);
     }
-
-    @GetMapping
-    public String showProveedores(@RequestParam(required = false) String name, Model model, Pageable pageable) {
-        int pageSize = 15;
-        Sort sort = Sort.by(Sort.Direction.DESC, "id");
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize, sort);
-        Page<ProveedorDTO> proveedores;
-        if (name != null && !name.isEmpty()) {
-            logger.info("Solicitud recibida para buscar proveedores por nombre: {}", name);
-            proveedores = proveedorService.searchProveedoresByName(name, newPageable);
-        } else {
-            proveedores = proveedorService.getAllProveedores(newPageable, sort);
-        }
-        model.addAttribute("proveedores", proveedores.getContent());
-        model.addAttribute("proveedorDTO", new ProveedorDTO());
-        model.addAttribute("page", proveedores);
-        model.addAttribute("currentPage", "tableProveedores");
-        return "main?table=tableProveedores";
-    }
-
-    @GetMapping("/search")
-    public String searchProveedoresByName(@RequestParam String name, Model model, Pageable pageable) {
-        int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
-        logger.info("Solicitud recibida para buscar proveedores por nombre: {}", name);
-        Page<ProveedorDTO> proveedores = proveedorService.searchProveedoresByName(name, newPageable);
-        model.addAttribute("proveedores", proveedores.getContent());
-        model.addAttribute("proveedorDTO", new ProveedorDTO());
-        model.addAttribute("page", proveedores);
-        return "main?table=tableProveedores";
-    }
 }

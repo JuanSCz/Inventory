@@ -113,6 +113,34 @@
                 </form>
             </div>
         </div>
+        <div th:case="'Compras'">
+            <div class="btn-group">
+                <button class="btn bg-success bg-success-compra btn-sm navbar-menu me-2"
+                        th:data-id="${row['id']}" onclick="showDetalleCompraModal(this)">
+                    Detalle
+                </button>
+                <button class="btn btn-primary btn-sm navbar-menu me-2 buttonUpdateCompra"
+                        data-bs-toggle="modal"
+                        data-bs-target="#updateCompraModal" th:data-id="${row['id']}">
+                    Editar
+                </button>
+                <form th:action="@{/tableCompras/{id}(id=${row['id']})}" method="post"
+                      onsubmit="return confirmDelete(this);">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn btn-danger btn-sm delete-button"
+                            th:data-id="${row['id']}">Borrar
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div th:case="'Presupuestar'">
+            <div class="btn-group">
+                <button class="btn bg-success bg-success-compra btn-sm navbar-menu me-2"
+                        th:onclick="'downloadPdf(' + ${row['id']} + ')'">
+                    Presupuestar
+                </button>
+            </div>
+        </div>
         <div th:case="*">
             <p th:text="'No se encontró el boton para la tabla: ' + ${table}"></p>
         </div>

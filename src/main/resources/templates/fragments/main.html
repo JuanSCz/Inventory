@@ -56,16 +56,22 @@
                 Crear Venta
             </button>
         </div>
-        <div th:case="*">
+        <div th:case="'Compras'">
+            <button class="btn buttonPersist" data-bs-toggle="modal"
+                    data-bs-target="#createCompraModal">
+                Crear Compra
+            </button>
+        </div>
+        <div th:case="*" th:if="${table != 'HistorialStock' and table != 'Presupuestar'}">
             <p th:text="'No se encontró el caso para la tabla: ' + ${table}"></p>
         </div>
     </div>
 
-    <form th:action="@{/${table}/search}" method="get" class="search-form-container">
+    <form th:action="@{/main/search}" method="get" class="search-form-container">
         <div class="input-group-buscar">
             <input type="text" name="name" placeholder="Buscar" class="form-control search-input">
+            <input type="hidden" name="table" th:value="${table}">
             <input type="hidden" name="page" value="0">
-            <input type="hidden" name="size" value="15">
         </div>
     </form>
 
@@ -74,7 +80,7 @@
             <thead class="table-light">
             <tr>
                 <th th:each="header : ${headers}" scope="col" th:text="${header}">Header</th>
-                <th scope="col">Acciones</th>
+                <th scope="col" th:if="${table} != 'HistorialStock'">Acciones</th>
             </tr>
             </thead>
             <tbody>
@@ -82,7 +88,7 @@
                 <td th:each="header : ${headers}" th:data-label="${header}" th:text="${row[header.toLowerCase()]}">
                     Data
                 </td>
-                <td th:data-label="Acciones">
+                <td th:data-label="Acciones" th:if="${table} != 'HistorialStock'">
                     <div th:replace="~{fragments/actionButtons :: actionButtons(table=${table}, row=${row})}"></div>
                 </td>
             </tr>

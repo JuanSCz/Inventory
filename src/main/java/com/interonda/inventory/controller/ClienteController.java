@@ -83,34 +83,4 @@ public class ClienteController {
         ClienteDTO clienteDTO = clienteService.getCliente(id);
         return new ResponseEntity<>(clienteDTO, HttpStatus.OK);
     }
-
-    @GetMapping
-    public String showClientes(@RequestParam(required = false) String name, Model model, Pageable pageable) {
-        int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize, Sort.by("id").descending());
-        Page<ClienteDTO> clientes;
-        if (name != null && !name.isEmpty()) {
-            logger.info("Solicitud recibida para buscar clientes por nombre: {}", name);
-            clientes = clienteService.searchClientesByName(name, newPageable);
-        } else {
-            clientes = clienteService.getAllClientes(newPageable);
-        }
-        model.addAttribute("clientes", clientes.getContent());
-        model.addAttribute("clienteDTO", new ClienteDTO());
-        model.addAttribute("page", clientes);
-        model.addAttribute("currentPage", "tableClientes");
-        return "main?table=tableClientes";
-    }
-
-    @GetMapping("/search")
-    public String searchClientesByName(@RequestParam String name, Model model, Pageable pageable) {
-        int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
-        logger.info("Solicitud recibida para buscar clientes por nombre: {}", name);
-        Page<ClienteDTO> clientes = clienteService.searchClientesByName(name, newPageable);
-        model.addAttribute("clientes", clientes.getContent());
-        model.addAttribute("clienteDTO", new ClienteDTO());
-        model.addAttribute("page", clientes);
-        return "main?table=tableClientes";
-    }
 }

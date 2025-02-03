@@ -1,6 +1,7 @@
 package com.interonda.inventory.service.impl;
 
 import com.interonda.inventory.dto.HistorialStockDTO;
+import com.interonda.inventory.entity.Compra;
 import com.interonda.inventory.entity.HistorialStock;
 import com.interonda.inventory.exceptions.DataAccessException;
 import com.interonda.inventory.exceptions.ResourceNotFoundException;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 
 @Service
@@ -86,5 +89,12 @@ public class HistorialStockServiceImpl implements HistorialStockService {
             logger.error("Error obteniendo todos los HistorialStock con paginación", e);
             throw new DataAccessException("Error obteniendo todos los HistorialStock con paginación", e);
         }
+    }
+
+    @Override
+    public Page<Map<String, Object>> getAllHistorialStockAsMap(Pageable pageable) {
+        Page<HistorialStock> historialStocks = historialStockRepository.findAll(pageable);
+
+        return historialStocks.map(historialStock -> Map.of("id", historialStock.getId(), "cant anterior", historialStock.getCantidadAnterior(), "cant nueva", historialStock.getCantidadNueva(), "actualización", historialStock.getFechaActualizacion(), "motivo", historialStock.getMotivo(), "movimiento", historialStock.getTipoMovimiento(), "producto", historialStock.getProducto().getNombre(), "depósito", historialStock.getDeposito().getNombre()));
     }
 }

@@ -38,6 +38,6 @@ public class HistorialStockController {
         Page<HistorialStockDTO> historialStockPage = historialStockService.getAllHistorialStock(pageable);
         model.addAttribute("historiales", historialStockPage.getContent());
         model.addAttribute("page", historialStockPage);
-        return "tableHistorialStock";
+        return "main?table=tableHistorialStock";
     }
 }

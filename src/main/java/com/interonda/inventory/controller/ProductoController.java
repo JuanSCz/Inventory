@@ -132,35 +132,4 @@ public class ProductoController {
         return new ResponseEntity<>(productoDTO, HttpStatus.OK);
     }
 
-    @GetMapping
-    public String showProductos(@RequestParam(required = false) String name, Model model, Pageable pageable) {
-        int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize, Sort.by("id").descending());
-        Page<ProductoDTO> productos;
-        if (name != null && !name.isEmpty()) {
-            logger.info("Solicitud recibida para buscar productos por nombre: {}", name);
-            productos = productoService.searchProductosByName(name, newPageable);
-        } else {
-            productos = productoService.getAllProductos(newPageable);
-        }
-        model.addAttribute("productos", productos.getContent());
-        model.addAttribute("productoDTO", new ProductoDTO());
-        model.addAttribute("page", productos);
-        model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
-        model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)));
-        model.addAttribute("currentPage", "tableProductos");
-        return "main?table=tableProductos";
-    }
-
-    @GetMapping("/search")
-    public String searchProductosByName(@RequestParam String name, Model model, Pageable pageable) {
-        int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
-        logger.info("Solicitud recibida para buscar productos por nombre: {}", name);
-        Page<ProductoDTO> productos = productoService.searchProductosByName(name, newPageable);
-        model.addAttribute("productos", productos.getContent());
-        model.addAttribute("productoDTO", new ProductoDTO());
-        model.addAttribute("page", productos);
-        return "main?table=tableProductos";
-    }
 }

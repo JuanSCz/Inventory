@@ -153,6 +153,6 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Override
     public Page<Map<String, Object>> getAllCategoriaAsMap(Pageable pageable) {
         Page<Categoria> categorias = categoriaRepository.findAll(pageable);
-        return categorias.map(categoria -> Map.of("id", categoria.getId(), "nombre", categoria.getNombre(), "descripcion", categoria.getDescripcion()));
+        return categorias.map(categoria -> Map.of("id", categoria.getId(), "nombre", categoria.getNombre(), "descripción", categoria.getDescripcion()));
     }
 }

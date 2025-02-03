@@ -168,6 +168,18 @@ public class DepositoServiceImpl implements DepositoService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<Deposito> obtenerTodosLosDepositos() {
+        try {
+            logger.info("Obteniendo todos los productos");
+            return depositoRepository.findAll();
+        } catch (Exception e) {
+            logger.error("Error obteniendo todos los productos", e);
+            throw new DataAccessException("Error obteniendo todos los productos", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<DepositoDTO> searchDepositosByName(String nombre, Pageable pageable) {
         try {
             logger.info("Buscando Depositos por nombre: {}", nombre);
@@ -176,18 +188,6 @@ public class DepositoServiceImpl implements DepositoService {
         } catch (Exception e) {
             logger.error("Error buscando Depositos por nombre", e);
             throw new DataAccessException("Error buscando Depositos por nombre", e);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Deposito> obtenerTodosLosDepositos() {
-        try {
-            logger.info("Obteniendo todos los productos");
-            return depositoRepository.findAll();
-        } catch (Exception e) {
-            logger.error("Error obteniendo todos los productos", e);
-            throw new DataAccessException("Error obteniendo todos los productos", e);
         }
     }
 

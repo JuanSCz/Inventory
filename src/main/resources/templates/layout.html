@@ -72,7 +72,23 @@
         <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
         <script src="js/indexVentas.js"></script>
     </div>
-    <div th:case="*">
+    <div th:case="'Compras'">
+        <div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
+        <div th:replace="~{fragments/tableDetalleCompras :: createModalTableCompras}"></div>
+        <div th:replace="~{fragments/formUpdateCompras :: updateModalCompras}"></div>
+        <div th:replace="~{fragments/formCreateCompras :: createModalCompras}"></div>
+        <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
+        <script src="js/indexCompras.js"></script>
+    </div>
+    <div th:case="'HistorialStock'">
+        <div th:replace="~{fragments/modalDelete :: advertenciaModal(advertenciaMessage)}"></div>
+        <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
+        <script src="js/indexHistorialStock.js"></script>
+    </div>
+    <div th:case="'Presupuestar'">
+        <script src="js/indexPresupuestar.js"></script>
+    </div>
+    <div th:case="*" th:if="${table} != 'HistorialStock'">
         <p th:text="'No se encontró el caso para la tabla: ' + ${table}"></p>
     </div>
 </div>

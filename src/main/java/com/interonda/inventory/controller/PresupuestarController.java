@@ -79,7 +79,7 @@ public class PresupuestarController {
         model.addAttribute("clientes", clienteService.getAllClientes(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
         model.addAttribute("productos", productoService.obtenerTodosLosProductos());
         model.addAttribute("currentPage", "tableVentas");
-        return "tablePresupuestar";
+        return "main?table=tablePresupuestar";
     }
 
     @GetMapping("/search")
@@ -99,6 +99,6 @@ public class PresupuestarController {
         model.addAttribute("ventaDTO", new VentaDTO());
         model.addAttribute("page", ventas);
         model.addAttribute("clientes", clienteService.getAllClientes(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
-        return "tableVentas";
+        return "main?table=tablePresupuestar";
     }
 }

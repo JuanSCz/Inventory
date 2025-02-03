@@ -26,4 +26,5 @@ public interface PresupuestarService {
     byte[] generatePdf(Long id);
 
     Page<Map<String, Object>> getAllPresupuestarAsMap(Pageable pageable);
+
 }

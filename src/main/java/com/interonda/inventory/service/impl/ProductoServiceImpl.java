@@ -313,19 +313,6 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ProductoDTO> searchProductosByName(String nombre, Pageable pageable) {
-        try {
-            logger.info("Buscando Productos activos por nombre: {}", nombre);
-            Page<Producto> productos = productoRepository.findByNombreContainingIgnoreCaseAndActivoTrue(nombre, pageable);
-            return productos.map(productoMapper::toDto);
-        } catch (Exception e) {
-            logger.error("Error buscando Productos activos por nombre", e);
-            throw new DataAccessException("Error buscando Productos activos por nombre", e);
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public long countProductos() {
         try {
             long total = productoRepository.count();
@@ -346,6 +333,19 @@ public class ProductoServiceImpl implements ProductoService {
         } catch (Exception e) {
             logger.error("Error obteniendo todos los productos", e);
             throw new DataAccessException("Error obteniendo todos los productos", e);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<ProductoDTO> searchProductosByName(String nombre, Pageable pageable) {
+        try {
+            logger.info("Buscando Productos activos por nombre: {}", nombre);
+            Page<Producto> productos = productoRepository.findByNombreContainingIgnoreCaseAndActivoTrue(nombre, pageable);
+            return productos.map(productoMapper::toDto);
+        } catch (Exception e) {
+            logger.error("Error buscando Productos activos por nombre", e);
+            throw new DataAccessException("Error buscando Productos activos por nombre", e);
         }
     }
 
