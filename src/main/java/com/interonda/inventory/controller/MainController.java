@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -40,9 +39,11 @@ public class MainController {
     private final PresupuestarService presupuestarService;
     private final ProductoRepository productoRepository;
     private final CompraRepository compraRepository;
+    private final DepositoProductoService depositoProductoService;
+    private final DepositosProductosUnidadService depositosProductosUnidadService;
 
     @Autowired
-    public MainController(PageService pageService, ProveedorService proveedorService, ProductoService productoService, DepositoService depositoService, CategoriaService categoriaService, ClienteService clienteService, VentaService ventaService, CompraService compraService, HistorialStockService historialStockService, PresupuestarService presupuestarService, ProductoRepository productoRepository, CompraRepository compraRepository) {
+    public MainController(PageService pageService, ProveedorService proveedorService, ProductoService productoService, DepositoService depositoService, CategoriaService categoriaService, ClienteService clienteService, VentaService ventaService, CompraService compraService, HistorialStockService historialStockService, PresupuestarService presupuestarService, ProductoRepository productoRepository, CompraRepository compraRepository, DepositoProductoService depositoProductoService, DepositosProductosUnidadService depositosProductosUnidadService) {
         this.pageService = pageService;
         this.proveedorService = proveedorService;
         this.productoService = productoService;
@@ -55,6 +56,8 @@ public class MainController {
         this.presupuestarService = presupuestarService;
         this.productoRepository = productoRepository;
         this.compraRepository = compraRepository;
+        this.depositoProductoService = depositoProductoService;
+        this.depositosProductosUnidadService = depositosProductosUnidadService;
     }
 
     @GetMapping
@@ -138,6 +141,19 @@ public class MainController {
             model.addAttribute("depositos", depositoService.obtenerTodosLosDepositos());
         }
 
+        if ("DepositoProducto".equals(tableName)) {
+            if (depositoId == null) {
+                depositoId = depositoProductoService.getDefaultDepositoId();
+                return "redirect:/main?table=tableDepositoProducto&depositoId=" + depositoId;
+            }
+            model.addAttribute("producto", new Producto());
+            model.addAttribute("productoDTO", new ProductoDTO());
+            model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+            model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+            model.addAttribute("selectedDepositoId", depositoId); // Añadir el depósito seleccionado al modelo
+            model.addAttribute("productos", depositoProductoService.getProductosByDeposito(depositoId, PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+        }
+
         logger.debug("Final model attributes: {}", model.asMap());
         return "layout";
     }
@@ -162,6 +178,8 @@ public class MainController {
                 return historialStockService.getAllHistorialStockAsMap(PageRequest.of(page, 10));
             case "tablePresupuestar":
                 return presupuestarService.getAllPresupuestarAsMap(PageRequest.of(page, 10));
+            case "tableDepositoProducto":
+                return depositoProductoService.getProductosByDepositoAsMap(depositoId, PageRequest.of(page, 10));
             default:
                 throw new IllegalArgumentException("Tabla no reconocida: " + table);
         }
@@ -186,22 +204,24 @@ public class MainController {
                 return List.of("ID", "proveedor", "Fecha", "Estado", "Método de Pago", "Impuestos", "Total");
             case "tableHistorialStock":
                 return List.of("ID", "Cant Anterior", "Cant Nueva", "Actualización", "Motivo", "Movimiento", "Producto", "Depósito", "Usuario");
+            case "tableDepositoProducto":
+                return List.of("ID", "Nombre", "Stock", "Mac Address", "Numero De Serie", "Codigo De Barras", "Categoria");
             default:
                 throw new IllegalArgumentException("Tabla no reconocida: " + table);
         }
     }
 
     @GetMapping("/search")
-    public String searchTable(@RequestParam(name = "table") String table, @RequestParam(name = "name") String name, @RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+    public String searchTable(@RequestParam(name = "table") String table, @RequestParam(name = "name") String name, @RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "depositoId", required = false) Long depositoId, Model model) {
         if (table == null || name == null) {
             model.addAttribute("errorMessage", "Los parámetros 'table' y 'name' son obligatorios.");
             return "errorPage";
         }
 
-        logger.debug("searchTable called with table: {}, name: {}, page: {}", table, name, page);
+        logger.debug("searchTable called with table: {}, name: {}, page: {}, depositoId: {}", table, name, page, depositoId);
         String tableName = "table" + table; // Agregar el prefijo "table"
 
-        Page<Map<String, Object>> tablePage = searchPageForTable(tableName, name, page);
+        Page<Map<String, Object>> tablePage = searchPageForTable(tableName, name, page, depositoId);
         PageDetails pageDetails = pageService.getPageDetails(tablePage);
 
         model.addAttribute("title", "Página Principal");
@@ -210,10 +230,9 @@ public class MainController {
         model.addAttribute("pageDetails", pageDetails);
         model.addAttribute("table", table);
 
-        // Añadir categoriaDTO al modelo si la tabla es Categorias
         if ("Categorias".equals(table)) {
             model.addAttribute("categoriaDTO", new CategoriaDTO());
-            model.addAttribute("categoria", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+            model.addAttribute("categorias", categoriaService.getAllCategorias(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
         }
 
         if ("Clientes".equals(table)) {
@@ -252,11 +271,16 @@ public class MainController {
             model.addAttribute("venta", ventaService.getAllVentas(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
         }
 
+        if ("DepositoProducto".equals(tableName)) {
+            model.addAttribute("depositos", depositoService.getAllDepositos(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
+            model.addAttribute("selectedDepositoId", depositoId);
+        }
+
         logger.debug("Final model attributes: {}", model.asMap());
         return "layout";
     }
 
-    private Page<Map<String, Object>> searchPageForTable(String table, String name, int page) {
+    private Page<Map<String, Object>> searchPageForTable(String table, String name, int page, Long depositoId) {
         switch (table) {
             case "tableCategorias":
                 Page<CategoriaDTO> categoriaPage = categoriaService.searchCategoriasByName(name, PageRequest.of(page, 10));
@@ -282,6 +306,9 @@ public class MainController {
             case "tablePresupuestar":
                 Page<VentaDTO> presupuestarPage = presupuestarService.searchVentasByClienteNombre(name, PageRequest.of(page, 10));
                 return presupuestarPage.map(venta -> Map.of("id", venta.getId(), "cliente", venta.getCliente().getNombre(), "fecha", venta.getFecha(), "estado", venta.getEstado(), "método de pago", venta.getMetodoPago(), "impuestos", venta.getImpuestos(), "total", venta.getTotal()));
+            case "tableDepositoProducto":
+                Page<ProductoDTO> productosPorDepositoPage = depositoProductoService.searchProductosByName(name, PageRequest.of(page, 10));
+                return productosPorDepositoPage.map(producto -> Map.of("id", producto.getId(), "nombre", producto.getNombre(), "descripcion", producto.getDescripcion(), "stock", producto.getStockActual(), "macAddress", producto.getMacAddress(), "numeroDeSerie", producto.getNumeroDeSerie(), "codigoBarras", producto.getCodigoBarras(), "categoria", producto.getCategoriaNombre()));
             default:
                 throw new IllegalArgumentException("Tabla no reconocida: " + table);
         }

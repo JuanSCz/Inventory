@@ -38,14 +38,13 @@
                 Crear Producto
             </button>
         </div>
-        <div th:case="'DepositosProductos'">
+        <div th:case="'DepositoProducto'">
             <div class="col-md-6 mb-3">
                 <form th:action="@{/main}" method="get">
-                    <input type="hidden" name="table" value="tableDepositosProductos"/>
-                    <select class="form-control form-control-sm form-control-chico" id="depositoId" name="depositoId"
-                            onchange="this.form.submit()">
+                    <input type="hidden" name="table" value="tableDepositoProducto"/>
+                    <select class="form-control form-control-sm form-control-chico" id="depositoId" name="depositoId" onchange="this.form.submit()">
                         <option th:each="deposito : ${depositos}" th:value="${deposito.id}" th:text="${deposito.nombre}"
-                                th:selected="${deposito.id} == ${selectedDepositoId}"></option>
+                                th:selected="${deposito.id == selectedDepositoId}"></option>
                     </select>
                 </form>
             </div>

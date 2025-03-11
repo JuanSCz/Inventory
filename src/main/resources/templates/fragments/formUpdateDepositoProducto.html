@@ -7,8 +7,8 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-<div th:fragment="updateModalDepositosProductos">
-    <div class="modal fade" id="updateDepositosProductosModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+<div th:fragment="updateModalDepositoProducto">
+    <div class="modal fade" id="updateDepositoProductoModal" tabindex="-1" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-detalle">
             <div class="modal-content modal-content-detalle">
@@ -18,10 +18,12 @@
                             aria-label="Close"></button>
                 </div>
                 <div class="modal-body modal-body-detalle">
-                    <form th:action="@{/tableDepositosProductos/update}" method="post" th:object="${productoDTO}"
+                    <form th:action="@{/tableDepositoProducto/update}" method="post" th:object="${productoDTO}"
                           autocomplete="off">
-                        <input type="hidden" name="depositoId" th:value="${selectedDepositoId}">
-                        <input type="hidden" name="id" th:field="*{id}">
+                        <input type="hidden" id="id" th:field="*{id}">
+                        <input type="hidden" id="depositoProductoId" name="depositoProductoId"
+                               th:value="${productoDTO.depositoId}">
+                        <input type="hidden" id="depositoId" name="depositoId" th:value="${selectedDepositoId}">
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="macAddress" class="form-label form-labelForms">MAC Address</label>
@@ -42,10 +44,11 @@
                                        th:field="*{codigoBarras}">
                             </div>
                             <h4 class="mb-3 text-center title-stock">Stock:</h4>
-                            <div id="stockContainerUpdate" class="row">
+                            <div class="row" id="stockContainerUpdate">
                                 <div class="col-md-6 mb-3">
-                                    <label for="depositoId" class="form-label form-labelForms">Depósito</label>
-                                    <select class="form-control form-control-sm form-control-detalle" id="depositoId"
+                                    <label for="stockDepositoId" class="form-label form-labelForms">Depósito</label>
+                                    <select class="form-control form-control-sm form-control-detalle"
+                                            id="stockDepositoId"
                                             th:field="*{stocks[0].depositoId}">
                                         <option value="">Seleccione un depósito...</option>
                                         <option th:each="deposito : ${depositos}" th:value="${deposito.id}"
@@ -54,9 +57,9 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="cantidad" class="form-label form-labelForms">Cantidad</label>
+                                    <label for="stockCantidad" class="form-label form-labelForms">Cantidad</label>
                                     <input type="number" class="form-control form-control-sm form-control-detalle"
-                                           id="cantidad"
+                                           id="stockCantidad"
                                            th:field="*{stocks[0].cantidad}" placeholder="Ingrese la cantidad">
                                 </div>
                             </div>

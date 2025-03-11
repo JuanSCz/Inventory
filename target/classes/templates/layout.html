@@ -59,10 +59,10 @@
         <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
         <script src="js/indexProductos.js"></script>
     </div>
-    <div th:case="'DepositosProductos'">
-        <div th:replace="~{fragments/formUpdateDepositosProductos :: updateModalDepositosProductos}"></div>
+    <div th:case="'DepositoProducto'">
+        <div th:replace="~{fragments/formUpdateDepositoProducto :: updateModalDepositoProducto}"></div>
         <div th:replace="~{fragments/errors :: errorModal(errorMessage=${errorMessage})}"></div>
-        <script src="js/indexDepositosProductos.js"></script>
+        <script src="js/indexDepositoProducto.js"></script>
     </div>
     <div th:case="'Ventas'">
         <div th:replace="~{fragments/tableDetalleVentas :: createModalTableVentas}"></div>

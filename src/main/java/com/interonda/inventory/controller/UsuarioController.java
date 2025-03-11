@@ -87,35 +87,4 @@ public class UsuarioController {
         UsuarioDTO usuarioDTO = usuarioService.getUsuario(id);
         return new ResponseEntity<>(usuarioDTO, HttpStatus.OK);
     }
-
-    @GetMapping
-    public String showUsuarios(@RequestParam(required = false) String name, Model model, Pageable pageable) {
-        int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize, Sort.by("id").descending());
-        Page<UsuarioDTO> usuarios;
-        if (name != null && !name.isEmpty()) {
-            logger.info("Solicitud recibida para buscar usuarios por nombre: {}", name);
-            usuarios = usuarioService.searchUsuariosByName(name, newPageable);
-        } else {
-            usuarios = usuarioService.getAllUsuarios(newPageable);
-        }
-        model.addAttribute("usuarios", usuarios.getContent());
-        model.addAttribute("usuarioDTO", new UsuarioDTO());
-        model.addAttribute("page", usuarios); // Asegúrate de que esta línea esté presente
-        model.addAttribute("roles", rolService.getAllRoles(PageRequest.of(0, Integer.MAX_VALUE)).getContent());
-        model.addAttribute("currentPage", "tableUsuarios");
-        return "tableUsuarios";
-    }
-
-    @GetMapping("/search")
-    public String searchUsuariosByName(@RequestParam String name, Model model, Pageable pageable) {
-        int pageSize = 15;
-        Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
-        logger.info("Solicitud recibida para buscar usuarios por nombre: {}", name);
-        Page<UsuarioDTO> usuarios = usuarioService.searchUsuariosByName(name, newPageable);
-        model.addAttribute("usuarios", usuarios.getContent());
-        model.addAttribute("usuarioDTO", new UsuarioDTO());
-        model.addAttribute("page", usuarios);
-        return "tableUsuarios";
-    }
 }

@@ -1,8 +1,9 @@
 package com.interonda.inventory.service.impl;
 
 import com.interonda.inventory.dto.ProductoDTO;
+import com.interonda.inventory.dto.ProductoDepositoDTO;
 import com.interonda.inventory.dto.StockDTO;
-import com.interonda.inventory.entity.Categoria;
+import com.interonda.inventory.entity.HistorialStock;
 import com.interonda.inventory.entity.Producto;
 import com.interonda.inventory.entity.Stock;
 import com.interonda.inventory.exceptions.DataAccessException;
@@ -12,8 +13,8 @@ import com.interonda.inventory.repository.CategoriaRepository;
 import com.interonda.inventory.repository.DepositoRepository;
 import com.interonda.inventory.repository.ProductoRepository;
 import com.interonda.inventory.repository.StockRepository;
-import com.interonda.inventory.service.DepositosProductosService;
-import com.interonda.inventory.utils.ValidatorUtils;
+import com.interonda.inventory.service.DepositoProductoService;
+import com.interonda.inventory.service.DepositoService;
 import jakarta.validation.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,23 +33,25 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class DepositosProductosServiceImpl implements DepositosProductosService {
-    private static final Logger logger = LoggerFactory.getLogger(ProductoServiceImpl.class);
+public class DepositoProductoServiceImpl implements DepositoProductoService {
+    private static final Logger logger = LoggerFactory.getLogger(DepositoProductoServiceImpl.class);
 
     private final ProductoRepository productoRepository;
     private final ProductoMapper productoMapper;
     private final CategoriaRepository categoriaRepository;
     private final DepositoRepository depositoRepository;
     private final StockRepository stockRepository;
+    private final DepositoService depositoService;
     private final Validator validator;
 
     @Autowired
-    public DepositosProductosServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper, CategoriaRepository categoriaRepository, DepositoRepository depositoRepository, StockRepository stockRepository, Validator validator) {
+    public DepositoProductoServiceImpl(ProductoRepository productoRepository, ProductoMapper productoMapper, CategoriaRepository categoriaRepository, DepositoRepository depositoRepository, StockRepository stockRepository, DepositoService depositoService, Validator validator) {
         this.productoRepository = productoRepository;
         this.productoMapper = productoMapper;
         this.categoriaRepository = categoriaRepository;
         this.depositoRepository = depositoRepository;
         this.stockRepository = stockRepository;
+        this.depositoService = depositoService;
         this.validator = validator;
     }
 
@@ -64,39 +67,51 @@ public class DepositosProductosServiceImpl implements DepositosProductosService 
 
     @Override
     @Transactional
-    public ProductoDTO updateProducto(ProductoDTO productoDTO) {
-        ValidatorUtils.validateEntity(productoDTO, validator);
+    public ProductoDTO updateProducto(ProductoDepositoDTO productoDepositoDTO) {
+        logger.debug("Entrando al método updateProducto en el servicio con productoDepositoDTO: {}", productoDepositoDTO);
+
+        // Verificar los IDs en el DTO
+        logger.debug("ID del producto en el DTO: {}", productoDepositoDTO.getId());
+        logger.debug("ID del depósito en el DTO: {}", productoDepositoDTO.getDepositoId());
+
         try {
-            logger.info("Actualizando Producto con id: {}", productoDTO.getId());
-            Producto producto = productoRepository.findById(productoDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + productoDTO.getId()));
+            Producto producto = productoRepository.findById(productoDepositoDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Producto no encontrado con el id: " + productoDepositoDTO.getId()));
 
-            producto.setNombre(productoDTO.getNombre());
-            producto.setDescripcion(productoDTO.getDescripcion());
-            producto.setPrecio(productoDTO.getPrecio());
-            producto.setCosto(productoDTO.getCosto());
-            producto.setStockActual(productoDTO.getStockActual());
-            producto.setStockMinimo(productoDTO.getStockMinimo());
-            producto.setMacAddress(productoDTO.getMacAddress());
-            producto.setNumeroDeSerie(productoDTO.getNumeroDeSerie());
-            producto.setCodigoBarras(productoDTO.getCodigoBarras());
+            producto.setCodigoBarras(productoDepositoDTO.getCodigoBarras());
+            producto.setNumeroDeSerie(productoDepositoDTO.getNumeroDeSerie());
+            producto.setMacAddress(productoDepositoDTO.getMacAddress());
 
-            if (productoDTO.getCategoriaId() != null) {
-                Categoria categoria = categoriaRepository.findById(productoDTO.getCategoriaId()).orElseThrow(() -> new ResourceNotFoundException("Categoría no encontrada con el id: " + productoDTO.getCategoriaId()));
-                producto.setCategoria(categoria);
-            } else {
-                producto.setCategoria(null);
-            }
-
+            // Actualizar los stocks del producto y crear historial de stock
             producto.getStocks().clear();
-            producto.getStocks().addAll(productoDTO.getStocks().stream().map(stockDTO -> {
-                Stock stock = new Stock();
+            producto.getStocks().addAll(productoDepositoDTO.getStocks().stream().map(stockDTO -> {
+                Stock stock = stockRepository.findByProductoIdAndDepositoId(producto.getId(), stockDTO.getDepositoId()).orElse(new Stock());
+                Integer cantidadAnterior = stock.getCantidad() == null ? 0 : stock.getCantidad();
                 stock.setCantidad(stockDTO.getCantidad());
                 stock.setFechaActualizacion(LocalDateTime.now());
                 stock.setOperacion("ACTUALIZACIÓN");
                 stock.setProducto(producto);
                 stock.setDeposito(depositoRepository.findById(stockDTO.getDepositoId()).orElseThrow(() -> new ResourceNotFoundException("Depósito no encontrado con el id: " + stockDTO.getDepositoId())));
+
+                // Crear historial de stock
+                HistorialStock historialStock = new HistorialStock();
+                historialStock.setCantidadAnterior(cantidadAnterior);
+                historialStock.setCantidadNueva(stock.getCantidad());
+                historialStock.setFechaActualizacion(stock.getFechaActualizacion());
+                historialStock.setMotivo("Actualización de producto");
+                historialStock.setTipoMovimiento("ACTUALIZACIÓN");
+                historialStock.setProducto(producto);
+                historialStock.setDeposito(stock.getDeposito());
+                historialStock.setStock(stock);
+
+                stock.getHistorialStocks().add(historialStock);
+
                 return stock;
             }).collect(Collectors.toList()));
+
+            // Asignar el depósito al producto
+            if (!producto.getStocks().isEmpty()) {
+                producto.setDeposito(producto.getStocks().get(0).getDeposito());
+            }
 
             Producto updatedProducto = productoRepository.save(producto);
             logger.info("Producto actualizado exitosamente con id: {}", updatedProducto.getId());
@@ -232,22 +247,23 @@ public class DepositosProductosServiceImpl implements DepositosProductosService 
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Page<Map<String, Object>> getProductosByDepositoAsMap(Long depositoId, Pageable pageable) {
-        Page<ProductoDTO> productos = getProductosByDeposito(depositoId, pageable);
-
-        return productos.map(productoDTO -> {
+        Page<Producto> productos = productoRepository.findByDepositoId(depositoId, pageable);
+        return productos.map(producto -> {
             Map<String, Object> productoMap = new HashMap<>();
-            productoMap.put("id", productoDTO.getId());
-            productoMap.put("nombre", productoDTO.getNombre());
-            productoMap.put("descripcion", productoDTO.getDescripcion());
-            productoMap.put("stock", productoDTO.getStockActual());
-            productoMap.put("macAddress", productoDTO.getMacAddress());
-            productoMap.put("numeroDeSerie", productoDTO.getNumeroDeSerie());
-            productoMap.put("codigoBarras", productoDTO.getCodigoBarras());
-            productoMap.put("categoria", productoDTO.getCategoriaNombre());
-            productoMap.put("depositoId", productoDTO.getDepositoId());
+            productoMap.put("id", producto.getId());
+            productoMap.put("nombre", producto.getNombre());
+            productoMap.put("stock", producto.getStockActual());
+            productoMap.put("macAddress", producto.getMacAddress());
+            productoMap.put("numeroDeSerie", producto.getNumeroDeSerie());
+            productoMap.put("codigoBarras", producto.getCodigoBarras());
+            productoMap.put("categoria", producto.getCategoria() != null ? producto.getCategoria().getNombre() : "Sin categoría");
             return productoMap;
         });
     }
+
+    public Long getDefaultDepositoId() {
+        return depositoService.getAllDepositos(PageRequest.of(0, 1)).getContent().get(0).getId();
+    }
 }
+

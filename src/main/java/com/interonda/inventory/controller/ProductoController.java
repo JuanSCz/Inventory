@@ -105,11 +105,6 @@ public class ProductoController {
             return "main?table=tableProductos";
         }
 
-        // Establecer los atributos como null
-        productoDTO.setCodigoBarras(null);
-        productoDTO.setNumeroDeSerie(null);
-        productoDTO.setMacAddress(null);
-
         productoService.updateProducto(productoDTO);
         return "redirect:/main?table=tableProductos";
     }

@@ -28,7 +28,6 @@ public interface DepositoService {
 
     long countDepositos();
 
-
     List<Deposito> obtenerTodosLosDepositos();
 
     Page<Map<String, Object>> getAllDepositosAsMap(Pageable pageable);
